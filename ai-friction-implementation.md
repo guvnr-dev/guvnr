@@ -948,6 +948,33 @@ name: AI Code Review
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+  workflow_dispatch:
+    inputs:
+      model:
+        description: 'Claude model to use'
+        required: false
+        default: 'claude-sonnet-4-20250514'
+        type: choice
+        options:
+          - claude-sonnet-4-20250514
+          - claude-opus-4-20250514
+          - claude-3-5-sonnet-20241022
+      max_tokens:
+        description: 'Maximum tokens for response'
+        required: false
+        default: '4096'
+        type: string
+      review_focus:
+        description: 'Review focus areas'
+        required: false
+        default: 'security,bugs,performance,quality'
+        type: string
+
+# Configuration - set these as repository variables for easy updates
+env:
+  DEFAULT_MODEL: ${{ vars.AI_REVIEW_MODEL || 'claude-sonnet-4-20250514' }}
+  DEFAULT_MAX_TOKENS: ${{ vars.AI_REVIEW_MAX_TOKENS || '4096' }}
+  DIFF_MAX_SIZE: ${{ vars.AI_REVIEW_DIFF_SIZE || '50000' }}
 
 permissions:
   contents: read
@@ -964,7 +991,7 @@ jobs:
 
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v41
+        uses: tj-actions/changed-files@v44
         with:
           files: |
             **/*.ts
@@ -973,52 +1000,96 @@ jobs:
             **/*.jsx
             **/*.py
             **/*.go
+            **/*.rs
+            **/*.java
+            **/*.rb
+
+      - name: Determine model and parameters
+        id: config
+        run: |
+          # Use workflow dispatch inputs if provided, otherwise defaults
+          MODEL="${{ github.event.inputs.model || env.DEFAULT_MODEL }}"
+          MAX_TOKENS="${{ github.event.inputs.max_tokens || env.DEFAULT_MAX_TOKENS }}"
+          FOCUS="${{ github.event.inputs.review_focus || 'security,bugs,performance,quality' }}"
+
+          echo "model=$MODEL" >> $GITHUB_OUTPUT
+          echo "max_tokens=$MAX_TOKENS" >> $GITHUB_OUTPUT
+          echo "focus=$FOCUS" >> $GITHUB_OUTPUT
+
+          echo "Using model: $MODEL"
+          echo "Max tokens: $MAX_TOKENS"
+          echo "Focus areas: $FOCUS"
 
       - name: AI Code Review
         if: steps.changed-files.outputs.any_changed == 'true'
         uses: actions/github-script@v7
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          MODEL: ${{ steps.config.outputs.model }}
+          MAX_TOKENS: ${{ steps.config.outputs.max_tokens }}
+          FOCUS: ${{ steps.config.outputs.focus }}
+          DIFF_LIMIT: ${{ env.DIFF_MAX_SIZE }}
         with:
           script: |
             const { execSync } = require('child_process');
 
             // Get the diff
-            const diff = execSync('git diff origin/main...HEAD -- "*.ts" "*.tsx" "*.js" "*.jsx"', {
-              encoding: 'utf-8',
-              maxBuffer: 1024 * 1024 * 10
-            });
+            let diff;
+            try {
+              diff = execSync('git diff origin/main...HEAD -- "*.ts" "*.tsx" "*.js" "*.jsx" "*.py" "*.go" "*.rs" "*.java" "*.rb"', {
+                encoding: 'utf-8',
+                maxBuffer: 1024 * 1024 * 10
+              });
+            } catch (error) {
+              console.log('Error getting diff, trying alternative:', error.message);
+              diff = execSync('git diff HEAD~1...HEAD', {
+                encoding: 'utf-8',
+                maxBuffer: 1024 * 1024 * 10
+              });
+            }
 
             if (!diff.trim()) {
               console.log('No relevant changes to review');
               return;
             }
 
+            const diffLimit = parseInt(process.env.DIFF_LIMIT) || 50000;
+            const truncatedDiff = diff.substring(0, diffLimit);
+            const wasTruncated = diff.length > diffLimit;
+
+            // Build focus areas from config
+            const focusAreas = process.env.FOCUS.split(',').map(f => f.trim());
+            const focusPrompt = focusAreas.map((area, i) => `${i+1}. ${area}`).join('\n');
+
             // Prepare review prompt
             const prompt = `Review this code diff for a pull request. Focus on:
-            1. Bugs and logic errors
-            2. Security vulnerabilities
-            3. Performance issues
-            4. Code quality and maintainability
+            ${focusPrompt}
 
             Format your response as:
             ## Summary
             [One sentence summary]
 
             ## Issues Found
-            - 🔴 **Critical**: [issue]
-            - 🟡 **Warning**: [issue]
-            - 🟢 **Suggestion**: [improvement]
+            - 🔴 **Critical**: [issue requiring immediate fix]
+            - 🟡 **Warning**: [issue that should be addressed]
+            - 🟢 **Suggestion**: [nice-to-have improvement]
+
+            ## Security Checklist
+            - [ ] No hardcoded secrets or credentials
+            - [ ] Input validation present where needed
+            - [ ] No SQL/command injection vulnerabilities
+            - [ ] Proper error handling without info leakage
 
             ## Verdict
             [APPROVE/REQUEST_CHANGES/COMMENT]
 
+            ${wasTruncated ? '**Note: Diff was truncated due to size. Review may be incomplete.**\n\n' : ''}
             Diff:
             \`\`\`diff
-            ${diff.substring(0, 50000)}
+            ${truncatedDiff}
             \`\`\``;
 
-            // Call Claude API
+            // Call Claude API with configurable model
             const response = await fetch('https://api.anthropic.com/v1/messages', {
               method: 'POST',
               headers: {
@@ -1027,13 +1098,25 @@ jobs:
                 'anthropic-version': '2023-06-01'
               },
               body: JSON.stringify({
-                model: 'claude-sonnet-4-20250514',
-                max_tokens: 4096,
+                model: process.env.MODEL,
+                max_tokens: parseInt(process.env.MAX_TOKENS),
                 messages: [{ role: 'user', content: prompt }]
               })
             });
 
+            if (!response.ok) {
+              const error = await response.text();
+              core.setFailed(`API request failed: ${response.status} - ${error}`);
+              return;
+            }
+
             const result = await response.json();
+
+            if (!result.content || !result.content[0]) {
+              core.setFailed('Invalid API response structure');
+              return;
+            }
+
             const review = result.content[0].text;
 
             // Post review as PR comment
@@ -1041,16 +1124,24 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: `## 🤖 AI Code Review\n\n${review}\n\n---\n*Automated review by Claude*`
+              body: `## 🤖 AI Code Review\n\n${review}\n\n---\n*Automated review by Claude (${process.env.MODEL})*\n*Focus: ${process.env.FOCUS}*`
             });
 
       - name: Check for critical issues
         if: steps.changed-files.outputs.any_changed == 'true'
         run: |
-          # Optional: fail PR if critical issues found
-          # Parse the review output and fail if needed
           echo "Review complete"
+          # To fail on critical issues, uncomment:
+          # if grep -q "🔴 \*\*Critical\*\*" review_output.txt; then
+          #   echo "Critical issues found!"
+          #   exit 1
+          # fi
 ```
+
+**Configuration Variables** (set in repository settings > Variables):
+- `AI_REVIEW_MODEL`: Default model (e.g., `claude-sonnet-4-20250514`)
+- `AI_REVIEW_MAX_TOKENS`: Maximum response tokens (e.g., `4096`)
+- `AI_REVIEW_DIFF_SIZE`: Maximum diff size to analyze (e.g., `50000`)
 
 ### 6.2 GitHub Actions: Session Context Preservation
 

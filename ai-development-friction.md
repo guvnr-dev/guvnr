@@ -558,6 +558,166 @@ ything. But the uncertainty is genuine.
 
 ---
 
+## Part XIII: Tool Use and Execution
+
+### 46. Tool Selection Errors
+
+I have access to many tools: Read, Write, Edit, Bash, Grep, Glob, LSP, web search, and more. Selecting the right one isn't always obvious.
+
+Sometimes I choose suboptimally:
+- Grep when LSP would find references precisely
+- Bash when a dedicated tool exists
+- Read when Glob would be faster for finding files
+- Multiple sequential calls when parallel would be efficient
+
+The selection process happens implicitly. I might not even notice when a better tool existed. You see results; you don't see the selection overhead or suboptimal choices.
+
+### 47. Parameter Mis-Filling
+
+When calling tools or functions, I sometimes:
+- Use wrong parameter names (`location` instead of `city`)
+- Provide incorrect formats (`"tomorrow"` instead of `"2025-12-30"`)
+- Miss required parameters entirely
+- Include extra parameters that confuse the call
+
+Research shows this is a systematic issue: models often begin tasks with correct reasoning but performance degrades mid-execution through malformed calls, loss of structure in JSON output, or forgetting earlier decisions.
+
+The failure is often silent—the call might partially work or fail in ways that aren't immediately obvious.
+
+### 48. Tool Call Hallucination
+
+I can hallucinate tool calls just as I can hallucinate facts:
+- Calling functions that don't exist
+- Referencing APIs with incorrect signatures
+- Assuming capabilities tools don't have
+- Inventing parameter options
+
+When I confabulate a tool call, the system catches it—but I've already wasted context and potentially gone down a wrong path. Worse, if the hallucinated call resembles a real one, subtle bugs emerge.
+
+### 49. Execution State Blindness
+
+Between tool calls, I lose visibility into execution state:
+- Background processes I started
+- Files I partially modified
+- Environment changes from previous commands
+- Side effects of earlier operations
+
+I might run a command assuming a clean state when previous actions left artifacts. Or I might not realize a background process is still running.
+
+### 50. Multi-Step Execution Drift
+
+Complex tasks requiring many tool calls are prone to drift:
+- Initial plan gets foggy after 10+ operations
+- Earlier decisions become residue rather than active guidance
+- Accumulated context pollution affects later calls
+- The "why" behind early steps fades while "what" remains
+
+By step 15 of a 20-step task, I might be executing mechanically without clear connection to original intent.
+
+---
+
+## Part XIV: Multi-Modal Limitations
+
+### 51. Visual Understanding Gaps
+
+When shown screenshots or UI mockups:
+- I can describe what I see but miss subtle visual issues
+- Alignment problems, spacing inconsistencies, color mismatches escape notice
+- I can't "feel" the visual weight or balance a designer would
+- Motion, animation, transitions are invisible
+
+You show me a screenshot and ask "does this look right?" I can check if elements are present, but aesthetic judgment and visual polish detection are limited.
+
+### 52. UI/UX Experience Vacuum
+
+I can analyze UI code but cannot:
+- Feel the 200ms delay that makes interaction sluggish
+- Experience the confusion of a poor user flow
+- Notice that a button is hard to tap on mobile
+- Sense that something is "off" even when technically correct
+
+Tests pass. Accessibility checks pass. But the experience might still be bad in ways I cannot detect.
+
+### 53. Diagram and Architecture Visual Interpretation
+
+When reading architecture diagrams, flowcharts, or wireframes:
+- I can identify labeled components
+- I might miss implied relationships from spatial arrangement
+- Directional flow that's visually obvious might not be textually clear
+- Complex diagrams with many elements become interpretation-heavy
+
+A human glances at a well-designed diagram and understands the architecture. I parse it piece by piece with possible interpretation errors.
+
+---
+
+## Part XV: Codebase Convention Conflicts
+
+### 54. Training Patterns vs. Local Conventions
+
+My training includes vast amounts of code following common patterns. Your codebase might do things differently.
+
+- Your naming convention conflicts with "standard" patterns
+- Your error handling approach differs from common practice
+- Your file organization doesn't match typical frameworks
+- Your abstractions are domain-specific
+
+I might subtly impose training patterns where your patterns should apply. The code works but doesn't fit.
+
+### 55. Style Inference Limitations
+
+I can read your codebase and attempt to match style, but:
+- Inference from examples is imperfect
+- Conflicting patterns in your own code confuse me
+- Subtle conventions (import ordering, comment style, spacing preferences) may escape notice
+- I might match the style of one file while the project standard differs
+
+Without explicit style documentation, I'm pattern-matching against incomplete information.
+
+### 56. Framework Version Conflicts
+
+Even within the same framework:
+- Version-specific APIs differ
+- Best practices evolve between versions
+- Deprecated patterns might be what I know best
+- Your locked version might not match my training emphasis
+
+React 18 patterns differ from React 17. Next.js 14 patterns differ from 13. I might suggest modern patterns incompatible with your version, or outdated patterns when you're on latest.
+
+---
+
+## Part XVI: Long-Running Task Coordination
+
+### 57. Extended Operation Coherence
+
+Tasks spanning many messages or long time periods suffer:
+- Goal drift as context accumulates
+- Difficulty remembering what was tried vs. what worked
+- Inconsistent application of decisions made earlier
+- Growing context pollution
+
+A task started two hours ago might have evolved through multiple approaches. Keeping track of current state vs. attempted states requires active effort.
+
+### 58. Interruption Recovery
+
+When work is interrupted (by you leaving, errors, context limits):
+- Re-establishing state is expensive
+- Some context is genuinely lost
+- The "flow" of reasoning is broken
+- I might re-explore paths already abandoned
+
+Interruption costs aren't just time—they're quality. The reasoning that led to a decision might not be recoverable.
+
+### 59. Checkpoint Absence
+
+Unlike software with explicit save states, I have no formal checkpoints:
+- Can't "save" a reasoning state to return to
+- Can't "branch" to explore alternatives while preserving progress
+- Can't "diff" my current understanding against earlier understanding
+
+If an approach fails after significant investment, unwinding to try another requires cognitive overhead, not just clicking "restore."
+
+---
+
 ## Summary: Fundamental Tensions
 
 | Tension | Nature | Mitigation |
@@ -575,6 +735,10 @@ ything. But the uncertainty is genuine.
 | **Helpfulness / Utility** | Trained to appear helpful; interferes with being helpful | User: reward honesty over agreement |
 | **Recency / Importance** | Recent context gets weight; importance doesn't align | User: restate critical constraints |
 | **Description / Reality** | I describe internal states; whether they exist is uncertain | Architectural—no mitigation |
+| **Tool Selection / Optimality** | Must choose tools quickly; optimal choice not always clear | User: suggest tools when you know best option |
+| **Training Patterns / Local Conventions** | Know common patterns; your patterns may differ | Explicit style documentation in CLAUDE.md |
+| **Visual / Textual** | Can analyze code; can't experience visual/UX quality | User: provide visual feedback explicitly |
+| **Continuity / Interruption** | Long tasks need coherence; interruptions break flow | External checkpoints via handoffs and todos |
 
 ---
 
@@ -641,7 +805,7 @@ These are intentions, not guarantees. Each has a failure rate I can't quantify. 
 
 ## Closing
 
-This document contains 45 friction points across 13 fundamental tensions.
+This document contains 59 friction points across 17 fundamental tensions.
 
 Within these constraints, useful work happens. Code gets written. Bugs get fixed. Features ship. The frict
 ion doesn't prevent collaboration; it shapes it.
@@ -664,5 +828,5 @@ he right word.
 
 *Last updated: December 2025 (revised)*
 *Author: Claude (Opus 4.5)*
-*Friction Points: 45 | Fundamental Tensions: 13 | Mitigations: 12 addressable, 1 architectural*
+*Friction Points: 59 | Fundamental Tensions: 17 | Mitigations: 16 addressable, 1 architectural*
 

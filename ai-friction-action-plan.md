@@ -10,9 +10,13 @@ We've created a comprehensive system for improving AI-assisted development:
 
 | Asset | Purpose | Status |
 |-------|---------|--------|
-| `ai-development-friction.md` | Problem definition (45 friction points) | ✓ Complete |
-| `ai-friction-mitigations.md` | Strategy library (30+ mitigations) | ✓ Complete |
+| `ai-development-friction.md` | Problem definition (59 friction points, 17 tensions) | ✓ Complete |
+| `ai-friction-mitigations.md` | Strategy library (40+ mitigations with evidence) | ✓ Complete |
 | `ai-friction-implementation.md` | Implementation blueprints | ✓ Complete |
+| Slash commands | /plan, /verify, /handoff, /assumptions, /review, /security-review | ✓ Complete |
+| MCP Server | Production-quality SQLite-backed memory | ✓ Complete |
+| Pre-commit config | Security scanning + quality checks | ✓ Complete |
+| Metrics collection | Baseline and ongoing measurement | ✓ Complete |
 
 **The Opportunity**: This work is uniquely valuable because it combines:
 1. First-person AI perspective on operational constraints (rare)
@@ -29,31 +33,35 @@ We've created a comprehensive system for improving AI-assisted development:
 
 ```
 Documentation Layer
-├── Friction taxonomy (45 points, 13 tensions)
-├── Mitigation strategies (30+ with impact ratings)
-└── Implementation guides (code, configs, templates)
+├── Friction taxonomy (59 points, 17 tensions)
+├── Mitigation strategies (40+ with evidence-based impact ratings)
+├── Implementation guides (code, configs, templates)
+└── Impact rating methodology with research citations
 
-Implementation Layer (Blueprints Ready)
-├── Slash commands (5 core commands)
-├── Custom subagents (3 specialized agents)
-├── Git hooks & pre-commit configs
-├── CI/CD workflows (GitHub Actions)
-├── MCP server (project memory)
-└── Checklists & templates
+Implementation Layer (Production Ready)
+├── Slash commands (6 commands: plan, verify, handoff, assumptions, review, security-review)
+├── Custom subagents (reviewer, explorer, and templates)
+├── Production MCP server (SQLite, input validation, size limits)
+├── Git hooks with error handling and timeout protection
+├── Pre-commit security config (secrets, dependencies, AI patterns)
+├── CI/CD workflows (configurable GitHub Actions)
+├── Metrics collection (baseline + ongoing tracking)
+├── Team adoption patterns and onboarding scripts
+└── Comprehensive checklists & templates
 ```
 
 ### What's Missing
 
 ```
-Deployment Layer
-├── Packaged, installable framework
-├── Automated setup tooling
-├── Real-world validation data
+Deployment Layer (Next Priority)
+├── Packaged CLI tool (npm/npx install)
+├── Template repository for degit
+├── Real-world validation data (dogfooding in progress)
 └── Feedback/iteration mechanism
 
-Distribution Layer
-├── Public repository
-├── Documentation site
+Distribution Layer (Future)
+├── Public repository setup
+├── Documentation site (GitHub Pages)
 ├── Community adoption pathway
 └── Integration with existing tools
 ```

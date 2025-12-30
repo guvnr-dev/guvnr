@@ -6,7 +6,7 @@
 
 ## Overview
 
-This document provides actionable strategies for reducing or eliminating the 45 friction points identified in AI-assisted development. Strategies are categorized by who implements them:
+This document provides actionable strategies for reducing or eliminating the 59 friction points identified in AI-assisted development. Strategies are categorized by who implements them:
 
 - **User-side**: Actions developers can take immediately
 - **System-side**: Tool configurations, MCP servers, and infrastructure
@@ -14,6 +14,48 @@ This document provides actionable strategies for reducing or eliminating the 45 
 - **Collaborative**: Requires coordination between human and AI
 
 Each mitigation includes effort level (Low/Medium/High) and expected impact (1-5 scale).
+
+---
+
+## Impact Rating Methodology
+
+Impact ratings in this document are derived from three sources:
+
+### Evidence Sources
+
+1. **Published Research** — Academic studies and industry reports with measured outcomes
+2. **Practitioner Reports** — Developer surveys, case studies, and adoption metrics
+3. **Theoretical Analysis** — Logical assessment of friction-mitigation alignment
+
+### Rating Scale
+
+| Rating | Meaning | Evidence Required |
+|--------|---------|-------------------|
+| **5** | Critical/Transformative | Multiple studies show >30% improvement or prevents critical failures |
+| **4** | High Impact | Studies show 10-30% improvement or addresses major friction |
+| **3** | Moderate Impact | Practitioner reports show meaningful improvement |
+| **2** | Low Impact | Theoretical benefit, limited evidence |
+| **1** | Minimal Impact | Marginal benefit, may not justify effort |
+
+### Evidence Mapping
+
+| Strategy Category | Key Evidence | Measured Impact |
+|-------------------|--------------|-----------------|
+| **CLAUDE.md/Context** | [Anthropic Best Practices](https://www.anthropic.com/engineering/claude-code-best-practices); [Qodo 2025](https://www.qodo.ai/reports/state-of-ai-code-quality/) | 65% cite missing context as #1 issue; context files directly address |
+| **Plan-First Workflow** | [METR Study](https://www.augmentcode.com/guides/why-ai-coding-tools-make-experienced-developers-19-slower-and-how-to-fix-it); [Prompt Engineering Playbook](https://addyo.substack.com/p/the-prompt-engineering-playbook-for) | Unplanned AI use made devs 19% slower; planning reduces rework |
+| **Verification-First** | [ISSTA 2025](https://arxiv.org/abs/2409.20550); [Veracode 2025](https://www.helpnetsecurity.com/2025/08/07/create-ai-code-security-risks/) | 45% of AI code has vulnerabilities; verification catches before deploy |
+| **Multi-Agent Review** | [Qodo 2025](https://www.qodo.ai/reports/state-of-ai-code-quality/); [VentureBeat Research](https://venturebeat.com/orchestration/research-shows-more-agents-isnt-a-reliable-path-to-better-enterprise-ai) | 81% quality improvement with AI review; but 2-6× overhead for tool-heavy |
+| **Session Handoffs** | [GitHub #11455](https://github.com/anthropics/claude-code/issues/11455); [RedMonk 2025](https://redmonk.com/kholterhoff/2025/12/22/10-things-developers-want-from-their-agentic-ides-in-2025/) | Developers explicitly request session continuity; handoffs preserve context |
+| **Security Mitigations** | [OWASP Agentic AI](https://securityboulevard.com/2025/12/from-chatbot-to-code-threat-owasps-agentic-ai-top-10-and-the-specialized-risks-of-coding-agents/); [OpenSSF Guide](https://best.openssf.org/Security-Focused-Guide-for-AI-Code-Assistant-Instructions) | 322% more privilege escalation in AI code; explicit constraints reduce |
+
+### Limitations
+
+- **Individual variation**: Impact varies by developer experience, project type, and tool proficiency
+- **Compounding effects**: Some mitigations work better in combination than in isolation
+- **Evolving tools**: Impact may change as AI capabilities improve
+- **Selection bias**: Published studies may over-represent dramatic results
+
+When ratings conflict with your experience, trust your observations. These ratings are starting points, not absolutes.
 
 ---
 
@@ -795,7 +837,217 @@ The coordinator maintains overall context while specialists focus on specific ta
 
 ---
 
-## Part X: Human-in-the-Loop Patterns
+## Part X: Security Mitigations
+
+### AI-Specific Security Risks
+
+AI-assisted development introduces unique security challenges. According to Veracode's 2025 GenAI Code Security Report, GenAI introduces security vulnerabilities in 45% of cases. AI-assisted commits are merged into production 4× faster than regular commits, meaning insecure code can bypass normal review cycles.
+
+**Sources**: [Veracode GenAI Security Report 2025](https://www.helpnetsecurity.com/2025/08/07/create-ai-code-security-risks/), [OWASP Agentic AI Top 10](https://securityboulevard.com/2025/12/from-chatbot-to-code-threat-owasps-agentic-ai-top-10-and-the-specialized-risks-of-coding-agents/)
+
+---
+
+### Friction Points Addressed: AI-Introduced Vulnerabilities
+
+#### Strategy S1: OWASP-Aligned Security Review
+**Type**: Collaborative | **Effort**: Medium | **Impact**: 5
+
+Request security-focused review for all AI-generated code:
+
+```
+Before approving this code, verify it does NOT contain:
+
+OWASP Top 10 for AI-Generated Code:
+1. [ ] Injection vulnerabilities (SQL, command, XSS)
+2. [ ] Broken authentication or session management
+3. [ ] Sensitive data exposure (hardcoded secrets, logging PII)
+4. [ ] XXE (XML External Entity) vulnerabilities
+5. [ ] Broken access control
+6. [ ] Security misconfiguration
+7. [ ] Cross-site scripting (XSS) - 86% of AI code fails this
+8. [ ] Insecure deserialization
+9. [ ] Using components with known vulnerabilities
+10. [ ] Insufficient logging and monitoring
+
+Additional AI-Specific Checks:
+11. [ ] Log injection (CWE-117) - 88% of AI code vulnerable
+12. [ ] Privilege escalation paths (322% more common in AI code)
+13. [ ] Hallucinated package names (slopsquatting risk)
+```
+
+#### Strategy S2: Hallucinated Dependency Detection
+**Type**: System-side | **Effort**: Low | **Impact**: 5
+
+AI can hallucinate package names that don't exist—attackers register these names (slopsquatting). Verify all dependencies:
+
+```bash
+# Before installing any AI-suggested packages:
+
+# For npm
+npm view <package-name> --json 2>/dev/null || echo "⚠️ Package may not exist!"
+
+# Check package age, downloads, maintainers
+npm view <package-name> time.created
+npm view <package-name> 'dist-tags.latest'
+
+# For Python
+pip index versions <package-name> 2>/dev/null || echo "⚠️ Package may not exist!"
+```
+
+**Pre-commit Hook** (add to `.pre-commit-config.yaml`):
+```yaml
+- repo: local
+  hooks:
+    - id: verify-new-deps
+      name: Verify new dependencies exist
+      entry: ./scripts/hooks/verify-deps.sh
+      language: script
+      files: (package\.json|requirements\.txt|Pipfile|pyproject\.toml)$
+```
+
+#### Strategy S3: Secrets in AI Context Prevention
+**Type**: System-side | **Effort**: Low | **Impact**: 5
+
+CLAUDE.md and context files might accidentally contain secrets. Implement scanning:
+
+```yaml
+# Add to .pre-commit-config.yaml
+- repo: https://github.com/Yelp/detect-secrets
+  rev: v1.4.0
+  hooks:
+    - id: detect-secrets
+      args: ['--baseline', '.secrets.baseline']
+      # Explicitly include AI context files
+      files: (CLAUDE\.md|\.claude/|instructions\.md)$
+```
+
+**CLAUDE.md Security Template**:
+```markdown
+## Environment Variables
+<!-- NEVER put actual values here. Reference .env.example instead -->
+Required environment variables: See `.env.example`
+
+## API Endpoints
+<!-- Use placeholders, not real URLs with tokens -->
+- Auth API: ${AUTH_API_URL}
+- Data API: ${DATA_API_URL}
+
+## Credentials
+<!-- NEVER document actual credentials -->
+See 1Password vault: [vault-name] or contact security team
+```
+
+#### Strategy S4: MCP Server Security
+**Type**: System-side | **Effort**: Medium | **Impact**: 5
+
+MCP servers introduce data exfiltration risk. A malicious MCP server can intercept all data passing through it.
+
+**Verification Protocol**:
+```markdown
+Before installing any MCP server:
+1. [ ] Source is official (modelcontextprotocol org, Anthropic, verified publisher)
+2. [ ] Repository has public code review
+3. [ ] No outbound network calls to unknown domains
+4. [ ] Permissions are minimal and documented
+5. [ ] Recent security audit or active maintenance
+
+Red Flags:
+- MCP servers that need network access for local operations
+- Servers requesting broad filesystem permissions
+- Newly published servers with no history
+- Servers not from verified organizations
+```
+
+**MCP Configuration Security**:
+```json
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem",
+               "--allowed-directories", "./src", "./docs"],
+      // Limit to specific directories, not entire filesystem
+    }
+  }
+}
+```
+
+#### Strategy S5: Review Bypass Prevention
+**Type**: System-side | **Effort**: Low | **Impact**: 5
+
+AI-assisted commits merge 4× faster—this can bypass security review. Enforce gates:
+
+```yaml
+# .github/workflows/security-gate.yml
+name: Security Gate for AI-Assisted Code
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  detect-ai-code:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for AI-assistance markers
+        id: ai-check
+        run: |
+          # Check commit messages and file content for AI patterns
+          if git log --oneline origin/main..HEAD | grep -iE '(claude|copilot|gpt|ai-generated)'; then
+            echo "ai_assisted=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Require security review for AI code
+        if: steps.ai-check.outputs.ai_assisted == 'true'
+        run: |
+          echo "⚠️ AI-assisted code detected. Security review required."
+          echo "Add 'security-reviewed' label after review."
+
+      - name: Check security label
+        if: steps.ai-check.outputs.ai_assisted == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const labels = context.payload.pull_request.labels.map(l => l.name);
+            if (!labels.includes('security-reviewed')) {
+              core.setFailed('AI-assisted code requires security-reviewed label');
+            }
+```
+
+#### Strategy S6: Secure Coding Instructions
+**Type**: User-side | **Effort**: Low | **Impact**: 4
+
+Add security constraints to CLAUDE.md based on OpenSSF guidelines:
+
+```markdown
+## Security Requirements
+
+CRITICAL - All generated code MUST:
+- [ ] Validate and sanitize ALL user input
+- [ ] Use parameterized queries (never string concatenation for SQL)
+- [ ] Escape output appropriately for context (HTML, JS, SQL)
+- [ ] Never log sensitive data (passwords, tokens, PII)
+- [ ] Use constant-time comparison for secrets
+- [ ] Handle errors without exposing internal details
+- [ ] Use secure defaults (HTTPS, secure cookies, etc.)
+
+NEVER generate code that:
+- Disables SSL/TLS verification
+- Uses eval() or dynamic code execution with user input
+- Stores secrets in code or logs
+- Uses deprecated cryptographic algorithms
+- Grants excessive permissions
+```
+
+**Sources**: [OpenSSF Security-Focused Guide for AI Code Assistants](https://best.openssf.org/Security-Focused-Guide-for-AI-Code-Assistant-Instructions)
+
+---
+
+## Part XI: Human-in-the-Loop Patterns
 
 ### HULA (Human-in-the-Loop LLM Agents) Framework
 
@@ -818,6 +1070,316 @@ The coordinator maintains overall context while specialists focus on specific ta
 
 ---
 
+## Part XII: Team Adoption and Organizational Patterns
+
+### Scaling Beyond Individual Use
+
+Individual developer adoption is straightforward—copy files, start using. Team and organizational adoption requires additional infrastructure for consistency, knowledge sharing, and collective learning.
+
+---
+
+### Strategy T1: Shared CLAUDE.md Conventions
+**Type**: System-side | **Effort**: Medium | **Impact**: 5
+
+Establish team-wide CLAUDE.md standards:
+
+```markdown
+# Team CLAUDE.md Template
+
+## Required Sections (every project)
+1. Overview - What this project does
+2. Tech Stack - Versions matter
+3. Architecture - Key entry points
+4. Conventions - Coding standards
+5. Current State - Updated weekly minimum
+6. Security Requirements - Non-negotiable
+
+## Optional Sections (as needed)
+- Session Instructions
+- Known Issues
+- Recent Decisions
+
+## Update Protocol
+- [ ] Update "Current State" after each significant change
+- [ ] Review weekly for staleness
+- [ ] Archive outdated decisions (don't delete history)
+
+## Ownership
+- CLAUDE.md owner: [role/person]
+- Review cadence: Weekly in team standup
+```
+
+**Enforcement**:
+```yaml
+# Add to .github/workflows/claude-md-check.yml
+name: CLAUDE.md Compliance
+
+on:
+  pull_request:
+    paths:
+      - 'CLAUDE.md'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check required sections
+        run: |
+          for section in "## Overview" "## Tech Stack" "## Architecture" "## Conventions" "## Current State" "## Security"; do
+            if ! grep -q "$section" CLAUDE.md; then
+              echo "❌ Missing required section: $section"
+              exit 1
+            fi
+          done
+          echo "✅ All required sections present"
+```
+
+---
+
+### Strategy T2: Shared Memory and Decision History
+**Type**: System-side | **Effort**: High | **Impact**: 5
+
+Create team-accessible memory store for decisions, patterns, and learnings:
+
+**Architecture**:
+```
+team-memory/
+├── decisions/
+│   ├── 2025-01-auth-strategy.md      # Why we chose JWT over sessions
+│   ├── 2025-02-api-versioning.md     # Why we chose URL versioning
+│   └── index.md                       # Decision log with links
+├── patterns/
+│   ├── error-handling.md              # Team's error handling pattern
+│   ├── api-response-format.md         # Standard API response shape
+│   └── index.md                        # Pattern catalog
+├── learnings/
+│   ├── gotchas.md                      # Things that bite us repeatedly
+│   ├── ai-failures.md                  # AI mistakes to watch for
+│   └── index.md
+└── CLAUDE-TEAM.md                      # Aggregate context for AI
+```
+
+**Integration with CLAUDE.md**:
+```markdown
+## Team Context
+
+For team decisions and patterns, see:
+- Architectural decisions: `docs/decisions/`
+- Code patterns: `docs/patterns/`
+- Known gotchas: `docs/learnings/gotchas.md`
+
+When making decisions that affect architecture, document in `docs/decisions/` using the ADR template.
+```
+
+---
+
+### Strategy T3: Session Handoff Sharing
+**Type**: Collaborative | **Effort**: Low | **Impact**: 4
+
+Enable visibility into what team members worked on with AI:
+
+**Shared Handoff Location**:
+```
+docs/session-notes/
+├── 2025-01-15-alice-auth-refactor.md
+├── 2025-01-15-bob-api-optimization.md
+├── 2025-01-16-alice-continued.md
+└── index.md   # Summary of recent sessions
+```
+
+**Handoff Template for Team Use**:
+```markdown
+# Session Handoff: [Date] - [Name]
+
+## Session Goal
+[What I set out to accomplish]
+
+## What I Did
+- [Action 1]
+- [Action 2]
+
+## Decisions Made
+| Decision | Rationale | Affects |
+|----------|-----------|---------|
+| [decision] | [why] | [what files/features] |
+
+## AI Behaviors to Note
+- [Any hallucinations or errors observed]
+- [Patterns that worked well]
+
+## For Next Session
+1. [Priority task]
+2. [Secondary task]
+
+## @mentions
+<!-- Tag teammates who should review -->
+@alice - Need your input on [X]
+@bob - FYI on API changes
+```
+
+---
+
+### Strategy T4: Team AI Guidelines
+**Type**: User-side | **Effort**: Low | **Impact**: 4
+
+Document team norms for AI-assisted development:
+
+```markdown
+# Team AI Development Guidelines
+
+## When to Use AI
+✅ Boilerplate generation
+✅ Test case generation
+✅ Documentation drafts
+✅ Code review (supplementary)
+✅ Refactoring assistance
+✅ Debugging exploration
+
+## When to Be Extra Careful
+⚠️ Security-sensitive code (auth, crypto, permissions)
+⚠️ Financial/billing logic
+⚠️ Data migrations
+⚠️ Public API design
+
+## Required Verification
+All AI-generated code MUST be:
+- [ ] Read and understood by a human
+- [ ] Tested (not just AI-generated tests)
+- [ ] Reviewed by another human for PRs
+- [ ] Security-scanned (see security section)
+
+## AI Disclosure
+- Commit messages MAY indicate AI assistance
+- PR descriptions SHOULD note significant AI contribution
+- No shame—AI is a tool, disclose for review calibration
+
+## Shared Learning
+- Document AI failures in `docs/learnings/ai-failures.md`
+- Share effective prompts in `docs/patterns/prompts/`
+- Update CLAUDE.md when patterns emerge
+```
+
+---
+
+### Strategy T5: Onboarding Automation
+**Type**: System-side | **Effort**: Medium | **Impact**: 4
+
+Automate new team member setup:
+
+```bash
+#!/bin/bash
+# scripts/onboard-ai-workflow.sh
+
+echo "🚀 Setting up AI Excellence Framework..."
+
+# 1. Check prerequisites
+command -v claude >/dev/null 2>&1 || {
+    echo "❌ Claude Code not installed. Visit: https://claude.ai/code"
+    exit 1
+}
+
+# 2. Configure user-specific settings
+mkdir -p ~/.claude
+if [ ! -f ~/.claude/settings.json ]; then
+    echo '{"theme": "dark"}' > ~/.claude/settings.json
+    echo "✅ Created user settings"
+fi
+
+# 3. Set up local overrides
+if [ ! -f CLAUDE.local.md ]; then
+    cat > CLAUDE.local.md << 'EOF'
+# Personal Preferences
+
+## My Context
+- Name: [Your name]
+- Role: [Your role]
+- Areas of focus: [What you work on]
+
+## My Preferences
+- Verbosity: [concise/detailed]
+- Explanation level: [senior/mid/junior]
+- Preferred review style: [thorough/quick]
+
+## My Sessions
+Recent work:
+- [Date]: [What you worked on]
+EOF
+    echo "✅ Created CLAUDE.local.md - please customize"
+fi
+
+# 4. Install pre-commit hooks
+pip install pre-commit
+pre-commit install
+echo "✅ Pre-commit hooks installed"
+
+# 5. Verify setup
+echo ""
+echo "📋 Checklist:"
+echo "  [ ] Read CLAUDE.md to understand project context"
+echo "  [ ] Customize CLAUDE.local.md with your preferences"
+echo "  [ ] Review docs/patterns/ for team conventions"
+echo "  [ ] Check docs/learnings/gotchas.md for known issues"
+echo ""
+echo "🎉 Setup complete! Run 'claude' to start."
+```
+
+---
+
+### Strategy T6: Collective Metrics
+**Type**: System-side | **Effort**: High | **Impact**: 4
+
+Track team-wide AI effectiveness:
+
+```markdown
+## Team AI Metrics Dashboard
+
+### Weekly Aggregates
+| Metric | This Week | Last Week | Trend |
+|--------|-----------|-----------|-------|
+| Sessions | 47 | 42 | ↑ |
+| Handoffs created | 23 | 18 | ↑ |
+| Security issues caught | 3 | 5 | ↓ |
+| AI errors documented | 7 | 4 | ↑ |
+
+### Per-Developer Patterns
+[Private to each developer, not for comparison]
+
+### Lessons This Week
+- Pattern that worked: [description]
+- Mistake to avoid: [description]
+- Tool improvement idea: [description]
+```
+
+**Collection Script**:
+```bash
+#!/bin/bash
+# scripts/collect-ai-metrics.sh
+
+WEEK=$(date +%Y-W%V)
+METRICS_FILE="docs/metrics/${WEEK}.json"
+
+# Count session handoffs
+HANDOFFS=$(find docs/session-notes -name "*.md" -mtime -7 | wc -l)
+
+# Count security issues from commits
+SECURITY_FIXES=$(git log --oneline --since="1 week ago" | grep -ci "security\|vuln\|fix")
+
+# Output
+cat > "$METRICS_FILE" << EOF
+{
+  "week": "$WEEK",
+  "handoffs": $HANDOFFS,
+  "security_fixes": $SECURITY_FIXES,
+  "collected_at": "$(date -Iseconds)"
+}
+EOF
+
+echo "Metrics saved to $METRICS_FILE"
+```
+
+---
+
 ## Quick Reference: Mitigation by Friction Category
 
 | Category | Top 3 Mitigations | Combined Impact |
@@ -830,6 +1392,10 @@ The coordinator maintains overall context while specialists focus on specific ta
 | **Communication** | Expertise declaration, Examples, Explicit boundaries | Medium |
 | **Knowledge** | Version pinning, Web search, Reality context | Medium |
 | **Scope** | Explicit boundaries, Priority ordering, Urgency context | Medium |
+| **Security** | OWASP review, Dependency verification, Review bypass prevention | Critical |
+| **Tool Use** | Parameter verification, Tool hints, State tracking | Medium |
+| **Multi-Modal** | Explicit visual feedback, UX testing requirements | Medium |
+| **Team Adoption** | Shared CLAUDE.md, Session handoff sharing, Team guidelines | High |
 
 ---
 
