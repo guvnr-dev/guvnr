@@ -39,6 +39,8 @@ export { initCommand } from './commands/init.js';
 export { validateCommand } from './commands/validate.js';
 export { updateCommand } from './commands/update.js';
 export { doctorCommand } from './commands/doctor.js';
+export { generateCommand, SUPPORTED_TOOLS } from './commands/generate.js';
+export { lintCommand } from './commands/lint.js';
 
 // ============================================
 // Error System Exports
@@ -62,7 +64,7 @@ export {
  * Framework version (semver)
  * @constant {string}
  */
-export const VERSION = '1.3.0';
+export const VERSION = '1.5.0';
 
 /**
  * Available presets for initialization

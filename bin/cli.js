@@ -23,6 +23,8 @@ import { initCommand } from '../src/commands/init.js';
 import { validateCommand } from '../src/commands/validate.js';
 import { updateCommand } from '../src/commands/update.js';
 import { doctorCommand } from '../src/commands/doctor.js';
+import { generateCommand, SUPPORTED_TOOLS } from '../src/commands/generate.js';
+import { lintCommand } from '../src/commands/lint.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -82,6 +84,33 @@ program
   .description('Diagnose common issues and verify setup')
   .option('--verbose', 'Show detailed diagnostic information', false)
   .action(doctorCommand);
+
+// Generate command (multi-tool support)
+program
+  .command('generate')
+  .alias('gen')
+  .description('Generate configuration files for multiple AI coding tools')
+  .option(
+    '-t, --tools <tools>',
+    `Tools to generate for: ${SUPPORTED_TOOLS.join(', ')}`,
+    'all'
+  )
+  .option('-f, --force', 'Overwrite existing files', false)
+  .option(
+    '--dry-run',
+    'Show what would be created without making changes',
+    false
+  )
+  .action(generateCommand);
+
+// Lint command (configuration validation)
+program
+  .command('lint')
+  .description('Check configuration files for issues and best practices')
+  .option('--verbose', 'Show all findings including suggestions', false)
+  .option('--only <files>', 'Only check specific files (comma-separated)', '')
+  .option('--ignore-errors', 'Exit 0 even with errors', false)
+  .action(lintCommand);
 
 // Error handling
 program.exitOverride(err => {

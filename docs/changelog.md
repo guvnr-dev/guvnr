@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2025-12-30
+
+### Added
+
+#### Multi-Tool Support
+- **AGENTS.md generation** — Linux Foundation standard adopted by 60K+ projects
+- **Cursor rules** — `.cursor/rules/*.mdc` with YAML frontmatter
+- **GitHub Copilot instructions** — `.github/copilot-instructions.md`
+- **Windsurf rules** — `.windsurf/rules/` with character limit compliance
+- **Aider configuration** — `.aider.conf.yml` with auto-commit/lint/test
+
+#### New CLI Commands
+- `aix generate` — Generate configurations for multiple AI coding tools
+- `aix lint` — Validate configuration files with best practice checks
+- Support for `--tools all|cursor|copilot|windsurf|agents|aider`
+
+#### OpenSSF Alignment
+- Full alignment with [OpenSSF Security Guide for AI Code Assistants](https://best.openssf.org)
+- RCI (Recursive Criticism and Improvement) pattern in security review
+- Research-backed: RCI fixes 41.9%-68.7% of vulnerabilities
+
+#### Security Enhancements
+- OWASP Top 10 for LLM Applications 2025 coverage
+- Automated fix suggestions with code patterns
+- Prompt injection protection patterns
+- Dependency verification commands
+
+### Changed
+- Updated security-review command with OpenSSF RCI methodology
+- Enhanced CLAUDE.md parser for multi-tool generation
+- Improved test coverage for new commands
+- Updated package.json with new keywords for discoverability
+
+### Fixed
+- Version constant alignment between package.json and src/index.js
+
 ## [1.4.0] - 2024-12-30
 
 ### Added
@@ -85,6 +121,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Focus |
 |---------|-------|
+| 1.5.0 | Multi-tool support (Cursor, Copilot, Windsurf, Aider, AGENTS.md), OpenSSF alignment |
 | 1.4.0 | VitePress documentation, enterprise features |
 | 1.3.0 | MCP server production features |
 | 1.2.0 | CLI installer and templates |

@@ -227,6 +227,99 @@ export interface UpdateOptions {
 }
 
 /**
+ * Supported AI coding tools for multi-tool generation
+ */
+export type SupportedTool =
+  | 'agents'
+  | 'cursor'
+  | 'copilot'
+  | 'windsurf'
+  | 'aider'
+  | 'claude'
+  | 'all';
+
+/**
+ * List of supported AI tools
+ */
+export const SUPPORTED_TOOLS: SupportedTool[];
+
+/**
+ * Options for the generate command
+ */
+export interface GenerateOptions {
+  /** Tools to generate configuration for */
+  tools?: SupportedTool | SupportedTool[] | string;
+
+  /** Overwrite existing files */
+  force?: boolean;
+
+  /** Preview changes without writing */
+  dryRun?: boolean;
+}
+
+/**
+ * Options for the lint command
+ */
+export interface LintOptions {
+  /** Show detailed output */
+  verbose?: boolean;
+
+  /** Only check specific files */
+  only?: string | string[];
+
+  /** Exit 0 even with errors */
+  ignoreErrors?: boolean;
+}
+
+/**
+ * Lint check result
+ */
+export interface LintResult {
+  /** Check passed */
+  passed: boolean;
+
+  /** Result message */
+  message: string;
+
+  /** Suggestion for fixing */
+  suggestion?: string;
+}
+
+/**
+ * Lint results summary
+ */
+export interface LintResults {
+  /** Errors (severity: error) */
+  errors: LintFinding[];
+
+  /** Warnings (severity: warning) */
+  warnings: LintFinding[];
+
+  /** Informational (severity: info) */
+  info: LintFinding[];
+
+  /** Passed checks */
+  passed: LintFinding[];
+}
+
+/**
+ * Individual lint finding
+ */
+export interface LintFinding {
+  /** File checked */
+  file: string;
+
+  /** Check name */
+  check: string;
+
+  /** Finding message */
+  message: string;
+
+  /** Suggestion for fixing */
+  suggestion?: string;
+}
+
+/**
  * Result of init command
  */
 export interface InitResult {

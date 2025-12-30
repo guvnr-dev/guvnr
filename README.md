@@ -1,6 +1,11 @@
 # AI Excellence Framework
 
-A comprehensive framework for reducing friction in AI-assisted software development.
+**Universal framework for AI-assisted development — works with Claude, Cursor, Copilot, Windsurf, and Aider.**
+
+[![npm version](https://img.shields.io/npm/v/ai-excellence-framework)](https://www.npmjs.com/package/ai-excellence-framework)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![AGENTS.md](https://img.shields.io/badge/AGENTS.md-compatible-blue)](https://agents.md)
+[![OpenSSF](https://img.shields.io/badge/OpenSSF-aligned-green)](https://best.openssf.org)
 
 ## The Problem
 
@@ -14,9 +19,9 @@ This framework provides:
 
 1. **Friction Taxonomy** — 59 documented friction points across 17 categories
 2. **Mitigation Strategies** — 40+ evidence-based approaches with research citations
-3. **Ready-to-Deploy Tools** — Slash commands, subagents, hooks, MCP server, and automation
-4. **Security Focus** — AI-specific security scanning (OWASP, slopsquatting, secrets)
-5. **Team Patterns** — Organizational adoption, shared memory, onboarding
+3. **Multi-Tool Support** — Works with Claude, Cursor, Copilot, Windsurf, and Aider
+4. **Security Focus** — OpenSSF/OWASP-aligned security scanning (slopsquatting, secrets, LLM Top 10)
+5. **Industry Standards** — Full [AGENTS.md](https://agents.md) support (60K+ projects)
 
 ## Quick Start
 
@@ -62,6 +67,26 @@ claude  # In your project directory
 /plan implement user authentication
 ```
 
+### Generate Multi-Tool Support
+
+```bash
+# Generate configuration for all supported AI tools
+npx ai-excellence-framework generate --tools all
+
+# Or specific tools
+npx ai-excellence-framework generate --tools cursor,copilot,agents
+
+# Validate your configuration
+npx ai-excellence-framework lint
+```
+
+This creates:
+- `AGENTS.md` — [Linux Foundation standard](https://agents.md) (60K+ projects)
+- `.cursor/rules/` — [Cursor IDE rules](https://docs.cursor.com/context/rules)
+- `.github/copilot-instructions.md` — [GitHub Copilot instructions](https://docs.github.com/copilot)
+- `.windsurf/rules/` — [Windsurf IDE rules](https://docs.windsurf.com)
+- `.aider.conf.yml` — [Aider configuration](https://aider.chat)
+
 ## What's Included
 
 ```
@@ -94,7 +119,9 @@ src/
 │   ├── init.js                   # Framework installer
 │   ├── validate.js               # Configuration validator
 │   ├── doctor.js                 # Environment diagnostics
-│   └── update.js                 # Update checker
+│   ├── update.js                 # Update checker
+│   ├── generate.js               # Multi-tool configuration generator
+│   └── lint.js                   # Configuration linter
 ├── schemas/                      # Validation schemas
 │   ├── config.schema.json        # Configuration schema
 │   └── claude-md.schema.json     # CLAUDE.md validation
