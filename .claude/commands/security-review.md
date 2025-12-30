@@ -264,6 +264,161 @@ Check for:
 
 ---
 
+## Language-Specific Security Patterns
+
+### Python Security
+
+```python
+# ❌ VULNERABLE - SQL Injection
+cursor.execute(f"SELECT * FROM users WHERE id = {user_id}")
+
+# ✅ SECURE - Parameterized query
+cursor.execute("SELECT * FROM users WHERE id = %s", (user_id,))
+```
+
+```python
+# ❌ VULNERABLE - Command injection
+import os
+os.system(f"echo {user_input}")
+
+# ✅ SECURE - Use subprocess with list args
+import subprocess
+subprocess.run(["echo", user_input], check=True)
+```
+
+```python
+# ❌ VULNERABLE - Pickle deserialization (RCE risk)
+import pickle
+data = pickle.loads(untrusted_data)
+
+# ✅ SECURE - Use JSON for untrusted data
+import json
+data = json.loads(untrusted_data)
+```
+
+```python
+# ❌ VULNERABLE - Path traversal
+with open(f"/uploads/{filename}", "r") as f:
+    content = f.read()
+
+# ✅ SECURE - Validate path stays within directory
+from pathlib import Path
+base = Path("/uploads").resolve()
+file_path = (base / filename).resolve()
+if not str(file_path).startswith(str(base)):
+    raise ValueError("Path traversal detected")
+```
+
+**Python-Specific Checks:**
+- [ ] No `pickle.loads()` on untrusted data
+- [ ] No `eval()` or `exec()` with user input
+- [ ] Using `secrets` module instead of `random` for tokens
+- [ ] `yaml.safe_load()` instead of `yaml.load()`
+- [ ] Bandit/Safety checks passing
+
+### Go Security
+
+```go
+// ❌ VULNERABLE - SQL Injection
+db.Query("SELECT * FROM users WHERE id = " + userId)
+
+// ✅ SECURE - Parameterized query
+db.Query("SELECT * FROM users WHERE id = ?", userId)
+```
+
+```go
+// ❌ VULNERABLE - Command injection
+cmd := exec.Command("sh", "-c", "echo " + userInput)
+
+// ✅ SECURE - Pass args separately
+cmd := exec.Command("echo", userInput)
+```
+
+```go
+// ❌ VULNERABLE - Unchecked error (can lead to nil panic)
+file, _ := os.Open(filename)
+file.Read(buffer)
+
+// ✅ SECURE - Always check errors
+file, err := os.Open(filename)
+if err != nil {
+    return fmt.Errorf("failed to open file: %w", err)
+}
+defer file.Close()
+```
+
+```go
+// ❌ VULNERABLE - Race condition
+if _, err := os.Stat(file); err == nil {
+    os.Remove(file) // TOCTOU vulnerability
+}
+
+// ✅ SECURE - Handle errors atomically
+err := os.Remove(file)
+if err != nil && !os.IsNotExist(err) {
+    return err
+}
+```
+
+**Go-Specific Checks:**
+- [ ] All errors are checked (no `_` for errors)
+- [ ] No `fmt.Sprintf` for SQL queries
+- [ ] Using `crypto/rand` not `math/rand` for security
+- [ ] Proper context cancellation handling
+- [ ] Race detector passing (`go test -race`)
+
+### Rust Security
+
+```rust
+// ❌ VULNERABLE - Unchecked unwrap can panic
+let value = some_option.unwrap();
+
+// ✅ SECURE - Handle errors gracefully
+let value = some_option.ok_or_else(|| Error::new("Value not found"))?;
+```
+
+```rust
+// ❌ VULNERABLE - Integer overflow in release builds
+let result = a + b; // Can overflow in release mode
+
+// ✅ SECURE - Use checked arithmetic
+let result = a.checked_add(b).ok_or_else(|| Error::new("Overflow"))?;
+```
+
+```rust
+// ❌ VULNERABLE - Unsafe block without justification
+unsafe {
+    std::ptr::write(ptr, value);
+}
+
+// ✅ SECURE - Document unsafe usage and minimize scope
+// SAFETY: ptr is guaranteed to be valid and aligned
+// because it comes from Box::into_raw() above
+unsafe {
+    std::ptr::write(ptr, value);
+}
+```
+
+```rust
+// ❌ VULNERABLE - SQL via format string
+let query = format!("SELECT * FROM users WHERE id = {}", user_id);
+
+// ✅ SECURE - Use query builder with parameters
+let user = sqlx::query_as::<_, User>("SELECT * FROM users WHERE id = $1")
+    .bind(user_id)
+    .fetch_one(&pool)
+    .await?;
+```
+
+**Rust-Specific Checks:**
+- [ ] Minimal `unsafe` blocks with safety comments
+- [ ] No `.unwrap()` in production code paths
+- [ ] Using `clippy` lints at warn level
+- [ ] Checked/saturating arithmetic where needed
+- [ ] `#[deny(unsafe_code)]` where possible
+
+---
+
 ## Context-Specific Checks
 
 If code handles:
