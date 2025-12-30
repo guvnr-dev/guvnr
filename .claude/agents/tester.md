@@ -49,23 +49,23 @@ Follow these patterns:
 
 ```javascript
 // Naming: describe what, expect what, when what
-describe("UserService", () => {
-  describe("createUser", () => {
-    it("should create user when valid data provided", () => {
+describe('UserService', () => {
+  describe('createUser', () => {
+    it('should create user when valid data provided', () => {
       // Arrange
-      const userData = { name: "Test", email: "test@example.com" };
+      const userData = { name: 'Test', email: 'test@example.com' };
 
       // Act
       const result = userService.createUser(userData);
 
       // Assert
       expect(result.id).toBeDefined();
-      expect(result.name).toBe("Test");
+      expect(result.name).toBe('Test');
     });
 
-    it("should throw ValidationError when email invalid", () => {
+    it('should throw ValidationError when email invalid', () => {
       // Arrange
-      const userData = { name: "Test", email: "invalid" };
+      const userData = { name: 'Test', email: 'invalid' };
 
       // Act & Assert
       expect(() => userService.createUser(userData)).toThrow(ValidationError);

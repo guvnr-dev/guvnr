@@ -251,6 +251,7 @@ chmod 755 ~/.claude/project-memories
 **Common Causes:**
 
 1. **Node.js version mismatch**
+
    ```yaml
    # Ensure consistent version in .github/workflows
    - uses: actions/setup-node@v4
@@ -259,12 +260,14 @@ chmod 755 ~/.claude/project-memories
    ```
 
 2. **Missing environment variables**
+
    ```bash
    # Check if tests depend on env vars
    env | grep -E 'CI|NODE|NPM'
    ```
 
 3. **File permission differences**
+
    ```bash
    # Make hooks executable in CI
    chmod +x scripts/hooks/*.sh
@@ -283,11 +286,13 @@ chmod 755 ~/.claude/project-memories
 **Solutions:**
 
 1. Increase pytest timeout:
+
    ```bash
    python -m pytest tests/mcp/ -v --timeout=60
    ```
 
 2. Check if MCP SDK is installed:
+
    ```yaml
    - name: Install MCP
      run: pip install mcp
@@ -314,11 +319,13 @@ chmod 755 ~/.claude/project-memories
    - Use `/handoff` to create session boundaries
 
 2. **Clean up .tmp directory**
+
    ```bash
    rm -rf .tmp/*
    ```
 
 3. **Reduce MCP database size**
+
    ```bash
    # Check database size
    ls -lh ~/.claude/project-memories/
@@ -352,11 +359,13 @@ sqlite3 ~/.claude/project-memories/project.db "
 **Solutions:**
 
 1. **Enable WAL mode** (already default in v1.4.0+)
+
    ```python
    conn.execute("PRAGMA journal_mode=WAL")
    ```
 
 2. **Add indexes for frequent queries**
+
    ```sql
    CREATE INDEX IF NOT EXISTS idx_decisions_timestamp ON decisions(timestamp);
    ```
@@ -375,6 +384,7 @@ sqlite3 ~/.claude/project-memories/project.db "
 **Solutions:**
 
 1. Configure git:
+
    ```bash
    git config core.autocrlf input  # Mac/Linux
    git config core.autocrlf true   # Windows
@@ -395,6 +405,7 @@ sqlite3 ~/.claude/project-memories/project.db "
 
 1. Use Git Bash or WSL
 2. Use cross-platform npm scripts:
+
    ```json
    "scripts": {
      "health": "node scripts/metrics/friction-metrics.js status"
@@ -497,12 +508,14 @@ SELECT * FROM decisions ORDER BY timestamp DESC LIMIT 5;
 **Recovery:**
 
 1. Check git history:
+
    ```bash
    git log --oneline CLAUDE.md
    git show HEAD~1:CLAUDE.md > CLAUDE.md.backup
    ```
 
 2. Regenerate from template:
+
    ```bash
    npx ai-excellence-framework init --force
    ```
@@ -519,16 +532,19 @@ SELECT * FROM decisions ORDER BY timestamp DESC LIMIT 5;
 **Recovery:**
 
 1. Backup current state:
+
    ```bash
    cp ~/.claude/project-memories/project.db ~/.claude/project-memories/project.db.corrupted
    ```
 
 2. Try integrity check:
+
    ```bash
    sqlite3 ~/.claude/project-memories/project.db "PRAGMA integrity_check;"
    ```
 
 3. Recover what's possible:
+
    ```bash
    sqlite3 ~/.claude/project-memories/project.db ".recover" | \
      sqlite3 ~/.claude/project-memories/project-recovered.db
@@ -556,21 +572,22 @@ npx ai-excellence-framework init --preset standard --force
 
 ## Diagnostic Commands Reference
 
-| Command | Purpose |
-|---------|---------|
-| `npx ai-excellence doctor` | Full environment check |
-| `npx ai-excellence validate` | Configuration validation |
-| `npx ai-excellence validate --fix` | Auto-fix issues |
-| `./scripts/health/claude-md-monitor.sh` | CLAUDE.md health check |
-| `node scripts/metrics/friction-metrics.js status` | Metrics system status |
-| `python -c "import mcp; print('OK')"` | MCP SDK check |
-| `pre-commit run --all-files` | Run all hooks manually |
+| Command                                           | Purpose                  |
+| ------------------------------------------------- | ------------------------ |
+| `npx ai-excellence doctor`                        | Full environment check   |
+| `npx ai-excellence validate`                      | Configuration validation |
+| `npx ai-excellence validate --fix`                | Auto-fix issues          |
+| `./scripts/health/claude-md-monitor.sh`           | CLAUDE.md health check   |
+| `node scripts/metrics/friction-metrics.js status` | Metrics system status    |
+| `python -c "import mcp; print('OK')"`             | MCP SDK check            |
+| `pre-commit run --all-files`                      | Run all hooks manually   |
 
 ## Getting Expert Help
 
 If you've tried the above solutions and still have issues:
 
 1. **Gather diagnostics:**
+
    ```bash
    npx ai-excellence doctor --verbose > diagnostics.txt 2>&1
    node --version >> diagnostics.txt

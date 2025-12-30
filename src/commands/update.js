@@ -165,9 +165,7 @@ export async function updateCommand(options) {
     return;
   }
 
-  console.log(
-    chalk.yellow(`  Found ${updates.available.length} updates available:\n`)
-  );
+  console.log(chalk.yellow(`  Found ${updates.available.length} updates available:\n`));
   updates.available.forEach(u => {
     console.log(chalk.gray(`    - ${u.file} (${u.component})`));
   });

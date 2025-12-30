@@ -97,8 +97,7 @@ export const ERROR_CODES = {
   'AIX-INIT-101': {
     category: 'Initialization',
     description: 'Directory already contains framework files',
-    suggestion:
-      'Use --force to overwrite existing files, or use --dry-run to preview changes'
+    suggestion: 'Use --force to overwrite existing files, or use --dry-run to preview changes'
   },
   'AIX-INIT-102': {
     category: 'Initialization',
@@ -113,14 +112,12 @@ export const ERROR_CODES = {
   'AIX-INIT-104': {
     category: 'Initialization',
     description: 'Template file not found',
-    suggestion:
-      'Reinstall the framework: npm install -g ai-excellence-framework'
+    suggestion: 'Reinstall the framework: npm install -g ai-excellence-framework'
   },
   'AIX-INIT-105': {
     category: 'Initialization',
     description: 'Interactive prompts not available',
-    suggestion:
-      'Use --yes flag for non-interactive mode, or run in an interactive terminal'
+    suggestion: 'Use --yes flag for non-interactive mode, or run in an interactive terminal'
   },
 
   // Validation Errors (200-299)
@@ -137,8 +134,7 @@ export const ERROR_CODES = {
   'AIX-VALID-202': {
     category: 'Validation',
     description: 'CLAUDE.md missing required sections',
-    suggestion:
-      'Required sections: ## Overview, ## Tech Stack, ## Current State'
+    suggestion: 'Required sections: ## Overview, ## Tech Stack, ## Current State'
   },
   'AIX-VALID-203': {
     category: 'Validation',
@@ -148,14 +144,12 @@ export const ERROR_CODES = {
   'AIX-VALID-204': {
     category: 'Validation',
     description: 'Slash command file is malformed',
-    suggestion:
-      'Slash commands must have YAML frontmatter with "description" field'
+    suggestion: 'Slash commands must have YAML frontmatter with "description" field'
   },
   'AIX-VALID-205': {
     category: 'Validation',
     description: 'Agent definition is malformed',
-    suggestion:
-      'Agent files must have YAML frontmatter with "name" and "description" fields'
+    suggestion: 'Agent files must have YAML frontmatter with "name" and "description" fields'
   },
   'AIX-VALID-206': {
     category: 'Validation',
@@ -200,8 +194,7 @@ export const ERROR_CODES = {
   'AIX-FS-401': {
     category: 'Filesystem',
     description: 'Permission denied',
-    suggestion:
-      'Check file/directory permissions or run with appropriate privileges'
+    suggestion: 'Check file/directory permissions or run with appropriate privileges'
   },
   'AIX-FS-402': {
     category: 'Filesystem',
@@ -282,8 +275,7 @@ export const ERROR_CODES = {
   'AIX-HOOK-701': {
     category: 'Hooks',
     description: 'Pre-commit hook installation failed',
-    suggestion:
-      'Install pre-commit: pip install pre-commit && pre-commit install'
+    suggestion: 'Install pre-commit: pip install pre-commit && pre-commit install'
   },
   'AIX-HOOK-702': {
     category: 'Hooks',
@@ -293,8 +285,7 @@ export const ERROR_CODES = {
   'AIX-HOOK-703': {
     category: 'Hooks',
     description: 'Hook blocked by security policy',
-    suggestion:
-      'Review hook commands against allowed commands in settings.json'
+    suggestion: 'Review hook commands against allowed commands in settings.json'
   },
 
   // General Errors (900-999)

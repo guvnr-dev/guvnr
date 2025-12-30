@@ -53,6 +53,7 @@ CLAUDE.md Structure
 ```
 
 **Design Decisions:**
+
 - Single file (not split) for simplicity
 - Markdown for universal compatibility
 - Required sections enforced by hooks
@@ -142,19 +143,19 @@ SQLite-backed memory server using Model Context Protocol:
 
 **MCP Tools:**
 
-| Tool | Purpose |
-|------|---------|
+| Tool                | Purpose                      |
+| ------------------- | ---------------------------- |
 | `remember_decision` | Store architectural decision |
-| `recall_decisions` | Search past decisions |
-| `store_pattern` | Save code pattern |
-| `get_patterns` | Retrieve patterns |
-| `set_context` | Store key-value context |
-| `get_context` | Retrieve context |
-| `memory_stats` | Database statistics |
-| `export_memory` | Export all data |
-| `import_memory` | Import from backup |
-| `health_check` | Verify server health |
-| `purge_memory` | Delete all data (careful!) |
+| `recall_decisions`  | Search past decisions        |
+| `store_pattern`     | Save code pattern            |
+| `get_patterns`      | Retrieve patterns            |
+| `set_context`       | Store key-value context      |
+| `get_context`       | Retrieve context             |
+| `memory_stats`      | Database statistics          |
+| `export_memory`     | Export all data              |
+| `import_memory`     | Import from backup           |
+| `health_check`      | Verify server health         |
+| `purge_memory`      | Delete all data (careful!)   |
 
 ### 5. Validation Layer (Hooks)
 
@@ -202,16 +203,16 @@ CLI Architecture
 
 **Preset Comparison:**
 
-| Component | Minimal | Standard | Full | Team |
-|-----------|---------|----------|------|------|
-| CLAUDE.md | ✓ | ✓ | ✓ | ✓ |
-| /plan, /verify | ✓ | ✓ | ✓ | ✓ |
-| Other commands | - | ✓ | ✓ | ✓ |
-| Subagents | - | ✓ | ✓ | ✓ |
-| Pre-commit hooks | - | ✓ | ✓ | ✓ |
-| MCP server | - | - | ✓ | ✓ |
-| Metrics | - | - | ✓ | ✓ |
-| Team features | - | - | - | ✓ |
+| Component        | Minimal | Standard | Full | Team |
+| ---------------- | ------- | -------- | ---- | ---- |
+| CLAUDE.md        | ✓       | ✓        | ✓    | ✓    |
+| /plan, /verify   | ✓       | ✓        | ✓    | ✓    |
+| Other commands   | -       | ✓        | ✓    | ✓    |
+| Subagents        | -       | ✓        | ✓    | ✓    |
+| Pre-commit hooks | -       | ✓        | ✓    | ✓    |
+| MCP server       | -       | -        | ✓    | ✓    |
+| Metrics          | -       | -        | ✓    | ✓    |
+| Team features    | -       | -        | -    | ✓    |
 
 ## Data Flow
 

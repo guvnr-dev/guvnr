@@ -4,13 +4,13 @@ AI-generated code has measurably higher vulnerability rates than human-written c
 
 ## The Security Gap
 
-| Vulnerability Type | AI Code Rate | Source |
-|-------------------|--------------|--------|
-| Any OWASP Top 10 | 45% | [Veracode 2025](https://www.veracode.com/blog/genai-code-security-report/) |
-| XSS (CWE-80) | 86% failure | [Veracode 2025](https://www.helpnetsecurity.com/2025/08/07/create-ai-code-security-risks/) |
-| Log Injection (CWE-117) | 88% vulnerable | Veracode 2025 |
-| Privilege Escalation | 322% increase | [Apiiro 2025](https://apiiro.com/blog/4x-velocity-10x-vulnerabilities-ai-coding-assistants-are-shipping-more-risks/) |
-| Architectural Flaws | 153% increase | Apiiro 2025 |
+| Vulnerability Type      | AI Code Rate   | Source                                                                                                               |
+| ----------------------- | -------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Any OWASP Top 10        | 45%            | [Veracode 2025](https://www.veracode.com/blog/genai-code-security-report/)                                           |
+| XSS (CWE-80)            | 86% failure    | [Veracode 2025](https://www.helpnetsecurity.com/2025/08/07/create-ai-code-security-risks/)                           |
+| Log Injection (CWE-117) | 88% vulnerable | Veracode 2025                                                                                                        |
+| Privilege Escalation    | 322% increase  | [Apiiro 2025](https://apiiro.com/blog/4x-velocity-10x-vulnerabilities-ai-coding-assistants-are-shipping-more-risks/) |
+| Architectural Flaws     | 153% increase  | Apiiro 2025                                                                                                          |
 
 **Key finding:** Larger models don't perform significantly better than smaller models on security. This is a systemic issue, not a scaling problem.
 
@@ -18,11 +18,11 @@ AI-generated code has measurably higher vulnerability rates than human-written c
 
 AI models suggest packages that don't exist:
 
-| Model Type | Hallucination Rate |
-|------------|-------------------|
-| Open-source LLMs | ~20% |
-| ChatGPT-4 | ~5% |
-| Repeated hallucinations | 58% consistent |
+| Model Type              | Hallucination Rate |
+| ----------------------- | ------------------ |
+| Open-source LLMs        | ~20%               |
+| ChatGPT-4               | ~5%                |
+| Repeated hallucinations | 58% consistent     |
 
 **Attack vector:** Attackers register malicious packages with hallucinated names. Developers run `npm install [hallucinated-package]` and execute malware.
 
@@ -74,6 +74,7 @@ OWASP-aligned security audit:
 ```
 
 Checks for:
+
 - OWASP Top 10 vulnerabilities
 - AI-specific security issues
 - Input validation gaps
@@ -82,6 +83,7 @@ Checks for:
 ### Dependency Validation (Impact: 5/5)
 
 The `verify-deps.sh` hook:
+
 1. Extracts package names from package.json
 2. Checks npm registry for existence
 3. Blocks commit if packages don't exist
@@ -94,6 +96,7 @@ In CLAUDE.md:
 
 ```markdown
 ## Security Requirements
+
 - Validate all user input
 - Use parameterized queries (never string concatenation for SQL)
 - Encode output for context (HTML, URL, JS)
@@ -102,9 +105,9 @@ In CLAUDE.md:
 
 ## Evidence
 
-| Source | Key Finding |
-|--------|-------------|
-| [Veracode 2025](https://www.veracode.com/blog/genai-code-security-report/) | 45% of AI code has OWASP vulnerabilities |
-| [OWASP GenAI](https://genai.owasp.org/) | Updated Top 10 for LLM applications |
-| [Apiiro 2025](https://apiiro.com/blog/4x-velocity-10x-vulnerabilities-ai-coding-assistants-are-shipping-more-risks/) | 322% privilege escalation increase |
+| Source                                                                                                                                   | Key Finding                               |
+| ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| [Veracode 2025](https://www.veracode.com/blog/genai-code-security-report/)                                                               | 45% of AI code has OWASP vulnerabilities  |
+| [OWASP GenAI](https://genai.owasp.org/)                                                                                                  | Updated Top 10 for LLM applications       |
+| [Apiiro 2025](https://apiiro.com/blog/4x-velocity-10x-vulnerabilities-ai-coding-assistants-are-shipping-more-risks/)                     | 322% privilege escalation increase        |
 | [Slopsquatting Research](https://www.bleepingcomputer.com/news/security/ai-hallucinated-code-dependencies-become-new-supply-chain-risk/) | 205,474 unique hallucinated package names |

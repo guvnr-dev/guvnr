@@ -41,6 +41,7 @@ Add to `~/.config/claude-desktop/config.json` (Linux) or `~/Library/Application 
 ### 4. Verify Connection
 
 Restart Claude Desktop and check for the tools:
+
 - `remember_decision`
 - `recall_decisions`
 - `store_pattern`
@@ -50,15 +51,15 @@ Restart Claude Desktop and check for the tools:
 
 The MCP server provides persistent storage for:
 
-| Tool | Purpose |
-|------|---------|
+| Tool                | Purpose                       |
+| ------------------- | ----------------------------- |
 | `remember_decision` | Store architectural decisions |
-| `recall_decisions` | Search decisions by keyword |
-| `store_pattern` | Save code patterns |
-| `get_patterns` | Retrieve saved patterns |
-| `set_context` | Key-value storage |
-| `get_context` | Retrieve stored values |
-| `memory_stats` | Database statistics |
+| `recall_decisions`  | Search decisions by keyword   |
+| `store_pattern`     | Save code patterns            |
+| `get_patterns`      | Retrieve saved patterns       |
+| `set_context`       | Key-value storage             |
+| `get_context`       | Retrieve stored values        |
+| `memory_stats`      | Database statistics           |
 
 ## Example Usage
 
@@ -94,13 +95,13 @@ Claude: [calls store_pattern]
 
 Environment variables:
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `PROJECT_MEMORY_DB` | `.claude/memory.db` | Database location |
-| `PROJECT_MEMORY_MAX_DECISIONS` | 1000 | Decision limit |
-| `PROJECT_MEMORY_MAX_PATTERNS` | 100 | Pattern limit |
-| `PROJECT_MEMORY_POOL_SIZE` | 5 | Connection pool size |
-| `PROJECT_MEMORY_RATE_LIMIT` | 100 | Ops per minute |
+| Variable                       | Default             | Description          |
+| ------------------------------ | ------------------- | -------------------- |
+| `PROJECT_MEMORY_DB`            | `.claude/memory.db` | Database location    |
+| `PROJECT_MEMORY_MAX_DECISIONS` | 1000                | Decision limit       |
+| `PROJECT_MEMORY_MAX_PATTERNS`  | 100                 | Pattern limit        |
+| `PROJECT_MEMORY_POOL_SIZE`     | 5                   | Connection pool size |
+| `PROJECT_MEMORY_RATE_LIMIT`    | 100                 | Ops per minute       |
 
 ## Production Features
 
@@ -166,11 +167,13 @@ See [MCP Security Guide](/MCP-SECURITY) for:
 For team deployment:
 
 1. Use a shared database location:
+
    ```json
    "PROJECT_MEMORY_DB": "/shared/team/memory.db"
    ```
 
 2. Increase pool size:
+
    ```json
    "PROJECT_MEMORY_POOL_SIZE": "20"
    ```
@@ -208,16 +211,17 @@ If MCP setup is too complex:
 3. **Git history** — Decision records in commits
 
 MCP adds value when you need:
+
 - Searchable decision history
 - Team-shared memory
 - Structured pattern storage
 
 ## Evidence
 
-| Source | Finding |
-|--------|---------|
-| [Anthropic MCP](https://modelcontextprotocol.io/) | 97M+ monthly SDK downloads |
-| [MCP Registry](https://github.com/modelcontextprotocol/servers) | 75+ available connectors |
+| Source                                                          | Finding                    |
+| --------------------------------------------------------------- | -------------------------- |
+| [Anthropic MCP](https://modelcontextprotocol.io/)               | 97M+ monthly SDK downloads |
+| [MCP Registry](https://github.com/modelcontextprotocol/servers) | 75+ available connectors   |
 
 ## Next Steps
 

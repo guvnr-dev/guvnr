@@ -90,6 +90,7 @@ pre-commit install
 ```
 
 The hooks include:
+
 - `detect-secrets` for credential scanning
 - Dependency vulnerability checking
 - AI-specific pattern detection
@@ -120,6 +121,7 @@ npx ai-excellence-framework doctor
 ```
 
 This checks for:
+
 - Outdated dependencies
 - Missing security configurations
 - Known vulnerability patterns
@@ -128,13 +130,13 @@ This checks for:
 
 The framework includes security features to help protect your codebase:
 
-| Feature | Purpose |
-| --- | --- |
-| `/security-review` command | OWASP-aligned security audit |
-| Pre-commit hooks | Automated security scanning |
-| `verify-deps.sh` | Slopsquatting detection |
-| MCP server security | Rate limiting, input validation |
-| Template security | No hardcoded credentials in templates |
+| Feature                    | Purpose                               |
+| -------------------------- | ------------------------------------- |
+| `/security-review` command | OWASP-aligned security audit          |
+| Pre-commit hooks           | Automated security scanning           |
+| `verify-deps.sh`           | Slopsquatting detection               |
+| MCP server security        | Rate limiting, input validation       |
+| Template security          | No hardcoded credentials in templates |
 
 ## Known Security Considerations
 
@@ -142,12 +144,12 @@ The framework includes security features to help protect your codebase:
 
 The framework is designed to mitigate AI-specific security risks:
 
-| Risk | Prevalence | Mitigation |
-| --- | --- | --- |
-| XSS in AI code | 86% | `/security-review` command |
-| Log injection | 88% | Pattern detection in hooks |
-| Hallucinated packages | 20% | `verify-deps.sh` hook |
-| Privilege escalation | 322% higher | Access control reviews |
+| Risk                  | Prevalence  | Mitigation                 |
+| --------------------- | ----------- | -------------------------- |
+| XSS in AI code        | 86%         | `/security-review` command |
+| Log injection         | 88%         | Pattern detection in hooks |
+| Hallucinated packages | 20%         | `verify-deps.sh` hook      |
+| Privilege escalation  | 322% higher | Access control reviews     |
 
 ### MCP Server
 

@@ -30,17 +30,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Read package.json for version
-const packageJson = JSON.parse(
-  readFileSync(join(__dirname, '..', 'package.json'), 'utf-8')
-);
+const packageJson = JSON.parse(readFileSync(join(__dirname, '..', 'package.json'), 'utf-8'));
 
 const program = new Command();
 
 program
   .name('ai-excellence')
-  .description(
-    'AI Excellence Framework - Reduce friction in AI-assisted development'
-  )
+  .description('AI Excellence Framework - Reduce friction in AI-assisted development')
   .version(packageJson.version);
 
 // Init command
@@ -54,11 +50,7 @@ program
   )
   .option('-f, --force', 'Overwrite existing files', false)
   .option('-y, --yes', 'Skip interactive prompts, use defaults', false)
-  .option(
-    '--dry-run',
-    'Show what would be created without making changes',
-    false
-  )
+  .option('--dry-run', 'Show what would be created without making changes', false)
   .option('--no-hooks', 'Skip pre-commit hooks installation')
   .option('--no-mcp', 'Skip MCP server setup')
   .action(initCommand);
@@ -90,17 +82,9 @@ program
   .command('generate')
   .alias('gen')
   .description('Generate configuration files for multiple AI coding tools')
-  .option(
-    '-t, --tools <tools>',
-    `Tools to generate for: ${SUPPORTED_TOOLS.join(', ')}`,
-    'all'
-  )
+  .option('-t, --tools <tools>', `Tools to generate for: ${SUPPORTED_TOOLS.join(', ')}`, 'all')
   .option('-f, --force', 'Overwrite existing files', false)
-  .option(
-    '--dry-run',
-    'Show what would be created without making changes',
-    false
-  )
+  .option('--dry-run', 'Show what would be created without making changes', false)
   .action(generateCommand);
 
 // Lint command (configuration validation)

@@ -4,16 +4,16 @@ Slash commands are structured prompts that guide AI behavior for specific workfl
 
 ## Available Commands
 
-| Command | Purpose | Addresses |
-|---------|---------|-----------|
-| `/plan` | Structured planning before coding | First-framing lock |
-| `/verify` | Skeptical completion validation | Overconfidence |
-| `/handoff` | Session continuity notes | Session boundary |
-| `/assumptions` | Surface hidden assumptions | Coherence illusion |
-| `/review` | Multi-perspective code review | Quality degradation |
-| `/security-review` | OWASP-aligned security audit | Security vulnerabilities |
-| `/refactor` | Safe refactoring protocol | Technical debt |
-| `/test-coverage` | Test gap analysis | Quality assurance |
+| Command            | Purpose                           | Addresses                |
+| ------------------ | --------------------------------- | ------------------------ |
+| `/plan`            | Structured planning before coding | First-framing lock       |
+| `/verify`          | Skeptical completion validation   | Overconfidence           |
+| `/handoff`         | Session continuity notes          | Session boundary         |
+| `/assumptions`     | Surface hidden assumptions        | Coherence illusion       |
+| `/review`          | Multi-perspective code review     | Quality degradation      |
+| `/security-review` | OWASP-aligned security audit      | Security vulnerabilities |
+| `/refactor`        | Safe refactoring protocol         | Technical debt           |
+| `/test-coverage`   | Test gap analysis                 | Quality assurance        |
 
 ## Core Commands
 
@@ -26,6 +26,7 @@ Slash commands are structured prompts that guide AI behavior for specific workfl
 ```
 
 **Output structure:**
+
 1. Restates understanding
 2. Lists assumptions explicitly
 3. Identifies questions
@@ -43,6 +44,7 @@ Slash commands are structured prompts that guide AI behavior for specific workfl
 ```
 
 **Process:**
+
 1. Enumerate all claims
 2. Manually inspect files
 3. Check functional tests
@@ -60,6 +62,7 @@ Slash commands are structured prompts that guide AI behavior for specific workfl
 ```
 
 **Output includes:**
+
 - What was accomplished
 - What's in progress
 - Decisions made and rationale
@@ -73,6 +76,7 @@ Slash commands are structured prompts that guide AI behavior for specific workfl
 ### /review
 
 Multi-perspective code review covering:
+
 - Architecture alignment
 - Performance implications
 - Maintainability
@@ -81,6 +85,7 @@ Multi-perspective code review covering:
 ### /security-review
 
 OWASP Top 10 aligned security audit:
+
 - Input validation
 - Output encoding
 - Authentication/authorization
@@ -89,6 +94,7 @@ OWASP Top 10 aligned security audit:
 ### /refactor
 
 Safe refactoring with:
+
 - Current structure analysis
 - Improvement proposals
 - Breaking change detection
@@ -97,6 +103,7 @@ Safe refactoring with:
 ### /test-coverage
 
 Test gap analysis:
+
 - Uncovered code paths
 - Edge cases
 - Integration points
@@ -147,12 +154,14 @@ description: Create implementation plan before coding
 Before implementing anything, create a structured plan.
 
 ## Instructions
+
 1. Clarify understanding
 2. Research phase
 3. Design approach
 4. Verification criteria
 
 ## Output Format
+
 [structured template]
 
 User request: $ARGUMENTS
@@ -191,6 +200,7 @@ description: My personal code style preferences
 # My Style
 
 Apply these preferences:
+
 - Prefer early returns
 - Use descriptive variable names
 - Add comments for complex logic
@@ -198,11 +208,11 @@ Apply these preferences:
 
 ## Evidence
 
-| Source | Finding |
-|--------|---------|
-| [METR Study](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) | Unplanned AI use = 19% slower |
-| [Veracode](https://www.veracode.com/blog/genai-code-security-report/) | 45% of AI code has vulnerabilities |
-| [Anthropic](https://www.anthropic.com/engineering/claude-code-best-practices) | Plan mode recommended workflow |
+| Source                                                                                 | Finding                            |
+| -------------------------------------------------------------------------------------- | ---------------------------------- |
+| [METR Study](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) | Unplanned AI use = 19% slower      |
+| [Veracode](https://www.veracode.com/blog/genai-code-security-report/)                  | 45% of AI code has vulnerabilities |
+| [Anthropic](https://www.anthropic.com/engineering/claude-code-best-practices)          | Plan mode recommended workflow     |
 
 ## Next Steps
 

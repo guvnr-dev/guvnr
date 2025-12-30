@@ -173,6 +173,7 @@ When adding research claims:
 ## Recognition
 
 Contributors are recognized in:
+
 - Git history
 - README contributors section
 - Release notes

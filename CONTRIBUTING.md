@@ -87,14 +87,14 @@ node bin/cli.js doctor
 
 We welcome many types of contributions:
 
-| Type | Description | Label |
-|------|-------------|-------|
-| **Bug Reports** | Report issues you've found | `bug` |
-| **Feature Requests** | Suggest new features | `enhancement` |
-| **Documentation** | Improve or add documentation | `documentation` |
-| **Code** | Fix bugs or implement features | `code` |
-| **Tests** | Add or improve test coverage | `testing` |
-| **Security** | Report or fix security issues | `security` |
+| Type                 | Description                    | Label           |
+| -------------------- | ------------------------------ | --------------- |
+| **Bug Reports**      | Report issues you've found     | `bug`           |
+| **Feature Requests** | Suggest new features           | `enhancement`   |
+| **Documentation**    | Improve or add documentation   | `documentation` |
+| **Code**             | Fix bugs or implement features | `code`          |
+| **Tests**            | Add or improve test coverage   | `testing`       |
+| **Security**         | Report or fix security issues  | `security`      |
 
 ### Reporting Bugs
 
@@ -189,18 +189,18 @@ We use [Conventional Commits](https://www.conventionalcommits.org/):
 
 **Types:**
 
-| Type | Description |
-|------|-------------|
-| `feat` | New feature |
-| `fix` | Bug fix |
-| `docs` | Documentation only |
-| `style` | Formatting, no code change |
-| `refactor` | Code restructuring |
-| `test` | Adding/updating tests |
-| `chore` | Maintenance tasks |
-| `perf` | Performance improvement |
-| `ci` | CI/CD changes |
-| `security` | Security improvements |
+| Type       | Description                |
+| ---------- | -------------------------- |
+| `feat`     | New feature                |
+| `fix`      | Bug fix                    |
+| `docs`     | Documentation only         |
+| `style`    | Formatting, no code change |
+| `refactor` | Code restructuring         |
+| `test`     | Adding/updating tests      |
+| `chore`    | Maintenance tasks          |
+| `perf`     | Performance improvement    |
+| `ci`       | CI/CD changes              |
+| `security` | Security improvements      |
 
 **Examples:**
 
@@ -230,8 +230,8 @@ export async function initCommand(options) {
 }
 
 // Avoid: Default exports, callbacks, unclear names
-export default function(opts, cb) {
-  loadCfg(opts.p, (c) => cb(null, proc(c)));
+export default function (opts, cb) {
+  loadCfg(opts.p, c => cb(null, proc(c)));
 }
 ```
 
@@ -463,12 +463,15 @@ Update `CHANGELOG.md` for user-facing changes:
 ## [1.3.0] - 2025-01-15
 
 ### Added
+
 - New `/refactor` command for safe refactoring (#123)
 
 ### Fixed
+
 - CLI crash when CLAUDE.md is missing (#124)
 
 ### Changed
+
 - Improved error messages for validation failures
 ```
 

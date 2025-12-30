@@ -31,29 +31,37 @@ Then save the output as `YYYY-MM-DD-description.md`.
 ## Session Handoff: YYYY-MM-DD
 
 ### Focus
+
 [What this session was about]
 
 ### Completed
+
 - [What was finished]
 
 ### In Progress
+
 - [What was started but not finished]
 
 ### Decisions Made
+
 | Decision | Rationale |
-|----------|-----------|
-| [Choice] | [Why] |
+| -------- | --------- |
+| [Choice] | [Why]     |
 
 ### Blockers Encountered
+
 - [What blocked progress]
 
 ### For Next Session
+
 - [ ] [Immediate next steps]
 
 ### Files Modified
+
 - `path/to/file` - [what changed]
 
 ### Context to Preserve
+
 [Important context that might be lost]
 ```
 

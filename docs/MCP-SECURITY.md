@@ -190,11 +190,11 @@ export PROJECT_MEMORY_OAUTH_AUDIENCE="mcp-server"
 
 Future versions will support granular permissions:
 
-| Role       | Permissions                                    |
-| ---------- | ---------------------------------------------- |
-| `reader`   | `recall_decisions`, `get_patterns`, `get_context` |
-| `writer`   | All reader + `remember_decision`, `store_pattern`, `set_context` |
-| `admin`    | All writer + `purge_memory`, `export_memory`, `import_memory` |
+| Role     | Permissions                                                      |
+| -------- | ---------------------------------------------------------------- |
+| `reader` | `recall_decisions`, `get_patterns`, `get_context`                |
+| `writer` | All reader + `remember_decision`, `store_pattern`, `set_context` |
+| `admin`  | All writer + `purge_memory`, `export_memory`, `import_memory`    |
 
 Currently, all authenticated users have full access. Plan RBAC for team deployments.
 

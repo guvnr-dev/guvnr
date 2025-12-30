@@ -109,10 +109,7 @@ describe('E2E: Init Command', () => {
 
     // Check files created
     assert.ok(existsSync(join(tempDir, 'CLAUDE.md')), 'Should create CLAUDE.md');
-    assert.ok(
-      existsSync(join(tempDir, '.claude', 'commands')),
-      'Should create .claude/commands'
-    );
+    assert.ok(existsSync(join(tempDir, '.claude', 'commands')), 'Should create .claude/commands');
   });
 
   it('should initialize standard preset with required files', () => {
@@ -260,10 +257,7 @@ describe('E2E: Update Command', () => {
     const result = runCLI('update --check', tempDir);
 
     // Should at least run without crashing
-    assert.ok(
-      result.success || result.exitCode !== undefined,
-      'Update check should complete'
-    );
+    assert.ok(result.success || result.exitCode !== undefined, 'Update check should complete');
   });
 });
 

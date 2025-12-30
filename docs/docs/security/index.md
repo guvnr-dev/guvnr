@@ -4,13 +4,13 @@ AI-generated code has measurably higher vulnerability rates. This section covers
 
 ## The Security Gap
 
-| Metric | Value | Source |
-|--------|-------|--------|
-| OWASP Top 10 vulnerabilities | 45% | [Veracode 2025](https://www.veracode.com/blog/genai-code-security-report/) |
-| XSS vulnerability rate | 86% | Veracode 2025 |
-| Log injection rate | 88% | Veracode 2025 |
-| Privilege escalation increase | 322% | [Apiiro 2025](https://apiiro.com/blog/4x-velocity-10x-vulnerabilities-ai-coding-assistants-are-shipping-more-risks/) |
-| Package hallucination | ~20% | [BleepingComputer 2025](https://www.bleepingcomputer.com/news/security/ai-hallucinated-code-dependencies-become-new-supply-chain-risk/) |
+| Metric                        | Value | Source                                                                                                                                  |
+| ----------------------------- | ----- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| OWASP Top 10 vulnerabilities  | 45%   | [Veracode 2025](https://www.veracode.com/blog/genai-code-security-report/)                                                              |
+| XSS vulnerability rate        | 86%   | Veracode 2025                                                                                                                           |
+| Log injection rate            | 88%   | Veracode 2025                                                                                                                           |
+| Privilege escalation increase | 322%  | [Apiiro 2025](https://apiiro.com/blog/4x-velocity-10x-vulnerabilities-ai-coding-assistants-are-shipping-more-risks/)                    |
+| Package hallucination         | ~20%  | [BleepingComputer 2025](https://www.bleepingcomputer.com/news/security/ai-hallucinated-code-dependencies-become-new-supply-chain-risk/) |
 
 ## Why AI Code is Less Secure
 
@@ -27,12 +27,12 @@ AI-generated code has measurably higher vulnerability rates. This section covers
 repos:
   - repo: local
     hooks:
-      - id: verify-deps        # Slopsquatting prevention
-      - id: check-todos        # Incomplete work detection
+      - id: verify-deps # Slopsquatting prevention
+      - id: check-todos # Incomplete work detection
 
   - repo: https://github.com/gitleaks/gitleaks
     hooks:
-      - id: gitleaks          # Secret detection
+      - id: gitleaks # Secret detection
 ```
 
 ### /security-review Command
@@ -44,6 +44,7 @@ OWASP-aligned security audit:
 ```
 
 Checks:
+
 - Input validation
 - Output encoding
 - Authentication/authorization
@@ -54,6 +55,7 @@ Checks:
 
 ```markdown
 ## Security Requirements
+
 - Validate all user input
 - Use parameterized queries
 - Encode output for context
@@ -70,11 +72,11 @@ Checks:
 
 ## OWASP References
 
-| Standard | Version | URL |
-|----------|---------|-----|
-| OWASP Top 10 | 2021 | [owasp.org/Top10](https://owasp.org/Top10/) |
-| OWASP Top 10 for LLMs | 2025 | [genai.owasp.org](https://genai.owasp.org/) |
-| CWE Top 25 | 2023 | [cwe.mitre.org](https://cwe.mitre.org/top25/) |
+| Standard              | Version | URL                                           |
+| --------------------- | ------- | --------------------------------------------- |
+| OWASP Top 10          | 2021    | [owasp.org/Top10](https://owasp.org/Top10/)   |
+| OWASP Top 10 for LLMs | 2025    | [genai.owasp.org](https://genai.owasp.org/)   |
+| CWE Top 25            | 2023    | [cwe.mitre.org](https://cwe.mitre.org/top25/) |
 
 ## Key Recommendations
 

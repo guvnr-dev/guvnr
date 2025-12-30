@@ -4,11 +4,11 @@
 
 AI coding assistants promise massive productivity gains, but research tells a more nuanced story:
 
-| Study | Finding |
-|-------|---------|
+| Study                                                                                 | Finding                                                        |
+| ------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
 | [METR 2025](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) | Experienced developers 19% **slower** with unstructured AI use |
-| [MIT/NBER](https://arxiv.org/abs/2302.06590) | 21-26% **faster** with disciplined AI use |
-| [Veracode 2025](https://www.veracode.com/blog/genai-code-security-report/) | 45% of AI-generated code has security vulnerabilities |
+| [MIT/NBER](https://arxiv.org/abs/2302.06590)                                          | 21-26% **faster** with disciplined AI use                      |
+| [Veracode 2025](https://www.veracode.com/blog/genai-code-security-report/)            | 45% of AI-generated code has security vulnerabilities          |
 
 **The delta between "good" and "bad" AI use is ~40-45%.** This framework exists to help you capture the gains.
 
@@ -43,13 +43,13 @@ Pre-commit hooks (security + deps)
 
 Every component addresses a specific, measurable friction point:
 
-| Component | Friction Addressed | Evidence |
-|-----------|-------------------|----------|
-| CLAUDE.md | Session amnesia | 65% cite context loss as #1 issue |
-| /plan | First-framing lock | Unplanned use = 19% slower |
-| /verify | Overconfidence | Falsification catches hidden errors |
-| Pre-commit hooks | Security blind spots | 45% vulnerability rate |
-| MCP Server | Cross-session memory | Enables architectural continuity |
+| Component        | Friction Addressed   | Evidence                            |
+| ---------------- | -------------------- | ----------------------------------- |
+| CLAUDE.md        | Session amnesia      | 65% cite context loss as #1 issue   |
+| /plan            | First-framing lock   | Unplanned use = 19% slower          |
+| /verify          | Overconfidence       | Falsification catches hidden errors |
+| Pre-commit hooks | Security blind spots | 45% vulnerability rate              |
+| MCP Server       | Cross-session memory | Enables architectural continuity    |
 
 ## Who Benefits Most
 

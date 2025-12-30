@@ -20,13 +20,13 @@ That's it. You now have structured AI assistance for your project.
 
 AI coding assistants are powerful but have known friction points:
 
-| Problem | Without Framework | With Framework |
-| --- | --- | --- |
-| AI forgets project context | Repeats questions every session | Reads CLAUDE.md automatically |
-| Incomplete implementations | "Done" but half-finished | `/verify` catches gaps |
-| Security vulnerabilities | 86% of AI code has XSS issues | `/security-review` audits code |
-| Lost session context | Start from scratch next time | `/handoff` preserves state |
-| Hallucinated packages | 20% fake dependencies | Pre-commit hooks catch them |
+| Problem                    | Without Framework               | With Framework                 |
+| -------------------------- | ------------------------------- | ------------------------------ |
+| AI forgets project context | Repeats questions every session | Reads CLAUDE.md automatically  |
+| Incomplete implementations | "Done" but half-finished        | `/verify` catches gaps         |
+| Security vulnerabilities   | 86% of AI code has XSS issues   | `/security-review` audits code |
+| Lost session context       | Start from scratch next time    | `/handoff` preserves state     |
+| Hallucinated packages      | 20% fake dependencies           | Pre-commit hooks catch them    |
 
 **The framework provides structure that makes AI assistance reliable.**
 
@@ -60,12 +60,12 @@ You'll be guided through choosing a preset and customizing options.
 
 ### Option 2: Preset Selection
 
-| Preset | Best For | Install Command |
-| --- | --- | --- |
-| **Minimal** | Trying it out | `npx ai-excellence-framework init --preset minimal` |
-| **Standard** | Individual devs | `npx ai-excellence-framework init --preset standard` |
-| **Full** | Serious projects | `npx ai-excellence-framework init --preset full` |
-| **Team** | Team collaboration | `npx ai-excellence-framework init --preset team` |
+| Preset       | Best For           | Install Command                                      |
+| ------------ | ------------------ | ---------------------------------------------------- |
+| **Minimal**  | Trying it out      | `npx ai-excellence-framework init --preset minimal`  |
+| **Standard** | Individual devs    | `npx ai-excellence-framework init --preset standard` |
+| **Full**     | Serious projects   | `npx ai-excellence-framework init --preset full`     |
+| **Team**     | Team collaboration | `npx ai-excellence-framework init --preset team`     |
 
 ### Option 3: Global Installation
 
@@ -120,16 +120,18 @@ A brief description of what this project does.
 ## Architecture
 
 src/
-├── components/   # React components
-├── api/          # API routes
-└── utils/        # Helper functions
+├── components/ # React components
+├── api/ # API routes
+└── utils/ # Helper functions
 
 ## Current State
 
 ### Phase
+
 Early development - building core features
 
 ### Recent Decisions
+
 - 2025-01-15: Chose React Query for data fetching
 ```
 
@@ -195,21 +197,21 @@ This creates a summary for your next session.
 
 ### Essential (Use Daily)
 
-| Command | Purpose | When to Use |
-| --- | --- | --- |
-| `/plan [task]` | Create implementation plan | Before any significant work |
-| `/verify [task]` | Check work is complete | Before accepting AI output |
-| `/handoff` | Generate session summary | End of each session |
+| Command          | Purpose                    | When to Use                 |
+| ---------------- | -------------------------- | --------------------------- |
+| `/plan [task]`   | Create implementation plan | Before any significant work |
+| `/verify [task]` | Check work is complete     | Before accepting AI output  |
+| `/handoff`       | Generate session summary   | End of each session         |
 
 ### Situational (As Needed)
 
-| Command | Purpose | When to Use |
-| --- | --- | --- |
-| `/assumptions [task]` | Surface hidden assumptions | When requirements are unclear |
-| `/review [path]` | Multi-perspective code review | After significant changes |
-| `/security-review [path]` | Security audit | For security-sensitive code |
-| `/refactor [target]` | Plan safe refactoring | Before restructuring code |
-| `/test-coverage [path]` | Analyze test gaps | When improving tests |
+| Command                   | Purpose                       | When to Use                   |
+| ------------------------- | ----------------------------- | ----------------------------- |
+| `/assumptions [task]`     | Surface hidden assumptions    | When requirements are unclear |
+| `/review [path]`          | Multi-perspective code review | After significant changes     |
+| `/security-review [path]` | Security audit                | For security-sensitive code   |
+| `/refactor [target]`      | Plan safe refactoring         | Before restructuring code     |
+| `/test-coverage [path]`   | Analyze test gaps             | When improving tests          |
 
 ---
 
@@ -308,18 +310,18 @@ your-project/
 
 The framework works with 10+ AI coding assistants:
 
-| Tool | Configuration File |
-| --- | --- |
-| Claude Code | `CLAUDE.md` |
-| Cursor | `.cursor/rules/` |
-| GitHub Copilot | `.github/copilot-instructions.md` |
-| Windsurf | `.windsurf/rules/` |
-| Aider | `.aider.conf.yml` |
-| Gemini CLI | `GEMINI.md` |
-| OpenAI Codex | `.codex/` |
-| Zed | `.rules` |
-| Sourcegraph Amp | `amp.toml` |
-| Roo Code | `.roo/rules/` |
+| Tool            | Configuration File                |
+| --------------- | --------------------------------- |
+| Claude Code     | `CLAUDE.md`                       |
+| Cursor          | `.cursor/rules/`                  |
+| GitHub Copilot  | `.github/copilot-instructions.md` |
+| Windsurf        | `.windsurf/rules/`                |
+| Aider           | `.aider.conf.yml`                 |
+| Gemini CLI      | `GEMINI.md`                       |
+| OpenAI Codex    | `.codex/`                         |
+| Zed             | `.rules`                          |
+| Sourcegraph Amp | `amp.toml`                        |
+| Roo Code        | `.roo/rules/`                     |
 
 Generate configs for your tools:
 

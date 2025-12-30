@@ -81,6 +81,7 @@ npx ai-excellence-framework lint
 ```
 
 This creates:
+
 - `AGENTS.md` — [Linux Foundation standard](https://agents.md) (60K+ projects)
 - `.cursor/rules/` — [Cursor IDE rules](https://docs.cursor.com/context/rules)
 - `.github/copilot-instructions.md` — [GitHub Copilot instructions](https://docs.github.com/copilot)

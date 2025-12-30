@@ -5,6 +5,7 @@ This directory contains session handoff notes for maintaining context between AI
 ## Purpose
 
 Session notes help:
+
 - **Preserve context** between conversations
 - **Track decisions** made during development
 - **Document blockers** and their resolutions
@@ -19,6 +20,7 @@ Use the `/handoff` command at the end of a session to automatically generate ses
 ```
 
 The command will:
+
 1. Summarize work completed
 2. List files modified
 3. Document decisions made
@@ -32,6 +34,7 @@ YYYY-MM-DD-<brief-description>.md
 ```
 
 Examples:
+
 - `2025-01-15-auth-implementation.md`
 - `2025-01-16-api-refactor.md`
 - `2025-01-17-performance-optimization.md`
@@ -46,33 +49,41 @@ Examples:
 **Focus**: [Main objective]
 
 ## Session Summary
+
 [One paragraph overview]
 
 ## Work Completed
+
 - [x] Task 1
 - [x] Task 2
 
 ## Decisions Made
+
 | Decision | Rationale | Alternatives |
-|----------|-----------|--------------|
-| ... | ... | ... |
+| -------- | --------- | ------------ |
+| ...      | ...       | ...          |
 
 ## Blockers Encountered
+
 1. [Blocker] - [Resolution]
 
 ## Context for Next Session
 
 ### Files Modified
+
 - `path/to/file.js` (new/updated/deleted)
 
 ### Pending Work
+
 - [ ] Next task 1
 - [ ] Next task 2
 
 ### Known Issues
+
 - Issue description
 
 ## Notes for Future Sessions
+
 - Important context that might be forgotten
 ```
 

@@ -142,12 +142,12 @@ Enterprise setup with dedicated server.
 
 ```yaml
 # docker-compose.yml
-version: "3.8"
+version: '3.8'
 services:
   mcp-server:
     build: ./scripts/mcp
     ports:
-      - "8080:8080"
+      - '8080:8080'
     volumes:
       - mcp-data:/data
     environment:
@@ -156,7 +156,7 @@ services:
       - PROJECT_MEMORY_RATE_LIMIT=1000
       - MCP_AUTH_TOKEN=${MCP_AUTH_TOKEN}
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      test: ['CMD', 'curl', '-f', 'http://localhost:8080/health']
       interval: 30s
       timeout: 10s
       retries: 3
@@ -448,8 +448,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "MCP memory approaching capacity"
-          description: "Project {{ $labels.project }} is at {{ $value }}% decision capacity"
+          summary: 'MCP memory approaching capacity'
+          description: 'Project {{ $labels.project }} is at {{ $value }}% decision capacity'
 
       - alert: MCPServerUnhealthy
         expr: up{job="mcp-memory"} == 0
@@ -457,7 +457,7 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "MCP server is down"
+          summary: 'MCP server is down'
 ```
 
 ---

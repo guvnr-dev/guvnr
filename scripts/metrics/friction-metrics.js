@@ -167,7 +167,8 @@ function generateReport(days = 30) {
       contextLost: events.filter(e => e.type === EVENT_TYPES.CONTEXT_LOST).length,
       securityIssuesFound: events.filter(e => e.type === EVENT_TYPES.SECURITY_ISSUE_FOUND).length,
       securityIssuesFixed: events.filter(e => e.type === EVENT_TYPES.SECURITY_ISSUE_FIXED).length,
-      hallucinationsDetected: events.filter(e => e.type === EVENT_TYPES.HALLUCINATION_DETECTED).length,
+      hallucinationsDetected: events.filter(e => e.type === EVENT_TYPES.HALLUCINATION_DETECTED)
+        .length,
       decisionsRecorded: events.filter(e => e.type === EVENT_TYPES.DECISION_RECORDED).length,
       handoffsGenerated: events.filter(e => e.type === EVENT_TYPES.HANDOFF_GENERATED).length,
       plansCreated: events.filter(e => e.type === EVENT_TYPES.PLAN_CREATED).length,
@@ -181,24 +182,31 @@ function generateReport(days = 30) {
 
   if (summary.verificationsRun > 0) {
     report.calculated.verificationSuccessRate =
-      ((summary.verificationsRun - summary.verificationsFailed) / summary.verificationsRun * 100).toFixed(1) + '%';
+      (
+        ((summary.verificationsRun - summary.verificationsFailed) / summary.verificationsRun) *
+        100
+      ).toFixed(1) + '%';
   }
 
   if (summary.contextRestored + summary.contextLost > 0) {
     report.calculated.contextPreservationRate =
-      (summary.contextRestored / (summary.contextRestored + summary.contextLost) * 100).toFixed(1) + '%';
+      ((summary.contextRestored / (summary.contextRestored + summary.contextLost)) * 100).toFixed(
+        1
+      ) + '%';
   }
 
   if (summary.securityIssuesFound > 0) {
     report.calculated.securityFixRate =
-      (summary.securityIssuesFixed / summary.securityIssuesFound * 100).toFixed(1) + '%';
+      ((summary.securityIssuesFixed / summary.securityIssuesFound) * 100).toFixed(1) + '%';
   }
 
   if (summary.sessionsStarted > 0) {
-    report.calculated.avgCommandsPerSession =
-      (summary.commandsUsed / summary.sessionsStarted).toFixed(1);
-    report.calculated.avgTasksPerSession =
-      (summary.tasksCompleted / summary.sessionsStarted).toFixed(1);
+    report.calculated.avgCommandsPerSession = (
+      summary.commandsUsed / summary.sessionsStarted
+    ).toFixed(1);
+    report.calculated.avgTasksPerSession = (
+      summary.tasksCompleted / summary.sessionsStarted
+    ).toFixed(1);
   }
 
   return report;
@@ -209,8 +217,10 @@ function printReport(report) {
   if (!report) return;
 
   console.log('\n📊 AI Excellence Framework - Friction Metrics Report');
-  console.log('=' .repeat(55));
-  console.log(`Period: ${report.period.start.split('T')[0]} to ${report.period.end.split('T')[0]} (${report.period.days} days)`);
+  console.log('='.repeat(55));
+  console.log(
+    `Period: ${report.period.start.split('T')[0]} to ${report.period.end.split('T')[0]} (${report.period.days} days)`
+  );
   console.log('');
 
   console.log('📈 Activity Summary:');
@@ -279,12 +289,7 @@ function exportData(format = 'json') {
   } else if (format === 'csv') {
     const outputFile = `friction-metrics-export-${timestamp}.csv`;
     const headers = ['timestamp', 'type', 'anonymousId', 'version'];
-    const rows = events.map(e => [
-      e.timestamp,
-      e.type,
-      e.anonymousId,
-      e.version
-    ].join(','));
+    const rows = events.map(e => [e.timestamp, e.type, e.anonymousId, e.version].join(','));
     writeFileSync(outputFile, [headers.join(','), ...rows].join('\n'));
     console.log(`Exported ${events.length} events to ${outputFile}`);
   } else {

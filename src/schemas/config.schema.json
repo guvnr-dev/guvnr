@@ -33,15 +33,7 @@
         },
         "language": {
           "type": "string",
-          "enum": [
-            "typescript",
-            "javascript",
-            "python",
-            "go",
-            "rust",
-            "java",
-            "other"
-          ],
+          "enum": ["typescript", "javascript", "python", "go", "rust", "java", "other"],
           "description": "Primary programming language"
         },
         "framework": {
@@ -70,14 +62,7 @@
             ]
           },
           "description": "List of enabled commands",
-          "default": [
-            "plan",
-            "verify",
-            "handoff",
-            "assumptions",
-            "review",
-            "security-review"
-          ]
+          "default": ["plan", "verify", "handoff", "assumptions", "review", "security-review"]
         },
         "custom": {
           "type": "array",

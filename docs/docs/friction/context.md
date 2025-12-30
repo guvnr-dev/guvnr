@@ -5,6 +5,7 @@ Context management is the #1 source of friction in AI-assisted development. 65% 
 ## The Session Boundary Problem
 
 Every conversation ends and the AI retains nothing:
+
 - Understanding built together—gone
 - Decisions made—forgotten
 - Preferences learned—reset
@@ -31,6 +32,7 @@ By file D:
 ## Working Memory vs. Training
 
 There's a distinction between:
+
 - **Training knowledge**: Stable, always accessible (how React works)
 - **Session context**: Requires active maintenance (your component structure)
 
@@ -39,6 +41,7 @@ This creates an inverted confidence pattern: more certain about general patterns
 ## Context Pollution
 
 When iterating on problems, failed attempts accumulate:
+
 - Approach A didn't work
 - Approach B partially worked
 - Approach C broke something else
@@ -69,15 +72,18 @@ Persistent context file loaded automatically:
 # MyProject
 
 ## Architecture
+
 - src/: Main code
 - tests/: Test files
 
 ## Conventions
+
 - Use async/await (never callbacks)
 - Error handling: use Result type
 ```
 
 **Best practices:**
+
 - Keep under 300 lines
 - Focus on universally applicable rules
 - Use pointers (file:line), not inline code
@@ -91,16 +97,20 @@ Structured notes at session boundaries:
 ## Session 2024-12-30
 
 ### Completed
+
 - Implemented auth flow
 - Added user model
 
 ### In Progress
+
 - Payment integration (blocked on API key)
 
 ### Decisions
+
 - Using Stripe over PayPal (better docs)
 
 ### For Next Session
+
 - Get API key from team lead
 - Complete payment webhook
 ```
@@ -113,8 +123,8 @@ Structured notes at session boundaries:
 
 ## Evidence
 
-| Source | Finding |
-|--------|---------|
-| [MIT Technology Review 2025](https://www.technologyreview.com/2025/12/15/1128352/rise-of-ai-coding-developers-2026/) | 65% cite context as #1 issue |
-| [Anthropic Best Practices](https://www.anthropic.com/engineering/claude-code-best-practices) | CLAUDE.md recommended for all projects |
-| [HumanLayer](https://www.humanlayer.dev/blog/writing-a-good-claude-md) | <300 lines optimal for CLAUDE.md |
+| Source                                                                                                               | Finding                                |
+| -------------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
+| [MIT Technology Review 2025](https://www.technologyreview.com/2025/12/15/1128352/rise-of-ai-coding-developers-2026/) | 65% cite context as #1 issue           |
+| [Anthropic Best Practices](https://www.anthropic.com/engineering/claude-code-best-practices)                         | CLAUDE.md recommended for all projects |
+| [HumanLayer](https://www.humanlayer.dev/blog/writing-a-good-claude-md)                                               | <300 lines optimal for CLAUDE.md       |

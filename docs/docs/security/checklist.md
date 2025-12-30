@@ -12,30 +12,35 @@ Use this checklist before deploying AI-assisted code.
 ## Code Review
 
 ### Input Validation
+
 - [ ] All user input is validated
 - [ ] Validation uses allowlists where possible
 - [ ] File uploads are restricted by type and size
 - [ ] JSON/XML parsing has depth limits
 
 ### Output Encoding
+
 - [ ] HTML output is encoded
 - [ ] URL parameters are encoded
 - [ ] JavaScript strings are escaped
 - [ ] SQL uses parameterized queries
 
 ### Authentication
+
 - [ ] Passwords use secure hashing (bcrypt, argon2)
 - [ ] Sessions have secure flags (httpOnly, secure, sameSite)
 - [ ] Token comparison uses constant-time
 - [ ] Failed attempts have rate limiting
 
 ### Authorization
+
 - [ ] Every endpoint checks authorization
 - [ ] Privilege checks happen server-side
 - [ ] Object-level authorization verified
 - [ ] Admin functions are protected
 
 ### Data Protection
+
 - [ ] Sensitive data encrypted at rest
 - [ ] TLS enforced for transmission
 - [ ] PII handling follows regulations
@@ -44,17 +49,20 @@ Use this checklist before deploying AI-assisted code.
 ## AI-Specific Checks
 
 ### Hallucination Prevention
+
 - [ ] All dependencies verified in registry
 - [ ] API endpoints verified to exist
 - [ ] External service URLs confirmed
 - [ ] Configuration values validated
 
 ### Security Command Output
+
 - [ ] `/security-review` passed
 - [ ] Identified issues addressed
 - [ ] Mitigations documented
 
 ### CLAUDE.md Compliance
+
 - [ ] Security section present
 - [ ] Constraints followed
 - [ ] No forbidden patterns used
@@ -105,12 +113,12 @@ npm run lint
 
 ## Severity Guide
 
-| Severity | Action Required |
-|----------|----------------|
-| **Critical** | Fix before deploy, no exceptions |
-| **High** | Fix before deploy, or document accept risk |
-| **Medium** | Fix within sprint, track in backlog |
-| **Low** | Track in backlog, fix when convenient |
+| Severity     | Action Required                            |
+| ------------ | ------------------------------------------ |
+| **Critical** | Fix before deploy, no exceptions           |
+| **High**     | Fix before deploy, or document accept risk |
+| **Medium**   | Fix within sprint, track in backlog        |
+| **Low**      | Track in backlog, fix when convenient      |
 
 ## Resources
 

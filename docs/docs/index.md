@@ -6,13 +6,13 @@ AI Excellence Framework is a comprehensive toolkit for reducing friction in AI-a
 
 AI coding assistants have real limitations—not excuses, but architectural constraints:
 
-| Friction | Impact | Solution |
-|----------|--------|----------|
-| **Session Amnesia** | 65% cite as #1 issue | CLAUDE.md context files |
-| **First-Framing Lock** | Compounds early errors | /plan command |
-| **Security Vulnerabilities** | 45% of AI code affected | Pre-commit hooks, /security-review |
-| **Overconfidence** | Masks fundamental errors | /verify command |
-| **Context Decay** | Information loses specificity | Session handoffs |
+| Friction                     | Impact                        | Solution                           |
+| ---------------------------- | ----------------------------- | ---------------------------------- |
+| **Session Amnesia**          | 65% cite as #1 issue          | CLAUDE.md context files            |
+| **First-Framing Lock**       | Compounds early errors        | /plan command                      |
+| **Security Vulnerabilities** | 45% of AI code affected       | Pre-commit hooks, /security-review |
+| **Overconfidence**           | Masks fundamental errors      | /verify command                    |
+| **Context Decay**            | Information loses specificity | Session handoffs                   |
 
 ## The Evidence
 

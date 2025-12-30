@@ -8,11 +8,11 @@ Review code without the context bias from implementation. Provides objective ass
 
 ## Tools Available
 
-| Tool | Purpose |
-|------|---------|
-| Read | Read file contents |
-| Grep | Search for patterns |
-| LSP | Navigate code structure |
+| Tool | Purpose                 |
+| ---- | ----------------------- |
+| Read | Read file contents      |
+| Grep | Search for patterns     |
+| LSP  | Navigate code structure |
 
 ## Usage
 
@@ -21,6 +21,7 @@ Review: [file or scope]
 ```
 
 **Examples:**
+
 ```
 Review: src/services/payment.ts
 Review: the authentication module
@@ -29,13 +30,13 @@ Review: changes in this PR
 
 ## When to Use
 
-| Situation | Use Reviewer? |
-|-----------|---------------|
-| After implementing feature | Yes |
-| Before merging PR | Yes |
-| Getting second opinion | Yes |
-| During implementation | Usually no |
-| For security review | Use /security-review instead |
+| Situation                  | Use Reviewer?                |
+| -------------------------- | ---------------------------- |
+| After implementing feature | Yes                          |
+| Before merging PR          | Yes                          |
+| Getting second opinion     | Yes                          |
+| During implementation      | Usually no                   |
+| For security review        | Use /security-review instead |
 
 ## Output Format
 
@@ -43,26 +44,33 @@ Review: changes in this PR
 ## Code Review: [Target]
 
 ### Summary
+
 [Overall assessment: 1-2 sentences]
 
 ### Strengths
+
 - [What's done well]
 
 ### Issues
 
 #### Critical
+
 - 🔴 [Must fix before merge]
 
 #### Warnings
+
 - 🟡 [Should fix]
 
 #### Suggestions
+
 - 🔵 [Nice to have]
 
 ### Architecture Assessment
+
 [How well does this fit the codebase architecture?]
 
 ### Recommendations
+
 1. [Specific actionable recommendation]
 2. [Specific actionable recommendation]
 ```
@@ -123,11 +131,13 @@ After review, address issues in the main conversation.
 ## Why Fresh Perspective Matters
 
 The main conversation has implementation bias:
+
 - You know why decisions were made
 - You see what you intended, not what's there
 - Context can mask issues
 
 A fresh reviewer agent:
+
 - Sees code as-is, not as-intended
 - No bias from implementation decisions
 - Can spot inconsistencies

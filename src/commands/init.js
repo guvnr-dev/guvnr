@@ -37,14 +37,7 @@ const PRESETS = {
     description: 'Recommended setup for individual developers',
     components: {
       claudeMd: true,
-      commands: [
-        'plan',
-        'verify',
-        'handoff',
-        'assumptions',
-        'review',
-        'security-review'
-      ],
+      commands: ['plan', 'verify', 'handoff', 'assumptions', 'review', 'security-review'],
       agents: ['reviewer', 'explorer', 'tester'],
       hooks: true,
       mcp: false,
@@ -58,14 +51,7 @@ const PRESETS = {
     description: 'Complete setup with MCP server and metrics',
     components: {
       claudeMd: true,
-      commands: [
-        'plan',
-        'verify',
-        'handoff',
-        'assumptions',
-        'review',
-        'security-review'
-      ],
+      commands: ['plan', 'verify', 'handoff', 'assumptions', 'review', 'security-review'],
       agents: ['reviewer', 'explorer', 'tester'],
       hooks: true,
       mcp: true,
@@ -79,14 +65,7 @@ const PRESETS = {
     description: 'Full setup with team collaboration features',
     components: {
       claudeMd: true,
-      commands: [
-        'plan',
-        'verify',
-        'handoff',
-        'assumptions',
-        'review',
-        'security-review'
-      ],
+      commands: ['plan', 'verify', 'handoff', 'assumptions', 'review', 'security-review'],
       agents: ['reviewer', 'explorer', 'tester'],
       hooks: true,
       mcp: true,
@@ -108,9 +87,7 @@ export async function initCommand(options) {
 
   // Dry run mode
   if (options.dryRun) {
-    console.log(
-      chalk.yellow('  Running in dry-run mode. No files will be created.\n')
-    );
+    console.log(chalk.yellow('  Running in dry-run mode. No files will be created.\n'));
   }
 
   // Get configuration
@@ -125,9 +102,7 @@ export async function initCommand(options) {
   // Check for existing installation
   const existingFiles = checkExistingFiles(cwd);
   if (existingFiles.length > 0 && !options.force) {
-    console.log(
-      chalk.yellow('\n  Existing AI Excellence Framework files detected:')
-    );
+    console.log(chalk.yellow('\n  Existing AI Excellence Framework files detected:'));
     existingFiles.forEach(f => console.log(chalk.gray(`    - ${f}`)));
 
     if (!options.yes) {
@@ -171,23 +146,13 @@ export async function initCommand(options) {
     // 3. Install slash commands
     if (config.components.commands.length > 0) {
       spinner.text = 'Installing slash commands...';
-      await installCommands(
-        cwd,
-        config.components.commands,
-        options.dryRun,
-        results
-      );
+      await installCommands(cwd, config.components.commands, options.dryRun, results);
     }
 
     // 4. Install subagents
     if (config.components.agents.length > 0) {
       spinner.text = 'Installing subagents...';
-      await installAgents(
-        cwd,
-        config.components.agents,
-        options.dryRun,
-        results
-      );
+      await installAgents(cwd, config.components.agents, options.dryRun, results);
     }
 
     // 5. Install hooks
@@ -329,10 +294,7 @@ async function installClaudeMd(cwd, dryRun, results) {
   // Replace placeholders
   const projectName = dirname(cwd).split('/').pop() || 'Project';
   content = content.replace(/\[PROJECT_NAME\]/g, projectName);
-  content = content.replace(
-    /\[DATE\]/g,
-    new Date().toISOString().split('T')[0]
-  );
+  content = content.replace(/\[DATE\]/g, new Date().toISOString().split('T')[0]);
 
   if (!dryRun) {
     writeFileSync(targetPath, content);
@@ -483,12 +445,7 @@ async function installHooks(cwd, dryRun, results) {
   const hooksDir = join(cwd, 'scripts', 'hooks');
   const sourceDir = join(PACKAGE_ROOT, 'scripts', 'hooks');
 
-  const hooks = [
-    'post-edit.sh',
-    'verify-deps.sh',
-    'check-todos.sh',
-    'check-claude-md.sh'
-  ];
+  const hooks = ['post-edit.sh', 'verify-deps.sh', 'check-todos.sh', 'check-claude-md.sh'];
 
   for (const hook of hooks) {
     const sourcePath = join(sourceDir, hook);
@@ -526,12 +483,7 @@ async function installPreCommit(cwd, dryRun, results) {
  */
 async function installMcp(cwd, dryRun, results) {
   const mcpDir = join(cwd, 'scripts', 'mcp');
-  const sourcePath = join(
-    PACKAGE_ROOT,
-    'scripts',
-    'mcp',
-    'project-memory-server.py'
-  );
+  const sourcePath = join(PACKAGE_ROOT, 'scripts', 'mcp', 'project-memory-server.py');
   const targetPath = join(mcpDir, 'project-memory-server.py');
 
   if (existsSync(sourcePath)) {
@@ -581,12 +533,7 @@ async function installTemplates(cwd, dryRun, results) {
  */
 async function installMetrics(cwd, dryRun, results) {
   const metricsDir = join(cwd, 'scripts', 'metrics');
-  const sourcePath = join(
-    PACKAGE_ROOT,
-    'scripts',
-    'metrics',
-    'collect-session-metrics.sh'
-  );
+  const sourcePath = join(PACKAGE_ROOT, 'scripts', 'metrics', 'collect-session-metrics.sh');
   const targetPath = join(metricsDir, 'collect-session-metrics.sh');
 
   if (existsSync(sourcePath)) {
@@ -637,9 +584,7 @@ function printResults(results, dryRun) {
 
   if (results.created.length > 0) {
     console.log(
-      chalk.green(
-        `  ${dryRun ? 'Would create' : 'Created'} ${results.created.length} files:`
-      )
+      chalk.green(`  ${dryRun ? 'Would create' : 'Created'} ${results.created.length} files:`)
     );
     results.created.forEach(f => console.log(chalk.gray(`    ✓ ${f}`)));
   }
@@ -664,17 +609,11 @@ function printNextSteps(config) {
   console.log(chalk.white('  2. Run "claude" and try "/plan [your task]"'));
 
   if (config.components.preCommit) {
-    console.log(
-      chalk.white('  3. Run "pip install pre-commit && pre-commit install"')
-    );
+    console.log(chalk.white('  3. Run "pip install pre-commit && pre-commit install"'));
   }
 
   if (config.components.mcp) {
-    console.log(
-      chalk.white(
-        '  4. Set up MCP server: pip install -r scripts/mcp/requirements.txt'
-      )
-    );
+    console.log(chalk.white('  4. Set up MCP server: pip install -r scripts/mcp/requirements.txt'));
   }
 
   console.log(

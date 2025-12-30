@@ -4,14 +4,14 @@ This framework provides 40+ evidence-based mitigations organized by implementati
 
 ## Quick Impact Matrix
 
-| Mitigation | Effort | Impact | Addresses |
-|------------|--------|--------|-----------|
-| **CLAUDE.md** | Low | 5/5 | Session boundary, context loss |
-| **`/plan` before coding** | Low | 5/5 | First-framing lock, misinterpretation |
-| **`/verify` before completing** | Low | 4/5 | Overconfidence, hallucination |
-| **Pre-commit security hooks** | Medium | 5/5 | 45% vulnerability rate |
-| **Session handoffs** | Low | 4/5 | Cross-session continuity |
-| **MCP project memory** | Medium | 4/5 | Long-term context persistence |
+| Mitigation                      | Effort | Impact | Addresses                             |
+| ------------------------------- | ------ | ------ | ------------------------------------- |
+| **CLAUDE.md**                   | Low    | 5/5    | Session boundary, context loss        |
+| **`/plan` before coding**       | Low    | 5/5    | First-framing lock, misinterpretation |
+| **`/verify` before completing** | Low    | 4/5    | Overconfidence, hallucination         |
+| **Pre-commit security hooks**   | Medium | 5/5    | 45% vulnerability rate                |
+| **Session handoffs**            | Low    | 4/5    | Cross-session continuity              |
+| **MCP project memory**          | Medium | 4/5    | Long-term context persistence         |
 
 ## The 15-Minute Setup
 
@@ -65,22 +65,22 @@ Coordination patterns for teams:
 
 Every mitigation is rated using evidence from:
 
-| Rating | Meaning | Evidence Required |
-|--------|---------|-------------------|
-| **5** | Critical/Transformative | Multiple studies show >30% improvement |
-| **4** | High Impact | Studies show 10-30% improvement |
-| **3** | Moderate Impact | Practitioner reports show improvement |
-| **2** | Low Impact | Theoretical benefit, limited evidence |
-| **1** | Minimal Impact | Marginal benefit |
+| Rating | Meaning                 | Evidence Required                      |
+| ------ | ----------------------- | -------------------------------------- |
+| **5**  | Critical/Transformative | Multiple studies show >30% improvement |
+| **4**  | High Impact             | Studies show 10-30% improvement        |
+| **3**  | Moderate Impact         | Practitioner reports show improvement  |
+| **2**  | Low Impact              | Theoretical benefit, limited evidence  |
+| **1**  | Minimal Impact          | Marginal benefit                       |
 
 ## Key Evidence
 
-| Strategy | Key Research | Measured Impact |
-|----------|--------------|-----------------|
-| CLAUDE.md | [Anthropic](https://www.anthropic.com/engineering/claude-code-best-practices) | 65% cite missing context as #1 issue |
-| Plan-First | [METR Study](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) | Unplanned use = 19% slower |
-| Verification | [Veracode 2025](https://www.veracode.com/blog/genai-code-security-report/) | 45% vulnerability rate |
-| Multi-Agent | [Qodo 2025](https://www.qodo.ai/reports/state-of-ai-code-quality/) | 81% quality improvement |
+| Strategy     | Key Research                                                                           | Measured Impact                      |
+| ------------ | -------------------------------------------------------------------------------------- | ------------------------------------ |
+| CLAUDE.md    | [Anthropic](https://www.anthropic.com/engineering/claude-code-best-practices)          | 65% cite missing context as #1 issue |
+| Plan-First   | [METR Study](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) | Unplanned use = 19% slower           |
+| Verification | [Veracode 2025](https://www.veracode.com/blog/genai-code-security-report/)             | 45% vulnerability rate               |
+| Multi-Agent  | [Qodo 2025](https://www.qodo.ai/reports/state-of-ai-code-quality/)                     | 81% quality improvement              |
 
 ## The 80/20 Rule
 

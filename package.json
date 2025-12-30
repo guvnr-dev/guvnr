@@ -1,6 +1,6 @@
 {
   "name": "ai-excellence-framework",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Universal framework for AI-assisted development - works with Claude, Cursor, Copilot, Windsurf, Aider, Gemini CLI, Codex, Zed, Amp, and Roo Code",
   "type": "module",
   "main": "src/index.js",

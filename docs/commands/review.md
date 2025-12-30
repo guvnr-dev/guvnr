@@ -13,6 +13,7 @@ Review code from multiple perspectives: architecture, performance, maintainabili
 ```
 
 **Examples:**
+
 ```
 /review src/services/payment.ts
 /review the authentication module
@@ -25,42 +26,49 @@ Review code from multiple perspectives: architecture, performance, maintainabili
 ## Code Review: [Target]
 
 ### Summary
+
 [Brief overall assessment]
 
 ### Architecture
-| Aspect | Status | Notes |
-|--------|--------|-------|
+
+| Aspect                 | Status | Notes   |
+| ---------------------- | ------ | ------- |
 | Separation of concerns | ✓/⚠️/✗ | [Notes] |
-| Dependency direction | ✓/⚠️/✗ | [Notes] |
-| Pattern compliance | ✓/⚠️/✗ | [Notes] |
+| Dependency direction   | ✓/⚠️/✗ | [Notes] |
+| Pattern compliance     | ✓/⚠️/✗ | [Notes] |
 
 ### Performance
-| Aspect | Status | Notes |
-|--------|--------|-------|
-| Algorithm complexity | ✓/⚠️/✗ | [Notes] |
-| Resource usage | ✓/⚠️/✗ | [Notes] |
+
+| Aspect                | Status | Notes   |
+| --------------------- | ------ | ------- |
+| Algorithm complexity  | ✓/⚠️/✗ | [Notes] |
+| Resource usage        | ✓/⚠️/✗ | [Notes] |
 | Caching opportunities | ✓/⚠️/✗ | [Notes] |
 
 ### Maintainability
-| Aspect | Status | Notes |
-|--------|--------|-------|
-| Readability | ✓/⚠️/✗ | [Notes] |
-| Testability | ✓/⚠️/✗ | [Notes] |
+
+| Aspect        | Status | Notes   |
+| ------------- | ------ | ------- |
+| Readability   | ✓/⚠️/✗ | [Notes] |
+| Testability   | ✓/⚠️/✗ | [Notes] |
 | Documentation | ✓/⚠️/✗ | [Notes] |
 
 ### Consistency
-| Aspect | Status | Notes |
-|--------|--------|-------|
+
+| Aspect             | Status | Notes   |
+| ------------------ | ------ | ------- |
 | Naming conventions | ✓/⚠️/✗ | [Notes] |
-| Error handling | ✓/⚠️/✗ | [Notes] |
-| Code style | ✓/⚠️/✗ | [Notes] |
+| Error handling     | ✓/⚠️/✗ | [Notes] |
+| Code style         | ✓/⚠️/✗ | [Notes] |
 
 ### Issues Found
+
 - 🔴 **Critical**: [Must fix]
 - 🟡 **Warning**: [Should fix]
 - 🔵 **Suggestion**: [Nice to have]
 
 ### Recommendations
+
 1. [Specific recommendation]
 2. [Specific recommendation]
 ```
@@ -70,6 +78,7 @@ Review code from multiple perspectives: architecture, performance, maintainabili
 ### Architecture Review
 
 Checks:
+
 - Separation of concerns
 - Dependency direction (inward)
 - Appropriate abstraction levels
@@ -79,6 +88,7 @@ Checks:
 ### Performance Review
 
 Checks:
+
 - Algorithm complexity (O notation)
 - Database query efficiency
 - Memory usage patterns
@@ -88,6 +98,7 @@ Checks:
 ### Maintainability Review
 
 Checks:
+
 - Code readability
 - Function/class size
 - Cognitive complexity
@@ -97,6 +108,7 @@ Checks:
 ### Consistency Review
 
 Checks:
+
 - Naming conventions
 - Error handling patterns
 - Logging consistency
@@ -133,18 +145,18 @@ Not all warnings are problems—some are intentional tradeoffs.
 
 ## When to Use
 
-| Situation | Use /review? |
-|-----------|--------------|
-| Before PR merge | Yes |
-| After completing feature | Yes |
-| Periodic codebase health | Yes |
-| During implementation | Sometimes |
-| Quick bug fix | Usually no |
+| Situation                | Use /review? |
+| ------------------------ | ------------ |
+| Before PR merge          | Yes          |
+| After completing feature | Yes          |
+| Periodic codebase health | Yes          |
+| During implementation    | Sometimes    |
+| Quick bug fix            | Usually no   |
 
 ## Evidence
 
-| Source | Finding |
-|--------|---------|
+| Source                                                             | Finding                                |
+| ------------------------------------------------------------------ | -------------------------------------- |
 | [Qodo 2025](https://www.qodo.ai/reports/state-of-ai-code-quality/) | 81% quality improvement with AI review |
 
 ## See Also

@@ -907,7 +907,7 @@ repos:
       - id: check-yaml
       - id: check-json
       - id: check-added-large-files
-        args: ["--maxkb=1000"]
+        args: ['--maxkb=1000']
       - id: detect-private-key
       - id: check-merge-conflict
 
@@ -940,7 +940,7 @@ repos:
     rev: v1.4.0
     hooks:
       - id: detect-secrets
-        args: ["--baseline", ".secrets.baseline"]
+        args: ['--baseline', '.secrets.baseline']
 
   # AI-specific: Verify CLAUDE.md is updated
   - repo: local
@@ -1036,23 +1036,23 @@ on:
   workflow_dispatch:
     inputs:
       model:
-        description: "Claude model to use"
+        description: 'Claude model to use'
         required: false
-        default: "claude-sonnet-4-20250514"
+        default: 'claude-sonnet-4-20250514'
         type: choice
         options:
           - claude-sonnet-4-20250514
           - claude-opus-4-20250514
           - claude-3-5-sonnet-20241022
       max_tokens:
-        description: "Maximum tokens for response"
+        description: 'Maximum tokens for response'
         required: false
-        default: "4096"
+        default: '4096'
         type: string
       review_focus:
-        description: "Review focus areas"
+        description: 'Review focus areas'
         required: false
-        default: "security,bugs,performance,quality"
+        default: 'security,bugs,performance,quality'
         type: string
 
 # Configuration - set these as repository variables for easy updates
@@ -1240,9 +1240,9 @@ on:
   push:
     branches: [main, develop]
     paths:
-      - "src/**"
-      - "lib/**"
-      - "app/**"
+      - 'src/**'
+      - 'lib/**'
+      - 'app/**'
 
 jobs:
   update-context:

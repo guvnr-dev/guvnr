@@ -4,14 +4,14 @@ Choosing the right AI model for different coding tasks maximizes quality while m
 
 ## TL;DR - Quick Recommendations
 
-| Task Type | Best Choice | Alternative |
-| --- | --- | --- |
-| Daily coding, bug fixes | Claude Sonnet 4.5 | GPT-5-Codex |
-| Quick scaffolding, small fixes | Claude Haiku 4.5 | Gemini 2.5 Flash |
-| Complex architecture, deep review | Claude Opus 4.5 | GPT-5.1-Codex-Max |
-| Large codebase analysis | Gemini 2.5 Pro | Claude Opus 4.5 |
-| Cost-optimized batch processing | Gemini 2.5 Flash | Claude Haiku 4.5 |
-| Final review before merge | Claude Opus 4.5 | GPT-5.2-Codex |
+| Task Type                         | Best Choice       | Alternative       |
+| --------------------------------- | ----------------- | ----------------- |
+| Daily coding, bug fixes           | Claude Sonnet 4.5 | GPT-5-Codex       |
+| Quick scaffolding, small fixes    | Claude Haiku 4.5  | Gemini 2.5 Flash  |
+| Complex architecture, deep review | Claude Opus 4.5   | GPT-5.1-Codex-Max |
+| Large codebase analysis           | Gemini 2.5 Pro    | Claude Opus 4.5   |
+| Cost-optimized batch processing   | Gemini 2.5 Flash  | Claude Haiku 4.5  |
+| Final review before merge         | Claude Opus 4.5   | GPT-5.2-Codex     |
 
 ---
 
@@ -21,23 +21,44 @@ Choosing the right AI model for different coding tasks maximizes quality while m
 
 The industry-standard benchmark for real-world coding tasks:
 
-| Model | Score | Notes |
-| --- | --- | --- |
-| Claude Sonnet 4.5 | 82.0% | Current leader |
-| Claude Opus 4.5 | 80.9% | Extended reasoning |
-| GPT-5.2-Codex | 80.0% | OpenAI's latest |
-| GPT-5.1-Codex-Max | 76.3% | Best efficiency |
-| Gemini 3 Pro | 76.2% | 1M token context |
-| Grok 4.1 | 74.9% | X.AI offering |
+| Model             | Score | Notes                  |
+| ----------------- | ----- | ---------------------- |
+| Claude Opus 4.5   | 80.9% | Current leader         |
+| GPT-5.2-Codex     | 80.0% | Near-parity achieved   |
+| Claude Sonnet 4.5 | 78.2% | Best value/performance |
+| Gemini 3 Pro      | 76.8% | 1M token context       |
+| GPT-5.1-Codex-Max | 76.3% | Best efficiency        |
+| DeepSeek V3.2     | 73.1% | Open source leader     |
+
+### SWE-Bench Pro Rankings (Harder Benchmark)
+
+Challenging real-world engineering tasks (December 2025):
+
+| Model             | Score  | Notes                   |
+| ----------------- | ------ | ----------------------- |
+| Claude Opus 4.5   | 45.89% | Current leader          |
+| Claude Sonnet 4.5 | 43.60% | Best cost/performance   |
+| Gemini 3 Pro      | 43.30% | Close competition       |
+| GPT-5.2           | 41.78% | Significant improvement |
+
+**Key insight:** All models drop significantly from Verified (~80%) to Pro (~45%), indicating room for improvement on complex tasks.
+
+### Terminal-bench 2.0 (CLI Proficiency)
+
+| Model           | Score | Notes             |
+| --------------- | ----- | ----------------- |
+| Claude Opus 4.5 | 59.3% | Best CLI handling |
+| Gemini 3 Pro    | 54.2% | Good CLI support  |
+| GPT-5.2         | 47.6% | Improving         |
 
 ### Context Window Comparison
 
-| Model | Context Window | Best For |
-| --- | --- | --- |
-| Gemini 2.5 Pro | 1,000,000 tokens | Entire codebase analysis |
-| Claude Opus 4.5 | 200,000 tokens | Large file analysis |
-| GPT-5-Codex | 128,000 tokens | Standard projects |
-| Claude Sonnet 4.5 | 200,000 tokens | Daily development |
+| Model             | Context Window   | Best For                 |
+| ----------------- | ---------------- | ------------------------ |
+| Gemini 2.5 Pro    | 1,000,000 tokens | Entire codebase analysis |
+| Claude Opus 4.5   | 200,000 tokens   | Large file analysis      |
+| GPT-5-Codex       | 128,000 tokens   | Standard projects        |
+| Claude Sonnet 4.5 | 200,000 tokens   | Daily development        |
 
 ---
 
@@ -273,20 +294,20 @@ model: gemini-2.5-pro
 
 ### Cost Optimization Matrix
 
-| Phase | Budget Mode | Balanced Mode | Quality Mode |
-| --- | --- | --- | --- |
-| Exploration | Gemini Flash | Claude Haiku | Claude Sonnet |
-| Implementation | Gemini Flash | Claude Sonnet | Claude Sonnet |
-| Review | Claude Sonnet | Claude Opus | Claude Opus |
-| **Est. Cost** | $10/day | $30/day | $75/day |
+| Phase          | Budget Mode   | Balanced Mode | Quality Mode  |
+| -------------- | ------------- | ------------- | ------------- |
+| Exploration    | Gemini Flash  | Claude Haiku  | Claude Sonnet |
+| Implementation | Gemini Flash  | Claude Sonnet | Claude Sonnet |
+| Review         | Claude Sonnet | Claude Opus   | Claude Opus   |
+| **Est. Cost**  | $10/day       | $30/day       | $75/day       |
 
 ### When to Use Each Provider
 
-| Provider | Strength | Use When |
-| --- | --- | --- |
-| **Claude** | Coding accuracy, safety | Quality is paramount |
-| **OpenAI/Codex** | IDE integration, ecosystem | Working in VS Code, GitHub |
-| **Gemini** | Context size, cost | Budget matters or large codebases |
+| Provider         | Strength                   | Use When                          |
+| ---------------- | -------------------------- | --------------------------------- |
+| **Claude**       | Coding accuracy, safety    | Quality is paramount              |
+| **OpenAI/Codex** | IDE integration, ecosystem | Working in VS Code, GitHub        |
+| **Gemini**       | Context size, cost         | Budget matters or large codebases |
 
 ---
 
@@ -348,15 +369,15 @@ default = "claude-sonnet-4-5"
 
 ## Decision Matrix
 
-| Factor | Haiku/Flash | Sonnet/Codex | Opus/Max |
-| --- | --- | --- | --- |
-| Speed | ⭐⭐⭐ | ⭐⭐ | ⭐ |
-| Cost | ⭐⭐⭐ | ⭐⭐ | ⭐ |
-| Code Quality | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ |
-| Complex Reasoning | ⭐ | ⭐⭐ | ⭐⭐⭐ |
-| Architecture | ⭐ | ⭐⭐ | ⭐⭐⭐ |
-| Security Analysis | ⭐ | ⭐⭐ | ⭐⭐⭐ |
-| Context Window | ⭐⭐ | ⭐⭐ | ⭐⭐⭐ |
+| Factor            | Haiku/Flash | Sonnet/Codex | Opus/Max |
+| ----------------- | ----------- | ------------ | -------- |
+| Speed             | ⭐⭐⭐      | ⭐⭐         | ⭐       |
+| Cost              | ⭐⭐⭐      | ⭐⭐         | ⭐       |
+| Code Quality      | ⭐⭐        | ⭐⭐⭐       | ⭐⭐⭐   |
+| Complex Reasoning | ⭐          | ⭐⭐         | ⭐⭐⭐   |
+| Architecture      | ⭐          | ⭐⭐         | ⭐⭐⭐   |
+| Security Analysis | ⭐          | ⭐⭐         | ⭐⭐⭐   |
+| Context Window    | ⭐⭐        | ⭐⭐         | ⭐⭐⭐   |
 
 ---
 

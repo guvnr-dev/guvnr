@@ -8,11 +8,11 @@ Generate test cases, identify coverage gaps, and suggest testing strategies.
 
 ## Tools Available
 
-| Tool | Purpose |
-|------|---------|
-| Read | Read source and test files |
-| Grep | Find patterns and coverage |
-| Write | Generate test files |
+| Tool  | Purpose                    |
+| ----- | -------------------------- |
+| Read  | Read source and test files |
+| Grep  | Find patterns and coverage |
+| Write | Generate test files        |
 
 ## Usage
 
@@ -21,6 +21,7 @@ Test: [file or feature]
 ```
 
 **Examples:**
+
 ```
 Test: src/services/payment.ts
 Test: the user registration flow
@@ -29,31 +30,34 @@ Test: edge cases for order processing
 
 ## When to Use
 
-| Situation | Use Tester? |
-|-----------|-------------|
-| After implementing feature | Yes |
-| Improving test coverage | Yes |
-| Before release | Yes |
-| Finding edge cases | Yes |
-| During implementation | Sometimes |
+| Situation                  | Use Tester? |
+| -------------------------- | ----------- |
+| After implementing feature | Yes         |
+| Improving test coverage    | Yes         |
+| Before release             | Yes         |
+| Finding edge cases         | Yes         |
+| During implementation      | Sometimes   |
 
 ## Output Format
 
-```markdown
+````markdown
 ## Test Analysis: [Target]
 
 ### Current Coverage
-| Type | Coverage |
-|------|----------|
-| Line | X% |
-| Branch | X% |
-| Function | X% |
+
+| Type     | Coverage |
+| -------- | -------- |
+| Line     | X%       |
+| Branch   | X%       |
+| Function | X%       |
 
 ### Missing Tests
+
 - [ ] [Test case description]
 - [ ] [Test case description]
 
 ### Edge Cases
+
 - [ ] [Edge case to test]
 - [ ] [Edge case to test]
 
@@ -74,10 +78,13 @@ describe('PaymentService', () => {
   });
 });
 ```
+````
 
 ### Recommendations
+
 1. [Testing strategy recommendation]
-```
+
+````
 
 ## Test Types Generated
 
@@ -88,7 +95,7 @@ test('validates email format', () => {
   expect(validateEmail('user@example.com')).toBe(true);
   expect(validateEmail('invalid')).toBe(false);
 });
-```
+````
 
 ### Integration Tests
 
@@ -105,10 +112,7 @@ test('creates user and sends welcome email', async () => {
 
 ```javascript
 test('handles concurrent payment attempts', async () => {
-  const results = await Promise.all([
-    paymentService.process(order),
-    paymentService.process(order),
-  ]);
+  const results = await Promise.all([paymentService.process(order), paymentService.process(order)]);
   expect(results.filter(r => r.success)).toHaveLength(1);
 });
 ```
@@ -118,6 +122,7 @@ test('handles concurrent payment attempts', async () => {
 ### 1. Test Critical Paths First
 
 Focus on:
+
 - Payment processing
 - Authentication flows
 - Data validation
@@ -128,8 +133,7 @@ Focus on:
 ```javascript
 // Don't just test success
 test('rejects invalid payment amount', async () => {
-  await expect(paymentService.process({ amount: -100 }))
-    .rejects.toThrow('Invalid amount');
+  await expect(paymentService.process({ amount: -100 })).rejects.toThrow('Invalid amount');
 });
 ```
 
@@ -151,7 +155,8 @@ test('rejects exceeding maximum quantity', async () => {
 
 ```javascript
 beforeEach(() => {
-  jest.spyOn(stripeClient, 'createPaymentIntent')
+  jest
+    .spyOn(stripeClient, 'createPaymentIntent')
     .mockResolvedValue({ id: 'pi_123', status: 'succeeded' });
 });
 ```

@@ -8,12 +8,12 @@ Create explicit documentation at session boundaries so the next session (or pers
 
 ## Why It Matters
 
-| Without /handoff | With /handoff |
-|------------------|---------------|
-| Context lost | Context preserved |
-| Decisions forgotten | Decisions documented |
-| Blockers rediscovered | Blockers known |
-| Ramp-up time wasted | Quick continuation |
+| Without /handoff      | With /handoff        |
+| --------------------- | -------------------- |
+| Context lost          | Context preserved    |
+| Decisions forgotten   | Decisions documented |
+| Blockers rediscovered | Blockers known       |
+| Ramp-up time wasted   | Quick continuation   |
 
 ## Usage
 
@@ -29,28 +29,35 @@ No arguments needed—generates based on session context.
 ## Session Handoff: [Date]
 
 ### Completed
+
 - [What was finished]
 
 ### In Progress
+
 - [What was started but not finished]
 
 ### Decisions Made
+
 | Decision | Rationale |
-|----------|-----------|
-| [Choice] | [Why] |
+| -------- | --------- |
+| [Choice] | [Why]     |
 
 ### Blockers Encountered
+
 - [What blocked progress]
 
 ### For Next Session
+
 - [Immediate next steps]
 - [Questions to answer]
 - [Resources needed]
 
 ### Files Modified
+
 - `path/to/file.ts` - [what changed]
 
 ### Context to Preserve
+
 [Any important context that might be lost]
 ```
 
@@ -94,21 +101,21 @@ Future you will forget why decisions were made:
 ```markdown
 ### Decisions Made
 
-| Decision | Rationale |
-|----------|-----------|
-| Used Stripe over PayPal | Better documentation, team familiarity |
+| Decision                 | Rationale                                 |
+| ------------------------ | ----------------------------------------- |
+| Used Stripe over PayPal  | Better documentation, team familiarity    |
 | Stored tokens in session | Simpler than separate token store for MVP |
 ```
 
 ## When to Use
 
-| Situation | Use /handoff? |
-|-----------|---------------|
-| End of work day | Yes |
-| Switching to different task | Yes |
-| Before taking a break | Optional |
-| Someone else continuing work | Yes |
-| Personal project, same person | Optional |
+| Situation                     | Use /handoff? |
+| ----------------------------- | ------------- |
+| End of work day               | Yes           |
+| Switching to different task   | Yes           |
+| Before taking a break         | Optional      |
+| Someone else continuing work  | Yes           |
+| Personal project, same person | Optional      |
 
 ## Practical Example
 
@@ -118,35 +125,42 @@ Future you will forget why decisions were made:
 ## Session Handoff: 2024-12-30
 
 ### Completed
+
 - OAuth2 flow with Google provider
 - User model with OAuth fields
 - Login/logout endpoints
 
 ### In Progress
+
 - Refresh token handling (50% done)
 - Session management
 
 ### Decisions Made
-| Decision | Rationale |
-|----------|-----------|
-| OAuth2 over SAML | Simpler, adequate for current needs |
-| Google only (initially) | Most users have Google accounts |
+
+| Decision                | Rationale                           |
+| ----------------------- | ----------------------------------- |
+| OAuth2 over SAML        | Simpler, adequate for current needs |
+| Google only (initially) | Most users have Google accounts     |
 
 ### Blockers Encountered
+
 - Need to configure Google Cloud Console credentials
 
 ### For Next Session
+
 - [ ] Get Google OAuth credentials from project owner
 - [ ] Complete refresh token rotation
 - [ ] Add session timeout handling
 - [ ] Write tests for auth flow
 
 ### Files Modified
+
 - `src/auth/oauth.ts` - OAuth flow implementation
 - `src/models/user.ts` - Added OAuth fields
 - `src/routes/auth.ts` - Login/logout routes
 
 ### Context to Preserve
+
 The OAuth library requires specific callback URL format.
 See `docs/oauth-setup.md` for configuration details.
 ```
@@ -159,22 +173,25 @@ Update CLAUDE.md's "Current State" section with handoff info:
 ## Current State
 
 ### Active Work
+
 Completing OAuth2 refresh token handling
 
 ### Recent Decisions
+
 - Using Google OAuth only for MVP
 - Tokens stored in session
 
 ### Blockers
+
 - Awaiting Google Cloud credentials
 ```
 
 ## Evidence
 
-| Source | Finding |
-|--------|---------|
-| [GitHub #11455](https://github.com/anthropics/claude-code/issues/11455) | Developers request session continuity |
-| [RedMonk 2025](https://redmonk.com/kholterhoff/2025/12/22/10-things-developers-want-from-their-agentic-ides-in-2025/) | Session continuity top request |
+| Source                                                                                                                | Finding                               |
+| --------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
+| [GitHub #11455](https://github.com/anthropics/claude-code/issues/11455)                                               | Developers request session continuity |
+| [RedMonk 2025](https://redmonk.com/kholterhoff/2025/12/22/10-things-developers-want-from-their-agentic-ides-in-2025/) | Session continuity top request        |
 
 ## See Also
 

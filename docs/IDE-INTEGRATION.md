@@ -195,11 +195,7 @@ Cursor uses the same configuration structure as VS Code. Create or update `.curs
   "cursor.context.includeWorkspace": true,
 
   // Use CLAUDE.md as primary context
-  "cursor.ai.contextFiles": [
-    "CLAUDE.md",
-    ".claude/commands/*.md",
-    ".claude/agents/*.md"
-  ],
+  "cursor.ai.contextFiles": ["CLAUDE.md", ".claude/commands/*.md", ".claude/agents/*.md"],
 
   // Agent mode settings
   "cursor.agent.enabled": true,

@@ -13,6 +13,56 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VitePress documentation site deployment
 - Real-world team usage metrics dashboard
 
+## [1.6.0] - 2025-12-30
+
+### Added
+
+#### Industry Standards Alignment
+
+- **Agentic AI Foundation (AAIF) Integration**
+  - Updated documentation to reference AAIF standards (launched Dec 9, 2025)
+  - MCP, AGENTS.md, and goose now under Linux Foundation governance
+  - Added AAIF research citations (10,000+ MCP servers, 60,000+ AGENTS.md repos)
+
+- **2025 DORA Report Integration**
+  - New `DORA-INTEGRATION.md` guide for DevOps metrics
+  - Seven team archetypes replacing elite/high/medium/low model
+  - AI amplification principle documentation
+  - Platform engineering as AI foundation guidance
+
+#### Database & Deployment
+
+- **PostgreSQL Deployment Guide** (`POSTGRESQL-DEPLOYMENT.md`)
+  - Full schema and migration scripts
+  - Connection pooling configuration
+  - High availability setup with Docker Compose
+  - Row-level security for multi-tenant deployments
+  - SQLite to PostgreSQL migration script
+
+#### Security Enhancements
+
+- **New AI Security Check Hook** (`check-ai-security.sh`)
+  - Detects eval() usage
+  - Finds hardcoded credentials
+  - Identifies SQL injection patterns
+  - Catches command injection risks
+
+### Changed
+
+- **Model Selection Guide** updated with December 2025 benchmarks
+  - SWE-Bench Pro rankings added (Claude Opus 4.5 leads at 45.89%)
+  - Terminal-bench 2.0 CLI proficiency scores
+  - DeepSeek V3.2 added as open source leader
+- **Research Citations** updated with AAIF and DORA 2025 findings
+- **VitePress Navigation** includes new guides
+- **Pre-commit Configuration** simplified with external scripts
+
+### Fixed
+
+- YAML syntax error in pre-commit configuration template
+- Prettier formatting applied to all files
+- ESLint errors auto-fixed
+
 ## [1.5.0] - 2025-12-30
 
 ### Added
@@ -480,17 +530,13 @@ This project follows [Semantic Versioning](https://semver.org/):
 1. **New Exports Available**: The framework now exports error handling utilities:
 
    ```javascript
-   import {
-     createError,
-     FrameworkError,
-     EXIT_CODES,
-   } from "ai-excellence-framework";
+   import { createError, FrameworkError, EXIT_CODES } from 'ai-excellence-framework';
    ```
 
 2. **TypeScript Support**: Full type definitions available:
 
    ```typescript
-   import type { InitOptions, ValidateResult } from "ai-excellence-framework";
+   import type { InitOptions, ValidateResult } from 'ai-excellence-framework';
    ```
 
 3. **CI Updates**: Consider adding the new security scanning workflows from `docs/SAST-INTEGRATION.md`

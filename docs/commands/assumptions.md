@@ -8,12 +8,12 @@ Make implicit assumptions explicit. AI (and humans) make many assumptions that s
 
 ## Why It Matters
 
-| Hidden Assumptions | Surfaced Assumptions |
-|-------------------|---------------------|
-| Compound silently | Caught early |
-| Cause rework | Prevent rework |
-| Misaligned expectations | Aligned expectations |
-| "I thought you meant..." | Clear understanding |
+| Hidden Assumptions       | Surfaced Assumptions |
+| ------------------------ | -------------------- |
+| Compound silently        | Caught early         |
+| Cause rework             | Prevent rework       |
+| Misaligned expectations  | Aligned expectations |
+| "I thought you meant..." | Clear understanding  |
 
 ## Usage
 
@@ -22,6 +22,7 @@ Make implicit assumptions explicit. AI (and humans) make many assumptions that s
 ```
 
 **Examples:**
+
 ```
 /assumptions the user authentication feature
 /assumptions our approach to caching
@@ -34,23 +35,29 @@ Make implicit assumptions explicit. AI (and humans) make many assumptions that s
 ## Assumptions Analysis: [Topic]
 
 ### Technical Assumptions
+
 - [ ] [Assumption about technology/architecture]
 
 ### Requirements Assumptions
+
 - [ ] [Assumption about what's needed]
 
 ### Environmental Assumptions
+
 - [ ] [Assumption about the environment]
 
 ### Implicit Constraints
+
 - [ ] [Unstated constraint we're operating under]
 
 ### Questions to Validate
+
 - [Question that would confirm/deny assumption]
 
 ### Risk Assessment
-| Assumption | If Wrong | Likelihood |
-|------------|----------|------------|
+
+| Assumption   | If Wrong | Likelihood   |
+| ------------ | -------- | ------------ |
 | [Assumption] | [Impact] | High/Med/Low |
 ```
 
@@ -60,6 +67,7 @@ Make implicit assumptions explicit. AI (and humans) make many assumptions that s
 
 ```markdown
 ### Technical Assumptions
+
 - [ ] The database supports JSONB columns
 - [ ] We have access to Redis for caching
 - [ ] The API supports webhooks
@@ -70,6 +78,7 @@ Make implicit assumptions explicit. AI (and humans) make many assumptions that s
 
 ```markdown
 ### Requirements Assumptions
+
 - [ ] Users need to be authenticated for all operations
 - [ ] We need to support multiple currencies
 - [ ] Response time should be under 200ms
@@ -80,6 +89,7 @@ Make implicit assumptions explicit. AI (and humans) make many assumptions that s
 
 ```markdown
 ### Environmental Assumptions
+
 - [ ] Running in AWS environment
 - [ ] Have access to secrets manager
 - [ ] CI/CD pipeline is configured
@@ -90,6 +100,7 @@ Make implicit assumptions explicit. AI (and humans) make many assumptions that s
 
 ```markdown
 ### Implicit Constraints
+
 - [ ] Must maintain backward compatibility
 - [ ] Cannot change the public API
 - [ ] Budget for external services is limited
@@ -104,9 +115,11 @@ Don't just list obvious assumptions:
 
 ```markdown
 # Too obvious
+
 - [ ] Users will have internet connection
 
 # More useful
+
 - [ ] Users will have stable 3G+ connection
 - [ ] Mobile users may have intermittent connectivity
 ```
@@ -117,6 +130,7 @@ For assumptions with high impact if wrong:
 
 ```markdown
 ### Questions to Validate
+
 - Is the database version 14+? (needed for JSONB)
 - Do we have Redis access in production?
 - What's the SLA for the external API?
@@ -128,6 +142,7 @@ Keep validated assumptions in project context:
 
 ```markdown
 ## Validated Assumptions
+
 - Database: PostgreSQL 15 with JSONB support ✓
 - Caching: Redis available in all environments ✓
 - API: Stripe webhooks enabled ✓
@@ -144,13 +159,13 @@ This broke because I assumed X, but actually Y.
 
 ## When to Use
 
-| Situation | Use /assumptions? |
-|-----------|-------------------|
-| Starting new feature | Yes |
-| Debugging unexpected behavior | Yes |
-| Planning architecture | Yes |
-| Code review | Sometimes |
-| Minor changes | No |
+| Situation                     | Use /assumptions? |
+| ----------------------------- | ----------------- |
+| Starting new feature          | Yes               |
+| Debugging unexpected behavior | Yes               |
+| Planning architecture         | Yes               |
+| Code review                   | Sometimes         |
+| Minor changes                 | No                |
 
 ## Example Analysis
 
@@ -158,36 +173,42 @@ This broke because I assumed X, but actually Y.
 ## Assumptions Analysis: Payment Integration
 
 ### Technical Assumptions
+
 - [ ] Stripe SDK is compatible with Node 18
 - [ ] We can use Stripe's hosted checkout
 - [ ] Webhooks can be received at public URL
 
 ### Requirements Assumptions
+
 - [ ] Only credit cards, no ACH initially
 - [ ] Single currency (USD)
 - [ ] Refunds handled manually for now
 
 ### Environmental Assumptions
+
 - [ ] Stripe API keys in environment variables
 - [ ] Webhook endpoint accessible from internet
 - [ ] SSL certificate configured
 
 ### Implicit Constraints
+
 - [ ] PCI compliance not required (Stripe handles)
 - [ ] No recurring billing in initial scope
 - [ ] Tax calculation not needed (handled separately)
 
 ### Questions to Validate
+
 - Do we need to support Apple Pay / Google Pay?
 - What's the refund policy?
 - Who has access to Stripe dashboard?
 
 ### Risk Assessment
-| Assumption | If Wrong | Likelihood |
-|------------|----------|------------|
-| Single currency | Major rework | Medium |
-| No recurring billing | Feature delay | Low |
-| Stripe hosted checkout | UI changes | Low |
+
+| Assumption             | If Wrong      | Likelihood |
+| ---------------------- | ------------- | ---------- |
+| Single currency        | Major rework  | Medium     |
+| No recurring billing   | Feature delay | Low        |
+| Stripe hosted checkout | UI changes    | Low        |
 ```
 
 ## See Also

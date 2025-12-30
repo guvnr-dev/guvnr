@@ -13,6 +13,7 @@ npx ai-excellence-framework init --preset minimal
 ```
 
 Includes:
+
 - CLAUDE.md
 - /plan and /verify commands
 
@@ -25,6 +26,7 @@ npx ai-excellence-framework init --preset standard
 ```
 
 Includes:
+
 - CLAUDE.md with team conventions
 - All 8 slash commands
 - 3 subagents
@@ -39,6 +41,7 @@ npx ai-excellence-framework init --preset full
 ```
 
 Includes:
+
 - Everything in standard
 - MCP server for persistent memory
 - Metrics collection
@@ -53,6 +56,7 @@ npx ai-excellence-framework init --preset team
 ```
 
 Includes:
+
 - Everything in full
 - Team memory federation
 - Multi-project context sharing
@@ -68,15 +72,19 @@ Create a team template:
 # [Team Name] Project Template
 
 ## Stack
+
 [Your standard stack]
 
 ## Conventions
+
 [Your coding standards]
 
 ## Commands
+
 [Your build/test/deploy commands]
 
 ## Security
+
 [Your security requirements]
 ```
 
@@ -107,6 +115,7 @@ Commit commands to the repository:
 ### 4. Train the Team
 
 Key concepts to cover:
+
 - CLAUDE.md purpose and maintenance
 - When to use /plan
 - When to use /verify
@@ -115,6 +124,7 @@ Key concepts to cover:
 ## Convention Enforcement
 
 See [Convention Enforcement](/docs/team/conventions) for:
+
 - Automated style checking
 - Consistent patterns across AI-generated code
 - Team-wide quality standards
@@ -160,12 +170,12 @@ See [Metrics Dashboard](/METRICS-VISUALIZATION) for setup.
 
 ## Success Metrics
 
-| Metric | Target |
-|--------|--------|
-| CLAUDE.md freshness | Updated within 30 days |
-| Hook bypass rate | <5% of commits |
-| /plan usage for complex tasks | >80% |
-| Security issues caught | Before merge |
+| Metric                        | Target                 |
+| ----------------------------- | ---------------------- |
+| CLAUDE.md freshness           | Updated within 30 days |
+| Hook bypass rate              | <5% of commits         |
+| /plan usage for complex tasks | >80%                   |
+| Security issues caught        | Before merge           |
 
 ## Resources
 

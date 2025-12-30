@@ -190,25 +190,25 @@ Before committing, verify:
 
 Track what patterns we use and their effectiveness:
 
-| Pattern                  | Used?   | Effective? | Notes                                      |
-| ------------------------ | ------- | ---------- | ------------------------------------------ |
-| CLAUDE.md                | Yes     | Yes        | Essential for context across sessions      |
-| /plan command            | Yes     | Yes        | Used for framework development planning    |
-| /verify command          | Yes     | Yes        | Used to verify implementation completeness |
-| /handoff command         | Yes     | Yes        | Used for session documentation             |
-| /assumptions command     | Yes     | Yes        | Surfaces hidden requirements               |
-| /security-review command | Yes     | Yes        | Guided security considerations in CLI/MCP  |
-| /refactor command        | Yes     | Yes        | Used during enhancement pass               |
-| /test-coverage command   | Yes     | Yes        | Guided test additions                      |
-| Session notes            | Yes     | Yes        | Documented in session-notes/               |
-| Pre-commit hooks         | Yes     | Yes        | Template comprehensive and tested          |
-| MCP memory               | Yes     | Yes        | Production server with export/import       |
-| Metrics collection       | Yes     | TBD        | Script implemented, awaiting data          |
-| TodoWrite tracking       | Yes     | Yes        | Critical for complex multi-step tasks      |
-| Online research          | Yes     | Yes        | Validated all claims against sources       |
-| CLI installer            | Yes     | Yes        | Used to structure project                  |
-| Configuration schemas    | Yes     | Yes        | Provides validation structure              |
-| Degit templates          | Yes     | Yes        | 4 presets for different use cases          |
+| Pattern                  | Used? | Effective? | Notes                                      |
+| ------------------------ | ----- | ---------- | ------------------------------------------ |
+| CLAUDE.md                | Yes   | Yes        | Essential for context across sessions      |
+| /plan command            | Yes   | Yes        | Used for framework development planning    |
+| /verify command          | Yes   | Yes        | Used to verify implementation completeness |
+| /handoff command         | Yes   | Yes        | Used for session documentation             |
+| /assumptions command     | Yes   | Yes        | Surfaces hidden requirements               |
+| /security-review command | Yes   | Yes        | Guided security considerations in CLI/MCP  |
+| /refactor command        | Yes   | Yes        | Used during enhancement pass               |
+| /test-coverage command   | Yes   | Yes        | Guided test additions                      |
+| Session notes            | Yes   | Yes        | Documented in session-notes/               |
+| Pre-commit hooks         | Yes   | Yes        | Template comprehensive and tested          |
+| MCP memory               | Yes   | Yes        | Production server with export/import       |
+| Metrics collection       | Yes   | TBD        | Script implemented, awaiting data          |
+| TodoWrite tracking       | Yes   | Yes        | Critical for complex multi-step tasks      |
+| Online research          | Yes   | Yes        | Validated all claims against sources       |
+| CLI installer            | Yes   | Yes        | Used to structure project                  |
+| Configuration schemas    | Yes   | Yes        | Provides validation structure              |
+| Degit templates          | Yes   | Yes        | 4 presets for different use cases          |
 
 ### Dogfooding Observations
 

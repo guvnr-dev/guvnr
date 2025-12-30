@@ -6,12 +6,12 @@ Ensure AI-generated code follows team conventions consistently.
 
 AI code often drifts from team standards:
 
-| Issue | Frequency |
-|-------|-----------|
-| Inconsistency with team standards | 40% |
-| Style variations across files | Common |
-| Architectural violations | Moderate |
-| Naming convention mismatches | Common |
+| Issue                             | Frequency |
+| --------------------------------- | --------- |
+| Inconsistency with team standards | 40%       |
+| Style variations across files     | Common    |
+| Architectural violations          | Moderate  |
+| Naming convention mismatches      | Common    |
 
 ## Solution Layers
 
@@ -23,22 +23,26 @@ Define standards in CLAUDE.md:
 ## Conventions
 
 ### Architecture
+
 - Use repository pattern for data access
 - Services contain business logic only
 - Controllers are thin (validation + delegation)
 
 ### Naming
+
 - Files: kebab-case (user-service.ts)
 - Classes: PascalCase (UserService)
 - Functions: camelCase (getUserById)
 - Constants: SCREAMING_SNAKE (MAX_RETRIES)
 
 ### Code Style
+
 - Prefer async/await over .then()
 - Use early returns to reduce nesting
 - Maximum function length: 50 lines
 
 ### Do Not
+
 - Do not use any/unknown types
 - Do not bypass the service layer
 - Do not use string concatenation for SQL
@@ -55,7 +59,7 @@ export default [
     rules: {
       'no-explicit-any': 'error',
       'max-lines-per-function': ['error', 50],
-      'prefer-await': 'error',
+      'prefer-await': 'error'
     }
   }
 ];
@@ -117,19 +121,19 @@ Example: See `src/controllers/user.ts:getUser`
 
 ### Error Handling Pattern
 
-```markdown
+````markdown
 ## Error Handling
 
 Use the Result type for recoverable errors:
 
 ```typescript
-type Result<T, E = Error> =
-  | { ok: true; value: T }
-  | { ok: false; error: E };
+type Result<T, E = Error> = { ok: true; value: T } | { ok: false; error: E };
 ```
+````
 
 Example: See `src/services/payment.ts`
-```
+
+````
 
 ### Database Pattern
 
@@ -144,7 +148,7 @@ const user = await userRepository.findById(id);
 
 // Bad
 const user = await db.query('SELECT * FROM users WHERE id = ?', [id]);
-```
+````
 
 ## Custom Commands
 
@@ -166,6 +170,7 @@ Create an endpoint following our conventions:
 5. Add tests in `tests/`
 
 Use existing endpoints as reference:
+
 - Simple CRUD: `src/controllers/user.ts`
 - Complex logic: `src/controllers/order.ts`
 
@@ -202,6 +207,7 @@ done
 
 ```markdown
 ## Do Not (Critical)
+
 ⛔ Never use `any` type
 ⛔ Never bypass service layer
 ⛔ Never use string SQL
@@ -215,6 +221,7 @@ done
 ## Current State
 
 ### Convention Review
+
 Last review: 2024-12-30
 Next review: 2025-01-30
 Owner: [Team Lead]
@@ -226,7 +233,9 @@ Owner: [Team Lead]
 
 ```markdown
 ## Patterns
+
 For the canonical implementation of each pattern, see:
+
 - API endpoints: `src/controllers/user.ts`
 - Services: `src/services/payment.ts`
 - Repositories: `src/repositories/order.ts`
@@ -234,7 +243,7 @@ For the canonical implementation of each pattern, see:
 
 ## Evidence
 
-| Source | Finding |
-|--------|---------|
+| Source                                                                                  | Finding                               |
+| --------------------------------------------------------------------------------------- | ------------------------------------- |
 | [Second Talent](https://www.secondtalent.com/resources/ai-coding-assistant-statistics/) | 40% inconsistency with team standards |
-| [GitClear](https://www.gitclear.com/ai_assistant_code_quality_2025_research) | Refactoring down from 25% to <10% |
+| [GitClear](https://www.gitclear.com/ai_assistant_code_quality_2025_research)            | Refactoring down from 25% to <10%     |

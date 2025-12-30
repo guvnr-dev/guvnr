@@ -191,16 +191,12 @@ const DIAGNOSTICS = [
       }
 
       const stats = statSync(claudeMdPath);
-      const daysSinceModified =
-        (Date.now() - stats.mtime) / (1000 * 60 * 60 * 24);
+      const daysSinceModified = (Date.now() - stats.mtime) / (1000 * 60 * 60 * 24);
 
       return {
         passed: daysSinceModified < 7,
         value: `${Math.floor(daysSinceModified)} days old`,
-        hint:
-          daysSinceModified >= 7
-            ? 'Consider updating Current State section'
-            : undefined
+        hint: daysSinceModified >= 7 ? 'Consider updating Current State section' : undefined
       };
     }
   },
@@ -267,9 +263,7 @@ export async function doctorCommand(options) {
     .filter(r => r.result.passed).length;
   const total = DIAGNOSTICS.length;
 
-  console.log(
-    chalk.white(`\n  Summary: ${totalPassed}/${total} checks passed\n`)
-  );
+  console.log(chalk.white(`\n  Summary: ${totalPassed}/${total} checks passed\n`));
 
   if (totalPassed === total) {
     console.log(chalk.green('  ✓ All systems operational!\n'));

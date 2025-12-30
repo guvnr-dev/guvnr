@@ -6,13 +6,13 @@ Pre-commit hooks provide automated quality gates for AI-generated code. They cat
 
 AI-generated code has specific risks that hooks address:
 
-| Risk | Hook Solution |
-|------|---------------|
-| Hallucinated packages | `verify-deps.sh` |
+| Risk                     | Hook Solution                 |
+| ------------------------ | ----------------------------- |
+| Hallucinated packages    | `verify-deps.sh`              |
 | Security vulnerabilities | `gitleaks`, security scanners |
-| Incomplete work | `check-todos.sh` |
-| CLAUDE.md drift | `check-claude-md.sh` |
-| Formatting inconsistency | `post-edit.sh` |
+| Incomplete work          | `check-todos.sh`              |
+| CLAUDE.md drift          | `check-claude-md.sh`          |
+| Formatting inconsistency | `post-edit.sh`                |
 
 ## Quick Setup
 
@@ -78,6 +78,7 @@ pre-commit install
 **Purpose:** Prevent slopsquatting by validating packages exist.
 
 **What it does:**
+
 1. Extracts package names from package.json
 2. Checks npm registry for existence
 3. Blocks commit if any package doesn't exist
@@ -89,11 +90,13 @@ pre-commit install
 **Purpose:** Detect incomplete work before commit.
 
 **What it does:**
+
 1. Scans staged files for TODO/FIXME
 2. Warns if >3 new TODOs added
 3. Blocks commit for critical TODOs
 
 **Configuration:**
+
 ```bash
 # In script or environment
 TODO_THRESHOLD=3
@@ -105,12 +108,14 @@ CRITICAL_PATTERNS="TODO:CRITICAL|FIXME:BLOCKING"
 **Purpose:** Keep CLAUDE.md healthy.
 
 **What it does:**
+
 1. Validates required sections exist
 2. Detects placeholder text
 3. Warns on hardcoded secrets
 4. Checks file length
 
 **Checks:**
+
 - Has Tech Stack section
 - Has Architecture section
 - No `[placeholder]` text
@@ -122,6 +127,7 @@ CRITICAL_PATTERNS="TODO:CRITICAL|FIXME:BLOCKING"
 **Purpose:** Auto-format after edits.
 
 **What it does:**
+
 1. Runs Prettier on JS/JSON/MD
 2. Runs Black/Ruff on Python
 3. Applies consistent style
@@ -200,7 +206,7 @@ Check for vulnerable dependencies:
       entry: npm test
       language: system
       pass_filenames: false
-      stages: [push]  # Only on push, not every commit
+      stages: [push] # Only on push, not every commit
 ```
 
 ## Custom Hooks
@@ -249,11 +255,11 @@ SKIP=verify-deps git commit -m "Known new package"
 
 ## Evidence
 
-| Source | Finding |
-|--------|---------|
-| [Veracode](https://www.veracode.com/blog/genai-code-security-report/) | 45% of AI code has vulnerabilities |
-| [Slopsquatting](https://www.bleepingcomputer.com/news/security/ai-hallucinated-code-dependencies-become-new-supply-chain-risk/) | 20% package hallucination rate |
-| [OWASP](https://genai.owasp.org/) | Pre-commit scanning recommended |
+| Source                                                                                                                          | Finding                            |
+| ------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| [Veracode](https://www.veracode.com/blog/genai-code-security-report/)                                                           | 45% of AI code has vulnerabilities |
+| [Slopsquatting](https://www.bleepingcomputer.com/news/security/ai-hallucinated-code-dependencies-become-new-supply-chain-risk/) | 20% package hallucination rate     |
+| [OWASP](https://genai.owasp.org/)                                                                                               | Pre-commit scanning recommended    |
 
 ## Best Practices
 

@@ -60,20 +60,20 @@ Create `.vscode/extensions.json`:
 
 ### Essential
 
-| Extension | Purpose |
-|-----------|---------|
-| [markdownlint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint) | Lint CLAUDE.md and command files |
-| [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) | Format Markdown, JSON, JavaScript |
-| [EditorConfig](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig) | Consistent editor settings |
+| Extension                                                                                          | Purpose                           |
+| -------------------------------------------------------------------------------------------------- | --------------------------------- |
+| [markdownlint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint) | Lint CLAUDE.md and command files  |
+| [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)             | Format Markdown, JSON, JavaScript |
+| [EditorConfig](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)      | Consistent editor settings        |
 
 ### Recommended
 
-| Extension | Purpose |
-|-----------|---------|
-| [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker) | Catch typos in documentation |
-| [YAML](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml) | Validate slash command frontmatter |
-| [GitLens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens) | Enhanced Git integration |
-| [Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python) | MCP server development |
+| Extension                                                                                                       | Purpose                            |
+| --------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker) | Catch typos in documentation       |
+| [YAML](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml)                                  | Validate slash command frontmatter |
+| [GitLens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens)                                  | Enhanced Git integration           |
+| [Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python)                                  | MCP server development             |
 
 ## Settings Configuration
 
@@ -183,12 +183,7 @@ Create `.vscode/markdown.code-snippets`:
   },
   "CLAUDE.md Section": {
     "prefix": "aix-section",
-    "body": [
-      "## ${1:Section Name}",
-      "",
-      "${2:Section content}",
-      ""
-    ],
+    "body": ["## ${1:Section Name}", "", "${2:Section content}", ""],
     "description": "Add a new CLAUDE.md section"
   }
 }
@@ -322,12 +317,8 @@ Add to Cursor settings for optimal experience:
 
 ```json
 {
-  "cursor.chat.alwaysInclude": [
-    "CLAUDE.md"
-  ],
-  "cursor.composer.defaultFiles": [
-    "CLAUDE.md"
-  ]
+  "cursor.chat.alwaysInclude": ["CLAUDE.md"],
+  "cursor.composer.defaultFiles": ["CLAUDE.md"]
 }
 ```
 

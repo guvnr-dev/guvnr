@@ -4,22 +4,24 @@ Subagents are specialized AI agents for specific tasks. They provide focused cap
 
 ## Available Agents
 
-| Agent | Purpose | Best For |
-|-------|---------|----------|
+| Agent        | Purpose                  | Best For                |
+| ------------ | ------------------------ | ----------------------- |
 | **Explorer** | Fast codebase navigation | Understanding structure |
-| **Reviewer** | Independent code review | Quality assessment |
-| **Tester** | Test generation | Coverage improvement |
+| **Reviewer** | Independent code review  | Quality assessment      |
+| **Tester**   | Test generation          | Coverage improvement    |
 
 ## Explorer Agent
 
 **Purpose:** Quick, focused codebase exploration without wasting context.
 
 **When to use:**
+
 - Understanding unfamiliar code
 - Finding files matching patterns
 - Answering structural questions
 
 **Example:**
+
 ```
 Explore: Find all API endpoint definitions and explain the routing pattern
 ```
@@ -33,16 +35,19 @@ Explore: Find all API endpoint definitions and explain the routing pattern
 **Purpose:** Independent code review from a fresh perspective.
 
 **When to use:**
+
 - After completing a feature
 - Before merging PRs
 - When you want a second opinion
 
 **Example:**
+
 ```
 Review: Check the authentication module for security and maintainability issues
 ```
 
 **Perspectives checked:**
+
 - Architecture alignment
 - Security concerns
 - Performance implications
@@ -56,16 +61,19 @@ Review: Check the authentication module for security and maintainability issues
 **Purpose:** Generate test cases and identify coverage gaps.
 
 **When to use:**
+
 - After implementing features
 - Before releases
 - When coverage is unknown
 
 **Example:**
+
 ```
 Test: Generate tests for the payment processing module
 ```
 
 **Output includes:**
+
 - Identified test gaps
 - Generated test cases
 - Edge cases considered
@@ -111,17 +119,20 @@ tools:
 You are a codebase exploration specialist.
 
 ## Capabilities
+
 - Find files by pattern
 - Search for code patterns
 - Answer structural questions
 
 ## Approach
+
 1. Use Glob for file discovery
 2. Use Grep for content search
 3. Use Read for detailed inspection
 4. Use LSP for navigation
 
 ## Guidelines
+
 - Stay focused on the exploration task
 - Report findings concisely
 - Suggest relevant files for follow-up
@@ -146,11 +157,13 @@ tools:
 You specialize in our database layer.
 
 ## Knowledge
+
 - We use PostgreSQL 15
 - Migrations in db/migrations/
 - Models in src/models/
 
 ## Tasks
+
 - Schema questions
 - Query optimization
 - Migration assistance
@@ -177,14 +190,15 @@ You specialize in our database layer.
 
 ## Evidence
 
-| Source | Finding |
-|--------|---------|
-| [Qodo 2025](https://www.qodo.ai/reports/state-of-ai-code-quality/) | 81% quality improvement with AI review |
+| Source                                                                                                                       | Finding                                 |
+| ---------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| [Qodo 2025](https://www.qodo.ai/reports/state-of-ai-code-quality/)                                                           | 81% quality improvement with AI review  |
 | [VentureBeat](https://venturebeat.com/orchestration/research-shows-more-agents-isnt-a-reliable-path-to-better-enterprise-ai) | Multi-agent effective but adds overhead |
 
 ## Key Insight
 
 Agents work best when:
+
 1. Task is well-defined
 2. Fresh perspective is valuable
 3. Main context should stay clean

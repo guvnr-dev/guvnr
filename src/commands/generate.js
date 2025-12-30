@@ -139,7 +139,6 @@ export async function generateCommand(options) {
 
     // Print results
     printResults(results, options.dryRun);
-
   } catch (error) {
     spinner.fail('Generation failed');
     console.error(chalk.red(`\n  Error: ${error.message}\n`));
@@ -279,7 +278,8 @@ async function generateAgentsMd(cwd, context, options, results) {
  */
 function generateAgentsMdContent(context) {
   const projectName = context?.projectName || basename(process.cwd());
-  const techStackStr = context?.techStack?.map(t => `${t.category}: ${t.value}`).join(', ') || 'Not specified';
+  const techStackStr =
+    context?.techStack?.map(t => `${t.category}: ${t.value}`).join(', ') || 'Not specified';
 
   return `# AGENTS.md
 
@@ -312,31 +312,39 @@ ${context?.commands || ''}
 
 ## Architecture Overview
 
-${context?.architecture || `This project follows standard practices for its technology stack.
+${
+  context?.architecture ||
+  `This project follows standard practices for its technology stack.
 
 Key directories:
 - \`src/\` - Source code
 - \`tests/\` - Test files
-- \`docs/\` - Documentation`}
+- \`docs/\` - Documentation`
+}
 
 ## Code Style & Conventions
 
-${context?.conventions || `- Use consistent naming conventions
+${
+  context?.conventions ||
+  `- Use consistent naming conventions
 - Follow the existing code style in the repository
 - Write meaningful commit messages using conventional commits
-- Add tests for new functionality`}
+- Add tests for new functionality`
+}
 
 ## Security Guidelines
 
 When generating or modifying code:
 
-${context?.securityChecklist?.length > 0
+${
+  context?.securityChecklist?.length > 0
     ? context.securityChecklist.map(item => `- ${item}`).join('\n')
     : `- Never hardcode secrets or credentials
 - Validate all user inputs
 - Avoid SQL/command/XSS injection vulnerabilities
 - Verify dependencies exist before adding them
-- Handle errors without exposing internal details`}
+- Handle errors without exposing internal details`
+}
 
 ## Git Workflow
 
@@ -444,10 +452,13 @@ alwaysApply: true
 ${context?.techStack?.map(t => `- ${t.category}: ${t.value}`).join('\n') || '- See package.json for dependencies'}
 
 ## Conventions
-${context?.conventions || `- Follow existing code patterns in the repository
+${
+  context?.conventions ||
+  `- Follow existing code patterns in the repository
 - Use consistent naming conventions
 - Write meaningful variable and function names
-- Add JSDoc comments for public APIs`}
+- Add JSDoc comments for public APIs`
+}
 
 ## Testing
 - Write tests for new functionality
@@ -582,22 +593,27 @@ ${context?.techStack?.map(t => `- **${t.category}**: ${t.value}`).join('\n') || 
 
 ## Code Style
 
-${context?.conventions || `- Follow existing patterns in the codebase
+${
+  context?.conventions ||
+  `- Follow existing patterns in the codebase
 - Use consistent naming conventions
 - Prefer explicit over implicit
-- Write self-documenting code`}
+- Write self-documenting code`
+}
 
 ## Security Requirements
 
 When generating code, always:
 
-${context?.securityChecklist?.length > 0
+${
+  context?.securityChecklist?.length > 0
     ? context.securityChecklist.map(item => `- ${item}`).join('\n')
     : `- Validate all user inputs
 - Use parameterized queries for database operations
 - Never hardcode secrets or credentials
 - Sanitize output to prevent XSS
-- Verify dependencies exist before suggesting them`}
+- Verify dependencies exist before suggesting them`
+}
 
 ## Testing
 
@@ -670,7 +686,12 @@ function generateWindsurfMainRule(context) {
 ${(context?.overview || 'Project configured with AI Excellence Framework.').slice(0, 500)}
 
 ## Tech Stack
-${context?.techStack?.slice(0, 8).map(t => `- ${t.category}: ${t.value}`).join('\n') || '- See package.json'}
+${
+  context?.techStack
+    ?.slice(0, 8)
+    .map(t => `- ${t.category}: ${t.value}`)
+    .join('\n') || '- See package.json'
+}
 
 ## Conventions
 - Follow existing code patterns
@@ -818,10 +839,13 @@ ${context?.techStack?.map(t => `- **${t.category}**: ${t.value}`).join('\n') || 
 
 ## Architecture
 
-${context?.architecture || `Standard project structure:
+${
+  context?.architecture ||
+  `Standard project structure:
 - \`src/\` - Source code
 - \`tests/\` - Test files
-- \`docs/\` - Documentation`}
+- \`docs/\` - Documentation`
+}
 
 ## Commands
 
@@ -834,10 +858,13 @@ npm run lint   # Check code style
 
 ## Coding Conventions
 
-${context?.conventions || `- Follow existing code patterns
+${
+  context?.conventions ||
+  `- Follow existing code patterns
 - Use conventional commits
 - Write tests for new features
-- Document public APIs`}
+- Document public APIs`
+}
 
 ## Security Guidelines
 
@@ -947,10 +974,13 @@ When working with Codex CLI:
 - Invoke skills with \`$skill-name\` syntax
 
 ## Security Checklist
-${context?.securityChecklist?.map(item => `- ${item}`).join('\n') || `- Validate inputs
+${
+  context?.securityChecklist?.map(item => `- ${item}`).join('\n') ||
+  `- Validate inputs
 - No hardcoded secrets
 - Sanitize outputs
-- Verify dependencies`}
+- Verify dependencies`
+}
 `;
 }
 
@@ -991,10 +1021,13 @@ ${context?.techStack?.map(t => `- ${t.category}: ${t.value}`).join('\n') || 'See
 
 ## Coding Conventions
 
-${context?.conventions || `- Follow existing patterns in the codebase
+${
+  context?.conventions ||
+  `- Follow existing patterns in the codebase
 - Use consistent naming conventions
 - Write self-documenting code
-- Add tests for new functionality`}
+- Add tests for new functionality`
+}
 
 ## Commands
 
@@ -1150,10 +1183,13 @@ ${context?.overview || 'A software project configured for AI-assisted developmen
 ${context?.techStack?.map(t => `- ${t.category}: ${t.value}`).join('\n') || '- See package.json for dependencies'}
 
 ## Conventions
-${context?.conventions || `- Follow existing code patterns
+${
+  context?.conventions ||
+  `- Follow existing code patterns
 - Use conventional commits (feat, fix, docs, refactor, test)
 - Write tests for new functionality
-- Run tests before committing`}
+- Run tests before committing`
+}
 
 ## Commands
 \`\`\`bash
@@ -1246,7 +1282,9 @@ function printResults(results, dryRun) {
   }
 
   console.log(chalk.cyan('\n  Multi-tool support enabled!'));
-  console.log(chalk.gray('  Your project now works with: Claude, Cursor, Copilot, Windsurf, Aider,'));
+  console.log(
+    chalk.gray('  Your project now works with: Claude, Cursor, Copilot, Windsurf, Aider,')
+  );
   console.log(chalk.gray('  Gemini CLI, Codex CLI, Zed, Amp, and Roo Code\n'));
 }
 

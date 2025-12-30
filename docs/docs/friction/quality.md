@@ -4,18 +4,19 @@ AI-generated code can degrade codebase quality over time. This isn't about indiv
 
 ## The Quality Problem
 
-| Issue | Trend | Source |
-|-------|-------|--------|
-| Code cloning | 4× increase (2021→2024) | [GitClear](https://www.gitclear.com/ai_assistant_code_quality_2025_research) |
-| Refactoring | Down from 25% to <10% | GitClear |
-| Bug rate with AI | 41% increase | [GitHub Copilot Statistics](https://www.secondtalent.com/resources/github-copilot-statistics/) |
-| Code churn | Projected 2× by 2024 | GitClear |
+| Issue            | Trend                   | Source                                                                                         |
+| ---------------- | ----------------------- | ---------------------------------------------------------------------------------------------- |
+| Code cloning     | 4× increase (2021→2024) | [GitClear](https://www.gitclear.com/ai_assistant_code_quality_2025_research)                   |
+| Refactoring      | Down from 25% to <10%   | GitClear                                                                                       |
+| Bug rate with AI | 41% increase            | [GitHub Copilot Statistics](https://www.secondtalent.com/resources/github-copilot-statistics/) |
+| Code churn       | Projected 2× by 2024    | GitClear                                                                                       |
 
 ## Why Quality Degrades
 
 ### 1. Copy-Paste Culture
 
 AI makes it easy to generate code, reducing incentive to understand or refactor existing code:
+
 - Easier to generate new than modify old
 - Duplication increases (8.3% → 12.3% of lines)
 - Technical debt accumulates faster
@@ -23,6 +24,7 @@ AI makes it easy to generate code, reducing incentive to understand or refactor 
 ### 2. Inconsistency with Codebase
 
 AI doesn't inherently understand your team's patterns:
+
 - 40% of developers report inconsistency with team standards
 - Style drift across files
 - Architectural violations
@@ -30,6 +32,7 @@ AI doesn't inherently understand your team's patterns:
 ### 3. Superficial Understanding
 
 AI optimizes for "correct output" not "deep understanding":
+
 - Solutions that work but don't fit the system
 - Missing edge cases that experience would catch
 - Brittle code that breaks under real-world conditions
@@ -37,6 +40,7 @@ AI optimizes for "correct output" not "deep understanding":
 ### 4. Reduced Learning
 
 When AI generates code, developers may learn less:
+
 - Pattern recognition without comprehension
 - Debugging skills atrophy
 - Architectural intuition doesn't develop
@@ -62,16 +66,19 @@ Research shows code churn (adding then removing code) has increased significantl
 ## Code Conventions
 
 ### Architecture
+
 - Use repository pattern for data access
 - Services contain business logic only
 - Controllers are thin (validation + delegation)
 
 ### Style
+
 - Prefer composition over inheritance
 - Maximum function length: 50 lines
 - Maximum file length: 300 lines
 
 ### Do Not
+
 - Do not use any/unknown types
 - Do not duplicate existing utilities
 - Do not bypass the service layer
@@ -86,6 +93,7 @@ Multi-perspective code review:
 ```
 
 Checks for:
+
 - Architecture alignment
 - Code duplication
 - Maintainability issues
@@ -133,15 +141,16 @@ Ensures AI-generated code has test coverage before merge.
 
 ## Evidence
 
-| Source | Key Finding |
-|--------|-------------|
-| [GitClear](https://www.gitclear.com/ai_assistant_code_quality_2025_research) | 4× increase in code cloning with AI |
-| [Uplevel Data Labs](https://visualstudiomagazine.com/articles/2024/09/17/another-report-weighs-in-on-github-copilot-dev-productivity.aspx) | Higher bug rate with Copilot access |
-| [Second Talent](https://www.secondtalent.com/resources/ai-coding-assistant-statistics/) | 40% inconsistency with team standards |
+| Source                                                                                                                                     | Key Finding                           |
+| ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------- |
+| [GitClear](https://www.gitclear.com/ai_assistant_code_quality_2025_research)                                                               | 4× increase in code cloning with AI   |
+| [Uplevel Data Labs](https://visualstudiomagazine.com/articles/2024/09/17/another-report-weighs-in-on-github-copilot-dev-productivity.aspx) | Higher bug rate with Copilot access   |
+| [Second Talent](https://www.secondtalent.com/resources/ai-coding-assistant-statistics/)                                                    | 40% inconsistency with team standards |
 
 ## Key Insight
 
 Quality degradation isn't about AI being "bad" at coding. It's about:
+
 1. Reduced friction for generating code
 2. Increased friction for maintaining code
 3. Cumulative effects over time

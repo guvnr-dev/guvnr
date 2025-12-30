@@ -1029,7 +1029,7 @@ CLAUDE.md and context files might accidentally contain secrets. Implement scanni
   rev: v1.4.0
   hooks:
     - id: detect-secrets
-      args: ["--baseline", ".secrets.baseline"]
+      args: ['--baseline', '.secrets.baseline']
       # Explicitly include AI context files
       files: (CLAUDE\.md|\.claude/|instructions\.md)$
 ```
@@ -1260,7 +1260,7 @@ name: CLAUDE.md Compliance
 on:
   pull_request:
     paths:
-      - "CLAUDE.md"
+      - 'CLAUDE.md'
 
 jobs:
   validate:

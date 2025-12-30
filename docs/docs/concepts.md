@@ -54,20 +54,24 @@ A project context file that loads automatically:
 # Project Name
 
 ## Tech Stack
+
 - TypeScript 5.0
 - Node.js 20
 
 ## Architecture
+
 src/
-  components/  # React components
-  services/    # Business logic
+components/ # React components
+services/ # Business logic
 
 ## Commands
-npm run build   # Build project
-npm test        # Run tests
+
+npm run build # Build project
+npm test # Run tests
 ```
 
 **Best practices** ([HumanLayer](https://www.humanlayer.dev/blog/writing-a-good-claude-md)):
+
 - Keep under 300 lines (shorter is better)
 - Use pointers, not copies (file references, not inline code)
 - Focus on universally applicable instructions
@@ -80,6 +84,7 @@ npm test        # Run tests
 ```
 
 Forces the AI to:
+
 1. Restate understanding
 2. List assumptions explicitly
 3. Identify questions before coding
@@ -92,6 +97,7 @@ Forces the AI to:
 ```
 
 The AI adopts a skeptical mindset:
+
 1. Enumerate claims
 2. Manually inspect files
 3. Attempt falsification (try to prove it's NOT complete)
@@ -100,11 +106,13 @@ The AI adopts a skeptical mindset:
 ### Session Handoff Pattern
 
 Before ending work:
+
 ```
 /handoff
 ```
 
 Creates structured notes for the next session covering:
+
 - What was accomplished
 - What's in progress
 - Decisions made and why

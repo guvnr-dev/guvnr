@@ -37,6 +37,7 @@ This page summarizes key research on AI-assisted development from 2024-2025. All
 ### Key Insight
 
 The **~40-45% productivity delta** between structured and unstructured AI use is consistent across studies:
+
 - Unstructured: -19% (METR)
 - Structured: +21-26% (MIT/NBER)
 - Delta: ~40-45%
@@ -47,14 +48,15 @@ The **~40-45% productivity delta** between structured and unstructured AI use is
 
 **Finding:** 45% of AI-generated code contains OWASP Top 10 vulnerabilities.
 
-| Language | Failure Rate |
-|----------|--------------|
-| Java | 72% |
-| Python | 38-45% |
-| JavaScript | 38-45% |
-| C# | 38-45% |
+| Language   | Failure Rate |
+| ---------- | ------------ |
+| Java       | 72%          |
+| Python     | 38-45%       |
+| JavaScript | 38-45%       |
+| C#         | 38-45%       |
 
 **Specific vulnerabilities:**
+
 - XSS (CWE-80): 86% failure rate
 - Log Injection (CWE-117): 88% vulnerable
 
@@ -66,11 +68,11 @@ The **~40-45% productivity delta** between structured and unstructured AI use is
 
 **Finding:** AI-generated code has significantly more critical vulnerabilities.
 
-| Issue Type | Increase |
-|------------|----------|
-| Privilege Escalation | 322% |
-| Architectural Flaws | 153% |
-| AI-generated code | 41% of new code |
+| Issue Type           | Increase        |
+| -------------------- | --------------- |
+| Privilege Escalation | 322%            |
+| Architectural Flaws  | 153%            |
+| AI-generated code    | 41% of new code |
 
 **Source:** [Apiiro Blog](https://apiiro.com/blog/4x-velocity-10x-vulnerabilities-ai-coding-assistants-are-shipping-more-risks/)
 
@@ -88,34 +90,34 @@ The **~40-45% productivity delta** between structured and unstructured AI use is
 
 ### Stack Overflow 2025 Survey
 
-| Metric | Value |
-|--------|-------|
-| Using AI tools | 84% |
-| Using daily | 51% |
-| Positive sentiment | 60% (down from 70%+ in 2023-2024) |
-| Trust AI accuracy | 33% |
-| Distrust AI accuracy | 46% |
+| Metric               | Value                             |
+| -------------------- | --------------------------------- |
+| Using AI tools       | 84%                               |
+| Using daily          | 51%                               |
+| Positive sentiment   | 60% (down from 70%+ in 2023-2024) |
+| Trust AI accuracy    | 33%                               |
+| Distrust AI accuracy | 46%                               |
 
 **Source:** [Stack Overflow](https://survey.stackoverflow.co/2025/ai)
 
 ### JetBrains 2025 Survey
 
-| Metric | Value |
-|--------|-------|
-| Using AI regularly | 85% |
-| Using AI coding assistant | 62% |
-| Time saved (typical) | 1+ hour/week |
-| Time saved (power users) | 8+ hours/week |
+| Metric                    | Value         |
+| ------------------------- | ------------- |
+| Using AI regularly        | 85%           |
+| Using AI coding assistant | 62%           |
+| Time saved (typical)      | 1+ hour/week  |
+| Time saved (power users)  | 8+ hours/week |
 
 **Source:** [JetBrains Blog](https://blog.jetbrains.com/research/2025/10/state-of-developer-ecosystem-2025/)
 
 ### Context as #1 Issue
 
-| Finding | Source |
-|---------|--------|
-| 65% cite context loss as primary issue | MIT Technology Review 2025 |
-| 44% attribute quality issues to context | Second Talent Statistics |
-| 65% lose context during refactoring | Second Talent Statistics |
+| Finding                                 | Source                     |
+| --------------------------------------- | -------------------------- |
+| 65% cite context loss as primary issue  | MIT Technology Review 2025 |
+| 44% attribute quality issues to context | Second Talent Statistics   |
+| 65% lose context during refactoring     | Second Talent Statistics   |
 
 ## Quality Research
 
@@ -123,11 +125,11 @@ The **~40-45% productivity delta** between structured and unstructured AI use is
 
 **Finding:** AI adoption correlates with maintainability concerns.
 
-| Metric | Change (2021→2024) |
-|--------|-------------------|
+| Metric       | Change (2021→2024)       |
+| ------------ | ------------------------ |
 | Code cloning | 8.3% → 12.3% (4× growth) |
-| Refactoring | 25% → <10% of changes |
-| Code churn | Projected 2× increase |
+| Refactoring  | 25% → <10% of changes    |
+| Code churn   | Projected 2× increase    |
 
 **Source:** [GitClear](https://www.gitclear.com/ai_assistant_code_quality_2025_research)
 

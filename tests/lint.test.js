@@ -66,7 +66,9 @@ Active development.
 
     try {
       process.chdir(testDir);
-      process.exit = (code) => { exitCode = code || 0; };
+      process.exit = code => {
+        exitCode = code || 0;
+      };
       console.log = () => {};
 
       await lintCommand({ verbose: false, ignoreErrors: true });
@@ -82,7 +84,8 @@ Active development.
 
   test('warns when CLAUDE.md is too long', async () => {
     // Create a very long CLAUDE.md (>300 lines)
-    const longContent = '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- JS\n\n' +
+    const longContent =
+      '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- JS\n\n' +
       Array(350).fill('This is a line of content.').join('\n');
 
     writeFileSync(join(testDir, 'CLAUDE.md'), longContent);
@@ -97,7 +100,9 @@ Active development.
     try {
       process.chdir(testDir);
       process.exit = () => {};
-      console.log = (msg) => { output.push(msg); };
+      console.log = msg => {
+        output.push(msg);
+      };
 
       await lintCommand({ verbose: true, ignoreErrors: true });
 
@@ -126,7 +131,9 @@ Active development.
 
     try {
       process.chdir(testDir);
-      process.exit = (code) => { exitCode = code || 0; };
+      process.exit = code => {
+        exitCode = code || 0;
+      };
       console.log = () => {};
 
       await lintCommand({ verbose: false, ignoreErrors: false });
@@ -164,7 +171,9 @@ Some config: api_key = "sk-1234567890abcdefghijklmnopqrstuvwxyz"
 
     try {
       process.chdir(testDir);
-      process.exit = (code) => { exitCode = code || 0; };
+      process.exit = code => {
+        exitCode = code || 0;
+      };
       console.log = () => {};
 
       await lintCommand({ verbose: false, ignoreErrors: false });
@@ -181,7 +190,10 @@ Some config: api_key = "sk-1234567890abcdefghijklmnopqrstuvwxyz"
 describe('lint command - AGENTS.md checks', () => {
   test('checks AGENTS.md core sections', async () => {
     // Create CLAUDE.md first
-    writeFileSync(join(testDir, 'CLAUDE.md'), '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- JS');
+    writeFileSync(
+      join(testDir, 'CLAUDE.md'),
+      '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- JS'
+    );
 
     // Create incomplete AGENTS.md
     const incompleteAgents = `# AGENTS.md
@@ -203,7 +215,9 @@ Just an overview section.
     try {
       process.chdir(testDir);
       process.exit = () => {};
-      console.log = (msg) => { output.push(msg); };
+      console.log = msg => {
+        output.push(msg);
+      };
 
       await lintCommand({ verbose: true, ignoreErrors: true });
 
@@ -221,7 +235,10 @@ Just an overview section.
   });
 
   test('passes with complete AGENTS.md', async () => {
-    writeFileSync(join(testDir, 'CLAUDE.md'), '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- JS');
+    writeFileSync(
+      join(testDir, 'CLAUDE.md'),
+      '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- JS'
+    );
 
     const completeAgents = `# AGENTS.md
 
@@ -270,7 +287,9 @@ npm test
 
     try {
       process.chdir(testDir);
-      process.exit = (code) => { exitCode = code || 0; };
+      process.exit = code => {
+        exitCode = code || 0;
+      };
       console.log = () => {};
 
       await lintCommand({ verbose: false, ignoreErrors: true });
@@ -286,11 +305,17 @@ npm test
 
 describe('lint command - Cursor rules checks', () => {
   test('checks MDC format', async () => {
-    writeFileSync(join(testDir, 'CLAUDE.md'), '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- JS');
+    writeFileSync(
+      join(testDir, 'CLAUDE.md'),
+      '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- JS'
+    );
 
     // Create Cursor rules without frontmatter
     mkdirSync(join(testDir, '.cursor', 'rules'), { recursive: true });
-    writeFileSync(join(testDir, '.cursor', 'rules', 'invalid.mdc'), '# No frontmatter\nJust content.');
+    writeFileSync(
+      join(testDir, '.cursor', 'rules', 'invalid.mdc'),
+      '# No frontmatter\nJust content.'
+    );
 
     const { lintCommand } = await import('../src/commands/lint.js');
 
@@ -302,7 +327,9 @@ describe('lint command - Cursor rules checks', () => {
     try {
       process.chdir(testDir);
       process.exit = () => {};
-      console.log = (msg) => { output.push(msg); };
+      console.log = msg => {
+        output.push(msg);
+      };
 
       await lintCommand({ verbose: true, ignoreErrors: true });
 
@@ -319,7 +346,10 @@ describe('lint command - Cursor rules checks', () => {
   });
 
   test('passes with valid MDC format', async () => {
-    writeFileSync(join(testDir, 'CLAUDE.md'), '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- JS');
+    writeFileSync(
+      join(testDir, 'CLAUDE.md'),
+      '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- JS'
+    );
 
     mkdirSync(join(testDir, '.cursor', 'rules'), { recursive: true });
 
@@ -344,7 +374,9 @@ Content here.
 
     try {
       process.chdir(testDir);
-      process.exit = (code) => { exitCode = code || 0; };
+      process.exit = code => {
+        exitCode = code || 0;
+      };
       console.log = () => {};
 
       await lintCommand({ verbose: false, ignoreErrors: true });
@@ -360,7 +392,10 @@ Content here.
 
 describe('lint command - Windsurf checks', () => {
   test('warns when rules exceed char limit', async () => {
-    writeFileSync(join(testDir, 'CLAUDE.md'), '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- JS');
+    writeFileSync(
+      join(testDir, 'CLAUDE.md'),
+      '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- JS'
+    );
 
     mkdirSync(join(testDir, '.windsurf', 'rules'), { recursive: true });
 
@@ -378,7 +413,9 @@ describe('lint command - Windsurf checks', () => {
     try {
       process.chdir(testDir);
       process.exit = () => {};
-      console.log = (msg) => { output.push(msg); };
+      console.log = msg => {
+        output.push(msg);
+      };
 
       await lintCommand({ verbose: true, ignoreErrors: true });
 
@@ -397,7 +434,10 @@ describe('lint command - Windsurf checks', () => {
 
 describe('lint command - hooks checks', () => {
   test('checks hook executability', async () => {
-    writeFileSync(join(testDir, 'CLAUDE.md'), '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- JS');
+    writeFileSync(
+      join(testDir, 'CLAUDE.md'),
+      '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- JS'
+    );
 
     mkdirSync(join(testDir, 'scripts', 'hooks'), { recursive: true });
 
@@ -415,7 +455,9 @@ describe('lint command - hooks checks', () => {
     try {
       process.chdir(testDir);
       process.exit = () => {};
-      console.log = (msg) => { output.push(msg); };
+      console.log = msg => {
+        output.push(msg);
+      };
 
       await lintCommand({ verbose: true, ignoreErrors: true });
 
@@ -432,7 +474,10 @@ describe('lint command - hooks checks', () => {
   });
 
   test('warns when verify-deps.sh is missing', async () => {
-    writeFileSync(join(testDir, 'CLAUDE.md'), '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- JS');
+    writeFileSync(
+      join(testDir, 'CLAUDE.md'),
+      '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- JS'
+    );
 
     // Create hooks directory WITHOUT verify-deps.sh
     mkdirSync(join(testDir, 'scripts', 'hooks'), { recursive: true });
@@ -449,14 +494,18 @@ describe('lint command - hooks checks', () => {
     try {
       process.chdir(testDir);
       process.exit = () => {};
-      console.log = (msg) => { output.push(msg); };
+      console.log = msg => {
+        output.push(msg);
+      };
 
       await lintCommand({ verbose: true, ignoreErrors: true });
 
       const outputStr = output.join(' ');
       // Should report missing verify-deps.sh in verbose mode (info level)
       assert.ok(
-        outputStr.includes('verify-deps') || outputStr.includes('slopsquatting') || outputStr.includes('hallucinated'),
+        outputStr.includes('verify-deps') ||
+          outputStr.includes('slopsquatting') ||
+          outputStr.includes('hallucinated'),
         'Should warn about missing verify-deps.sh for slopsquatting protection'
       );
     } finally {
@@ -469,7 +518,10 @@ describe('lint command - hooks checks', () => {
 
 describe('lint command - options', () => {
   test('--only filters checks', async () => {
-    writeFileSync(join(testDir, 'CLAUDE.md'), '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- JS');
+    writeFileSync(
+      join(testDir, 'CLAUDE.md'),
+      '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- JS'
+    );
 
     const { lintCommand } = await import('../src/commands/lint.js');
 
@@ -480,10 +532,16 @@ describe('lint command - options', () => {
 
     try {
       process.chdir(testDir);
-      process.exit = (code) => { exitCode = code || 0; };
+      process.exit = code => {
+        exitCode = code || 0;
+      };
       console.log = () => {};
 
-      await lintCommand({ verbose: false, only: ['claudeMd'], ignoreErrors: true });
+      await lintCommand({
+        verbose: false,
+        only: ['claudeMd'],
+        ignoreErrors: true
+      });
 
       assert.strictEqual(exitCode, 0, 'Should only check specified files');
     } finally {
@@ -505,7 +563,9 @@ describe('lint command - options', () => {
 
     try {
       process.chdir(testDir);
-      process.exit = (code) => { exitCode = code || 0; };
+      process.exit = code => {
+        exitCode = code || 0;
+      };
       console.log = () => {};
 
       await lintCommand({ verbose: false, ignoreErrors: true });

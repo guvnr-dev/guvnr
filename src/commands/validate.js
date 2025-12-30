@@ -4,13 +4,7 @@
  * Validates the framework configuration and setup with auto-fix capabilities.
  */
 
-import {
-  existsSync,
-  readFileSync,
-  writeFileSync,
-  mkdirSync,
-  appendFileSync
-} from 'fs';
+import { existsSync, readFileSync, writeFileSync, mkdirSync, appendFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import chalk from 'chalk';
@@ -150,8 +144,7 @@ Initial setup
             '$1\n\n## Tech Stack\n\n- Language: [specify]\n- Framework: [specify]\n\n$2'
           );
         } else {
-          content +=
-            '\n\n## Tech Stack\n\n- Language: [specify]\n- Framework: [specify]\n';
+          content += '\n\n## Tech Stack\n\n- Language: [specify]\n- Framework: [specify]\n';
         }
         writeFileSync(path, content);
       }
@@ -495,11 +488,7 @@ function printValidationResults(results, autoFix) {
   const passedCount = results.passed.length;
 
   // Summary
-  console.log(
-    chalk.white(
-      `  Validation Results: ${passedCount}/${total} checks passed\n`
-    )
-  );
+  console.log(chalk.white(`  Validation Results: ${passedCount}/${total} checks passed\n`));
 
   // Fixed (if any)
   if (results.fixed.length > 0) {
@@ -562,29 +551,15 @@ function printValidationResults(results, autoFix) {
   if (results.errors.length === 0 && results.warnings.length === 0) {
     console.log(chalk.green('  ✓ All critical checks passed!\n'));
   } else if (results.errors.length === 0) {
-    console.log(
-      chalk.yellow(
-        '  ⚠ Framework is functional but has warnings to address.\n'
-      )
-    );
+    console.log(chalk.yellow('  ⚠ Framework is functional but has warnings to address.\n'));
     if (!autoFix) {
-      console.log(
-        chalk.gray(
-          '  Run "npx ai-excellence validate --fix" to auto-fix issues.\n'
-        )
-      );
+      console.log(chalk.gray('  Run "npx ai-excellence validate --fix" to auto-fix issues.\n'));
     }
   } else {
     console.log(chalk.red('  ✗ Framework has errors that need to be fixed.\n'));
     if (!autoFix) {
-      console.log(
-        chalk.gray(
-          '  Run "npx ai-excellence validate --fix" to auto-fix issues.\n'
-        )
-      );
-      console.log(
-        chalk.gray('  Or run "npx ai-excellence init" to reinitialize.\n')
-      );
+      console.log(chalk.gray('  Run "npx ai-excellence validate --fix" to auto-fix issues.\n'));
+      console.log(chalk.gray('  Or run "npx ai-excellence init" to reinitialize.\n'));
     }
   }
 }

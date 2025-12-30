@@ -8,12 +8,12 @@ Counter the "looks good" bias with deliberate falsification. The AI adopts a ske
 
 ## Why It Matters
 
-| Without /verify | With /verify |
-|-----------------|--------------|
-| Assumed complete | Proven complete |
-| Hidden gaps remain | Gaps surfaced |
-| Overconfidence | Calibrated confidence |
-| Issues found later | Issues found now |
+| Without /verify    | With /verify          |
+| ------------------ | --------------------- |
+| Assumed complete   | Proven complete       |
+| Hidden gaps remain | Gaps surfaced         |
+| Overconfidence     | Calibrated confidence |
+| Issues found later | Issues found now      |
 
 ## Usage
 
@@ -22,6 +22,7 @@ Counter the "looks good" bias with deliberate falsification. The AI adopts a ske
 ```
 
 **Examples:**
+
 ```
 /verify the authentication feature
 /verify all CRUD operations for users
@@ -35,9 +36,9 @@ Counter the "looks good" bias with deliberate falsification. The AI adopts a ske
 
 ### Claims Reviewed
 
-| Claim | Status | Evidence |
-|-------|--------|----------|
-| [claim] | ✓/✗/⚠️ | [proof] |
+| Claim   | Status | Evidence |
+| ------- | ------ | -------- |
+| [claim] | ✓/✗/⚠️ | [proof]  |
 
 ### Issues Found
 
@@ -60,6 +61,7 @@ Counter the "looks good" bias with deliberate falsification. The AI adopts a ske
 ### 1. Enumerate Claims
 
 List everything that was supposedly completed:
+
 - Files created/modified
 - Functions implemented
 - Tests written
@@ -68,6 +70,7 @@ List everything that was supposedly completed:
 ### 2. Manual Inspection
 
 Read each file mentioned. Don't trust summaries—verify content:
+
 - Does the code exist?
 - Does it do what was claimed?
 - Is it complete?
@@ -93,6 +96,7 @@ Read each file mentioned. Don't trust summaries—verify content:
 ### 6. Falsification Attempt
 
 Actively try to prove it's NOT complete:
+
 - What's missing?
 - What doesn't work?
 - What was forgotten?
@@ -127,19 +131,20 @@ If something is intentionally incomplete, note it:
 
 ```markdown
 ### Known Limitations
+
 - Email verification not implemented (Phase 2)
 - Rate limiting deferred to infrastructure layer
 ```
 
 ## When to Use
 
-| Situation | Use /verify? |
-|-----------|--------------|
-| Before marking PR ready | Yes |
-| After implementing feature | Yes |
-| After fixing bug | Yes |
-| After refactoring | Yes |
-| During implementation | Optional |
+| Situation                  | Use /verify? |
+| -------------------------- | ------------ |
+| Before marking PR ready    | Yes          |
+| After implementing feature | Yes          |
+| After fixing bug           | Yes          |
+| After refactoring          | Yes          |
+| During implementation      | Optional     |
 
 ## The Falsification Mindset
 
@@ -151,10 +156,10 @@ This reversal catches issues that confirmation bias misses.
 
 ## Evidence
 
-| Source | Finding |
-|--------|---------|
-| [Veracode](https://www.veracode.com/blog/genai-code-security-report/) | 45% of AI code has vulnerabilities |
-| [ISSTA 2025](https://arxiv.org/abs/2409.20550) | Verification catches issues before deploy |
+| Source                                                                | Finding                                   |
+| --------------------------------------------------------------------- | ----------------------------------------- |
+| [Veracode](https://www.veracode.com/blog/genai-code-security-report/) | 45% of AI code has vulnerabilities        |
+| [ISSTA 2025](https://arxiv.org/abs/2409.20550)                        | Verification catches issues before deploy |
 
 ## See Also
 

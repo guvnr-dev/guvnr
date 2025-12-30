@@ -4,11 +4,11 @@ Subagents are specialized AI agents for specific tasks. They provide focused cap
 
 ## Available Agents
 
-| Agent | Purpose | Tools |
-|-------|---------|-------|
+| Agent                                 | Purpose             | Tools                 |
+| ------------------------------------- | ------------------- | --------------------- |
 | [Explorer](/commands/agents/explorer) | Codebase navigation | Glob, Grep, Read, LSP |
-| [Reviewer](/commands/agents/reviewer) | Code quality review | Read, Grep, LSP |
-| [Tester](/commands/agents/tester) | Test generation | Read, Grep, Write |
+| [Reviewer](/commands/agents/reviewer) | Code quality review | Read, Grep, LSP       |
+| [Tester](/commands/agents/tester)     | Test generation     | Read, Grep, Write     |
 
 ## When to Use Agents
 
@@ -72,11 +72,13 @@ tools:
 You specialize in our PostgreSQL database.
 
 ## Knowledge
+
 - Schema in db/schema.sql
 - Migrations in db/migrations/
 - Models in src/models/
 
 ## Tasks
+
 - Schema questions
 - Query optimization
 - Migration planning

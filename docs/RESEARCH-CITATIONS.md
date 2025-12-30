@@ -2,7 +2,7 @@
 
 This document lists all research claims made in the AI Excellence Framework with their verification status and authoritative sources.
 
-**Last Verified**: December 2024
+**Last Verified**: December 2025
 
 ---
 
@@ -85,11 +85,41 @@ This document lists all research claims made in the AI Excellence Framework with
 
 ### MCP & Industry Standards
 
-| Claim                     | Value          | Source                                                                                                                        | Verification Date |
-| ------------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------- |
-| MCP SDK downloads         | 97M+ monthly   | [Anthropic](https://www.anthropic.com/news/donating-the-model-context-protocol-and-establishing-of-the-agentic-ai-foundation) | Dec 2024          |
-| MCP connectors available  | 75+            | [Anthropic Engineering](https://www.anthropic.com/engineering/code-execution-with-mcp)                                        | Dec 2024          |
-| MCP vulnerabilities found | 2,000+ servers | [Backslash Security June 2025](https://www.anthropic.com/news/model-context-protocol)                                         | Dec 2024          |
+| Claim                     | Value          | Source                                                                                                                               | Verification Date |
+| ------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ----------------- |
+| MCP SDK downloads         | 97M+ monthly   | [Anthropic](https://www.anthropic.com/news/donating-the-model-context-protocol-and-establishing-of-the-agentic-ai-foundation)        | Dec 2025          |
+| MCP connectors available  | 10,000+        | [Linux Foundation AAIF](https://www.linuxfoundation.org/press/linux-foundation-announces-the-formation-of-the-agentic-ai-foundation) | Dec 2025          |
+| MCP vulnerabilities found | 2,000+ servers | [Backslash Security June 2025](https://www.anthropic.com/news/model-context-protocol)                                                | Dec 2025          |
+
+### Agentic AI Foundation (AAIF) - December 2025
+
+| Claim                 | Value         | Source                                                                                                                                                                                                   | Verification Date |
+| --------------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| AAIF Launch Date      | Dec 9, 2025   | [Linux Foundation Press](https://www.linuxfoundation.org/press/linux-foundation-announces-the-formation-of-the-agentic-ai-foundation)                                                                    | Dec 2025          |
+| Published MCP servers | 10,000+       | [Linux Foundation](https://www.linuxfoundation.org/press/linux-foundation-announces-the-formation-of-the-agentic-ai-foundation)                                                                          | Dec 2025          |
+| AGENTS.md adoption    | 60,000+ repos | [OpenAI/InfoQ](https://www.infoq.com/news/2025/12/agentic-ai-foundation/)                                                                                                                                | Dec 2025          |
+| Platinum members      | 8 companies   | [AAIF](https://aaif.io/press/linux-foundation-announces-the-formation-of-the-agentic-ai-foundation-aaif-anchored-by-new-project-contributions-including-model-context-protocol-mcp-goose-and-agents-md/) | Dec 2025          |
+
+**AAIF Founding Projects:**
+
+- **MCP (Model Context Protocol)** - Anthropic - Universal tool connection standard
+- **AGENTS.md** - OpenAI - Project-specific AI guidance standard
+- **goose** - Block - Open source AI agent framework
+
+### 2025 DORA Report (AI-Assisted Software Development)
+
+| Claim                     | Value          | Source                                                                                                           | Verification Date |
+| ------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------- | ----------------- |
+| AI adoption at work       | 90%            | [2025 DORA Report](https://cloud.google.com/resources/content/2025-dora-ai-assisted-software-development-report) | Dec 2025          |
+| Median AI experience      | 16 months      | [2025 DORA Report](https://cloud.google.com/resources/content/2025-dora-ai-assisted-software-development-report) | Dec 2025          |
+| Daily AI interaction time | 2 hours median | [2025 DORA Report](https://cloud.google.com/resources/content/2025-dora-ai-assisted-software-development-report) | Dec 2025          |
+| Tasks completed increase  | 21%            | [2025 DORA Report](https://cloud.google.com/resources/content/2025-dora-ai-assisted-software-development-report) | Dec 2025          |
+| PRs merged increase       | 98%            | [2025 DORA Report](https://cloud.google.com/resources/content/2025-dora-ai-assisted-software-development-report) | Dec 2025          |
+| PR review time increase   | 91%            | [Faros AI Analysis](https://www.faros.ai/blog/key-takeaways-from-the-dora-report-2025)                           | Dec 2025          |
+| Platform adoption         | 90%            | [2025 DORA Report](https://cloud.google.com/resources/content/2025-dora-ai-assisted-software-development-report) | Dec 2025          |
+| Survey respondents        | ~5,000         | [Google Cloud Blog](https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report)  | Dec 2025          |
+
+**Key DORA 2025 Finding:** "AI doesn't fix a team; it amplifies what's already there."
 
 ---
 

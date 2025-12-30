@@ -37,10 +37,12 @@ export default defineConfig({
         ]
       },
       {
-        text: 'v1.4.0',
+        text: 'v1.5.0',
         items: [
           { text: 'Changelog', link: '/changelog' },
           { text: 'Research Citations', link: '/RESEARCH-CITATIONS' },
+          { text: 'DORA Integration', link: '/DORA-INTEGRATION' },
+          { text: 'PostgreSQL Deployment', link: '/POSTGRESQL-DEPLOYMENT' },
           { text: 'Enterprise Guide', link: '/guides/enterprise' },
           { text: 'VS Code Integration', link: '/guides/vscode-integration' },
           { text: 'GitHub', link: 'https://github.com/ai-excellence-framework/ai-excellence-framework' }
@@ -135,7 +137,9 @@ export default defineConfig({
             { text: 'IDE Integration', link: '/IDE-INTEGRATION' },
             { text: 'SAST Integration', link: '/SAST-INTEGRATION' },
             { text: 'Metrics Dashboard', link: '/METRICS-VISUALIZATION' },
+            { text: 'DORA Integration', link: '/DORA-INTEGRATION' },
             { text: 'Team Memory', link: '/TEAM-MEMORY-FEDERATION' },
+            { text: 'PostgreSQL Deployment', link: '/POSTGRESQL-DEPLOYMENT' },
             { text: 'MCP Security', link: '/MCP-SECURITY' },
             { text: 'Model Selection', link: '/MODEL-SELECTION' },
             { text: 'Troubleshooting', link: '/TROUBLESHOOTING' },

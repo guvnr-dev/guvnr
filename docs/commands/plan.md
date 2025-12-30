@@ -8,12 +8,12 @@ Catch misframing before implementation begins. The AI restates understanding, li
 
 ## Why It Matters
 
-| Without /plan | With /plan |
-|---------------|------------|
-| Misinterpretation compounds | Caught early |
-| Assumptions stay hidden | Made explicit |
-| Rework required | Aligned from start |
-| 19% productivity loss | 21-26% productivity gain |
+| Without /plan               | With /plan               |
+| --------------------------- | ------------------------ |
+| Misinterpretation compounds | Caught early             |
+| Assumptions stay hidden     | Made explicit            |
+| Rework required             | Aligned from start       |
+| 19% productivity loss       | 21-26% productivity gain |
 
 ## Usage
 
@@ -22,6 +22,7 @@ Catch misframing before implementation begins. The AI restates understanding, li
 ```
 
 **Examples:**
+
 ```
 /plan add user authentication with OAuth
 /plan refactor the payment module for better testability
@@ -34,24 +35,30 @@ Catch misframing before implementation begins. The AI restates understanding, li
 ## Plan: [Brief Title]
 
 ### Understanding
+
 [AI's interpretation of the request]
 
 ### Assumptions
+
 - [ ] [Assumption 1]
 - [ ] [Assumption 2]
 
 ### Questions (if any)
+
 - [Question needing clarification]
 
 ### Approach
+
 1. [Step 1]
 2. [Step 2]
 3. [Step 3]
 
 ### Files to Modify
+
 - `path/to/file.ts` - [what changes]
 
 ### Verification
+
 - [ ] [Test case 1]
 - [ ] [Test case 2]
 ```
@@ -74,6 +81,7 @@ The assumptions section often reveals misunderstandings:
 
 ```markdown
 ### Assumptions
+
 - [ ] Using existing User model
 - [ ] OAuth tokens stored in session
 - [ ] No 2FA required initially
@@ -87,6 +95,7 @@ The questions section should be answered before coding:
 
 ```markdown
 ### Questions
+
 - Should failed OAuth redirect to login or show error?
 - What scopes are needed from Google?
 ```
@@ -94,6 +103,7 @@ The questions section should be answered before coding:
 ### 4. Approve Before Implementation
 
 After reviewing the plan:
+
 - Correct any misunderstandings
 - Answer questions
 - Approve the approach
@@ -102,21 +112,21 @@ Then proceed to implementation.
 
 ## When to Use
 
-| Task Type | Use /plan? |
-|-----------|------------|
-| New feature | Yes |
-| Significant refactor | Yes |
-| Bug fix (complex) | Yes |
-| Bug fix (simple) | Optional |
-| Configuration change | No |
-| Documentation update | No |
+| Task Type            | Use /plan? |
+| -------------------- | ---------- |
+| New feature          | Yes        |
+| Significant refactor | Yes        |
+| Bug fix (complex)    | Yes        |
+| Bug fix (simple)     | Optional   |
+| Configuration change | No         |
+| Documentation update | No         |
 
 ## Evidence
 
-| Source | Finding |
-|--------|---------|
-| [METR Study](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) | Unplanned AI use = 19% slower |
-| [Anthropic](https://www.anthropic.com/engineering/claude-code-best-practices) | Plan mode recommended workflow |
+| Source                                                                                 | Finding                        |
+| -------------------------------------------------------------------------------------- | ------------------------------ |
+| [METR Study](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) | Unplanned AI use = 19% slower  |
+| [Anthropic](https://www.anthropic.com/engineering/claude-code-best-practices)          | Plan mode recommended workflow |
 
 ## Integration
 

@@ -98,7 +98,10 @@ npm test
   });
 
   test('generates Cursor rules in .mdc format', async () => {
-    writeFileSync(join(testDir, 'CLAUDE.md'), '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- JS');
+    writeFileSync(
+      join(testDir, 'CLAUDE.md'),
+      '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- JS'
+    );
 
     const { generateCommand } = await import('../src/commands/generate.js');
 
@@ -143,7 +146,10 @@ npm test
   });
 
   test('generates GitHub Copilot instructions', async () => {
-    writeFileSync(join(testDir, 'CLAUDE.md'), '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- TS');
+    writeFileSync(
+      join(testDir, 'CLAUDE.md'),
+      '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- TS'
+    );
 
     const { generateCommand } = await import('../src/commands/generate.js');
 
@@ -172,7 +178,10 @@ npm test
   });
 
   test('generates Windsurf rules within char limit', async () => {
-    writeFileSync(join(testDir, 'CLAUDE.md'), '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- Go');
+    writeFileSync(
+      join(testDir, 'CLAUDE.md'),
+      '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- Go'
+    );
 
     const { generateCommand } = await import('../src/commands/generate.js');
 
@@ -202,7 +211,10 @@ npm test
   });
 
   test('generates Aider configuration', async () => {
-    writeFileSync(join(testDir, 'CLAUDE.md'), '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- Python');
+    writeFileSync(
+      join(testDir, 'CLAUDE.md'),
+      '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- Python'
+    );
 
     const { generateCommand } = await import('../src/commands/generate.js');
 
@@ -233,7 +245,10 @@ npm test
   });
 
   test('dry-run mode does not create files', async () => {
-    writeFileSync(join(testDir, 'CLAUDE.md'), '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- Rust');
+    writeFileSync(
+      join(testDir, 'CLAUDE.md'),
+      '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- Rust'
+    );
 
     const { generateCommand } = await import('../src/commands/generate.js');
 
@@ -249,9 +264,15 @@ npm test
       await generateCommand({ tools: 'all', dryRun: true, force: true });
 
       // Nothing should be created
-      assert.ok(!existsSync(join(testDir, 'AGENTS.md')), 'AGENTS.md should not be created in dry-run');
+      assert.ok(
+        !existsSync(join(testDir, 'AGENTS.md')),
+        'AGENTS.md should not be created in dry-run'
+      );
       assert.ok(!existsSync(join(testDir, '.cursor')), '.cursor/ should not be created in dry-run');
-      assert.ok(!existsSync(join(testDir, '.github', 'copilot-instructions.md')), 'copilot-instructions.md should not be created in dry-run');
+      assert.ok(
+        !existsSync(join(testDir, '.github', 'copilot-instructions.md')),
+        'copilot-instructions.md should not be created in dry-run'
+      );
     } finally {
       process.chdir(originalCwd);
       process.exit = originalExit;
@@ -260,7 +281,10 @@ npm test
   });
 
   test('respects existing files without --force', async () => {
-    writeFileSync(join(testDir, 'CLAUDE.md'), '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- C');
+    writeFileSync(
+      join(testDir, 'CLAUDE.md'),
+      '# Project\n\n## Overview\n\nTest\n\n## Tech Stack\n\n- C'
+    );
     writeFileSync(join(testDir, 'AGENTS.md'), '# Existing Content');
 
     const { generateCommand } = await import('../src/commands/generate.js');
@@ -365,8 +389,10 @@ Test.
 
       const content = readFileSync(join(testDir, 'AGENTS.md'), 'utf-8');
 
-      assert.ok(content.includes('hardcoded secrets') || content.includes('credentials'),
-        'Should include security guidance');
+      assert.ok(
+        content.includes('hardcoded secrets') || content.includes('credentials'),
+        'Should include security guidance'
+      );
     } finally {
       process.chdir(originalCwd);
       process.exit = originalExit;

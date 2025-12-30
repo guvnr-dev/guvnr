@@ -55,7 +55,7 @@ on:
     branches: [main]
   schedule:
     # Run weekly on Sundays
-    - cron: "0 0 * * 0"
+    - cron: '0 0 * * 0'
 
 jobs:
   semgrep:
@@ -237,7 +237,7 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    - cron: "0 3 * * 1" # Weekly on Monday
+    - cron: '0 3 * * 1' # Weekly on Monday
 
 jobs:
   analyze:
@@ -273,7 +273,7 @@ jobs:
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
-          category: "/language:${{ matrix.language }}"
+          category: '/language:${{ matrix.language }}'
 ```
 
 ### CodeQL Configuration
@@ -281,7 +281,7 @@ jobs:
 Create `.github/codeql/codeql-config.yml`:
 
 ```yaml
-name: "AI Excellence Security Config"
+name: 'AI Excellence Security Config'
 
 # Use extended queries for comprehensive analysis
 queries:
@@ -309,8 +309,8 @@ paths:
 
 paths-ignore:
   - node_modules
-  - "**/*.test.js"
-  - "**/*.spec.js"
+  - '**/*.test.js'
+  - '**/*.spec.js'
   - tests
   - docs
   - .tmp
@@ -379,7 +379,7 @@ bandit-scan:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: "3.12"
+        python-version: '3.12'
 
     - name: Install Bandit
       run: pip install bandit[toml]
@@ -422,36 +422,36 @@ npm install --save-dev eslint-plugin-security eslint-plugin-no-unsanitized
 Update `eslint.config.js`:
 
 ```javascript
-import security from "eslint-plugin-security";
-import noUnsanitized from "eslint-plugin-no-unsanitized";
+import security from 'eslint-plugin-security';
+import noUnsanitized from 'eslint-plugin-no-unsanitized';
 
 export default [
   // ... other configs
   {
     plugins: {
       security,
-      "no-unsanitized": noUnsanitized,
+      'no-unsanitized': noUnsanitized
     },
     rules: {
       // Security rules for AI-generated code
-      "security/detect-object-injection": "warn",
-      "security/detect-non-literal-regexp": "warn",
-      "security/detect-unsafe-regex": "error",
-      "security/detect-buffer-noassert": "error",
-      "security/detect-child-process": "warn",
-      "security/detect-disable-mustache-escape": "error",
-      "security/detect-eval-with-expression": "error",
-      "security/detect-no-csrf-before-method-override": "error",
-      "security/detect-non-literal-fs-filename": "warn",
-      "security/detect-non-literal-require": "warn",
-      "security/detect-possible-timing-attacks": "warn",
-      "security/detect-pseudoRandomBytes": "error",
+      'security/detect-object-injection': 'warn',
+      'security/detect-non-literal-regexp': 'warn',
+      'security/detect-unsafe-regex': 'error',
+      'security/detect-buffer-noassert': 'error',
+      'security/detect-child-process': 'warn',
+      'security/detect-disable-mustache-escape': 'error',
+      'security/detect-eval-with-expression': 'error',
+      'security/detect-no-csrf-before-method-override': 'error',
+      'security/detect-non-literal-fs-filename': 'warn',
+      'security/detect-non-literal-require': 'warn',
+      'security/detect-possible-timing-attacks': 'warn',
+      'security/detect-pseudoRandomBytes': 'error',
 
       // No unsanitized rules
-      "no-unsanitized/method": "error",
-      "no-unsanitized/property": "error",
-    },
-  },
+      'no-unsanitized/method': 'error',
+      'no-unsanitized/property': 'error'
+    }
+  }
 ];
 ```
 
@@ -472,7 +472,7 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    - cron: "0 6 * * 1"
+    - cron: '0 6 * * 1'
 
 jobs:
   dependency-review:
@@ -525,7 +525,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: '20'
       - run: npm ci
       - run: npm audit --audit-level=high
 
@@ -547,7 +547,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: '20'
       - name: Verify packages exist
         run: |
           echo "Checking for potentially hallucinated packages..."

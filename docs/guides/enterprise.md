@@ -56,14 +56,14 @@ This guide covers deploying and managing the AI Excellence Framework at enterpri
 
 ### Component Responsibilities
 
-| Component | Purpose | Scope |
-|-----------|---------|-------|
-| **CLAUDE.md** | Project context | Per-project |
-| **Local MCP** | Session memory | Per-developer |
-| **Federated Memory** | Shared decisions | Per-team/org |
-| **Metrics Dashboard** | Analytics | Organization-wide |
-| **Audit Logging** | Compliance | Organization-wide |
-| **Central Config** | Standards | Organization-wide |
+| Component             | Purpose          | Scope             |
+| --------------------- | ---------------- | ----------------- |
+| **CLAUDE.md**         | Project context  | Per-project       |
+| **Local MCP**         | Session memory   | Per-developer     |
+| **Federated Memory**  | Shared decisions | Per-team/org      |
+| **Metrics Dashboard** | Analytics        | Organization-wide |
+| **Audit Logging**     | Compliance       | Organization-wide |
+| **Central Config**    | Standards        | Organization-wide |
 
 ## Deployment Models
 
@@ -72,11 +72,13 @@ This guide covers deploying and managing the AI Excellence Framework at enterpri
 Each team manages their own framework installation independently.
 
 **Pros:**
+
 - Simple to deploy
 - Teams have full autonomy
 - No central infrastructure required
 
 **Cons:**
+
 - No cross-team learning
 - Inconsistent patterns across teams
 - Manual updates required
@@ -93,11 +95,13 @@ npx ai-excellence-framework init --preset standard
 Central team manages configuration templates; teams apply them.
 
 **Pros:**
+
 - Consistent standards
 - Easier compliance
 - Centralized updates
 
 **Cons:**
+
 - Less team autonomy
 - Requires central team capacity
 - Configuration drift possible
@@ -117,11 +121,13 @@ npx ai-excellence-framework init --from-org
 Combination of local autonomy and centralized services.
 
 **Pros:**
+
 - Cross-team learning
 - Scalable architecture
 - Balance of autonomy and consistency
 
 **Cons:**
+
 - More complex infrastructure
 - Requires operational support
 - Higher initial investment
@@ -144,11 +150,13 @@ Create a base template that all teams extend:
 <!-- This section is managed centrally. Do not modify. -->
 
 ### Required Practices
+
 - All code must pass security review before merge
 - Use conventional commits
 - Follow [Company Security Policy](link)
 
 ### AI Usage Guidelines
+
 - Run /security-review on all AI-generated code
 - Verify dependencies exist before adding
 - Document decisions in project memory
@@ -203,12 +211,12 @@ Create custom presets for different team types:
 
 ### SOC 2 Compliance
 
-| Control | Framework Feature | Evidence |
-|---------|------------------|----------|
-| **CC6.1** Access Control | MCP authentication | Audit logs |
-| **CC7.1** System Operations | /verify command | Verification reports |
-| **CC7.2** Change Management | Git hooks | Commit history |
-| **CC8.1** Risk Assessment | /security-review | Security reports |
+| Control                     | Framework Feature  | Evidence             |
+| --------------------------- | ------------------ | -------------------- |
+| **CC6.1** Access Control    | MCP authentication | Audit logs           |
+| **CC7.1** System Operations | /verify command    | Verification reports |
+| **CC7.2** Change Management | Git hooks          | Commit history       |
+| **CC8.1** Risk Assessment   | /security-review   | Security reports     |
 
 ### GDPR Considerations
 
@@ -251,7 +259,7 @@ AUDIT_LOG_RETENTION_DAYS = 365
 Create a policy file (`.ai-excellence-policy.yaml`):
 
 ```yaml
-version: "1.0"
+version: '1.0'
 enforcement: strict
 
 rules:
@@ -417,6 +425,7 @@ groups:
 ### Dashboard Templates
 
 Import these Grafana dashboards:
+
 - [AI Excellence Overview](https://grafana.com/grafana/dashboards/xxxxx)
 - [MCP Server Health](https://grafana.com/grafana/dashboards/xxxxy)
 - [Security Metrics](https://grafana.com/grafana/dashboards/xxxxz)
@@ -448,6 +457,7 @@ aws s3 sync /backup/ s3://company-backup/ai-excellence/
 ### Recovery Procedures
 
 1. **MCP Database Recovery**
+
    ```bash
    # Stop MCP server
    systemctl stop ai-excellence-mcp
@@ -460,6 +470,7 @@ aws s3 sync /backup/ s3://company-backup/ai-excellence/
    ```
 
 2. **Federation Server Recovery**
+
    ```bash
    # Restore PostgreSQL
    psql ai_excellence_federation < /backup/federation-20240115.sql
@@ -470,12 +481,12 @@ aws s3 sync /backup/ s3://company-backup/ai-excellence/
 
 ### RTO/RPO Targets
 
-| Component | RPO | RTO | Backup Frequency |
-|-----------|-----|-----|------------------|
-| Local MCP | 24h | 1h | Daily |
-| Federation Server | 1h | 15min | Hourly |
-| Configuration | 7d | 30min | Weekly |
-| Metrics Data | 30d | 4h | Daily |
+| Component         | RPO | RTO   | Backup Frequency |
+| ----------------- | --- | ----- | ---------------- |
+| Local MCP         | 24h | 1h    | Daily            |
+| Federation Server | 1h  | 15min | Hourly           |
+| Configuration     | 7d  | 30min | Weekly           |
+| Metrics Data      | 30d | 4h    | Daily            |
 
 ## Scaling Considerations
 
@@ -530,12 +541,12 @@ For organizations with > 1000 developers:
 
 ### Resource Right-Sizing
 
-| Deployment Size | MCP Resources | Federation Resources | Monthly Estimate |
-|-----------------|---------------|---------------------|------------------|
-| Small (< 50 devs) | 0.5 CPU, 512MB | 1 CPU, 2GB | ~$50 |
-| Medium (50-200 devs) | 2 CPU, 2GB | 2 CPU, 4GB | ~$200 |
-| Large (200-1000 devs) | 4 CPU, 4GB | 4 CPU, 8GB | ~$500 |
-| Enterprise (1000+ devs) | 8 CPU, 8GB | 8 CPU, 16GB | ~$1000 |
+| Deployment Size         | MCP Resources  | Federation Resources | Monthly Estimate |
+| ----------------------- | -------------- | -------------------- | ---------------- |
+| Small (< 50 devs)       | 0.5 CPU, 512MB | 1 CPU, 2GB           | ~$50             |
+| Medium (50-200 devs)    | 2 CPU, 2GB     | 2 CPU, 4GB           | ~$200            |
+| Large (200-1000 devs)   | 4 CPU, 4GB     | 4 CPU, 8GB           | ~$500            |
+| Enterprise (1000+ devs) | 8 CPU, 8GB     | 8 CPU, 16GB          | ~$1000           |
 
 ### Optimization Tips
 
@@ -558,18 +569,19 @@ For organizations with > 1000 developers:
 
 ### Enterprise Support Tiers
 
-| Tier | Response Time | Availability | Features |
-|------|---------------|--------------|----------|
-| Community | Best effort | N/A | GitHub Issues |
-| Professional | 24h | Business hours | Email support |
-| Enterprise | 4h | 24/7 | Dedicated support, SLA |
-| Premium | 1h | 24/7 | Phone, dedicated CSM |
+| Tier         | Response Time | Availability   | Features               |
+| ------------ | ------------- | -------------- | ---------------------- |
+| Community    | Best effort   | N/A            | GitHub Issues          |
+| Professional | 24h           | Business hours | Email support          |
+| Enterprise   | 4h            | 24/7           | Dedicated support, SLA |
+| Premium      | 1h            | 24/7           | Phone, dedicated CSM   |
 
 ### Getting Enterprise Support
 
 Contact: enterprise@ai-excellence-framework.org
 
 Include:
+
 - Organization size
 - Current deployment model
 - Specific requirements
@@ -584,4 +596,4 @@ Include:
 
 ---
 
-*For questions about enterprise deployment, open a [GitHub Discussion](https://github.com/ai-excellence-framework/ai-excellence-framework/discussions) or contact the maintainers.*
+_For questions about enterprise deployment, open a [GitHub Discussion](https://github.com/ai-excellence-framework/ai-excellence-framework/discussions) or contact the maintainers._

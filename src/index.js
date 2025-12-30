@@ -100,14 +100,7 @@ export const AGENTS = ['explorer', 'reviewer', 'tester'];
 export const DEFAULT_CONFIG = {
   version: VERSION,
   preset: 'standard',
-  commands: [
-    'plan',
-    'verify',
-    'handoff',
-    'assumptions',
-    'review',
-    'security-review'
-  ],
+  commands: ['plan', 'verify', 'handoff', 'assumptions', 'review', 'security-review'],
   agents: ['reviewer', 'explorer', 'tester'],
   hooks: true,
   mcp: false,
@@ -133,14 +126,7 @@ export const PRESET_CONFIGS = {
   },
   standard: {
     description: 'Recommended setup for individual developers',
-    commands: [
-      'plan',
-      'verify',
-      'handoff',
-      'assumptions',
-      'review',
-      'security-review'
-    ],
+    commands: ['plan', 'verify', 'handoff', 'assumptions', 'review', 'security-review'],
     agents: ['reviewer', 'explorer', 'tester'],
     hooks: true,
     mcp: false,
@@ -361,7 +347,10 @@ export function detectSecrets(content) {
     { name: 'GitHub Token', pattern: /ghp_[a-zA-Z0-9]{36}/g },
     { name: 'GitLab Token', pattern: /glpat-[a-zA-Z0-9-]{20}/g },
     { name: 'AWS Key', pattern: /AKIA[0-9A-Z]{16}/g },
-    { name: 'Private Key', pattern: /-----BEGIN (RSA |EC |DSA )?PRIVATE KEY-----/g }
+    {
+      name: 'Private Key',
+      pattern: /-----BEGIN (RSA |EC |DSA )?PRIVATE KEY-----/g
+    }
   ];
 
   const findings = [];

@@ -76,30 +76,30 @@ PROJECT_MEMORY_RATE_LIMIT=100            # Operations per minute
 
 ### Tools Provided
 
-| Tool | Description |
-|------|-------------|
-| `store_decision` | Store an architectural/technical decision |
-| `search_decisions` | Full-text search across decisions |
-| `get_recent_decisions` | Retrieve recent decisions |
-| `store_pattern` | Store a coding pattern |
-| `get_patterns` | Retrieve patterns by name |
-| `store_context` | Store key-value context |
-| `get_context` | Retrieve context by key |
-| `get_all_context` | Retrieve all context |
-| `clear_context` | Clear context data |
-| `export_memory` | Export all data to JSON |
-| `import_memory` | Import data from JSON |
-| `get_stats` | Get memory statistics |
-| `health_check` | Verify database health |
+| Tool                   | Description                               |
+| ---------------------- | ----------------------------------------- |
+| `store_decision`       | Store an architectural/technical decision |
+| `search_decisions`     | Full-text search across decisions         |
+| `get_recent_decisions` | Retrieve recent decisions                 |
+| `store_pattern`        | Store a coding pattern                    |
+| `get_patterns`         | Retrieve patterns by name                 |
+| `store_context`        | Store key-value context                   |
+| `get_context`          | Retrieve context by key                   |
+| `get_all_context`      | Retrieve all context                      |
+| `clear_context`        | Clear context data                        |
+| `export_memory`        | Export all data to JSON                   |
+| `import_memory`        | Import data from JSON                     |
+| `get_stats`            | Get memory statistics                     |
+| `health_check`         | Verify database health                    |
 
 ### Resources Provided
 
-| Resource | Description |
-|----------|-------------|
+| Resource             | Description          |
+| -------------------- | -------------------- |
 | `memory://decisions` | All stored decisions |
-| `memory://patterns` | All stored patterns |
-| `memory://context` | Current context |
-| `memory://stats` | Memory statistics |
+| `memory://patterns`  | All stored patterns  |
+| `memory://context`   | Current context      |
+| `memory://stats`     | Memory statistics    |
 
 ## Security Considerations
 

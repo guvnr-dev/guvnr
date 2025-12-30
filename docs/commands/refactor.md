@@ -13,6 +13,7 @@ Guide refactoring with analysis, planning, and verification to prevent breaking 
 ```
 
 **Examples:**
+
 ```
 /refactor src/services/user.ts for better testability
 /refactor the authentication module to use dependency injection
@@ -25,31 +26,38 @@ Guide refactoring with analysis, planning, and verification to prevent breaking 
 ## Refactoring Plan: [Target]
 
 ### Current State Analysis
+
 [Description of current structure and issues]
 
 ### Issues Identified
+
 - [Issue 1]
 - [Issue 2]
 
 ### Proposed Changes
-| Change | Reason | Risk |
-|--------|--------|------|
-| [Change] | [Why] | Low/Med/High |
+
+| Change   | Reason | Risk         |
+| -------- | ------ | ------------ |
+| [Change] | [Why]  | Low/Med/High |
 
 ### Breaking Changes
+
 - [ ] [Potential breaking change]
 
 ### Implementation Steps
+
 1. [Step 1]
 2. [Step 2]
 3. [Step 3]
 
 ### Test Strategy
+
 - [ ] Existing tests pass before refactor
 - [ ] [New test for change]
 - [ ] Existing tests pass after refactor
 
 ### Rollback Plan
+
 [How to revert if issues found]
 ```
 
@@ -59,30 +67,33 @@ Guide refactoring with analysis, planning, and verification to prevent breaking 
 
 ```markdown
 ### Proposed Changes
-| Change | Reason | Risk |
-|--------|--------|------|
-| Extract validation logic | Reduce function size | Low |
-| Create ValidationService | Reusable validation | Low |
+
+| Change                   | Reason               | Risk |
+| ------------------------ | -------------------- | ---- |
+| Extract validation logic | Reduce function size | Low  |
+| Create ValidationService | Reusable validation  | Low  |
 ```
 
 ### Dependency Injection
 
 ```markdown
 ### Proposed Changes
-| Change | Reason | Risk |
-|--------|--------|------|
-| Add constructor injection | Improve testability | Medium |
-| Create interfaces | Decouple dependencies | Low |
+
+| Change                    | Reason                | Risk   |
+| ------------------------- | --------------------- | ------ |
+| Add constructor injection | Improve testability   | Medium |
+| Create interfaces         | Decouple dependencies | Low    |
 ```
 
 ### Pattern Migration
 
 ```markdown
 ### Proposed Changes
-| Change | Reason | Risk |
-|--------|--------|------|
+
+| Change                        | Reason                  | Risk   |
+| ----------------------------- | ----------------------- | ------ |
 | Migrate to repository pattern | Standardize data access | Medium |
-| Add unit of work | Transaction management | Medium |
+| Add unit of work              | Transaction management  | Medium |
 ```
 
 ## Best Practices
@@ -122,32 +133,33 @@ If the refactor affects public API:
 
 ```markdown
 ### Breaking Changes
+
 - [ ] `getUserById()` now requires options object
 - [ ] `UserService` constructor takes `IUserRepository`
 ```
 
 ## When to Use
 
-| Situation | Use /refactor? |
-|-----------|----------------|
-| Improving code structure | Yes |
-| Reducing duplication | Yes |
-| Preparing for feature | Yes |
-| Quick fix during feature work | Be careful |
-| "While I'm here" cleanup | Usually no |
+| Situation                     | Use /refactor? |
+| ----------------------------- | -------------- |
+| Improving code structure      | Yes            |
+| Reducing duplication          | Yes            |
+| Preparing for feature         | Yes            |
+| Quick fix during feature work | Be careful     |
+| "While I'm here" cleanup      | Usually no     |
 
 ## Risk Levels
 
-| Risk | When | Approach |
-|------|------|----------|
-| **Low** | Renaming, extracting, formatting | Can batch changes |
-| **Medium** | Pattern changes, interface changes | Step by step |
-| **High** | Architecture changes, public API | Extensive testing |
+| Risk       | When                               | Approach          |
+| ---------- | ---------------------------------- | ----------------- |
+| **Low**    | Renaming, extracting, formatting   | Can batch changes |
+| **Medium** | Pattern changes, interface changes | Step by step      |
+| **High**   | Architecture changes, public API   | Extensive testing |
 
 ## Evidence
 
-| Source | Finding |
-|--------|---------|
+| Source                                                                       | Finding                           |
+| ---------------------------------------------------------------------------- | --------------------------------- |
 | [GitClear](https://www.gitclear.com/ai_assistant_code_quality_2025_research) | Refactoring down from 25% to <10% |
 
 Refactoring has decreased with AI adoption—this command helps maintain refactoring discipline.
