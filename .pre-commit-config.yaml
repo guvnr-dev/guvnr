@@ -1,0 +1,47 @@
+# Pre-commit hooks for AI Excellence Framework
+# Install: pip install pre-commit && pre-commit install
+
+repos:
+  # Standard checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      - id: detect-private-key
+      - id: check-merge-conflict
+
+  # Markdown linting
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.38.0
+    hooks:
+      - id: markdownlint
+        args: ['--fix', '--disable', 'MD013', 'MD033', 'MD041', '--']
+
+  # Secret detection
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+        exclude: 'package-lock\.json'
+
+  # Custom: Check CLAUDE.md updated
+  - repo: local
+    hooks:
+      - id: claude-md-check
+        name: Check CLAUDE.md updated
+        entry: ./scripts/hooks/check-claude-md.sh
+        language: script
+        files: ^(src/|lib/|scripts/)
+        pass_filenames: false
+
+      - id: todo-check
+        name: Check for critical TODOs
+        entry: ./scripts/hooks/check-todos.sh
+        language: script
+        pass_filenames: false
