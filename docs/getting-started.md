@@ -2,11 +2,41 @@
 
 Get up and running with the AI Excellence Framework in under 5 minutes.
 
+## TL;DR — 30-Second Setup
+
+```bash
+# One command to install everything
+npx ai-excellence-framework init --preset standard
+
+# Start using immediately
+/plan add a login button to the header
+```
+
+That's it. You now have structured AI assistance for your project.
+
+---
+
+## Why Use This Framework?
+
+AI coding assistants are powerful but have known friction points:
+
+| Problem | Without Framework | With Framework |
+| --- | --- | --- |
+| AI forgets project context | Repeats questions every session | Reads CLAUDE.md automatically |
+| Incomplete implementations | "Done" but half-finished | `/verify` catches gaps |
+| Security vulnerabilities | 86% of AI code has XSS issues | `/security-review` audits code |
+| Lost session context | Start from scratch next time | `/handoff` preserves state |
+| Hallucinated packages | 20% fake dependencies | Pre-commit hooks catch them |
+
+**The framework provides structure that makes AI assistance reliable.**
+
+---
+
 ## Prerequisites
 
 - **Node.js** 18.0.0 or higher
 - **Git** (for version control features)
-- **Claude Code** or compatible AI coding assistant (optional but recommended)
+- **An AI coding assistant** (Claude Code, Cursor, Copilot, etc.)
 
 Check your setup:
 
@@ -15,81 +45,46 @@ node --version  # Should be v18.0.0 or higher
 git --version   # Any recent version
 ```
 
-## Quick Start
+---
 
-### 1. Install the Framework
+## Installation Options
 
-Run this command in your project directory:
+### Option 1: Interactive Setup (Recommended)
 
 ```bash
+cd your-project
 npx ai-excellence-framework init
 ```
 
-### 2. Choose Your Preset
+You'll be guided through choosing a preset and customizing options.
 
-You'll be prompted to select a configuration preset:
+### Option 2: Preset Selection
 
-| Preset | Best For | What's Included |
-|--------|----------|-----------------|
-| **Minimal** | Trying it out | CLAUDE.md + /plan + /verify |
-| **Standard** | Individual developers | All commands + basic hooks |
-| **Full** | Serious projects | Everything including MCP server |
-| **Team** | Team collaboration | Full + team federation |
+| Preset | Best For | Install Command |
+| --- | --- | --- |
+| **Minimal** | Trying it out | `npx ai-excellence-framework init --preset minimal` |
+| **Standard** | Individual devs | `npx ai-excellence-framework init --preset standard` |
+| **Full** | Serious projects | `npx ai-excellence-framework init --preset full` |
+| **Team** | Team collaboration | `npx ai-excellence-framework init --preset team` |
 
-For most users, we recommend **Standard**:
+### Option 3: Global Installation
 
 ```bash
-npx ai-excellence-framework init --preset standard
+npm install -g ai-excellence-framework
+ai-excellence init  # or: aix init
 ```
 
-### 3. Customize Your CLAUDE.md
+---
 
-The installer creates a `CLAUDE.md` file. Open it and fill in your project details:
+## Your First 10 Minutes
 
-```markdown
-# Project: My Awesome App
-
-## Overview
-
-A web application for managing todo items with collaborative features.
-
-## Tech Stack
-
-- Frontend: React 18 with TypeScript
-- Backend: Node.js with Express
-- Database: PostgreSQL
-- Hosting: Vercel + Supabase
-
-## Architecture
-
-### Directory Structure
-```
-src/
-├── components/   # React components
-├── api/          # API routes
-├── hooks/        # Custom React hooks
-└── utils/        # Helper functions
-```
-
-## Current State
-
-### Phase
-Alpha - Core features implemented
-
-### Recent Decisions
-- 2025-01-15: Chose React Query for data fetching
-- 2025-01-10: Adopted Tailwind CSS for styling
-```
-
-### 4. Verify Installation
-
-Run the doctor command to check everything is set up correctly:
+### Minute 1-2: Verify Installation
 
 ```bash
 npx ai-excellence-framework doctor
 ```
 
-You should see all green checkmarks:
+You should see green checkmarks:
 
 ```
   Environment:
@@ -98,38 +93,67 @@ You should see all green checkmarks:
 
   Framework:
     ✓ Framework installed: Yes
-    ✓ CLAUDE.md freshness: 0 days old
+    ✓ CLAUDE.md present: Yes
 
   Summary: 10/10 checks passed
 
   ✓ All systems operational!
 ```
 
-## Your First AI Session
+### Minute 3-5: Customize CLAUDE.md
 
-### Start with /plan
+Open `CLAUDE.md` and fill in your project details:
 
-Before implementing anything significant, use the `/plan` command:
+```markdown
+# My Project Name
+
+## Overview
+
+A brief description of what this project does.
+
+## Tech Stack
+
+- Frontend: React 18 with TypeScript
+- Backend: Node.js with Express
+- Database: PostgreSQL
+
+## Architecture
+
+src/
+├── components/   # React components
+├── api/          # API routes
+└── utils/        # Helper functions
+
+## Current State
+
+### Phase
+Early development - building core features
+
+### Recent Decisions
+- 2025-01-15: Chose React Query for data fetching
+```
+
+### Minute 6-7: Try Your First Command
+
+Open your AI assistant and try:
 
 ```
-/plan Add user authentication with email/password login
+/plan add a dark mode toggle to the settings page
 ```
 
-This ensures you and the AI are aligned before writing code.
+The AI will create a structured plan before coding.
 
-### Verify with /verify
+### Minute 8-9: Verify Work
 
-After the AI completes work, verify it:
+After the AI implements something:
 
 ```
-/verify Check the authentication implementation is complete
+/verify check the dark mode implementation is complete
 ```
 
 This catches incomplete work before you accept it.
 
-### Generate Handoff Notes
-
-At the end of your session:
+### Minute 10: End Your Session
 
 ```
 /handoff
@@ -137,7 +161,119 @@ At the end of your session:
 
 This creates a summary for your next session.
 
-## What's Installed
+---
+
+## The Core Workflow
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    AI SESSION                           │
+│                                                         │
+│  START ───────┬──────────────┬──────────────┬─── END   │
+│               │              │              │           │
+│           /plan          implement      /verify         │
+│               │              │              │           │
+│        ┌──────▼──────┐   ┌──▼──┐    ┌──────▼──────┐   │
+│        │ Structured  │   │ AI  │    │ Skeptical   │   │
+│        │ planning    │   │works│    │ validation  │   │
+│        └─────────────┘   └─────┘    └─────────────┘   │
+│               │              │              │           │
+│               └──────────────┴──────────────┘           │
+│                          │                              │
+│                     /handoff                            │
+│                          │                              │
+│                  ┌───────▼───────┐                     │
+│                  │ Session notes │                     │
+│                  │ for next time │                     │
+│                  └───────────────┘                     │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Available Commands
+
+### Essential (Use Daily)
+
+| Command | Purpose | When to Use |
+| --- | --- | --- |
+| `/plan [task]` | Create implementation plan | Before any significant work |
+| `/verify [task]` | Check work is complete | Before accepting AI output |
+| `/handoff` | Generate session summary | End of each session |
+
+### Situational (As Needed)
+
+| Command | Purpose | When to Use |
+| --- | --- | --- |
+| `/assumptions [task]` | Surface hidden assumptions | When requirements are unclear |
+| `/review [path]` | Multi-perspective code review | After significant changes |
+| `/security-review [path]` | Security audit | For security-sensitive code |
+| `/refactor [target]` | Plan safe refactoring | Before restructuring code |
+| `/test-coverage [path]` | Analyze test gaps | When improving tests |
+
+---
+
+## Common Scenarios
+
+### Scenario: Bug Fix
+
+```bash
+# 1. Plan the fix
+/plan fix the login button not responding on mobile
+
+# 2. AI investigates and fixes
+
+# 3. Verify the fix
+/verify check the mobile login fix
+
+# 4. Commit
+git add . && git commit -m "fix: mobile login button responsiveness"
+```
+
+### Scenario: New Feature
+
+```bash
+# 1. Plan the feature
+/plan add user profile page with avatar upload
+
+# 2. Surface assumptions first
+/assumptions user profile requirements
+
+# 3. AI implements
+
+# 4. Security review (user-facing features)
+/security-review src/components/Profile.tsx
+
+# 5. Verify
+/verify check profile page implementation
+
+# 6. Commit
+git add . && git commit -m "feat: add user profile page"
+```
+
+### Scenario: Code Review
+
+```bash
+# Get a thorough review
+/review src/api/auth.ts
+
+# Or focus on security
+/security-review src/api/auth.ts
+```
+
+### Scenario: Refactoring
+
+```bash
+# Plan the refactor first
+/refactor extract payment logic into separate module
+
+# AI creates safe refactoring plan
+# Then implements step by step
+```
+
+---
+
+## What Gets Installed
 
 After running `init`, your project contains:
 
@@ -151,91 +287,73 @@ your-project/
 │   │   ├── handoff.md          # /handoff command
 │   │   ├── assumptions.md      # /assumptions command
 │   │   ├── review.md           # /review command
-│   │   └── security-review.md  # /security-review command
+│   │   ├── security-review.md  # /security-review command
+│   │   ├── refactor.md         # /refactor command
+│   │   └── test-coverage.md    # /test-coverage command
 │   └── agents/
-│       ├── explorer.md         # Codebase exploration agent
-│       ├── reviewer.md         # Code review agent
-│       └── tester.md           # Test generation agent
+│       ├── explorer.md         # Codebase exploration
+│       ├── reviewer.md         # Code review
+│       └── tester.md           # Test generation
 ├── scripts/
-│   └── hooks/                   # Git hooks (if enabled)
+│   ├── hooks/                   # Git hooks (standard/full/team)
+│   └── mcp/                     # MCP server (full/team only)
 ├── docs/
 │   └── session-notes/          # Session handoff notes
-└── .tmp/                        # Temporary working files
+└── .tmp/                        # Temporary files (gitignored)
 ```
 
-## Common Workflows
+---
 
-### Bug Fix
+## Multi-Tool Support
+
+The framework works with 10+ AI coding assistants:
+
+| Tool | Configuration File |
+| --- | --- |
+| Claude Code | `CLAUDE.md` |
+| Cursor | `.cursor/rules/` |
+| GitHub Copilot | `.github/copilot-instructions.md` |
+| Windsurf | `.windsurf/rules/` |
+| Aider | `.aider.conf.yml` |
+| Gemini CLI | `GEMINI.md` |
+| OpenAI Codex | `.codex/` |
+| Zed | `.rules` |
+| Sourcegraph Amp | `amp.toml` |
+| Roo Code | `.roo/rules/` |
+
+Generate configs for your tools:
 
 ```bash
-# 1. Understand the bug
-/plan Fix the login button not responding on mobile
+# Generate for specific tool
+npx ai-excellence-framework generate cursor
 
-# 2. AI investigates and fixes
+# Generate for multiple tools
+npx ai-excellence-framework generate cursor copilot aider
 
-# 3. Verify the fix
-/verify Check the mobile login fix
-
-# 4. Commit
-git add . && git commit -m "fix: mobile login button responsiveness"
+# Generate for all supported tools
+npx ai-excellence-framework generate all
 ```
 
-### New Feature
+---
 
-```bash
-# 1. Plan the feature
-/plan Add dark mode toggle to settings page
-
-# 2. AI implements
-
-# 3. Security review (for user-facing features)
-/security-review src/components/Settings.tsx
-
-# 4. Verify
-/verify Check dark mode implementation
-
-# 5. Commit
-git add . && git commit -m "feat: add dark mode toggle"
-```
-
-### Code Review
-
-```bash
-# Get a thorough review
-/review src/api/auth.ts
-```
-
-### End of Day
-
-```bash
-# Generate handoff summary
-/handoff
-
-# The summary is saved to docs/session-notes/
-# and shown in the terminal
-```
-
-## Configuration
+## Optional Enhancements
 
 ### Enable Pre-commit Hooks
 
-If you want security scanning on commits:
+Security scanning on every commit:
 
 ```bash
 pip install pre-commit
 pre-commit install
 ```
 
-### Enable MCP Server (Full preset)
+### Enable MCP Server (Full/Team Presets)
 
-The MCP server persists decisions across sessions:
+Persist decisions across sessions:
 
 ```bash
-# Install MCP SDK
 pip install mcp
-
-# The server is at scripts/mcp/project-memory-server.py
-# Configure in your Claude settings
+python scripts/mcp/project-memory-server.py
 ```
 
 ### Validate Configuration
@@ -244,36 +362,30 @@ Check your setup anytime:
 
 ```bash
 npx ai-excellence-framework validate
-```
 
-Fix issues automatically:
-
-```bash
+# Fix issues automatically
 npx ai-excellence-framework validate --fix
 ```
+
+---
 
 ## Troubleshooting
 
 ### "Command not found" errors
 
-Make sure you're using `npx`:
-
 ```bash
+# Use npx
 npx ai-excellence-framework --help
-```
 
-Or install globally:
-
-```bash
+# Or install globally
 npm install -g ai-excellence-framework
-ai-excellence --help
 ```
 
 ### Slash commands not working
 
-1. Check the files exist: `ls .claude/commands/`
-2. Verify frontmatter is valid YAML
-3. Restart your Claude Code session
+1. Check files exist: `ls .claude/commands/`
+2. Verify YAML frontmatter is valid
+3. Restart your AI assistant
 
 ### CLAUDE.md not being read
 
@@ -281,19 +393,33 @@ ai-excellence --help
 2. Must be in project root
 3. Must be valid markdown
 
+### Doctor command shows errors
+
+```bash
+# See detailed diagnostics
+npx ai-excellence-framework doctor --verbose
+
+# Auto-fix common issues
+npx ai-excellence-framework doctor --fix
+```
+
 See [Troubleshooting Guide](/TROUBLESHOOTING) for more solutions.
+
+---
 
 ## Next Steps
 
-1. **Customize CLAUDE.md** - Add your project's specific context
-2. **Try /plan** - Plan your first feature
-3. **Use /verify** - Verify AI-completed work
-4. **Read [Quick Reference](/QUICK-REFERENCE)** - One-page command summary
-5. **Explore [When AI Helps](/WHEN-AI-HELPS)** - Maximize AI effectiveness
+1. **Customize CLAUDE.md** — Add your project's specific context
+2. **Try /plan** — Plan your first feature
+3. **Use /verify** — Verify AI-completed work
+4. **Read [Quick Reference](/QUICK-REFERENCE)** — One-page command summary
+5. **Explore [Model Selection](/MODEL-SELECTION)** — Choose the right AI model
+6. **Read [When AI Helps](/WHEN-AI-HELPS)** — Maximize AI effectiveness
+
+---
 
 ## Getting Help
 
-- **Documentation**: You're here! Browse the sidebar.
 - **Quick Reference**: [One-page guide](/QUICK-REFERENCE)
 - **Troubleshooting**: [Common issues](/TROUBLESHOOTING)
 - **GitHub Issues**: [Report bugs](https://github.com/ai-excellence-framework/ai-excellence-framework/issues)
