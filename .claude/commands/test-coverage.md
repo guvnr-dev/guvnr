@@ -62,41 +62,51 @@ Analyze test coverage and identify gaps.
 ## Test Coverage Report: [target]
 
 ### Summary
-| Metric | Current | Target | Gap |
-|--------|---------|--------|-----|
-| Line Coverage | X% | 80% | +Y% |
-| Branch Coverage | X% | 75% | +Y% |
-| Function Coverage | X% | 90% | +Y% |
+
+| Metric            | Current | Target | Gap |
+| ----------------- | ------- | ------ | --- |
+| Line Coverage     | X%      | 80%    | +Y% |
+| Branch Coverage   | X%      | 75%    | +Y% |
+| Function Coverage | X%      | 90%    | +Y% |
 
 ### Lowest Coverage Files
-| File | Coverage | Risk Level | Priority |
-|------|----------|------------|----------|
-| [file] | X% | High/Med/Low | P1/P2/P3 |
+
+| File   | Coverage | Risk Level   | Priority |
+| ------ | -------- | ------------ | -------- |
+| [file] | X%       | High/Med/Low | P1/P2/P3 |
 
 ### Critical Gaps 🔴
+
 Code that MUST have tests:
+
 - `[file:function]` - [why critical]
 
 ### Recommended Tests
 
 #### High Priority
+
 1. **Test: [test name]**
    - Target: `[file:function]`
    - Type: unit/integration/e2e
    - Cases: [what to test]
 
 #### Medium Priority
+
 2. **Test: [test name]**
    - Target: `[file:function]`
    - Type: unit/integration/e2e
    - Cases: [what to test]
 
 ### Dead Code Candidates
+
 Code with 0% coverage that may be dead:
+
 - `[file:line]` - [investigation notes]
 
 ### Quick Wins
+
 Tests that would significantly improve coverage with minimal effort:
+
 - [ ] [test description] → +X% coverage
 ```
 

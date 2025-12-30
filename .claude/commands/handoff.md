@@ -51,31 +51,39 @@ Save to: `docs/session-notes/[DATE]-handoff.md`
 # Session Handoff: [DATE]
 
 ## Summary
+
 [2-3 sentence summary]
 
 ## Accomplished
+
 - [x] [Completed item]
 - [ ] [Partially complete item]
 
 ## Decisions
-| Decision | Rationale | Alternatives Considered |
-|----------|-----------|------------------------|
-| [decision] | [why] | [other options] |
+
+| Decision   | Rationale | Alternatives Considered |
+| ---------- | --------- | ----------------------- |
+| [decision] | [why]     | [other options]         |
 
 ## Files Changed
+
 - `path/to/file.ts` - [what changed]
 
 ## Current State
+
 [Description of where things stand]
 
 ## Blockers
+
 - [Blocker and what's needed to resolve]
 
 ## Next Steps
+
 1. [Priority 1]
 2. [Priority 2]
 3. [Priority 3]
 
 ## Warnings
+
 ⚠️ [Thing to be careful about]
 ```

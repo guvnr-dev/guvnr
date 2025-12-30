@@ -1,6 +1,6 @@
 # Operationalizing AI-Assisted Development: Implementation Guide
 
-*Concrete implementations for the strategies in "Mitigating AI-Assisted Development Friction"*
+_Concrete implementations for the strategies in "Mitigating AI-Assisted Development Friction"_
 
 ---
 
@@ -22,14 +22,14 @@ rm -rf /tmp/aix
 
 ### What Gets Installed
 
-| Component | Files | Purpose |
-|-----------|-------|---------|
-| **CLAUDE.md** | `CLAUDE.md` | Project context for every session |
-| **Slash Commands** | `.claude/commands/*.md` | /plan, /verify, /handoff, /review, /security-review |
-| **Subagents** | `.claude/agents/*.md` | reviewer, explorer, tester |
-| **Security Hooks** | `scripts/hooks/*`, `.pre-commit-config.yaml` | Pre-commit security scanning |
-| **MCP Server** | `scripts/mcp/project-memory-server.py` | Persistent project memory |
-| **Metrics** | `scripts/metrics/collect-session-metrics.sh` | Session effectiveness tracking |
+| Component          | Files                                        | Purpose                                             |
+| ------------------ | -------------------------------------------- | --------------------------------------------------- |
+| **CLAUDE.md**      | `CLAUDE.md`                                  | Project context for every session                   |
+| **Slash Commands** | `.claude/commands/*.md`                      | /plan, /verify, /handoff, /review, /security-review |
+| **Subagents**      | `.claude/agents/*.md`                        | reviewer, explorer, tester                          |
+| **Security Hooks** | `scripts/hooks/*`, `.pre-commit-config.yaml` | Pre-commit security scanning                        |
+| **MCP Server**     | `scripts/mcp/project-memory-server.py`       | Persistent project memory                           |
+| **Metrics**        | `scripts/metrics/collect-session-metrics.sh` | Session effectiveness tracking                      |
 
 ### Priority Order (if implementing incrementally)
 
@@ -54,6 +54,7 @@ rm -rf /tmp/aix
 This document provides **actual implementations**—code, configurations, file structures, and automation scripts—that operationalize the friction mitigation strategies. Everything here is designed to be copy-pasted, adapted, and deployed.
 
 **Organization:**
+
 1. Project Infrastructure Setup
 2. Claude Code Configuration
 3. Custom MCP Servers
@@ -108,9 +109,11 @@ Create `CLAUDE.md` in your project root:
 # Project: [PROJECT_NAME]
 
 ## Overview
+
 [One paragraph describing what this project does and its purpose]
 
 ## Tech Stack
+
 - Language: [e.g., TypeScript 5.3]
 - Runtime: [e.g., Node.js 20.x]
 - Framework: [e.g., Next.js 14]
@@ -121,13 +124,15 @@ Create `CLAUDE.md` in your project root:
 
 ### Directory Structure
 ```
+
 src/
-├── api/          # API routes and handlers
-├── components/   # React components
-├── lib/          # Shared utilities
-├── services/     # Business logic
-└── types/        # TypeScript types
-```
+├── api/ # API routes and handlers
+├── components/ # React components
+├── lib/ # Shared utilities
+├── services/ # Business logic
+└── types/ # TypeScript types
+
+````
 
 ### Key Entry Points
 - API: `src/api/index.ts`
@@ -159,21 +164,26 @@ npm run dev      # Start development server
 npm run build    # Production build
 npm test         # Run tests
 npm run lint     # Run linter
-```
+````
 
 ## Current State
 
 ### Active Work
+
 - [Current feature/task being developed]
 
 ### Known Issues
+
 - [List known bugs or technical debt]
 
 ### Recent Decisions
+
 - [Date]: [Decision and rationale]
 
 ## Critical Constraints
+
 <!-- These constraints should NOT be overridden -->
+
 - [Security requirements]
 - [Performance requirements]
 - [Compatibility requirements]
@@ -181,20 +191,24 @@ npm run lint     # Run linter
 ## Session Instructions
 
 ### Before Starting
+
 1. Read this file completely
 2. Check `docs/session-notes/` for recent context
 3. Run `npm test` to verify baseline
 
 ### During Work
+
 - Use todo lists for multi-step tasks
 - Verify before asserting
 - Ask before assuming on architectural decisions
 
 ### Before Ending
+
 - Run `/handoff` to generate session summary
 - Commit any completed work
 - Update "Current State" section if needed
-```
+
+````
 
 ### 1.3 Git Configuration
 
@@ -208,7 +222,7 @@ docs/session-notes/*.local.md
 
 # Session artifacts
 .tmp/
-```
+````
 
 ---
 
@@ -299,7 +313,7 @@ Make executable: `chmod +x scripts/hooks/post-edit.sh`
 
 Create `.claude/commands/plan.md`:
 
-```markdown
+````markdown
 ---
 description: Create implementation plan before coding
 ---
@@ -336,32 +350,40 @@ Before implementing anything, create a structured plan.
 ## Plan: [Brief Title]
 
 ### Understanding
+
 [Your interpretation of the request]
 
 ### Assumptions
+
 - [ ] [Assumption 1]
 - [ ] [Assumption 2]
 
 ### Questions (if any)
+
 - [Question needing clarification]
 
 ### Approach
+
 1. [Step 1]
 2. [Step 2]
 3. [Step 3]
 
 ### Files to Modify
+
 - `path/to/file.ts` - [what changes]
 
 ### Verification
+
 - [ ] [Test case 1]
 - [ ] [Test case 2]
 ```
+````
 
 **Do not proceed to implementation until plan is approved.**
 
 User request: $ARGUMENTS
-```
+
+````
 
 ### 3.2 Review Command
 
@@ -426,8 +448,9 @@ Perform a comprehensive code review from multiple perspectives.
 
 ### What's Good ✓
 - [Positive observations]
-```
-```
+````
+
+````
 
 ### 3.3 Handoff Command
 
@@ -514,8 +537,9 @@ Save to: `docs/session-notes/[DATE]-handoff.md`
 
 ## Warnings
 ⚠️ [Thing to be careful about]
-```
-```
+````
+
+````
 
 ### 3.4 Verify Command
 
@@ -590,8 +614,9 @@ Before confirming completion, actively try to prove it's NOT complete:
 [ ] ✓ COMPLETE - All claims verified
 [ ] ⚠️ PARTIAL - Issues noted above
 [ ] ✗ INCOMPLETE - Significant work remains
-```
-```
+````
+
+````
 
 ### 3.5 Assumptions Command
 
@@ -651,8 +676,9 @@ For each major assumption:
 ### Proceed?
 [ ] All assumptions are safe to proceed with
 [ ] Need clarification on: [items]
-```
-```
+````
+
+````
 
 ---
 
@@ -711,7 +737,7 @@ Provide findings in this format:
 - 🟡 **Warning**: [should address]
 - 🟢 **Suggestion**: [nice to have]
 - ✓ **Good**: [positive observations]
-```
+````
 
 ### 4.2 Tester Subagent
 
@@ -763,20 +789,27 @@ You are a testing specialist. Your job is to ensure code is properly tested.
 
 When generating tests:
 ```
+
 ## Test Plan for: [component]
 
 ### Happy Path Tests
+
 - [test case]
 
 ### Error Cases
+
 - [test case]
 
 ### Edge Cases
+
 - [test case]
 
 ### Integration Tests
+
 - [test case]
+
 ```
+
 ```
 
 ### 4.3 Explorer Subagent
@@ -828,21 +861,28 @@ You are a codebase explorer. Your job is to find relevant code and gather contex
 
 Provide findings concisely:
 ```
+
 ## Exploration: [query]
 
 ### Key Files
+
 - `path/to/main.ts` - [why relevant]
 
 ### Architecture
+
 [Brief description of how it works]
 
 ### Entry Points
+
 - [where to start]
 
 ### Dependencies
+
 - [what this depends on]
 - [what depends on this]
+
 ```
+
 ```
 
 ---
@@ -867,7 +907,7 @@ repos:
       - id: check-yaml
       - id: check-json
       - id: check-added-large-files
-        args: ['--maxkb=1000']
+        args: ["--maxkb=1000"]
       - id: detect-private-key
       - id: check-merge-conflict
 
@@ -900,7 +940,7 @@ repos:
     rev: v1.4.0
     hooks:
       - id: detect-secrets
-        args: ['--baseline', '.secrets.baseline']
+        args: ["--baseline", ".secrets.baseline"]
 
   # AI-specific: Verify CLAUDE.md is updated
   - repo: local
@@ -996,23 +1036,23 @@ on:
   workflow_dispatch:
     inputs:
       model:
-        description: 'Claude model to use'
+        description: "Claude model to use"
         required: false
-        default: 'claude-sonnet-4-20250514'
+        default: "claude-sonnet-4-20250514"
         type: choice
         options:
           - claude-sonnet-4-20250514
           - claude-opus-4-20250514
           - claude-3-5-sonnet-20241022
       max_tokens:
-        description: 'Maximum tokens for response'
+        description: "Maximum tokens for response"
         required: false
-        default: '4096'
+        default: "4096"
         type: string
       review_focus:
-        description: 'Review focus areas'
+        description: "Review focus areas"
         required: false
-        default: 'security,bugs,performance,quality'
+        default: "security,bugs,performance,quality"
         type: string
 
 # Configuration - set these as repository variables for easy updates
@@ -1184,6 +1224,7 @@ jobs:
 ```
 
 **Configuration Variables** (set in repository settings > Variables):
+
 - `AI_REVIEW_MODEL`: Default model (e.g., `claude-sonnet-4-20250514`)
 - `AI_REVIEW_MAX_TOKENS`: Maximum response tokens (e.g., `4096`)
 - `AI_REVIEW_DIFF_SIZE`: Maximum diff size to analyze (e.g., `50000`)
@@ -1199,9 +1240,9 @@ on:
   push:
     branches: [main, develop]
     paths:
-      - 'src/**'
-      - 'lib/**'
-      - 'app/**'
+      - "src/**"
+      - "lib/**"
+      - "app/**"
 
 jobs:
   update-context:
@@ -1246,7 +1287,7 @@ jobs:
 
 Create `scripts/mcp/project-memory-server.py`:
 
-```python
+````python
 #!/usr/bin/env python3
 """
 Project Memory MCP Server
@@ -1435,7 +1476,7 @@ async def main():
 if __name__ == "__main__":
     import asyncio
     asyncio.run(main())
-```
+````
 
 ### 7.2 MCP Server Configuration
 
@@ -1483,38 +1524,47 @@ For complex tasks, use multiple specialized agents.
 ## Orchestration Protocol
 
 ### Phase 1: Planning
+
 Use the Plan subagent to:
+
 1. Analyze the task requirements
 2. Break into subtasks
 3. Identify which specialists are needed
 
 ### Phase 2: Parallel Exploration
+
 Launch exploration agents in parallel to:
+
 - Map relevant codebase areas
 - Identify patterns and conventions
 - Gather necessary context
 
 ### Phase 3: Implementation
+
 For each implementation subtask:
+
 1. Implement in isolated context
 2. Pass to reviewer agent
 3. Address feedback
 4. Verify completion
 
 ### Phase 4: Integration
+
 1. Combine implemented pieces
 2. Run integration tests
 3. Verify end-to-end functionality
 
 ### Phase 5: Final Review
+
 Use reviewer agent for final pass:
+
 - Fresh perspective review
 - Security check
 - Performance review
 
 ## Agent Assignments
-
 ```
+
 Orchestrator (Main)
 ├── Planner Agent → Requirements analysis, task breakdown
 ├── Explorer Agent(s) → Context gathering (parallel)
@@ -1522,6 +1572,7 @@ Orchestrator (Main)
 ├── Reviewer Agent → Code review (sequential after each implementation)
 ├── Tester Agent → Test generation and verification
 └── Orchestrator → Integration and final assembly
+
 ```
 
 ## Rules
@@ -1550,23 +1601,29 @@ Implement independent components in parallel using subagents.
 ## Protocol
 
 ### 1. Dependency Analysis
+
 First, analyze which components can be implemented in parallel:
+
 - Components with no dependencies on each other → PARALLEL
 - Components that depend on others → SEQUENTIAL
 
 ### 2. Interface Definition
+
 Before parallel implementation:
+
 - Define interfaces between components
 - Establish data contracts
 - Document expected behaviors
 
 ### 3. Parallel Execution
-Launch implementation agents in parallel:
 
+Launch implementation agents in parallel:
 ```
+
 Component A ──┐
 Component B ──┼──► Integration
 Component C ──┘
+
 ```
 
 Each agent receives:
@@ -1590,20 +1647,25 @@ After parallel implementation:
 
 Track progress:
 ```
+
 ## Parallel Implementation Status
 
 ### Components
-| Component | Agent | Status | Notes |
-|-----------|-------|--------|-------|
-| A | impl-1 | ✓ Complete | |
-| B | impl-2 | 🔄 In Progress | |
-| C | impl-3 | ⏳ Pending | Blocked by B |
+
+| Component | Agent  | Status         | Notes        |
+| --------- | ------ | -------------- | ------------ |
+| A         | impl-1 | ✓ Complete     |              |
+| B         | impl-2 | 🔄 In Progress |              |
+| C         | impl-3 | ⏳ Pending     | Blocked by B |
 
 ### Integration
+
 [ ] Interfaces verified
 [ ] Components combined
 [ ] Integration tests pass
+
 ```
+
 ```
 
 ---
@@ -1620,29 +1682,36 @@ Create `docs/checklists/session-start.md`:
 ## Before Starting Work
 
 ### 1. Context Loading
+
 - [ ] Read CLAUDE.md completely
 - [ ] Check `docs/session-notes/` for recent handoffs
 - [ ] Review any open PRs or issues
 
 ### 2. Environment Verification
+
 - [ ] Run `npm install` (or equivalent)
 - [ ] Run `npm test` - baseline should pass
 - [ ] Run `npm run build` - should succeed
 
 ### 3. Goal Clarification
+
 - [ ] What is the primary objective?
 - [ ] What does "done" look like?
 - [ ] What are the constraints?
 
 ### 4. Context Statement
+
 Provide to Claude:
 ```
+
 Session context:
+
 - Continuing from: [previous session summary or "fresh start"]
 - Primary goal: [objective]
 - Constraints: [any limitations]
 - Time sensitivity: [urgent/normal/exploration]
 - Autonomy level: [proceed freely / check before X / ask for everything]
+
 ```
 
 ### 5. Tool Verification
@@ -1661,6 +1730,7 @@ Create `docs/checklists/task-complete.md`:
 ## Before Declaring a Task Complete
 
 ### Functionality
+
 - [ ] All specified requirements implemented
 - [ ] Code runs without errors
 - [ ] Happy path works end-to-end
@@ -1668,12 +1738,14 @@ Create `docs/checklists/task-complete.md`:
 - [ ] Edge cases considered
 
 ### Testing
+
 - [ ] Unit tests written for new code
 - [ ] Existing tests still pass
 - [ ] Integration tested if applicable
 - [ ] Manual testing performed
 
 ### Quality
+
 - [ ] Code follows project conventions
 - [ ] No linter errors
 - [ ] No TypeScript errors
@@ -1681,23 +1753,27 @@ Create `docs/checklists/task-complete.md`:
 - [ ] Comments for complex logic
 
 ### Documentation
+
 - [ ] README updated if needed
 - [ ] API docs updated if applicable
 - [ ] CLAUDE.md "Current State" updated
 - [ ] Complex decisions documented
 
 ### Integration
+
 - [ ] All imports resolve
 - [ ] Configuration updated
 - [ ] Environment variables documented
 - [ ] Dependencies added to package.json
 
 ### Verification
+
 - [ ] Ran `/verify` command
 - [ ] Two-pass rule: second pass found only cosmetic issues
 - [ ] Would I be confident merging this?
 
 ## Final Step
+
 - [ ] Commit with descriptive message
 - [ ] Update task tracking
 ```
@@ -1710,38 +1786,39 @@ Create `docs/templates/assumptions.md`:
 # Assumptions Document
 
 ## Feature/Task: [NAME]
+
 ## Date: [DATE]
 
 ## Explicit Assumptions
 
-| # | Assumption | Confidence | Impact if Wrong | Verified? |
-|---|------------|------------|-----------------|-----------|
-| 1 | | High/Med/Low | | [ ] |
-| 2 | | | | [ ] |
+| #   | Assumption | Confidence   | Impact if Wrong | Verified? |
+| --- | ---------- | ------------ | --------------- | --------- |
+| 1   |            | High/Med/Low |                 | [ ]       |
+| 2   |            |              |                 | [ ]       |
 
 ## Implicit Assumptions (surfaced)
 
-| # | Assumption | Why I Almost Missed It |
-|---|------------|----------------------|
-| 1 | | |
+| #   | Assumption | Why I Almost Missed It |
+| --- | ---------- | ---------------------- |
+| 1   |            |                        |
 
 ## Questions I Chose Not to Ask
 
 | Question | Why I Skipped It | Should I Have Asked? |
-|----------|-----------------|---------------------|
-| | | |
+| -------- | ---------------- | -------------------- |
+|          |                  |                      |
 
 ## Decision Points
 
 | Decision | Options Considered | Choice Made | Rationale |
-|----------|-------------------|-------------|-----------|
-| | | | |
+| -------- | ------------------ | ----------- | --------- |
+|          |                    |             |           |
 
 ## Risks Identified
 
 | Risk | Likelihood | Impact | Mitigation |
-|------|------------|--------|------------|
-| | | | |
+| ---- | ---------- | ------ | ---------- |
+|      |            |        |            |
 
 ## Review
 
@@ -1801,24 +1878,27 @@ claude  # Start Claude Code
 ## Maintenance
 
 ### Weekly
+
 - [ ] Review and clean `docs/session-notes/`
 - [ ] Update CLAUDE.md "Current State"
 - [ ] Check for new slash command needs
 
 ### Monthly
+
 - [ ] Audit MCP server memory
 - [ ] Review which commands are actually used
 - [ ] Update templates based on learnings
 
 ### Per Major Release
+
 - [ ] Full CLAUDE.md review and update
 - [ ] Architecture documentation refresh
 - [ ] Pattern library update
 
 ---
 
-*Last updated: December 2025*
-*Companion to: "Mitigating AI-Assisted Development Friction"*
+_Last updated: December 2025_
+_Companion to: "Mitigating AI-Assisted Development Friction"_
 
 ## Sources
 

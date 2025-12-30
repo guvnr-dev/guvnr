@@ -4,19 +4,20 @@ Choosing the right Claude model for different tasks maximizes quality while mini
 
 ## Quick Reference
 
-| Task Type | Recommended Model | Why |
-|-----------|------------------|-----|
-| Daily coding, bug fixes | **Sonnet 4.5** | Best balance of speed/quality |
-| Quick scaffolding, small fixes | **Haiku 4.5** | 3x faster, 90% of Sonnet quality |
-| Complex architecture, deep review | **Opus 4.5** | Catches subtle issues others miss |
-| High-volume batch processing | **Haiku 4.5** | 3x cost savings |
-| Final review before merge | **Opus 4.5** | Thorough analysis worth the cost |
+| Task Type                         | Recommended Model | Why                               |
+| --------------------------------- | ----------------- | --------------------------------- |
+| Daily coding, bug fixes           | **Sonnet 4.5**    | Best balance of speed/quality     |
+| Quick scaffolding, small fixes    | **Haiku 4.5**     | 3x faster, 90% of Sonnet quality  |
+| Complex architecture, deep review | **Opus 4.5**      | Catches subtle issues others miss |
+| High-volume batch processing      | **Haiku 4.5**     | 3x cost savings                   |
+| Final review before merge         | **Opus 4.5**      | Thorough analysis worth the cost  |
 
 ## Model Characteristics
 
 ### Haiku 4.5 — The Speed Demon
 
 **Best for:**
+
 - Quick iterations and rapid feedback
 - UI scaffolding and boilerplate generation
 - Simple bug fixes
@@ -24,12 +25,14 @@ Choosing the right Claude model for different tasks maximizes quality while mini
 - High-frequency, low-complexity tasks
 
 **Characteristics:**
+
 - Fastest response time (~2x faster than Sonnet)
 - 90% of Sonnet's coding capability
 - 3x more cost-effective than Sonnet
 - Ideal for multi-agent systems where speed matters
 
 **When to use in this framework:**
+
 - Running parallel exploration tasks
 - Quick `/plan` iterations
 - Simple validation checks
@@ -42,6 +45,7 @@ Choosing the right Claude model for different tasks maximizes quality while mini
 ### Sonnet 4.5 — The All-Rounder
 
 **Best for:**
+
 - Daily coding tasks
 - Writing and refactoring code
 - Bug fixes and debugging
@@ -50,6 +54,7 @@ Choosing the right Claude model for different tasks maximizes quality while mini
 - Managing state and connecting APIs
 
 **Characteristics:**
+
 - Best balance of intelligence, speed, and cost
 - "Best coding model in the world" per Anthropic
 - Reliable and consistent
@@ -57,6 +62,7 @@ Choosing the right Claude model for different tasks maximizes quality while mini
 - Doesn't freeze on complex contexts
 
 **When to use in this framework:**
+
 - Default for most `/plan` and `/verify` operations
 - Code generation and refactoring
 - Most subagent tasks (reviewer, tester)
@@ -69,6 +75,7 @@ Choosing the right Claude model for different tasks maximizes quality while mini
 ### Opus 4.5 — The Deep Thinker
 
 **Best for:**
+
 - Complex architectural decisions
 - Large-scale refactoring across many files
 - Final pre-merge reviews
@@ -77,6 +84,7 @@ Choosing the right Claude model for different tasks maximizes quality while mini
 - Enterprise R&D and research tasks
 
 **Characteristics:**
+
 - Highest capability, most thorough
 - Extended reasoning capability
 - SWE-bench Verified leader
@@ -84,6 +92,7 @@ Choosing the right Claude model for different tasks maximizes quality while mini
 - Slower but worth it for high-stakes work
 
 **When to use in this framework:**
+
 - `/security-review` on critical code
 - Final `/verify` before major releases
 - Complex `/refactor` operations
@@ -156,14 +165,14 @@ When defining subagents, specify model in the configuration:
 ```yaml
 # .claude/agents/explorer.md
 ---
-model: haiku  # Fast exploration
+model: haiku # Fast exploration
 ---
 ```
 
 ```yaml
 # .claude/agents/reviewer.md
 ---
-model: sonnet  # Balanced review
+model: sonnet # Balanced review
 ---
 ```
 
@@ -176,45 +185,49 @@ When spawning agents programmatically:
 Task({
   prompt: "Find all TypeScript files",
   subagent_type: "Explore",
-  model: "haiku"  // Fast and cheap
+  model: "haiku", // Fast and cheap
 });
 
 // For critical reviews
 Task({
   prompt: "Deep security analysis",
   subagent_type: "general-purpose",
-  model: "opus"  // Thorough analysis
+  model: "opus", // Thorough analysis
 });
 ```
 
 ## Decision Matrix
 
-| Factor | Haiku | Sonnet | Opus |
-|--------|-------|--------|------|
-| Speed | ⭐⭐⭐ | ⭐⭐ | ⭐ |
-| Cost | ⭐⭐⭐ | ⭐⭐ | ⭐ |
-| Code Quality | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ |
-| Complex Reasoning | ⭐ | ⭐⭐ | ⭐⭐⭐ |
-| Architecture | ⭐ | ⭐⭐ | ⭐⭐⭐ |
-| Security Analysis | ⭐ | ⭐⭐ | ⭐⭐⭐ |
+| Factor            | Haiku  | Sonnet | Opus   |
+| ----------------- | ------ | ------ | ------ |
+| Speed             | ⭐⭐⭐ | ⭐⭐   | ⭐     |
+| Cost              | ⭐⭐⭐ | ⭐⭐   | ⭐     |
+| Code Quality      | ⭐⭐   | ⭐⭐⭐ | ⭐⭐⭐ |
+| Complex Reasoning | ⭐     | ⭐⭐   | ⭐⭐⭐ |
+| Architecture      | ⭐     | ⭐⭐   | ⭐⭐⭐ |
+| Security Analysis | ⭐     | ⭐⭐   | ⭐⭐⭐ |
 
 ## Common Mistakes
 
 ### ❌ Using Opus for Everything
+
 - Expensive (5x Sonnet, 15x Haiku)
 - Slower responses
 - Not necessary for most tasks
 
 ### ❌ Using Haiku for Complex Architecture
+
 - May miss subtle issues
 - Insufficient for large-scale reasoning
 - Save time now, debug later
 
 ### ❌ Not Matching Model to Task
+
 - Wasted cost on simple tasks
 - Insufficient quality on complex tasks
 
 ### ✅ Right Approach
+
 - Default to Sonnet for most work
 - Use Haiku for speed/cost-sensitive tasks
 - Reserve Opus for final reviews and complex decisions

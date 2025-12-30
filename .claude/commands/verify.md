@@ -41,6 +41,7 @@ Adopt the persona of a skeptical validator. Assume nothing is complete until pro
 ### Falsification Attempt
 
 Before confirming completion, actively try to prove it's NOT complete:
+
 - What's missing?
 - What doesn't work?
 - What was forgotten?
@@ -51,18 +52,22 @@ Before confirming completion, actively try to prove it's NOT complete:
 ## Verification Report
 
 ### Claims Reviewed
-| Claim | Status | Evidence |
-|-------|--------|----------|
-| [claim] | ✓/✗/⚠️ | [proof] |
+
+| Claim   | Status | Evidence |
+| ------- | ------ | -------- |
+| [claim] | ✓/✗/⚠️ | [proof]  |
 
 ### Issues Found
+
 - 🔴 **Critical**: [must fix]
 - 🟡 **Warning**: [should fix]
 
 ### Remaining Work
+
 - [ ] [Task not complete]
 
 ### Verdict
+
 [ ] ✓ COMPLETE - All claims verified
 [ ] ⚠️ PARTIAL - Issues noted above
 [ ] ✗ INCOMPLETE - Significant work remains

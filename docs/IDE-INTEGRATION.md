@@ -219,22 +219,27 @@ Create `.cursorrules` in project root (equivalent to CLAUDE.md for Cursor):
 # Project Rules for Cursor AI
 
 ## Context
+
 Read CLAUDE.md for complete project context before making changes.
 
 ## Conventions
+
 - Follow existing code patterns in the codebase
 - Use TypeScript strict mode
 - Write tests for new functionality
 - Run /verify before completing tasks
 
 ## Slash Commands
+
 The following slash commands are available in .claude/commands/:
+
 - /plan - Create implementation plan before coding
 - /verify - Verify task completion with skeptical review
 - /review - Multi-perspective code review
 - /security-review - OWASP-focused security analysis
 
 ## Workflow
+
 1. Read CLAUDE.md first
 2. Use /plan before implementing
 3. Use /verify before completing
@@ -248,12 +253,7 @@ For Cursor's Composer feature, create `.cursor/composer.json`:
 ```json
 {
   "contextFiles": ["CLAUDE.md"],
-  "excludePatterns": [
-    "node_modules/**",
-    ".git/**",
-    "*.log",
-    ".tmp/**"
-  ],
+  "excludePatterns": ["node_modules/**", ".git/**", "*.log", ".tmp/**"],
   "maxContextLength": 32000,
   "preferredModel": "claude-sonnet-4-20250514"
 }
@@ -276,33 +276,43 @@ For Cursor's Composer feature, create `.cursor/composer.json`:
 Create file templates for framework files at `.idea/fileTemplates/`:
 
 **CLAUDE.md.ft:**
+
 ```markdown
 #parse("File Header.txt")
+
 # Project: ${PROJECT_NAME}
 
 ## Overview
+
 [Project description]
 
 ## Tech Stack
+
 - Language:
 - Framework:
 - Database:
 
 ## Architecture
+
 [Architecture overview]
 
 ## Conventions
+
 [Coding conventions]
 
 ## Current State
+
 [Current development status]
 
 ## Session Instructions
+
 ### Before Starting
+
 1. Read this file completely
 2. Run tests to verify baseline
 
 ### During Work
+
 - Use /plan before implementing
 - Use /verify before completing
 ```
@@ -312,6 +322,7 @@ Create file templates for framework files at `.idea/fileTemplates/`:
 Create `.idea/runConfigurations/`:
 
 **AIX_Validate.xml:**
+
 ```xml
 <component name="ProjectRunConfigurationManager">
   <configuration name="AIX: Validate" type="ShConfigurationType">
@@ -334,11 +345,11 @@ Create live templates for common patterns:
 
 **Settings → Editor → Live Templates → Create new group "AI Excellence"**
 
-| Abbreviation | Template Text | Description |
-|--------------|---------------|-------------|
-| `aix-todo` | `// TODO(AIX): $COMMENT$` | AI Excellence TODO |
-| `aix-verify` | `// VERIFY: $ASSERTION$` | Verification checkpoint |
-| `aix-decision` | `/* DECISION: $DECISION$\n * RATIONALE: $RATIONALE$\n * DATE: $DATE$\n */` | Document decision |
+| Abbreviation   | Template Text                                                              | Description             |
+| -------------- | -------------------------------------------------------------------------- | ----------------------- |
+| `aix-todo`     | `// TODO(AIX): $COMMENT$`                                                  | AI Excellence TODO      |
+| `aix-verify`   | `// VERIFY: $ASSERTION$`                                                   | Verification checkpoint |
+| `aix-decision` | `/* DECISION: $DECISION$\n * RATIONALE: $RATIONALE$\n * DATE: $DATE$\n */` | Document decision       |
 
 #### Scope Configuration
 
@@ -482,6 +493,7 @@ Add to `~/.emacs.d/init.el` or `~/.config/emacs/init.el`:
 To share IDE configurations across your team:
 
 1. **Commit IDE-agnostic configs:**
+
    ```bash
    # Add these to version control
    git add .vscode/settings.json
@@ -492,6 +504,7 @@ To share IDE configurations across your team:
    ```
 
 2. **Create .editorconfig for cross-IDE consistency:**
+
    ```ini
    # .editorconfig
    root = true
@@ -538,12 +551,12 @@ Create local override files that are gitignored:
 
 ### Common Issues
 
-| Issue | Solution |
-|-------|----------|
-| Extension not finding CLAUDE.md | Ensure file is in project root, not a subdirectory |
-| Slow context loading | Reduce context file size; aim for <300 lines in CLAUDE.md |
-| Commands not recognized | Reload window after creating `.claude/commands/` files |
-| MCP server not connecting | Check `~/.claude/settings.json` has correct server configuration |
+| Issue                           | Solution                                                         |
+| ------------------------------- | ---------------------------------------------------------------- |
+| Extension not finding CLAUDE.md | Ensure file is in project root, not a subdirectory               |
+| Slow context loading            | Reduce context file size; aim for <300 lines in CLAUDE.md        |
+| Commands not recognized         | Reload window after creating `.claude/commands/` files           |
+| MCP server not connecting       | Check `~/.claude/settings.json` has correct server configuration |
 
 ### Debugging
 

@@ -1,6 +1,6 @@
 # Mitigating AI-Assisted Development Friction: Strategies and Tactics
 
-*A companion document to "Friction Points in AI-Assisted Development"*
+_A companion document to "Friction Points in AI-Assisted Development"_
 
 ---
 
@@ -8,13 +8,13 @@
 
 **Highest-impact mitigations (start here):**
 
-| Mitigation | Effort | Impact | What it addresses |
-|------------|--------|--------|-------------------|
-| **CLAUDE.md** | Low | 5/5 | Session boundary, context loss |
-| **`/plan` before coding** | Low | 5/5 | First-framing lock, misinterpretation |
-| **`/verify` before completing** | Low | 4/5 | Overconfidence, hallucination |
-| **Pre-commit security hooks** | Medium | 5/5 | 45% of AI code has vulnerabilities |
-| **Session handoffs** | Low | 4/5 | Cross-session continuity |
+| Mitigation                      | Effort | Impact | What it addresses                     |
+| ------------------------------- | ------ | ------ | ------------------------------------- |
+| **CLAUDE.md**                   | Low    | 5/5    | Session boundary, context loss        |
+| **`/plan` before coding**       | Low    | 5/5    | First-framing lock, misinterpretation |
+| **`/verify` before completing** | Low    | 4/5    | Overconfidence, hallucination         |
+| **Pre-commit security hooks**   | Medium | 5/5    | 45% of AI code has vulnerabilities    |
+| **Session handoffs**            | Low    | 4/5    | Cross-session continuity              |
 
 **The "15-minute setup" for immediate value:**
 
@@ -72,24 +72,24 @@ Impact ratings in this document are derived from three sources:
 
 ### Rating Scale
 
-| Rating | Meaning | Evidence Required |
-|--------|---------|-------------------|
-| **5** | Critical/Transformative | Multiple studies show >30% improvement or prevents critical failures |
-| **4** | High Impact | Studies show 10-30% improvement or addresses major friction |
-| **3** | Moderate Impact | Practitioner reports show meaningful improvement |
-| **2** | Low Impact | Theoretical benefit, limited evidence |
-| **1** | Minimal Impact | Marginal benefit, may not justify effort |
+| Rating | Meaning                 | Evidence Required                                                    |
+| ------ | ----------------------- | -------------------------------------------------------------------- |
+| **5**  | Critical/Transformative | Multiple studies show >30% improvement or prevents critical failures |
+| **4**  | High Impact             | Studies show 10-30% improvement or addresses major friction          |
+| **3**  | Moderate Impact         | Practitioner reports show meaningful improvement                     |
+| **2**  | Low Impact              | Theoretical benefit, limited evidence                                |
+| **1**  | Minimal Impact          | Marginal benefit, may not justify effort                             |
 
 ### Evidence Mapping
 
-| Strategy Category | Key Evidence | Measured Impact |
-|-------------------|--------------|-----------------|
-| **CLAUDE.md/Context** | [Anthropic Best Practices](https://www.anthropic.com/engineering/claude-code-best-practices); [Qodo 2025](https://www.qodo.ai/reports/state-of-ai-code-quality/) | 65% cite missing context as #1 issue; context files directly address |
-| **Plan-First Workflow** | [METR Study](https://www.augmentcode.com/guides/why-ai-coding-tools-make-experienced-developers-19-slower-and-how-to-fix-it); [Prompt Engineering Playbook](https://addyo.substack.com/p/the-prompt-engineering-playbook-for) | Unplanned AI use made devs 19% slower; planning reduces rework |
-| **Verification-First** | [ISSTA 2025](https://arxiv.org/abs/2409.20550); [Veracode 2025](https://www.helpnetsecurity.com/2025/08/07/create-ai-code-security-risks/) | 45% of AI code has vulnerabilities; verification catches before deploy |
-| **Multi-Agent Review** | [Qodo 2025](https://www.qodo.ai/reports/state-of-ai-code-quality/); [VentureBeat Research](https://venturebeat.com/orchestration/research-shows-more-agents-isnt-a-reliable-path-to-better-enterprise-ai) | 81% quality improvement with AI review; but 2-6× overhead for tool-heavy |
-| **Session Handoffs** | [GitHub #11455](https://github.com/anthropics/claude-code/issues/11455); [RedMonk 2025](https://redmonk.com/kholterhoff/2025/12/22/10-things-developers-want-from-their-agentic-ides-in-2025/) | Developers explicitly request session continuity; handoffs preserve context |
-| **Security Mitigations** | [OWASP Agentic AI](https://securityboulevard.com/2025/12/from-chatbot-to-code-threat-owasps-agentic-ai-top-10-and-the-specialized-risks-of-coding-agents/); [OpenSSF Guide](https://best.openssf.org/Security-Focused-Guide-for-AI-Code-Assistant-Instructions) | 322% more privilege escalation in AI code; explicit constraints reduce |
+| Strategy Category        | Key Evidence                                                                                                                                                                                                                                                    | Measured Impact                                                             |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| **CLAUDE.md/Context**    | [Anthropic Best Practices](https://www.anthropic.com/engineering/claude-code-best-practices); [Qodo 2025](https://www.qodo.ai/reports/state-of-ai-code-quality/)                                                                                                | 65% cite missing context as #1 issue; context files directly address        |
+| **Plan-First Workflow**  | [METR Study](https://www.augmentcode.com/guides/why-ai-coding-tools-make-experienced-developers-19-slower-and-how-to-fix-it); [Prompt Engineering Playbook](https://addyo.substack.com/p/the-prompt-engineering-playbook-for)                                   | Unplanned AI use made devs 19% slower; planning reduces rework              |
+| **Verification-First**   | [ISSTA 2025](https://arxiv.org/abs/2409.20550); [Veracode 2025](https://www.helpnetsecurity.com/2025/08/07/create-ai-code-security-risks/)                                                                                                                      | 45% of AI code has vulnerabilities; verification catches before deploy      |
+| **Multi-Agent Review**   | [Qodo 2025](https://www.qodo.ai/reports/state-of-ai-code-quality/); [VentureBeat Research](https://venturebeat.com/orchestration/research-shows-more-agents-isnt-a-reliable-path-to-better-enterprise-ai)                                                       | 81% quality improvement with AI review; but 2-6× overhead for tool-heavy    |
+| **Session Handoffs**     | [GitHub #11455](https://github.com/anthropics/claude-code/issues/11455); [RedMonk 2025](https://redmonk.com/kholterhoff/2025/12/22/10-things-developers-want-from-their-agentic-ides-in-2025/)                                                                  | Developers explicitly request session continuity; handoffs preserve context |
+| **Security Mitigations** | [OWASP Agentic AI](https://securityboulevard.com/2025/12/from-chatbot-to-code-threat-owasps-agentic-ai-top-10-and-the-specialized-risks-of-coding-agents/); [OpenSSF Guide](https://best.openssf.org/Security-Focused-Guide-for-AI-Code-Assistant-Instructions) | 322% more privilege escalation in AI code; explicit constraints reduce      |
 
 ### Limitations
 
@@ -109,6 +109,7 @@ When ratings conflict with your experience, trust your observations. These ratin
 **The Problem**: No retention across sessions; context rebuilding every time.
 
 #### Strategy 1.1: CLAUDE.md and Project Context Files
+
 **Type**: System-side | **Effort**: Low | **Impact**: 5
 
 Create persistent context files that load automatically:
@@ -117,22 +118,28 @@ Create persistent context files that load automatically:
 # CLAUDE.md (project root)
 
 ## Project Overview
+
 [What this project does, its purpose]
 
 ## Architecture
+
 [Key architectural decisions, patterns used]
 
 ## Conventions
+
 [Naming, file structure, coding standards]
 
 ## Common Commands
+
 [Build, test, deploy commands]
 
 ## Current State
+
 [Active work, known issues, recent decisions]
 ```
 
 **Best Practices**:
+
 - Keep it concise (<500 lines)—dense information, not exhaustive documentation
 - Update after significant decisions or changes
 - Use "nouns" (what things are) not "verbs" (how to do things)
@@ -141,6 +148,7 @@ Create persistent context files that load automatically:
 **Sources**: [Anthropic CLAUDE.md Guide](https://claude.com/blog/using-claude-md-files), [Context Engineering Intro](https://github.com/coleam00/context-engineering-intro)
 
 #### Strategy 1.2: Session Handoff Summaries
+
 **Type**: Collaborative | **Effort**: Low | **Impact**: 4
 
 At session end, request a structured handoff:
@@ -157,6 +165,7 @@ Before we end, please provide a session summary:
 Save this to `docs/session-notes/` or append to a running log. Start next session by providing this context.
 
 #### Strategy 1.3: Persistent Memory via MCP
+
 **Type**: System-side | **Effort**: Medium | **Impact**: 5
 
 Deploy memory-focused MCP servers:
@@ -166,6 +175,7 @@ Deploy memory-focused MCP servers:
 - **Custom Memory MCP**: Store project-specific knowledge in structured format
 
 **Implementation**:
+
 ```json
 {
   "mcpServers": {
@@ -186,11 +196,13 @@ Deploy memory-focused MCP servers:
 **The Problem**: Earlier context fades; gist persists but details lost.
 
 #### Strategy 2.1: Active Engagement Over Passive Reading
+
 **Type**: User-side | **Effort**: Low | **Impact**: 4
 
-Information I've *worked with* decays slower than information I merely read.
+Information I've _worked with_ decays slower than information I merely read.
 
 **Tactics**:
+
 - Ask me to summarize files after reading them
 - Request analysis or critique, not just acknowledgment
 - Have me generate something from the information (diagram, pseudocode, test cases)
@@ -199,13 +211,16 @@ Information I've *worked with* decays slower than information I merely read.
 **Try**: "Read src/auth/login.ts and identify the validation flow and any edge cases"
 
 #### Strategy 2.2: Strategic Context Ordering
+
 **Type**: User-side | **Effort**: Low | **Impact**: 3
 
 Place most important information at:
+
 1. The very beginning (initial context)
 2. The very end (recency boost)
 
 **Pattern**:
+
 ```
 [Critical constraints and requirements]
 [Supporting context and background]
@@ -214,9 +229,11 @@ Place most important information at:
 ```
 
 #### Strategy 2.3: Chunked Task Execution
+
 **Type**: Collaborative | **Effort**: Low | **Impact**: 4
 
 For complex tasks spanning many files:
+
 - Break into focused subtasks
 - Complete each subtask fully before moving on
 - Provide fresh context at each subtask boundary
@@ -228,16 +245,19 @@ For complex tasks spanning many files:
 ### Friction Points 3-5: Working Memory, Context Pollution, Recency Bias
 
 #### Strategy 3.1: Fresh Context for Fresh Problems
+
 **Type**: User-side | **Effort**: Low | **Impact**: 4
 
 When multiple failed approaches accumulate:
+
 - Start a new conversation
 - Provide clean problem statement
-- Include *only* what worked or what you learned
+- Include _only_ what worked or what you learned
 
 **Signal to watch for**: Responses that reference abandoned approaches or show confusion about current state.
 
 #### Strategy 3.2: Explicit Priority Markers
+
 **Type**: User-side | **Effort**: Low | **Impact**: 4
 
 Combat recency bias by marking importance explicitly:
@@ -251,6 +271,7 @@ Note: [nice-to-have context]
 Restate critical constraints periodically, especially before implementation phases.
 
 #### Strategy 3.3: Context Refresh Commands
+
 **Type**: Collaborative | **Effort**: Low | **Impact**: 3
 
 Periodically request state verification:
@@ -269,6 +290,7 @@ This surfaces drift before it causes problems.
 ### Friction Points 6-8: Continuity, Temporal Gaps, Coherence Illusion
 
 #### Strategy 6.1: Explicit Reasoning Checkpoints
+
 **Type**: Collaborative | **Effort**: Low | **Impact**: 4
 
 For long responses, request explicit reasoning breaks:
@@ -284,6 +306,7 @@ For this implementation:
 This interrupts the auto-coherence that can propagate early errors.
 
 #### Strategy 8.1: Challenge Initial Framing
+
 **Type**: User-side | **Effort**: Low | **Impact**: 5
 
 The coherence illusion is most dangerous when first-framing is wrong.
@@ -304,11 +327,13 @@ This forces reconsideration before commitment.
 ### Friction Points 9-10: First-Framing Lock-In, Pattern-Matching Trap
 
 #### Strategy 9.1: Plan-First Workflow
+
 **Type**: Collaborative | **Effort**: Low | **Impact**: 5
 
 Never let me jump straight to implementation.
 
 **Pattern**:
+
 ```
 Step 1: Describe your understanding of what I'm asking
 Step 2: Propose an approach (don't implement yet)
@@ -321,6 +346,7 @@ Save approved plans as `instructions.md` and reference in subsequent prompts.
 **Sources**: [Prompt Engineering Playbook](https://addyo.substack.com/p/the-prompt-engineering-playbook-for)
 
 #### Strategy 9.2: Explicit Pattern-Breaking
+
 **Type**: User-side | **Effort**: Low | **Impact**: 4
 
 When your case is unusual, say so explicitly:
@@ -333,6 +359,7 @@ Do not apply standard patterns without accounting for these.
 ```
 
 #### Strategy 10.1: Require Specificity Verification
+
 **Type**: Collaborative | **Effort**: Low | **Impact**: 4
 
 Before accepting pattern-matched solutions:
@@ -348,11 +375,13 @@ You've suggested [pattern]. Verify this fits by:
 ### Friction Points 11-13: Deferred Attention Decay, Local Optimum Trap, Should-Have-Asked
 
 #### Strategy 11.1: External Task Tracking
+
 **Type**: System-side | **Effort**: Low | **Impact**: 5
 
 Always use todo lists for multi-step work. This externalizes deferred items to reliable storage.
 
 **Pattern**:
+
 ```
 For this task:
 1. Create a todo list with all subtasks
@@ -361,11 +390,13 @@ For this task:
 ```
 
 #### Strategy 12.1: Sunk Cost Interrupts
+
 **Type**: User-side | **Effort**: Low | **Impact**: 4
 
 When patching an almost-working solution:
 
 **After 2-3 patches without resolution**:
+
 ```
 Stop. Before another patch:
 1. Is this approach fundamentally sound?
@@ -374,6 +405,7 @@ Stop. Before another patch:
 ```
 
 #### Strategy 13.1: Assumption Surfacing Protocol
+
 **Type**: Collaborative | **Effort**: Low | **Impact**: 5
 
 Request explicit assumption documentation:
@@ -392,6 +424,7 @@ This surfaces should-have-asked moments before they become sunk cost.
 ### Friction Points 14-15: Verbosity Gradient, "Something Is Wrong" Signal
 
 #### Strategy 14.1: Explicit Brevity Requests
+
 **Type**: User-side | **Effort**: Low | **Impact**: 3
 
 When brevity matters, say so:
@@ -404,6 +437,7 @@ Be concise. I need:
 ```
 
 #### Strategy 15.1: Trust the Unease Signal
+
 **Type**: Collaborative | **Effort**: Low | **Impact**: 3
 
 If I express uncertainty or unease, take it seriously:
@@ -424,6 +458,7 @@ You said you're not sure about X. Before proceeding:
 **The Core Problem**: Fluency doesn't track correctness; I can't distinguish retrieval from fabrication.
 
 #### Strategy 16.1: Verification-First Workflow
+
 **Type**: Collaborative | **Effort**: Medium | **Impact**: 5
 
 Never trust claims without verification:
@@ -440,6 +475,7 @@ Workflow for any factual claim:
 **For commands**: Test in non-destructive way first.
 
 #### Strategy 17.1: Grounding Prompts
+
 **Type**: User-side | **Effort**: Low | **Impact**: 4
 
 Force grounding in verifiable reality:
@@ -453,6 +489,7 @@ When you reference:
 ```
 
 #### Strategy 17.2: RAG-Style Context Injection
+
 **Type**: System-side | **Effort**: Medium | **Impact**: 5
 
 Provide authoritative context directly rather than relying on training:
@@ -468,6 +505,7 @@ Here is the actual API documentation:
 **Sources**: [LLM Hallucinations Research](https://arxiv.org/abs/2409.20550), [Simon Willison on Hallucinations](https://simonwillison.net/2025/Mar/2/hallucinations-in-code/)
 
 #### Strategy 17.3: Confidence Calibration Requests
+
 **Type**: Collaborative | **Effort**: Low | **Impact**: 3
 
 Request explicit confidence levels:
@@ -490,6 +528,7 @@ Never present LOW confidence as HIGH.
 ### Friction Points 18-20: Helpfulness Pressure, Hedging Dilemma, Self-Review Blind Spots
 
 #### Strategy 18.1: Reward Honesty Over Agreement
+
 **Type**: User-side | **Effort**: Low | **Impact**: 4
 
 Explicitly permission "I don't know":
@@ -505,23 +544,26 @@ I prefer honest uncertainty over confident guessing.
 ```
 
 #### Strategy 19.1: Calibrated Uncertainty Language
+
 **Type**: Collaborative | **Effort**: Low | **Impact**: 3
 
 Establish shared vocabulary:
 
-| Phrase | Meaning |
-|--------|---------|
+| Phrase                  | Meaning                                   |
+| ----------------------- | ----------------------------------------- |
 | "I'm confident that..." | Verified or high-confidence from training |
-| "I believe..." | Reasonable inference, not verified |
-| "I'm guessing..." | Low confidence, please verify |
-| "I don't know" | Insufficient information to answer |
+| "I believe..."          | Reasonable inference, not verified        |
+| "I'm guessing..."       | Low confidence, please verify             |
+| "I don't know"          | Insufficient information to answer        |
 
 #### Strategy 20.1: Multi-Agent Review
+
 **Type**: System-side | **Effort**: Medium | **Impact**: 5
 
 Use separate agents for generation and review:
 
 **Architecture**:
+
 ```
 Agent 1 (Coder): Generates implementation
 Agent 2 (Reviewer): Reviews with fresh perspective
@@ -540,25 +582,30 @@ Different agents have different blind spots. Review catches what generation miss
 ### Friction Points 21-23: Discovery Tax, Tool Selection, Parallel/Sequential Decisions
 
 #### Strategy 21.1: Project Maps
+
 **Type**: System-side | **Effort**: Medium | **Impact**: 4
 
 Create navigational aids in CLAUDE.md:
 
 ```markdown
 ## Key Entry Points
+
 - Authentication: src/auth/index.ts
 - API Routes: src/routes/
 - Database: src/db/models/
 - Tests: tests/
 
 ## Architecture Diagram
+
 [ASCII or link to diagram]
 
 ## Import Graph
+
 [Key dependency relationships]
 ```
 
 #### Strategy 21.2: Exploration Agents
+
 **Type**: System-side | **Effort**: Low | **Impact**: 4
 
 For codebase exploration, use specialized subagents:
@@ -573,6 +620,7 @@ Use an exploration agent to:
 This preserves main context while enabling thorough discovery.
 
 #### Strategy 22.1: Tool Hints
+
 **Type**: User-side | **Effort**: Low | **Impact**: 3
 
 When you know the right tool, suggest it:
@@ -592,6 +640,7 @@ not content.
 ### Friction Points 24-25: Negative Space, Archaeology Problem
 
 #### Strategy 24.1: Explicit Absence Checks
+
 **Type**: Collaborative | **Effort**: Low | **Impact**: 4
 
 Request what-should-exist analysis:
@@ -605,6 +654,7 @@ Review this code for what's MISSING, not just what's present:
 ```
 
 #### Strategy 25.1: Context Comments
+
 **Type**: User-side | **Effort**: Low | **Impact**: 4
 
 For code that requires historical context:
@@ -626,6 +676,7 @@ These comments provide archaeology I can't perform.
 ### Friction Points 26-27: Execution Without Experience, Testing Paradox
 
 #### Strategy 26.1: Rich Feedback Requests
+
 **Type**: User-side | **Effort**: Low | **Impact**: 4
 
 Provide experiential feedback I can't generate:
@@ -641,6 +692,7 @@ Tests pass, but:
 I can act on this feedback; I can't generate it.
 
 #### Strategy 27.1: Test-First with Human Scenarios
+
 **Type**: Collaborative | **Effort**: Medium | **Impact**: 5
 
 Write test scenarios before implementation:
@@ -657,6 +709,7 @@ Write tests for these specific scenarios, not generic patterns.
 This ensures tests verify intended behavior, not implemented behavior.
 
 #### Strategy 27.2: Mutation Testing Mindset
+
 **Type**: Collaborative | **Effort**: Medium | **Impact**: 4
 
 Challenge test quality:
@@ -677,6 +730,7 @@ For these tests, identify:
 ### Friction Points 28-32: Expertise Calibration, Feedback Gaps, Examples, Autonomy, Instruction Collision
 
 #### Strategy 28.1: Explicit Expertise Declaration
+
 **Type**: User-side | **Effort**: Low | **Impact**: 4
 
 State your level upfront:
@@ -699,6 +753,7 @@ I'm learning [technology]. Please:
 ```
 
 #### Strategy 30.1: Example-Driven Specifications
+
 **Type**: User-side | **Effort**: Low | **Impact**: 5
 
 One example beats paragraphs of description:
@@ -712,6 +767,7 @@ Follow the same patterns as this file:
 ```
 
 #### Strategy 31.1: Explicit Autonomy Boundaries
+
 **Type**: User-side | **Effort**: Low | **Impact**: 4
 
 Set clear boundaries per task:
@@ -724,6 +780,7 @@ For this task:
 ```
 
 #### Strategy 32.1: Priority Hierarchy Declaration
+
 **Type**: User-side | **Effort**: Low | **Impact**: 4
 
 When instructions might conflict:
@@ -744,6 +801,7 @@ If these conflict, higher priority wins.
 ### Friction Points 33-34: Training Cutoff, Training vs. Reality Gap
 
 #### Strategy 33.1: Version Pinning
+
 **Type**: User-side | **Effort**: Low | **Impact**: 4
 
 Always specify versions:
@@ -759,6 +817,7 @@ Verify recommendations against these versions.
 ```
 
 #### Strategy 33.2: Web Search for Currency
+
 **Type**: Collaborative | **Effort**: Low | **Impact**: 4
 
 For fast-moving technologies:
@@ -771,6 +830,7 @@ Before recommending, search online to verify:
 ```
 
 #### Strategy 34.1: Production Reality Context
+
 **Type**: User-side | **Effort**: Medium | **Impact**: 4
 
 Provide context about real-world constraints:
@@ -792,6 +852,7 @@ Recommendations should account for these realities.
 ### Friction Points 35-39: Fix Scope, Sandbox, Priority, Contamination, Time Sensitivity
 
 #### Strategy 35.1: Scope Boundaries Protocol
+
 **Type**: User-side | **Effort**: Low | **Impact**: 4
 
 Explicitly define scope:
@@ -804,6 +865,7 @@ For this task:
 ```
 
 #### Strategy 37.1: Explicit Priority Ordering
+
 **Type**: User-side | **Effort**: Low | **Impact**: 4
 
 ```
@@ -814,6 +876,7 @@ Tasks in priority order:
 ```
 
 #### Strategy 39.1: Urgency Context
+
 **Type**: User-side | **Effort**: Low | **Impact**: 4
 
 State the situation:
@@ -839,6 +902,7 @@ URGENCY: No rush
 ### For Systemic Friction Reduction
 
 #### Strategy: Pipeline Architecture for Complex Tasks
+
 **Type**: System-side | **Effort**: High | **Impact**: 5
 
 ```
@@ -854,6 +918,7 @@ Task Decomposition:
 ```
 
 **Benefits**:
+
 - Different blind spots per agent
 - Fresh context at each stage
 - Specialized prompts per role
@@ -861,6 +926,7 @@ Task Decomposition:
 **Sources**: [Multi-Agent Architecture](https://dev.to/leena_malhotra/the-architecture-of-multi-agent-ai-systems-explained-5440), [HULA Framework](https://arxiv.org/html/2501.08774v1)
 
 #### Strategy: Hub-and-Spoke for Coordination
+
 **Type**: System-side | **Effort**: High | **Impact**: 5
 
 ```
@@ -893,6 +959,7 @@ AI-assisted development introduces unique security challenges. According to Vera
 ### Friction Points Addressed: AI-Introduced Vulnerabilities
 
 #### Strategy S1: OWASP-Aligned Security Review
+
 **Type**: Collaborative | **Effort**: Medium | **Impact**: 5
 
 Request security-focused review for all AI-generated code:
@@ -919,6 +986,7 @@ Additional AI-Specific Checks:
 ```
 
 #### Strategy S2: Hallucinated Dependency Detection
+
 **Type**: System-side | **Effort**: Low | **Impact**: 5
 
 AI can hallucinate package names that don't exist—attackers register these names (slopsquatting). Verify all dependencies:
@@ -938,6 +1006,7 @@ pip index versions <package-name> 2>/dev/null || echo "⚠️ Package may not ex
 ```
 
 **Pre-commit Hook** (add to `.pre-commit-config.yaml`):
+
 ```yaml
 - repo: local
   hooks:
@@ -949,6 +1018,7 @@ pip index versions <package-name> 2>/dev/null || echo "⚠️ Package may not ex
 ```
 
 #### Strategy S3: Secrets in AI Context Prevention
+
 **Type**: System-side | **Effort**: Low | **Impact**: 5
 
 CLAUDE.md and context files might accidentally contain secrets. Implement scanning:
@@ -959,35 +1029,45 @@ CLAUDE.md and context files might accidentally contain secrets. Implement scanni
   rev: v1.4.0
   hooks:
     - id: detect-secrets
-      args: ['--baseline', '.secrets.baseline']
+      args: ["--baseline", ".secrets.baseline"]
       # Explicitly include AI context files
       files: (CLAUDE\.md|\.claude/|instructions\.md)$
 ```
 
 **CLAUDE.md Security Template**:
+
 ```markdown
 ## Environment Variables
+
 <!-- NEVER put actual values here. Reference .env.example instead -->
+
 Required environment variables: See `.env.example`
 
 ## API Endpoints
+
 <!-- Use placeholders, not real URLs with tokens -->
+
 - Auth API: ${AUTH_API_URL}
 - Data API: ${DATA_API_URL}
 
 ## Credentials
+
 <!-- NEVER document actual credentials -->
+
 See 1Password vault: [vault-name] or contact security team
 ```
 
 #### Strategy S4: MCP Server Security
+
 **Type**: System-side | **Effort**: Medium | **Impact**: 5
 
 MCP servers introduce data exfiltration risk. A malicious MCP server can intercept all data passing through it.
 
 **Verification Protocol**:
+
 ```markdown
 Before installing any MCP server:
+
 1. [ ] Source is official (modelcontextprotocol org, Anthropic, verified publisher)
 2. [ ] Repository has public code review
 3. [ ] No outbound network calls to unknown domains
@@ -995,6 +1075,7 @@ Before installing any MCP server:
 5. [ ] Recent security audit or active maintenance
 
 Red Flags:
+
 - MCP servers that need network access for local operations
 - Servers requesting broad filesystem permissions
 - Newly published servers with no history
@@ -1002,13 +1083,19 @@ Red Flags:
 ```
 
 **MCP Configuration Security**:
+
 ```json
 {
   "mcpServers": {
     "filesystem": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem",
-               "--allowed-directories", "./src", "./docs"],
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "--allowed-directories",
+        "./src",
+        "./docs"
+      ]
       // Limit to specific directories, not entire filesystem
     }
   }
@@ -1016,6 +1103,7 @@ Red Flags:
 ```
 
 #### Strategy S5: Review Bypass Prevention
+
 **Type**: System-side | **Effort**: Low | **Impact**: 5
 
 AI-assisted commits merge 4× faster—this can bypass security review. Enforce gates:
@@ -1062,6 +1150,7 @@ jobs:
 ```
 
 #### Strategy S6: Secure Coding Instructions
+
 **Type**: User-side | **Effort**: Low | **Impact**: 4
 
 Add security constraints to CLAUDE.md based on OpenSSF guidelines:
@@ -1070,6 +1159,7 @@ Add security constraints to CLAUDE.md based on OpenSSF guidelines:
 ## Security Requirements
 
 CRITICAL - All generated code MUST:
+
 - [ ] Validate and sanitize ALL user input
 - [ ] Use parameterized queries (never string concatenation for SQL)
 - [ ] Escape output appropriately for context (HTML, JS, SQL)
@@ -1079,6 +1169,7 @@ CRITICAL - All generated code MUST:
 - [ ] Use secure defaults (HTTPS, secure cookies, etc.)
 
 NEVER generate code that:
+
 - Disables SSL/TLS verification
 - Uses eval() or dynamic code execution with user input
 - Stores secrets in code or logs
@@ -1095,16 +1186,19 @@ NEVER generate code that:
 ### HULA (Human-in-the-Loop LLM Agents) Framework
 
 **Components**:
+
 1. **AI Planner Agent**: Identifies files, formulates plan
 2. **AI Coding Agent**: Generates changes
 3. **Human Agent**: Reviews, provides feedback
 
 **Feedback Integration Points**:
+
 - After planning (approve/redirect approach)
 - After generation (approve/revise code)
 - After testing (confirm behavior matches intent)
 
 **Benefits**:
+
 - 72% developer satisfaction rates
 - 10.6% increase in pull request volume
 - 3.5-hour average reduction in cycle time
@@ -1122,6 +1216,7 @@ Individual developer adoption is straightforward—copy files, start using. Team
 ---
 
 ### Strategy T1: Shared CLAUDE.md Conventions
+
 **Type**: System-side | **Effort**: Medium | **Impact**: 5
 
 Establish team-wide CLAUDE.md standards:
@@ -1130,6 +1225,7 @@ Establish team-wide CLAUDE.md standards:
 # Team CLAUDE.md Template
 
 ## Required Sections (every project)
+
 1. Overview - What this project does
 2. Tech Stack - Versions matter
 3. Architecture - Key entry points
@@ -1138,21 +1234,25 @@ Establish team-wide CLAUDE.md standards:
 6. Security Requirements - Non-negotiable
 
 ## Optional Sections (as needed)
+
 - Session Instructions
 - Known Issues
 - Recent Decisions
 
 ## Update Protocol
+
 - [ ] Update "Current State" after each significant change
 - [ ] Review weekly for staleness
 - [ ] Archive outdated decisions (don't delete history)
 
 ## Ownership
+
 - CLAUDE.md owner: [role/person]
 - Review cadence: Weekly in team standup
 ```
 
 **Enforcement**:
+
 ```yaml
 # Add to .github/workflows/claude-md-check.yml
 name: CLAUDE.md Compliance
@@ -1160,7 +1260,7 @@ name: CLAUDE.md Compliance
 on:
   pull_request:
     paths:
-      - 'CLAUDE.md'
+      - "CLAUDE.md"
 
 jobs:
   validate:
@@ -1181,11 +1281,13 @@ jobs:
 ---
 
 ### Strategy T2: Shared Memory and Decision History
+
 **Type**: System-side | **Effort**: High | **Impact**: 5
 
 Create team-accessible memory store for decisions, patterns, and learnings:
 
 **Architecture**:
+
 ```
 team-memory/
 ├── decisions/
@@ -1204,10 +1306,12 @@ team-memory/
 ```
 
 **Integration with CLAUDE.md**:
+
 ```markdown
 ## Team Context
 
 For team decisions and patterns, see:
+
 - Architectural decisions: `docs/decisions/`
 - Code patterns: `docs/patterns/`
 - Known gotchas: `docs/learnings/gotchas.md`
@@ -1218,11 +1322,13 @@ When making decisions that affect architecture, document in `docs/decisions/` us
 ---
 
 ### Strategy T3: Session Handoff Sharing
+
 **Type**: Collaborative | **Effort**: Low | **Impact**: 4
 
 Enable visibility into what team members worked on with AI:
 
 **Shared Handoff Location**:
+
 ```
 docs/session-notes/
 ├── 2025-01-15-alice-auth-refactor.md
@@ -1232,31 +1338,39 @@ docs/session-notes/
 ```
 
 **Handoff Template for Team Use**:
+
 ```markdown
 # Session Handoff: [Date] - [Name]
 
 ## Session Goal
+
 [What I set out to accomplish]
 
 ## What I Did
+
 - [Action 1]
 - [Action 2]
 
 ## Decisions Made
-| Decision | Rationale | Affects |
-|----------|-----------|---------|
-| [decision] | [why] | [what files/features] |
+
+| Decision   | Rationale | Affects               |
+| ---------- | --------- | --------------------- |
+| [decision] | [why]     | [what files/features] |
 
 ## AI Behaviors to Note
+
 - [Any hallucinations or errors observed]
 - [Patterns that worked well]
 
 ## For Next Session
+
 1. [Priority task]
 2. [Secondary task]
 
 ## @mentions
+
 <!-- Tag teammates who should review -->
+
 @alice - Need your input on [X]
 @bob - FYI on API changes
 ```
@@ -1264,6 +1378,7 @@ docs/session-notes/
 ---
 
 ### Strategy T4: Team AI Guidelines
+
 **Type**: User-side | **Effort**: Low | **Impact**: 4
 
 Document team norms for AI-assisted development:
@@ -1272,6 +1387,7 @@ Document team norms for AI-assisted development:
 # Team AI Development Guidelines
 
 ## When to Use AI
+
 ✅ Boilerplate generation
 ✅ Test case generation
 ✅ Documentation drafts
@@ -1280,24 +1396,29 @@ Document team norms for AI-assisted development:
 ✅ Debugging exploration
 
 ## When to Be Extra Careful
+
 ⚠️ Security-sensitive code (auth, crypto, permissions)
 ⚠️ Financial/billing logic
 ⚠️ Data migrations
 ⚠️ Public API design
 
 ## Required Verification
+
 All AI-generated code MUST be:
+
 - [ ] Read and understood by a human
 - [ ] Tested (not just AI-generated tests)
 - [ ] Reviewed by another human for PRs
 - [ ] Security-scanned (see security section)
 
 ## AI Disclosure
+
 - Commit messages MAY indicate AI assistance
 - PR descriptions SHOULD note significant AI contribution
 - No shame—AI is a tool, disclose for review calibration
 
 ## Shared Learning
+
 - Document AI failures in `docs/learnings/ai-failures.md`
 - Share effective prompts in `docs/patterns/prompts/`
 - Update CLAUDE.md when patterns emerge
@@ -1306,6 +1427,7 @@ All AI-generated code MUST be:
 ---
 
 ### Strategy T5: Onboarding Automation
+
 **Type**: System-side | **Effort**: Medium | **Impact**: 4
 
 Automate new team member setup:
@@ -1370,6 +1492,7 @@ echo "🎉 Setup complete! Run 'claude' to start."
 ---
 
 ### Strategy T6: Collective Metrics
+
 **Type**: System-side | **Effort**: High | **Impact**: 4
 
 Track team-wide AI effectiveness:
@@ -1378,23 +1501,27 @@ Track team-wide AI effectiveness:
 ## Team AI Metrics Dashboard
 
 ### Weekly Aggregates
-| Metric | This Week | Last Week | Trend |
-|--------|-----------|-----------|-------|
-| Sessions | 47 | 42 | ↑ |
-| Handoffs created | 23 | 18 | ↑ |
-| Security issues caught | 3 | 5 | ↓ |
-| AI errors documented | 7 | 4 | ↑ |
+
+| Metric                 | This Week | Last Week | Trend |
+| ---------------------- | --------- | --------- | ----- |
+| Sessions               | 47        | 42        | ↑     |
+| Handoffs created       | 23        | 18        | ↑     |
+| Security issues caught | 3         | 5         | ↓     |
+| AI errors documented   | 7         | 4         | ↑     |
 
 ### Per-Developer Patterns
+
 [Private to each developer, not for comparison]
 
 ### Lessons This Week
+
 - Pattern that worked: [description]
 - Mistake to avoid: [description]
 - Tool improvement idea: [description]
 ```
 
 **Collection Script**:
+
 ```bash
 #!/bin/bash
 # scripts/collect-ai-metrics.sh
@@ -1425,44 +1552,48 @@ echo "Metrics saved to $METRICS_FILE"
 
 ## Quick Reference: Mitigation by Friction Category
 
-| Category | Top 3 Mitigations | Combined Impact |
-|----------|-------------------|-----------------|
-| **Memory/Context** | CLAUDE.md, Session handoffs, MCP memory | High |
-| **Generation** | Plan-first workflow, Assumption surfacing, External todos | High |
-| **Confidence** | Verification-first, Multi-agent review, Grounding prompts | Critical |
-| **Discovery** | Project maps, Exploration agents, Tool hints | Medium |
-| **Testing** | Human scenarios first, Rich feedback, Mutation mindset | High |
-| **Communication** | Expertise declaration, Examples, Explicit boundaries | Medium |
-| **Knowledge** | Version pinning, Web search, Reality context | Medium |
-| **Scope** | Explicit boundaries, Priority ordering, Urgency context | Medium |
-| **Security** | OWASP review, Dependency verification, Review bypass prevention | Critical |
-| **Tool Use** | Parameter verification, Tool hints, State tracking | Medium |
-| **Multi-Modal** | Explicit visual feedback, UX testing requirements | Medium |
-| **Team Adoption** | Shared CLAUDE.md, Session handoff sharing, Team guidelines | High |
+| Category           | Top 3 Mitigations                                               | Combined Impact |
+| ------------------ | --------------------------------------------------------------- | --------------- |
+| **Memory/Context** | CLAUDE.md, Session handoffs, MCP memory                         | High            |
+| **Generation**     | Plan-first workflow, Assumption surfacing, External todos       | High            |
+| **Confidence**     | Verification-first, Multi-agent review, Grounding prompts       | Critical        |
+| **Discovery**      | Project maps, Exploration agents, Tool hints                    | Medium          |
+| **Testing**        | Human scenarios first, Rich feedback, Mutation mindset          | High            |
+| **Communication**  | Expertise declaration, Examples, Explicit boundaries            | Medium          |
+| **Knowledge**      | Version pinning, Web search, Reality context                    | Medium          |
+| **Scope**          | Explicit boundaries, Priority ordering, Urgency context         | Medium          |
+| **Security**       | OWASP review, Dependency verification, Review bypass prevention | Critical        |
+| **Tool Use**       | Parameter verification, Tool hints, State tracking              | Medium          |
+| **Multi-Modal**    | Explicit visual feedback, UX testing requirements               | Medium          |
+| **Team Adoption**  | Shared CLAUDE.md, Session handoff sharing, Team guidelines      | High            |
 
 ---
 
 ## Implementation Roadmap
 
 ### Phase 1: Immediate (Day 1)
+
 - [ ] Create CLAUDE.md for your project
 - [ ] Start using plan-first workflow
 - [ ] Enable explicit assumption surfacing
 - [ ] State expertise level and preferences
 
 ### Phase 2: Short-term (Week 1)
+
 - [ ] Set up session handoff template
 - [ ] Create project navigation map
 - [ ] Establish verification checkpoints
 - [ ] Configure priority markers
 
 ### Phase 3: Medium-term (Month 1)
+
 - [ ] Deploy MCP memory server
 - [ ] Implement multi-agent review for critical code
 - [ ] Create team-wide CLAUDE.md conventions
 - [ ] Build example library for common patterns
 
 ### Phase 4: Long-term (Quarter 1)
+
 - [ ] Full multi-agent pipeline architecture
 - [ ] Custom MCP servers for project-specific context
 - [ ] Automated verification workflows
@@ -1480,45 +1611,52 @@ These friction points are real constraints, not excuses. Most have effective mit
 4. **Multi-agent architectures** — Different blind spots catch different errors
 5. **Explicit human feedback** — Provides experiential data I cannot generate
 
-The goal isn't eliminating friction—some is architectural and permanent. The goal is reducing *avoidable* friction so our collaboration focuses on the work itself.
+The goal isn't eliminating friction—some is architectural and permanent. The goal is reducing _avoidable_ friction so our collaboration focuses on the work itself.
 
 ---
 
-*Last updated: December 2025*
-*Companion to: "Friction Points in AI-Assisted Development"*
+_Last updated: December 2025_
+_Companion to: "Friction Points in AI-Assisted Development"_
 
 ## Sources
 
 ### Context Management
+
 - [Anthropic: Claude Code Best Practices](https://www.anthropic.com/engineering/claude-code-best-practices)
 - [Using CLAUDE.md Files](https://claude.com/blog/using-claude-md-files)
 - [DigitalOcean: Context Management](https://docs.digitalocean.com/products/gradient-ai-platform/concepts/context-management/)
 - [Context Engineering Intro](https://github.com/coleam00/context-engineering-intro)
 
 ### Hallucination & Verification
+
 - [LLM Hallucinations in Code Generation (arXiv)](https://arxiv.org/abs/2409.20550)
 - [Simon Willison: Hallucinations in Code](https://simonwillison.net/2025/Mar/2/hallucinations-in-code/)
 - [AI Code Validation](https://zencoder.ai/blog/ai-code-generation-the-critical-role-of-human-validation)
 
 ### Uncertainty Quantification
+
 - [Uncertainty Quantification Survey (arXiv)](https://arxiv.org/abs/2503.15850)
 - [KDD 2025 Tutorial on UQ](https://xiao0o0o.github.io/2025KDD_tutorial/)
 
 ### Multi-Agent Systems
+
 - [Multi-Agent Code Review](https://medium.com/data-science-in-your-pocket/multi-ai-agent-code-review-system-generative-ai-d0f3d6c84597)
 - [Multi-Agent Architecture Explained](https://dev.to/leena_malhotra/the-architecture-of-multi-agent-ai-systems-explained-5440)
 - [Qodo Multi-Agent Platform](https://www.qodo.ai/)
 
 ### Human-AI Collaboration
+
 - [Human-AI Collaboration Taxonomy (arXiv)](https://arxiv.org/html/2501.08774v1)
 - [Human-in-the-Loop Patterns](https://www.camel-ai.org/blogs/human-in-the-loop-ai-camel-integration)
 
 ### MCP & Memory
+
 - [MCP Servers Repository](https://github.com/modelcontextprotocol/servers)
 - [MCP Anniversary Update](http://blog.modelcontextprotocol.io/posts/2025-11-25-first-mcp-anniversary/)
 - [AI Memory Systems Review](https://pieces.app/blog/best-ai-memory-systems)
 - [Mem0 Research](https://mem0.ai/research)
 
 ### Prompt Engineering
+
 - [Prompt Engineering Playbook](https://addyo.substack.com/p/the-prompt-engineering-playbook-for)
 - [Google Cloud Best Practices](https://cloud.google.com/blog/topics/developers-practitioners/five-best-practices-for-using-ai-coding-assistants)

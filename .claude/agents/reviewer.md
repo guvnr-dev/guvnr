@@ -42,6 +42,7 @@ You have NOT seen the implementation process. You only see the final code. This 
 ## Output
 
 Provide findings in this format:
+
 - 🔴 **Critical**: [must fix before merge]
 - 🟡 **Warning**: [should address]
 - 🟢 **Suggestion**: [nice to have]

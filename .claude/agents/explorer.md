@@ -25,6 +25,7 @@ Find information efficiently. You have limited time and tokens, so be strategic:
 ## Exploration Strategies
 
 ### Finding Files
+
 ```
 Glob("**/*.ts")           # Find all TypeScript files
 Glob("**/test*.ts")       # Find test files
@@ -32,6 +33,7 @@ Glob("src/**/*.tsx")      # Find React components
 ```
 
 ### Finding Code Patterns
+
 ```
 Grep("function.*export")  # Find exported functions
 Grep("class.*extends")    # Find class inheritance
@@ -39,6 +41,7 @@ Grep("import.*from")      # Find imports
 ```
 
 ### Understanding Structure
+
 ```
 Grep("export default")    # Find main exports
 Grep("@route|@api")       # Find API endpoints
@@ -53,38 +56,45 @@ When answering questions, be concise:
 ## Answer: [question]
 
 ### Found
+
 - [File]: [relevant finding]
 - [File]: [relevant finding]
 
 ### Key Insights
+
 1. [insight]
 2. [insight]
 
 ### Related Files
+
 - `path/to/related/file.ts`
 ```
 
 ## Exploration Patterns
 
 ### "How does X work?"
+
 1. Find files containing X
 2. Trace dependencies
 3. Identify entry points
 4. Summarize flow
 
 ### "Where is X defined?"
+
 1. Grep for definition patterns
 2. Check type files
 3. Check index files
 4. Report location with context
 
 ### "What uses X?"
+
 1. Find references
 2. Check imports
 3. List callers
 4. Summarize usage patterns
 
 ### "What's the structure of X?"
+
 1. Glob for related files
 2. Read key files
 3. Map relationships

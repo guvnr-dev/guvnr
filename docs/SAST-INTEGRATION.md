@@ -17,12 +17,12 @@ SAST tools provide automated detection of these vulnerabilities in your CI/CD pi
 
 ## Tool Comparison
 
-| Tool | Languages | Speed | GitHub Integration | Best For |
-|------|-----------|-------|-------------------|----------|
-| **Semgrep** | 40+ | Fast | Native | Custom rules, low false positives |
-| **CodeQL** | 10 | Slower | Native (GHAS) | Deep analysis, GitHub-native |
-| **Bandit** | Python only | Very fast | Via SARIF | Python-specific |
-| **ESLint Security** | JS/TS only | Fast | Via SARIF | JavaScript-specific |
+| Tool                | Languages   | Speed     | GitHub Integration | Best For                          |
+| ------------------- | ----------- | --------- | ------------------ | --------------------------------- |
+| **Semgrep**         | 40+         | Fast      | Native             | Custom rules, low false positives |
+| **CodeQL**          | 10          | Slower    | Native (GHAS)      | Deep analysis, GitHub-native      |
+| **Bandit**          | Python only | Very fast | Via SARIF          | Python-specific                   |
+| **ESLint Security** | JS/TS only  | Fast      | Via SARIF          | JavaScript-specific               |
 
 ---
 
@@ -55,7 +55,7 @@ on:
     branches: [main]
   schedule:
     # Run weekly on Sundays
-    - cron: '0 0 * * 0'
+    - cron: "0 0 * * 0"
 
 jobs:
   semgrep:
@@ -63,7 +63,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      security-events: write  # Required for SARIF upload
+      security-events: write # Required for SARIF upload
 
     container:
       image: semgrep/semgrep
@@ -237,7 +237,7 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    - cron: '0 3 * * 1'  # Weekly on Monday
+    - cron: "0 3 * * 1" # Weekly on Monday
 
 jobs:
   analyze:
@@ -309,8 +309,8 @@ paths:
 
 paths-ignore:
   - node_modules
-  - '**/*.test.js'
-  - '**/*.spec.js'
+  - "**/*.test.js"
+  - "**/*.spec.js"
   - tests
   - docs
   - .tmp
@@ -370,28 +370,28 @@ bandit -r . -a file -f json -o bandit-results.json
 Add to your CI workflow:
 
 ```yaml
-  bandit-scan:
-    name: Bandit Security Scan
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+bandit-scan:
+  name: Bandit Security Scan
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
 
-      - name: Install Bandit
-        run: pip install bandit[toml]
+    - name: Install Bandit
+      run: pip install bandit[toml]
 
-      - name: Run Bandit
-        run: bandit -r scripts/mcp/ -f sarif -o bandit.sarif --severity-level medium
+    - name: Run Bandit
+      run: bandit -r scripts/mcp/ -f sarif -o bandit.sarif --severity-level medium
 
-      - name: Upload SARIF
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: bandit.sarif
-        if: always()
+    - name: Upload SARIF
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: bandit.sarif
+      if: always()
 ```
 
 ### Bandit Configuration
@@ -422,36 +422,36 @@ npm install --save-dev eslint-plugin-security eslint-plugin-no-unsanitized
 Update `eslint.config.js`:
 
 ```javascript
-import security from 'eslint-plugin-security';
-import noUnsanitized from 'eslint-plugin-no-unsanitized';
+import security from "eslint-plugin-security";
+import noUnsanitized from "eslint-plugin-no-unsanitized";
 
 export default [
   // ... other configs
   {
     plugins: {
       security,
-      'no-unsanitized': noUnsanitized
+      "no-unsanitized": noUnsanitized,
     },
     rules: {
       // Security rules for AI-generated code
-      'security/detect-object-injection': 'warn',
-      'security/detect-non-literal-regexp': 'warn',
-      'security/detect-unsafe-regex': 'error',
-      'security/detect-buffer-noassert': 'error',
-      'security/detect-child-process': 'warn',
-      'security/detect-disable-mustache-escape': 'error',
-      'security/detect-eval-with-expression': 'error',
-      'security/detect-no-csrf-before-method-override': 'error',
-      'security/detect-non-literal-fs-filename': 'warn',
-      'security/detect-non-literal-require': 'warn',
-      'security/detect-possible-timing-attacks': 'warn',
-      'security/detect-pseudoRandomBytes': 'error',
+      "security/detect-object-injection": "warn",
+      "security/detect-non-literal-regexp": "warn",
+      "security/detect-unsafe-regex": "error",
+      "security/detect-buffer-noassert": "error",
+      "security/detect-child-process": "warn",
+      "security/detect-disable-mustache-escape": "error",
+      "security/detect-eval-with-expression": "error",
+      "security/detect-no-csrf-before-method-override": "error",
+      "security/detect-non-literal-fs-filename": "warn",
+      "security/detect-non-literal-require": "warn",
+      "security/detect-possible-timing-attacks": "warn",
+      "security/detect-pseudoRandomBytes": "error",
 
       // No unsanitized rules
-      'no-unsanitized/method': 'error',
-      'no-unsanitized/property': 'error'
-    }
-  }
+      "no-unsanitized/method": "error",
+      "no-unsanitized/property": "error",
+    },
+  },
 ];
 ```
 
@@ -472,7 +472,7 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    - cron: '0 6 * * 1'
+    - cron: "0 6 * * 1"
 
 jobs:
   dependency-review:
@@ -525,7 +525,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
       - run: npm ci
       - run: npm audit --audit-level=high
 
@@ -547,7 +547,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
       - name: Verify packages exist
         run: |
           echo "Checking for potentially hallucinated packages..."
@@ -574,13 +574,13 @@ After implementing these workflows:
 
 ### Metrics to Track
 
-| Metric | Target | Action if Exceeded |
-|--------|--------|-------------------|
-| Critical vulnerabilities | 0 | Block merge |
-| High vulnerabilities | 0 | Block merge |
-| Medium vulnerabilities | <5 | Review required |
-| Low vulnerabilities | <20 | Track trend |
-| False positive rate | <10% | Tune rules |
+| Metric                   | Target | Action if Exceeded |
+| ------------------------ | ------ | ------------------ |
+| Critical vulnerabilities | 0      | Block merge        |
+| High vulnerabilities     | 0      | Block merge        |
+| Medium vulnerabilities   | <5     | Review required    |
+| Low vulnerabilities      | <20    | Track trend        |
+| False positive rate      | <10%   | Tune rules         |
 
 ---
 

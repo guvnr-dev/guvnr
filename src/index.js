@@ -62,7 +62,7 @@ export {
  * Framework version (semver)
  * @constant {string}
  */
-export const VERSION = '1.1.0';
+export const VERSION = '1.2.0';
 
 /**
  * Available presets for initialization
@@ -98,7 +98,14 @@ export const AGENTS = ['explorer', 'reviewer', 'tester'];
 export const DEFAULT_CONFIG = {
   version: VERSION,
   preset: 'standard',
-  commands: ['plan', 'verify', 'handoff', 'assumptions', 'review', 'security-review'],
+  commands: [
+    'plan',
+    'verify',
+    'handoff',
+    'assumptions',
+    'review',
+    'security-review'
+  ],
   agents: ['reviewer', 'explorer', 'tester'],
   hooks: true,
   mcp: false,
@@ -124,7 +131,14 @@ export const PRESET_CONFIGS = {
   },
   standard: {
     description: 'Recommended setup for individual developers',
-    commands: ['plan', 'verify', 'handoff', 'assumptions', 'review', 'security-review'],
+    commands: [
+      'plan',
+      'verify',
+      'handoff',
+      'assumptions',
+      'review',
+      'security-review'
+    ],
     agents: ['reviewer', 'explorer', 'tester'],
     hooks: true,
     mcp: false,
@@ -132,7 +146,16 @@ export const PRESET_CONFIGS = {
   },
   full: {
     description: 'Complete setup with MCP server and metrics',
-    commands: ['plan', 'verify', 'handoff', 'assumptions', 'review', 'security-review', 'refactor', 'test-coverage'],
+    commands: [
+      'plan',
+      'verify',
+      'handoff',
+      'assumptions',
+      'review',
+      'security-review',
+      'refactor',
+      'test-coverage'
+    ],
     agents: ['reviewer', 'explorer', 'tester'],
     hooks: true,
     mcp: true,
@@ -141,7 +164,16 @@ export const PRESET_CONFIGS = {
   },
   team: {
     description: 'Full setup with team collaboration features',
-    commands: ['plan', 'verify', 'handoff', 'assumptions', 'review', 'security-review', 'refactor', 'test-coverage'],
+    commands: [
+      'plan',
+      'verify',
+      'handoff',
+      'assumptions',
+      'review',
+      'security-review',
+      'refactor',
+      'test-coverage'
+    ],
     agents: ['reviewer', 'explorer', 'tester'],
     hooks: true,
     mcp: true,

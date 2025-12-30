@@ -5,6 +5,7 @@ This guide covers sharing project memory across team members using the MCP serve
 ## Overview
 
 Team Memory Federation enables:
+
 - Shared decisions and rationale across developers
 - Consistent pattern adoption team-wide
 - Context preservation during handoffs
@@ -75,11 +76,13 @@ export PROJECT_MEMORY_DB=/shared/team/project-memories/myproject.db
 ```
 
 **Requirements:**
+
 - Network file system (NFS, SMB, EFS)
 - SQLite WAL mode (enabled by default)
 - Appropriate file permissions
 
 **Limitations:**
+
 - All team members need network access
 - Latency on slow connections
 - No offline access
@@ -139,7 +142,7 @@ Enterprise setup with dedicated server.
 
 ```yaml
 # docker-compose.yml
-version: '3.8'
+version: "3.8"
 services:
   mcp-server:
     build: ./scripts/mcp
@@ -464,21 +467,25 @@ groups:
 ### From Local to Federated
 
 1. **Export existing memory:**
+
    ```bash
    python3 scripts/mcp/project-memory-server.py --export > local-memory.json
    ```
 
 2. **Configure federation:**
+
    ```bash
    export PROJECT_MEMORY_DB=/shared/team/memories/project.db
    ```
 
 3. **Import to shared location:**
+
    ```bash
    python3 scripts/mcp/project-memory-server.py --import local-memory.json
    ```
 
 4. **Verify migration:**
+
    ```bash
    python3 scripts/mcp/project-memory-server.py --health
    ```
@@ -492,11 +499,13 @@ groups:
 ### From SQLite to PostgreSQL
 
 1. **Export from SQLite:**
+
    ```bash
    python3 scripts/mcp/project-memory-server.py --export > sqlite-export.json
    ```
 
 2. **Set up PostgreSQL:**
+
    ```sql
    CREATE DATABASE mcp_memory;
    \c mcp_memory
@@ -523,14 +532,14 @@ groups:
 
 ## Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| Sync conflicts | Use `--merge` flag with conflict resolution |
-| Slow queries | Index frequently searched fields |
-| Connection pool exhausted | Increase `PROJECT_MEMORY_POOL_SIZE` |
-| Rate limited | Wait or increase `PROJECT_MEMORY_RATE_LIMIT` |
-| Database locked | Check for hung connections; restart server |
-| Import fails | Validate JSON format; check schema version |
+| Issue                     | Solution                                     |
+| ------------------------- | -------------------------------------------- |
+| Sync conflicts            | Use `--merge` flag with conflict resolution  |
+| Slow queries              | Index frequently searched fields             |
+| Connection pool exhausted | Increase `PROJECT_MEMORY_POOL_SIZE`          |
+| Rate limited              | Wait or increase `PROJECT_MEMORY_RATE_LIMIT` |
+| Database locked           | Check for hung connections; restart server   |
+| Import fails              | Validate JSON format; check schema version   |
 
 ---
 

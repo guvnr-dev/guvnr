@@ -3,7 +3,16 @@
   "version": "1.0.0",
   "preset": "team",
   "commands": {
-    "enabled": ["plan", "verify", "handoff", "assumptions", "review", "security-review", "refactor", "test-coverage"]
+    "enabled": [
+      "plan",
+      "verify",
+      "handoff",
+      "assumptions",
+      "review",
+      "security-review",
+      "refactor",
+      "test-coverage"
+    ]
   },
   "agents": {
     "enabled": ["reviewer", "explorer", "tester"]

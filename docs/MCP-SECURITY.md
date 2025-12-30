@@ -14,23 +14,23 @@ The Model Context Protocol (MCP) server provides persistent memory for AI-assist
 
 ### Potential Attack Vectors
 
-| Vector | Risk | Mitigation |
-|--------|------|------------|
-| **Prompt Injection** | AI manipulation to exfiltrate data | Input sanitization, output filtering |
-| **Data Exfiltration** | Sensitive project info leaked | Access controls, encryption |
-| **Denial of Service** | Resource exhaustion | Rate limiting, size limits |
-| **SQL Injection** | Database compromise | Parameterized queries (implemented) |
-| **Path Traversal** | Unauthorized file access | Path validation (implemented) |
-| **Privilege Escalation** | Unauthorized operations | Confirmation for destructive ops |
+| Vector                   | Risk                               | Mitigation                           |
+| ------------------------ | ---------------------------------- | ------------------------------------ |
+| **Prompt Injection**     | AI manipulation to exfiltrate data | Input sanitization, output filtering |
+| **Data Exfiltration**    | Sensitive project info leaked      | Access controls, encryption          |
+| **Denial of Service**    | Resource exhaustion                | Rate limiting, size limits           |
+| **SQL Injection**        | Database compromise                | Parameterized queries (implemented)  |
+| **Path Traversal**       | Unauthorized file access           | Path validation (implemented)        |
+| **Privilege Escalation** | Unauthorized operations            | Confirmation for destructive ops     |
 
 ### Data Sensitivity Levels
 
-| Data Type | Sensitivity | Protection |
-|-----------|-------------|------------|
-| Decisions | Medium | Stored plaintext, sanitized input |
-| Patterns | Low-Medium | Code examples may contain secrets |
-| Context | Variable | Key-value pairs, user-controlled |
-| Exports | High | Contains all data, encrypt at rest |
+| Data Type | Sensitivity | Protection                         |
+| --------- | ----------- | ---------------------------------- |
+| Decisions | Medium      | Stored plaintext, sanitized input  |
+| Patterns  | Low-Medium  | Code examples may contain secrets  |
+| Context   | Variable    | Key-value pairs, user-controlled   |
+| Exports   | High        | Contains all data, encrypt at rest |
 
 ---
 
@@ -82,12 +82,12 @@ rate_limiter = RateLimiter(max_ops=RATE_LIMIT, window_seconds=60)
 
 Configurable limits prevent resource exhaustion:
 
-| Resource | Default Limit | Environment Variable |
-|----------|--------------|---------------------|
-| Decisions | 1000 | `PROJECT_MEMORY_MAX_DECISIONS` |
-| Patterns | 100 | `PROJECT_MEMORY_MAX_PATTERNS` |
-| Context Keys | 50 | `PROJECT_MEMORY_MAX_CONTEXT_KEYS` |
-| String Length | 10000 chars | (hardcoded) |
+| Resource      | Default Limit | Environment Variable              |
+| ------------- | ------------- | --------------------------------- |
+| Decisions     | 1000          | `PROJECT_MEMORY_MAX_DECISIONS`    |
+| Patterns      | 100           | `PROJECT_MEMORY_MAX_PATTERNS`     |
+| Context Keys  | 50            | `PROJECT_MEMORY_MAX_CONTEXT_KEYS` |
+| String Length | 10000 chars   | (hardcoded)                       |
 
 ### 5. Destructive Operation Confirmation
 
@@ -168,6 +168,7 @@ export PROJECT_MEMORY_AUDIT_LOG=/var/log/mcp-audit.log
 #### Monitor for Anomalies
 
 Watch for:
+
 - Unusual rate of operations
 - Large data exports
 - Failed authentication attempts
@@ -198,6 +199,7 @@ Watch for:
 ### Code Review for Stored Content
 
 Before storing, verify:
+
 - [ ] No API keys or secrets in decision text
 - [ ] No passwords in pattern examples
 - [ ] No PII in context values
@@ -209,16 +211,17 @@ Before storing, verify:
 
 ### MCP Protocol-Level Issues (June 2025 Research)
 
-| Issue | Status | Mitigation |
-|-------|--------|------------|
-| Tool Combining Exfiltration | Mitigated | Single-tool server design |
-| Lookalike Tools | Not Applicable | Self-contained server |
-| Over-Permissioning | Mitigated | Minimal permission set |
-| Prompt Injection | Partially Mitigated | Input sanitization |
+| Issue                       | Status              | Mitigation                |
+| --------------------------- | ------------------- | ------------------------- |
+| Tool Combining Exfiltration | Mitigated           | Single-tool server design |
+| Lookalike Tools             | Not Applicable      | Self-contained server     |
+| Over-Permissioning          | Mitigated           | Minimal permission set    |
+| Prompt Injection            | Partially Mitigated | Input sanitization        |
 
 ### Recommended Additional Protections
 
 1. **Content Scanning**: Integrate with secrets detection
+
    ```bash
    # Scan exports for secrets before sharing
    detect-secrets scan export.json
@@ -238,6 +241,7 @@ Before storing, verify:
 ### If Secrets Are Accidentally Stored
 
 1. **Immediately** purge affected data:
+
    ```
    Tool: purge_memory
    Arguments: {"confirm": "CONFIRM_PURGE"}
@@ -259,18 +263,59 @@ Before storing, verify:
 
 ---
 
+## OWASP LLM Top 10 (2025) Alignment
+
+The AI Excellence Framework addresses key risks from the [OWASP Top 10 for LLM Applications 2025](https://genai.owasp.org/llm-top-10/):
+
+| OWASP LLM Risk                                  | Framework Mitigation                                           |
+| ----------------------------------------------- | -------------------------------------------------------------- |
+| **LLM01: Prompt Injection**                     | Input sanitization, output validation, security review command |
+| **LLM02: Sensitive Information Disclosure**     | Pre-commit secrets detection, audit logging, sanitized storage |
+| **LLM03: Supply Chain Vulnerabilities**         | `verify-deps.sh` prevents slopsquatting, dependency scanning   |
+| **LLM04: Data/Model Poisoning**                 | N/A (framework doesn't train models)                           |
+| **LLM05: Improper Output Handling**             | `/verify` command, validation hooks, security review checklist |
+| **LLM06: Excessive Agency**                     | Confirmation for destructive operations, rate limiting         |
+| **LLM07: System Prompt Leakage**                | N/A (no system prompts in MCP server)                          |
+| **LLM08: Vector and Embedding Vulnerabilities** | N/A (no RAG/embedding storage)                                 |
+| **LLM09: Misinformation**                       | Research citations verification, `/verify` skepticism protocol |
+| **LLM10: Unbounded Consumption**                | Rate limiting, size limits, resource monitoring                |
+
+### New for 2025: Agentic AI Security
+
+As 2025 emerges as the "year of LLM agents," the framework includes specific mitigations:
+
+1. **Excessive Agency Controls**
+   - MCP server requires explicit confirmation for destructive operations
+   - Rate limiting prevents runaway operations
+   - Audit logging tracks all agent actions
+
+2. **Agent Permission Boundaries**
+   - MCP server has minimal permissions (read/write to SQLite only)
+   - No file system access beyond database
+   - No network access beyond MCP protocol
+
+3. **Multi-Agent Considerations**
+   - Connection pooling supports multiple concurrent agents
+   - Thread-safe operations prevent race conditions
+   - Clear audit trail for forensics
+
+---
+
 ## References
 
 - [Anthropic MCP Security](https://www.anthropic.com/news/model-context-protocol)
+- [OWASP Top 10 for LLM Applications 2025](https://genai.owasp.org/llm-top-10/)
 - [OWASP Injection Prevention](https://owasp.org/www-community/Injection_Prevention_Cheat_Sheet)
 - [SQLite Security](https://sqlite.org/security.html)
 - [MCP Authorization Specification (June 2025)](https://modelcontextprotocol.io/)
+- [OWASP Agentic AI Top 10](https://securityboulevard.com/2025/12/from-chatbot-to-code-threat-owasps-agentic-ai-top-10-and-the-specialized-risks-of-coding-agents/)
 
 ---
 
 ## Version History
 
-| Version | Date | Changes |
-|---------|------|---------|
-| 1.1.0 | 2024-12-30 | Added connection pooling, rate limiting |
-| 1.0.0 | 2024-12-29 | Initial security documentation |
+| Version | Date       | Changes                                                    |
+| ------- | ---------- | ---------------------------------------------------------- |
+| 1.2.0   | 2024-12-30 | Added OWASP LLM Top 10 2025 alignment, agentic AI security |
+| 1.1.0   | 2024-12-30 | Added connection pooling, rate limiting                    |
+| 1.0.0   | 2024-12-29 | Initial security documentation                             |

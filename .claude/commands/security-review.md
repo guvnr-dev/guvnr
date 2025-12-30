@@ -13,6 +13,7 @@ Perform a security-focused review of code, checking against OWASP Top 10 and AI-
 ### 1. Injection Vulnerabilities (OWASP A03:2021)
 
 Check for:
+
 - [ ] SQL injection (parameterized queries used?)
 - [ ] Command injection (shell escaping proper?)
 - [ ] XSS (output encoding correct?)
@@ -24,6 +25,7 @@ Check for:
 ### 2. Authentication & Session (OWASP A07:2021)
 
 Check for:
+
 - [ ] Hardcoded credentials or secrets
 - [ ] Weak password policies
 - [ ] Session token exposure
@@ -33,6 +35,7 @@ Check for:
 ### 3. Sensitive Data Exposure (OWASP A02:2021)
 
 Check for:
+
 - [ ] Secrets in code or logs
 - [ ] PII logged inappropriately
 - [ ] Sensitive data in error messages
@@ -42,8 +45,9 @@ Check for:
 ### 4. Access Control (OWASP A01:2021)
 
 Check for:
+
 - [ ] Missing authorization checks
-- [ ] Privilege escalation paths (322% more common in AI code)
+- [ ] Privilege escalation paths (322% increase per Apiiro Fortune 50 study)
 - [ ] Insecure direct object references
 - [ ] CORS misconfiguration
 - [ ] Missing function-level access control
@@ -51,6 +55,7 @@ Check for:
 ### 5. Security Misconfiguration (OWASP A05:2021)
 
 Check for:
+
 - [ ] Debug mode enabled in production
 - [ ] Default credentials
 - [ ] Unnecessary features enabled
@@ -60,6 +65,7 @@ Check for:
 ### 6. AI-Specific Vulnerabilities
 
 Check for:
+
 - [ ] Log injection (88% of AI code vulnerable - CWE-117)
 - [ ] Hallucinated package names (verify dependencies exist)
 - [ ] Over-permissive configurations
@@ -69,6 +75,7 @@ Check for:
 ### 7. Cryptographic Failures (OWASP A02:2021)
 
 Check for:
+
 - [ ] Weak algorithms (MD5, SHA1 for passwords)
 - [ ] Hardcoded keys or IVs
 - [ ] Insufficient key lengths
@@ -78,6 +85,7 @@ Check for:
 ### 8. Vulnerable Dependencies
 
 Check for:
+
 - [ ] Known CVEs in dependencies
 - [ ] Outdated packages with security fixes
 - [ ] Hallucinated package names (slopsquatting risk)
@@ -89,33 +97,40 @@ Check for:
 ## Security Review: [target]
 
 ### Summary
+
 [One sentence assessment]
 
 ### Findings
 
 #### 🔴 Critical (must fix before merge)
+
 - [Finding]: [description]
   - **Location**: [file:line]
   - **Risk**: [what could go wrong]
   - **Fix**: [how to remediate]
 
 #### 🟡 Warning (should address)
+
 - [Finding]: [description]
   - **Location**: [file:line]
   - **Risk**: [what could go wrong]
   - **Fix**: [how to remediate]
 
 #### 🟢 Note (consider)
+
 - [Finding]: [description]
 
 ### Passed Checks
+
 - [x] [Check that passed]
 
 ### Recommendations
+
 1. [Priority recommendation]
 2. [Secondary recommendation]
 
 ### Verdict
+
 [ ] ✅ SECURE - No critical issues found
 [ ] ⚠️ NEEDS WORK - Issues require attention before deploy
 [ ] 🚫 INSECURE - Critical vulnerabilities present
@@ -124,6 +139,7 @@ Check for:
 ## Additional Actions
 
 If this code handles:
+
 - **Authentication**: Run extra checks on password handling, session management
 - **Payments**: Verify PCI-DSS relevant controls
 - **User Data**: Check GDPR/privacy implications

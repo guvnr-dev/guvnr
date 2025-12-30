@@ -3,7 +3,14 @@
   "version": "1.0.0",
   "preset": "standard",
   "commands": {
-    "enabled": ["plan", "verify", "handoff", "assumptions", "review", "security-review"]
+    "enabled": [
+      "plan",
+      "verify",
+      "handoff",
+      "assumptions",
+      "review",
+      "security-review"
+    ]
   },
   "agents": {
     "enabled": ["reviewer", "explorer"]

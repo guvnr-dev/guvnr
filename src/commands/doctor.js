@@ -19,7 +19,7 @@ const DIAGNOSTICS = [
     name: 'Node.js version',
     category: 'environment',
     check: async () => {
-      const {version} = process;
+      const { version } = process;
       const major = parseInt(version.slice(1).split('.')[0], 10);
       return {
         passed: major >= 18,
@@ -191,12 +191,16 @@ const DIAGNOSTICS = [
       }
 
       const stats = statSync(claudeMdPath);
-      const daysSinceModified = (Date.now() - stats.mtime) / (1000 * 60 * 60 * 24);
+      const daysSinceModified =
+        (Date.now() - stats.mtime) / (1000 * 60 * 60 * 24);
 
       return {
         passed: daysSinceModified < 7,
         value: `${Math.floor(daysSinceModified)} days old`,
-        hint: daysSinceModified >= 7 ? 'Consider updating Current State section' : undefined
+        hint:
+          daysSinceModified >= 7
+            ? 'Consider updating Current State section'
+            : undefined
       };
     }
   },
@@ -263,7 +267,9 @@ export async function doctorCommand(options) {
     .filter(r => r.result.passed).length;
   const total = DIAGNOSTICS.length;
 
-  console.log(chalk.white(`\n  Summary: ${totalPassed}/${total} checks passed\n`));
+  console.log(
+    chalk.white(`\n  Summary: ${totalPassed}/${total} checks passed\n`)
+  );
 
   if (totalPassed === total) {
     console.log(chalk.green('  ✓ All systems operational!\n'));
@@ -285,7 +291,9 @@ function printDiagnosticResults(results, verbose) {
 
   for (const category of categories) {
     const items = results[category.key];
-    if (items.length === 0) {continue;}
+    if (items.length === 0) {
+      continue;
+    }
 
     console.log(chalk.white(`  ${category.name}:`));
 

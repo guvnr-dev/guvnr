@@ -4,7 +4,13 @@
  * Validates the framework configuration and setup with auto-fix capabilities.
  */
 
-import { existsSync, readFileSync, writeFileSync, mkdirSync, appendFileSync } from 'fs';
+import {
+  existsSync,
+  readFileSync,
+  writeFileSync,
+  mkdirSync,
+  appendFileSync
+} from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import chalk from 'chalk';
@@ -94,17 +100,24 @@ Initial setup
     category: 'core',
     check: cwd => {
       const path = join(cwd, 'CLAUDE.md');
-      if (!existsSync(path)) {return false;}
+      if (!existsSync(path)) {
+        return false;
+      }
       const content = readFileSync(path, 'utf-8');
       return /## Overview/i.test(content);
     },
     fix: async cwd => {
       const path = join(cwd, 'CLAUDE.md');
-      if (!existsSync(path)) {return false;}
+      if (!existsSync(path)) {
+        return false;
+      }
       let content = readFileSync(path, 'utf-8');
       if (!/## Overview/i.test(content)) {
         // Find the first heading and insert after it
-        content = content.replace(/^(# .+\n)/m, '$1\n## Overview\n\n[Brief description of what this project does]\n\n');
+        content = content.replace(
+          /^(# .+\n)/m,
+          '$1\n## Overview\n\n[Brief description of what this project does]\n\n'
+        );
         writeFileSync(path, content);
       }
       return true;
@@ -117,20 +130,28 @@ Initial setup
     category: 'core',
     check: cwd => {
       const path = join(cwd, 'CLAUDE.md');
-      if (!existsSync(path)) {return false;}
+      if (!existsSync(path)) {
+        return false;
+      }
       const content = readFileSync(path, 'utf-8');
       return /## Tech Stack/i.test(content);
     },
     fix: async cwd => {
       const path = join(cwd, 'CLAUDE.md');
-      if (!existsSync(path)) {return false;}
+      if (!existsSync(path)) {
+        return false;
+      }
       let content = readFileSync(path, 'utf-8');
       if (!/## Tech Stack/i.test(content)) {
         // Find Overview section and insert after it
         if (/## Overview/i.test(content)) {
-          content = content.replace(/(## Overview[\s\S]*?)(\n## |\n$)/m, '$1\n\n## Tech Stack\n\n- Language: [specify]\n- Framework: [specify]\n\n$2');
+          content = content.replace(
+            /(## Overview[\s\S]*?)(\n## |\n$)/m,
+            '$1\n\n## Tech Stack\n\n- Language: [specify]\n- Framework: [specify]\n\n$2'
+          );
         } else {
-          content += '\n\n## Tech Stack\n\n- Language: [specify]\n- Framework: [specify]\n';
+          content +=
+            '\n\n## Tech Stack\n\n- Language: [specify]\n- Framework: [specify]\n';
         }
         writeFileSync(path, content);
       }
@@ -144,16 +165,21 @@ Initial setup
     category: 'core',
     check: cwd => {
       const path = join(cwd, 'CLAUDE.md');
-      if (!existsSync(path)) {return false;}
+      if (!existsSync(path)) {
+        return false;
+      }
       const content = readFileSync(path, 'utf-8');
       return /## Current State/i.test(content);
     },
     fix: async cwd => {
       const path = join(cwd, 'CLAUDE.md');
-      if (!existsSync(path)) {return false;}
+      if (!existsSync(path)) {
+        return false;
+      }
       let content = readFileSync(path, 'utf-8');
       if (!/## Current State/i.test(content)) {
-        content += '\n\n## Current State\n\n### Phase\nIn development\n\n### Recent Decisions\n- [Add decisions here]\n';
+        content +=
+          '\n\n## Current State\n\n### Phase\nIn development\n\n### Recent Decisions\n- [Add decisions here]\n';
         writeFileSync(path, content);
       }
       return true;
@@ -281,13 +307,17 @@ Thumbs.db
     category: 'security',
     check: cwd => {
       const path = join(cwd, '.gitignore');
-      if (!existsSync(path)) {return false;}
+      if (!existsSync(path)) {
+        return false;
+      }
       const content = readFileSync(path, 'utf-8');
       return content.includes('.tmp/') || content.includes('.tmp');
     },
     fix: async cwd => {
       const path = join(cwd, '.gitignore');
-      if (!existsSync(path)) {return false;}
+      if (!existsSync(path)) {
+        return false;
+      }
       appendFileSync(path, '\n# AI Excellence Framework temp files\n.tmp/\n');
       return true;
     },
@@ -299,13 +329,17 @@ Thumbs.db
     category: 'security',
     check: cwd => {
       const path = join(cwd, '.gitignore');
-      if (!existsSync(path)) {return false;}
+      if (!existsSync(path)) {
+        return false;
+      }
       const content = readFileSync(path, 'utf-8');
       return content.includes('.secrets.baseline');
     },
     fix: async cwd => {
       const path = join(cwd, '.gitignore');
-      if (!existsSync(path)) {return false;}
+      if (!existsSync(path)) {
+        return false;
+      }
       appendFileSync(path, '\n.secrets.baseline\n');
       return true;
     },
@@ -341,7 +375,9 @@ Thumbs.db
     category: 'security',
     check: cwd => {
       const path = join(cwd, 'CLAUDE.md');
-      if (!existsSync(path)) {return true;}
+      if (!existsSync(path)) {
+        return true;
+      }
       const content = readFileSync(path, 'utf-8');
       const patterns = [
         /password\s*[:=]\s*["'][^"']{8,}["']/i,
@@ -459,7 +495,11 @@ function printValidationResults(results, autoFix) {
   const passedCount = results.passed.length;
 
   // Summary
-  console.log(chalk.white(`  Validation Results: ${passedCount}/${total} checks passed\n`));
+  console.log(
+    chalk.white(
+      `  Validation Results: ${passedCount}/${total} checks passed\n`
+    )
+  );
 
   // Fixed (if any)
   if (results.fixed.length > 0) {
@@ -522,15 +562,29 @@ function printValidationResults(results, autoFix) {
   if (results.errors.length === 0 && results.warnings.length === 0) {
     console.log(chalk.green('  ✓ All critical checks passed!\n'));
   } else if (results.errors.length === 0) {
-    console.log(chalk.yellow('  ⚠ Framework is functional but has warnings to address.\n'));
+    console.log(
+      chalk.yellow(
+        '  ⚠ Framework is functional but has warnings to address.\n'
+      )
+    );
     if (!autoFix) {
-      console.log(chalk.gray('  Run "npx ai-excellence validate --fix" to auto-fix issues.\n'));
+      console.log(
+        chalk.gray(
+          '  Run "npx ai-excellence validate --fix" to auto-fix issues.\n'
+        )
+      );
     }
   } else {
     console.log(chalk.red('  ✗ Framework has errors that need to be fixed.\n'));
     if (!autoFix) {
-      console.log(chalk.gray('  Run "npx ai-excellence validate --fix" to auto-fix issues.\n'));
-      console.log(chalk.gray('  Or run "npx ai-excellence init" to reinitialize.\n'));
+      console.log(
+        chalk.gray(
+          '  Run "npx ai-excellence validate --fix" to auto-fix issues.\n'
+        )
+      );
+      console.log(
+        chalk.gray('  Or run "npx ai-excellence init" to reinitialize.\n')
+      );
     }
   }
 }

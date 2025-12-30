@@ -36,17 +36,27 @@ const program = new Command();
 
 program
   .name('ai-excellence')
-  .description('AI Excellence Framework - Reduce friction in AI-assisted development')
+  .description(
+    'AI Excellence Framework - Reduce friction in AI-assisted development'
+  )
   .version(packageJson.version);
 
 // Init command
 program
   .command('init')
   .description('Initialize the AI Excellence Framework in your project')
-  .option('-p, --preset <preset>', 'Preset configuration (minimal, standard, full, team)', 'standard')
+  .option(
+    '-p, --preset <preset>',
+    'Preset configuration (minimal, standard, full, team)',
+    'standard'
+  )
   .option('-f, --force', 'Overwrite existing files', false)
   .option('-y, --yes', 'Skip interactive prompts, use defaults', false)
-  .option('--dry-run', 'Show what would be created without making changes', false)
+  .option(
+    '--dry-run',
+    'Show what would be created without making changes',
+    false
+  )
   .option('--no-hooks', 'Skip pre-commit hooks installation')
   .option('--no-mcp', 'Skip MCP server setup')
   .action(initCommand);

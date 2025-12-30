@@ -27,6 +27,7 @@ export default defineConfig({
         text: 'Guides',
         items: [
           { text: 'Quick Reference', link: '/QUICK-REFERENCE' },
+          { text: 'When AI Helps', link: '/WHEN-AI-HELPS' },
           { text: 'IDE Integration', link: '/IDE-INTEGRATION' },
           { text: 'Security Scanning', link: '/SAST-INTEGRATION' },
           { text: 'Metrics Dashboard', link: '/METRICS-VISUALIZATION' },
@@ -36,7 +37,7 @@ export default defineConfig({
         ]
       },
       {
-        text: 'v1.1.0',
+        text: 'v1.2.0',
         items: [
           { text: 'Changelog', link: '/changelog' },
           { text: 'Research Citations', link: '/RESEARCH-CITATIONS' },
@@ -127,6 +128,7 @@ export default defineConfig({
           text: 'Guides',
           items: [
             { text: 'Quick Reference', link: '/QUICK-REFERENCE' },
+            { text: 'When AI Helps', link: '/WHEN-AI-HELPS' },
             { text: 'IDE Integration', link: '/IDE-INTEGRATION' },
             { text: 'SAST Integration', link: '/SAST-INTEGRATION' },
             { text: 'Metrics Dashboard', link: '/METRICS-VISUALIZATION' },

@@ -1,6 +1,6 @@
 # AI-Assisted Development Excellence: Strategic Action Plan
 
-*Synthesizing friction analysis, mitigation strategies, and implementation blueprints into actionable next steps*
+_Synthesizing friction analysis, mitigation strategies, and implementation blueprints into actionable next steps_
 
 ---
 
@@ -8,17 +8,18 @@
 
 We've created a comprehensive system for improving AI-assisted development:
 
-| Asset | Purpose | Status |
-|-------|---------|--------|
-| `ai-development-friction.md` | Problem definition (59 friction points, 17 tensions) | ✓ Complete |
-| `ai-friction-mitigations.md` | Strategy library (40+ mitigations with evidence) | ✓ Complete |
-| `ai-friction-implementation.md` | Implementation blueprints | ✓ Complete |
-| Slash commands | /plan, /verify, /handoff, /assumptions, /review, /security-review | ✓ Complete |
-| MCP Server | Production-quality SQLite-backed memory | ✓ Complete |
-| Pre-commit config | Security scanning + quality checks | ✓ Complete |
-| Metrics collection | Baseline and ongoing measurement | ✓ Complete |
+| Asset                           | Purpose                                                           | Status     |
+| ------------------------------- | ----------------------------------------------------------------- | ---------- |
+| `ai-development-friction.md`    | Problem definition (59 friction points, 17 tensions)              | ✓ Complete |
+| `ai-friction-mitigations.md`    | Strategy library (40+ mitigations with evidence)                  | ✓ Complete |
+| `ai-friction-implementation.md` | Implementation blueprints                                         | ✓ Complete |
+| Slash commands                  | /plan, /verify, /handoff, /assumptions, /review, /security-review | ✓ Complete |
+| MCP Server                      | Production-quality SQLite-backed memory                           | ✓ Complete |
+| Pre-commit config               | Security scanning + quality checks                                | ✓ Complete |
+| Metrics collection              | Baseline and ongoing measurement                                  | ✓ Complete |
 
 **The Opportunity**: This work is uniquely valuable because it combines:
+
 1. First-person AI perspective on operational constraints (rare)
 2. Research-backed mitigation strategies (evidence-based)
 3. Concrete, copy-paste implementations (actionable)
@@ -71,55 +72,65 @@ Distribution Layer (Future)
 ## Highest-Value Proposals
 
 ### Proposal 1: Deploy & Validate (Highest Priority)
+
 **Impact**: 5/5 | **Effort**: Low | **Risk**: Low
 
 Deploy the minimum viable implementation in an active project to validate effectiveness before broader investment.
 
 **Why Highest Priority**:
+
 - Theory without practice is untested
 - Real usage reveals gaps in blueprints
 - Builds confidence for larger investments
 - Generates concrete metrics
 
 ### Proposal 2: Package as Installable Framework
+
 **Impact**: 5/5 | **Effort**: Medium | **Risk**: Low
 
 Create a CLI tool or npm package that bootstraps projects with the full excellence framework.
 
 **Why High Value**:
+
 - Reduces adoption friction from hours to minutes
 - Enables team-wide standardization
 - Creates foundation for distribution
 - Makes iteration systematic
 
 ### Proposal 3: Build Production MCP Server
+
 **Impact**: 4/5 | **Effort**: Medium | **Risk**: Medium
 
 Implement the project memory MCP server with robust storage, search, and team sharing capabilities.
 
 **Why High Value**:
+
 - Addresses the #1 friction point (session boundary)
 - Enables true cross-session continuity
 - Differentiates from basic CLAUDE.md approach
 - Provides measurable retention improvement
 
 ### Proposal 4: Create Measurement System
+
 **Impact**: 4/5 | **Effort**: Low | **Risk**: Low
 
 Build lightweight metrics to track friction reduction and validate improvements.
 
 **Why High Value**:
+
 - Evidence-based iteration
 - Demonstrates ROI
 - Identifies what actually works vs. theoretical
 - Enables before/after comparisons
 
 ### Proposal 5: Open Source Release
+
 **Impact**: 5/5 | **Effort**: Medium | **Risk**: Low
 
 Package and release as open source project for community adoption.
 
 **Why High Value**:
+
 - Broader impact
 - Community contributions and improvements
 - Establishes thought leadership
@@ -130,37 +141,44 @@ Package and release as open source project for community adoption.
 ## Recommended Action Plan
 
 ### Phase 1: Validate (Week 1)
+
 **Goal**: Prove the framework works in practice
 
 #### 1.1 Deploy Minimum Viable Framework
+
 ```bash
 # In an active project:
 mkdir -p .claude/commands .claude/agents docs/session-notes scripts/hooks
 ```
 
 **Deliverables**:
+
 - [ ] CLAUDE.md configured for real project
 - [ ] Core slash commands deployed (`/plan`, `/verify`, `/handoff`)
 - [ ] Pre-commit hooks active
 - [ ] Session handoff workflow tested
 
 #### 1.2 Establish Baseline Metrics
+
 Track for one week of normal development:
 
-| Metric | How to Measure | Target |
-|--------|----------------|--------|
-| Context rebuild time | Time from session start to productive work | Baseline → -50% |
-| Verification catches | Issues caught by `/verify` before commit | Track count |
-| Session continuity | Handoff quality (subjective 1-5) | Track score |
-| First-framing accuracy | Plans accepted without major revision | Track % |
+| Metric                 | How to Measure                             | Target          |
+| ---------------------- | ------------------------------------------ | --------------- |
+| Context rebuild time   | Time from session start to productive work | Baseline → -50% |
+| Verification catches   | Issues caught by `/verify` before commit   | Track count     |
+| Session continuity     | Handoff quality (subjective 1-5)           | Track score     |
+| First-framing accuracy | Plans accepted without major revision      | Track %         |
 
 #### 1.3 Daily Retrospective
+
 End each day with brief notes:
+
 - What worked well?
 - What friction remained?
 - What's missing from the framework?
 
 **Phase 1 Success Criteria**:
+
 - [ ] Framework deployed in real project
 - [ ] Baseline metrics collected
 - [ ] At least 5 sessions using the framework
@@ -169,29 +187,37 @@ End each day with brief notes:
 ---
 
 ### Phase 2: Refine (Week 2)
+
 **Goal**: Address gaps discovered in Phase 1
 
 #### 2.1 Gap Analysis
+
 Review Phase 1 findings:
+
 - Which commands were actually used?
 - Which were awkward or unused?
 - What workflows emerged organically?
 - What's still friction-heavy?
 
 #### 2.2 Iterate on Implementations
+
 Based on findings:
+
 - [ ] Revise slash commands that didn't work
 - [ ] Add commands for workflows that emerged
 - [ ] Simplify over-engineered pieces
 - [ ] Remove unused components
 
 #### 2.3 Refine Documentation
+
 Update the three core documents:
+
 - [ ] Add learnings to friction document
 - [ ] Update mitigation effectiveness ratings
 - [ ] Revise implementation blueprints
 
 **Phase 2 Success Criteria**:
+
 - [ ] All three documents updated with learnings
 - [ ] Framework refined based on real usage
 - [ ] Metrics show improvement over baseline
@@ -200,9 +226,11 @@ Update the three core documents:
 ---
 
 ### Phase 3: Package (Week 3-4)
+
 **Goal**: Create installable, distributable framework
 
 #### 3.1 Create Bootstrap CLI
+
 Build a simple CLI that sets up the framework:
 
 ```bash
@@ -214,6 +242,7 @@ npx degit username/ai-excellence-template .claude
 ```
 
 **CLI Features**:
+
 - Initialize directory structure
 - Copy slash commands and agents
 - Configure hooks
@@ -221,6 +250,7 @@ npx degit username/ai-excellence-template .claude
 - Set up pre-commit
 
 #### 3.2 Package Structure
+
 ```
 ai-excellence-framework/
 ├── bin/
@@ -242,23 +272,25 @@ ai-excellence-framework/
 ```
 
 #### 3.3 Configuration Options
+
 Support customization:
 
 ```json
 // ai-excellence.config.json
 {
-  "language": "typescript",  // Adjusts hooks and linting
-  "commands": ["plan", "verify", "handoff"],  // Which to install
+  "language": "typescript", // Adjusts hooks and linting
+  "commands": ["plan", "verify", "handoff"], // Which to install
   "agents": ["reviewer", "explorer"],
   "hooks": {
     "pre-commit": true,
     "post-edit": true
   },
-  "ci": "github-actions"  // or "gitlab", "none"
+  "ci": "github-actions" // or "gitlab", "none"
 }
 ```
 
 **Phase 3 Success Criteria**:
+
 - [ ] CLI tool functional
 - [ ] Can bootstrap new project in <2 minutes
 - [ ] Works on macOS, Linux, (Windows optional)
@@ -267,12 +299,15 @@ Support customization:
 ---
 
 ### Phase 4: Extend (Week 5-6)
+
 **Goal**: Build advanced capabilities
 
 #### 4.1 Production MCP Server
+
 Upgrade the blueprint MCP server to production-ready:
 
 **Features**:
+
 - SQLite or PostgreSQL storage (not JSON files)
 - Vector embeddings for semantic search
 - Team sharing via cloud sync
@@ -280,6 +315,7 @@ Upgrade the blueprint MCP server to production-ready:
 - Web dashboard for browsing memory
 
 **Architecture**:
+
 ```
 ┌─────────────────────────────────────────────┐
 │              MCP Server                      │
@@ -299,6 +335,7 @@ Upgrade the blueprint MCP server to production-ready:
 ```
 
 #### 4.2 Metrics Dashboard
+
 Build simple dashboard for tracking:
 
 ```
@@ -317,13 +354,16 @@ Build simple dashboard for tracking:
 ```
 
 #### 4.3 Team Features
+
 Enable team adoption:
+
 - Shared CLAUDE.md conventions
 - Team memory sync
 - Onboarding automation
 - Code review integration
 
 **Phase 4 Success Criteria**:
+
 - [ ] MCP server deployed and stable
 - [ ] Metrics tracking operational
 - [ ] At least one team feature working
@@ -332,9 +372,11 @@ Enable team adoption:
 ---
 
 ### Phase 5: Release (Week 7-8)
+
 **Goal**: Open source and community adoption
 
 #### 5.1 Repository Setup
+
 ```
 github.com/[username]/ai-excellence-framework
 
@@ -350,6 +392,7 @@ github.com/[username]/ai-excellence-framework
 ```
 
 #### 5.2 Launch Content
+
 - [ ] README with clear value proposition
 - [ ] "Why This Exists" section (link friction doc)
 - [ ] Quick start (60 seconds to value)
@@ -357,12 +400,14 @@ github.com/[username]/ai-excellence-framework
 - [ ] Demo video or GIF showing workflow
 
 #### 5.3 Distribution
+
 - [ ] npm package published
 - [ ] GitHub template repository
 - [ ] Announcement post (blog, social, relevant communities)
 - [ ] Submit to awesome-claude-code lists
 
 **Phase 5 Success Criteria**:
+
 - [ ] Public repository live
 - [ ] Package published to npm
 - [ ] Documentation site live
@@ -375,12 +420,15 @@ github.com/[username]/ai-excellence-framework
 These require no additional development:
 
 ### 1. Deploy CLAUDE.md Template
+
 Copy the template from `ai-friction-implementation.md` to an active project. Immediate value.
 
 ### 2. Create `/plan` and `/verify` Commands
+
 Copy the two highest-impact slash commands. Start using them today.
 
 ### 3. Enable Pre-commit Hooks
+
 ```bash
 pip install pre-commit
 # Copy .pre-commit-config.yaml
@@ -388,9 +436,11 @@ pre-commit install
 ```
 
 ### 4. Start Session Handoffs
+
 At end of each session, manually create handoff note in `docs/session-notes/`. Build the habit before automation.
 
 ### 5. Share Friction Document
+
 The `ai-development-friction.md` document is valuable standalone. Consider sharing it—it helps anyone working with AI assistants understand the constraints.
 
 ---
@@ -398,21 +448,25 @@ The `ai-development-friction.md` document is valuable standalone. Consider shari
 ## Resource Requirements
 
 ### Phase 1-2 (Validate & Refine)
+
 - **Time**: 2 weeks part-time
 - **Dependencies**: Active project to test with
 - **Tools**: Just Claude Code
 
 ### Phase 3 (Package)
+
 - **Time**: 2 weeks
 - **Skills**: Node.js CLI development (or shell scripting)
 - **Dependencies**: Phase 1-2 learnings
 
 ### Phase 4 (Extend)
+
 - **Time**: 2 weeks
 - **Skills**: Python (MCP server), basic web (dashboard)
 - **Dependencies**: Phase 3 package as foundation
 
 ### Phase 5 (Release)
+
 - **Time**: 1-2 weeks
 - **Skills**: Documentation, community engagement
 - **Dependencies**: All previous phases
@@ -424,33 +478,36 @@ The `ai-development-friction.md` document is valuable standalone. Consider shari
 
 ## Risk Assessment
 
-| Risk | Likelihood | Impact | Mitigation |
-|------|------------|--------|------------|
-| Framework too complex for adoption | Medium | High | Phase 1 validation, simplify ruthlessly |
-| CLAUDE.md/commands become stale | Medium | Medium | Automation, habits, team accountability |
-| MCP server reliability issues | Medium | Medium | Start simple, add complexity gradually |
-| Limited community interest | Low | Low | Value exists for personal use regardless |
-| Claude Code changes break implementations | Medium | Medium | Abstract where possible, maintain actively |
+| Risk                                      | Likelihood | Impact | Mitigation                                 |
+| ----------------------------------------- | ---------- | ------ | ------------------------------------------ |
+| Framework too complex for adoption        | Medium     | High   | Phase 1 validation, simplify ruthlessly    |
+| CLAUDE.md/commands become stale           | Medium     | Medium | Automation, habits, team accountability    |
+| MCP server reliability issues             | Medium     | Medium | Start simple, add complexity gradually     |
+| Limited community interest                | Low        | Low    | Value exists for personal use regardless   |
+| Claude Code changes break implementations | Medium     | Medium | Abstract where possible, maintain actively |
 
 ---
 
 ## Success Metrics
 
 ### Quantitative
-| Metric | Baseline | Target | Measurement |
-|--------|----------|--------|-------------|
-| Session startup time | [measure] | -50% | Time to first productive action |
-| Verification catch rate | 0% | >80% | Issues caught by `/verify` |
-| Cross-session context retention | ~10% | >60% | Information preserved via memory |
-| First-framing accuracy | [measure] | >80% | Plans accepted without major revision |
+
+| Metric                          | Baseline  | Target | Measurement                           |
+| ------------------------------- | --------- | ------ | ------------------------------------- |
+| Session startup time            | [measure] | -50%   | Time to first productive action       |
+| Verification catch rate         | 0%        | >80%   | Issues caught by `/verify`            |
+| Cross-session context retention | ~10%      | >60%   | Information preserved via memory      |
+| First-framing accuracy          | [measure] | >80%   | Plans accepted without major revision |
 
 ### Qualitative
+
 - Reduced frustration from context rebuilding
 - Higher confidence in AI-generated code
 - Better collaboration flow
 - Less rework from misunderstandings
 
 ### Adoption (if released)
+
 - GitHub stars
 - npm downloads
 - Community contributions
@@ -461,16 +518,19 @@ The `ai-development-friction.md` document is valuable standalone. Consider shari
 ## Decision Points
 
 ### After Phase 1
+
 - **Continue?** Did validation show meaningful improvement?
 - **Pivot?** Which components need major rework?
 - **Scope?** Full framework or focus on highest-impact pieces only?
 
 ### After Phase 3
+
 - **Release?** Is package quality sufficient for public release?
 - **Extend?** Is MCP server worth the investment?
 - **Team?** Should this be team-focused or individual-focused?
 
 ### After Phase 5
+
 - **Maintain?** Commit to ongoing maintenance?
 - **Community?** Actively build community or passive sharing?
 - **Commercial?** Any commercial potential worth exploring?
@@ -480,6 +540,7 @@ The `ai-development-friction.md` document is valuable standalone. Consider shari
 ## Recommended Immediate Actions
 
 ### This Week
+
 1. **Deploy MVP** in one active project (2 hours)
    - CLAUDE.md + `/plan` + `/verify` + `/handoff`
 
@@ -490,6 +551,7 @@ The `ai-development-friction.md` document is valuable standalone. Consider shari
    - What worked, what didn't
 
 ### Next Week
+
 4. **Review and iterate** based on Week 1 (2 hours)
    - Update implementations
    - Document learnings
@@ -497,6 +559,7 @@ The `ai-development-friction.md` document is valuable standalone. Consider shari
 5. **Decision**: Continue to Phase 3 or iterate more?
 
 ### If Proceeding to Package
+
 6. **Build CLI** (1-2 days)
 7. **Create repository structure** (half day)
 8. **Write documentation** (1 day)
@@ -531,10 +594,11 @@ The framework proves itself through use. Start small, measure results, expand wh
 
 ---
 
-*Document created: December 2025*
-*Part of: AI-Assisted Development Excellence Framework*
+_Document created: December 2025_
+_Part of: AI-Assisted Development Excellence Framework_
 
 **Document Suite**:
+
 1. `ai-development-friction.md` — Problem definition
 2. `ai-friction-mitigations.md` — Strategy library
 3. `ai-friction-implementation.md` — Implementation blueprints

@@ -34,24 +34,30 @@ Before implementing anything, create a structured plan.
 ## Plan: [Brief Title]
 
 ### Understanding
+
 [Your interpretation of the request]
 
 ### Assumptions
+
 - [ ] [Assumption 1]
 - [ ] [Assumption 2]
 
 ### Questions (if any)
+
 - [Question needing clarification]
 
 ### Approach
+
 1. [Step 1]
 2. [Step 2]
 3. [Step 3]
 
 ### Files to Modify
+
 - `path/to/file.ts` - [what changes]
 
 ### Verification
+
 - [ ] [Test case 1]
 - [ ] [Test case 2]
 ```

@@ -5,6 +5,7 @@ This guide covers collecting, visualizing, and analyzing AI Excellence Framework
 ## Overview
 
 The framework collects metrics on:
+
 - Session duration and task completion
 - Friction points encountered and mitigated
 - AI tool usage patterns
@@ -101,9 +102,9 @@ The framework collects metrics on:
   },
   "friction": {
     "most_common": [
-      {"type": "context_loss", "count": 23, "mitigation_rate": 0.87},
-      {"type": "hallucination", "count": 12, "mitigation_rate": 0.67},
-      {"type": "outdated_knowledge", "count": 8, "mitigation_rate": 0.75}
+      { "type": "context_loss", "count": 23, "mitigation_rate": 0.87 },
+      { "type": "hallucination", "count": 12, "mitigation_rate": 0.67 },
+      { "type": "outdated_knowledge", "count": 8, "mitigation_rate": 0.75 }
     ]
   },
   "quality_trends": {
@@ -199,9 +200,9 @@ Create `grafana-dashboard.json`:
         ],
         "options": {
           "thresholds": [
-            {"value": 0.6, "color": "red"},
-            {"value": 0.8, "color": "yellow"},
-            {"value": 0.9, "color": "green"}
+            { "value": 0.6, "color": "red" },
+            { "value": 0.8, "color": "yellow" },
+            { "value": 0.9, "color": "green" }
           ]
         }
       },
@@ -262,6 +263,7 @@ Add to `.vscode/settings.json`:
 #### Webview Dashboard
 
 The VS Code extension includes a webview dashboard accessible via:
+
 - Command Palette: `AI Excellence: Show Metrics Dashboard`
 - Status Bar: Click the metrics indicator
 
@@ -284,85 +286,107 @@ Create `scripts/metrics/report-template.html`:
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>AI Excellence Metrics Report</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body { font-family: system-ui, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
-    .card { background: #f8f9fa; border-radius: 8px; padding: 20px; margin: 20px 0; }
-    .metric { display: inline-block; margin: 10px 20px; text-align: center; }
-    .metric-value { font-size: 2em; font-weight: bold; color: #2563eb; }
-    .metric-label { color: #6b7280; }
-    .chart-container { height: 300px; }
-  </style>
-</head>
-<body>
-  <h1>AI Excellence Framework Metrics</h1>
-  <p>Report generated: {{generated_at}}</p>
-
-  <div class="card">
-    <h2>Summary</h2>
-    <div class="metric">
-      <div class="metric-value">{{total_sessions}}</div>
-      <div class="metric-label">Sessions</div>
-    </div>
-    <div class="metric">
-      <div class="metric-value">{{total_hours}}h</div>
-      <div class="metric-label">Total Time</div>
-    </div>
-    <div class="metric">
-      <div class="metric-value">{{completion_rate}}%</div>
-      <div class="metric-label">Completion Rate</div>
-    </div>
-    <div class="metric">
-      <div class="metric-value">{{friction_mitigation_rate}}%</div>
-      <div class="metric-label">Friction Mitigated</div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>Productivity Trend</h2>
-    <div class="chart-container">
-      <canvas id="productivityChart"></canvas>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>Friction Points</h2>
-    <div class="chart-container">
-      <canvas id="frictionChart"></canvas>
-    </div>
-  </div>
-
-  <script>
-    // Productivity chart
-    new Chart(document.getElementById('productivityChart'), {
-      type: 'line',
-      data: {
-        labels: {{date_labels}},
-        datasets: [{
-          label: 'Tasks Completed',
-          data: {{tasks_data}},
-          borderColor: '#2563eb',
-          tension: 0.1
-        }]
+  <head>
+    <meta charset="UTF-8" />
+    <title>AI Excellence Metrics Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
       }
-    });
-
-    // Friction chart
-    new Chart(document.getElementById('frictionChart'), {
-      type: 'doughnut',
-      data: {
-        labels: {{friction_labels}},
-        datasets: [{
-          data: {{friction_data}},
-          backgroundColor: ['#ef4444', '#f59e0b', '#10b981', '#6366f1']
-        }]
+      .card {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 20px 0;
       }
-    });
-  </script>
-</body>
+      .metric {
+        display: inline-block;
+        margin: 10px 20px;
+        text-align: center;
+      }
+      .metric-value {
+        font-size: 2em;
+        font-weight: bold;
+        color: #2563eb;
+      }
+      .metric-label {
+        color: #6b7280;
+      }
+      .chart-container {
+        height: 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>AI Excellence Framework Metrics</h1>
+    <p>Report generated: {{generated_at}}</p>
+
+    <div class="card">
+      <h2>Summary</h2>
+      <div class="metric">
+        <div class="metric-value">{{total_sessions}}</div>
+        <div class="metric-label">Sessions</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">{{total_hours}}h</div>
+        <div class="metric-label">Total Time</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">{{completion_rate}}%</div>
+        <div class="metric-label">Completion Rate</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">{{friction_mitigation_rate}}%</div>
+        <div class="metric-label">Friction Mitigated</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Productivity Trend</h2>
+      <div class="chart-container">
+        <canvas id="productivityChart"></canvas>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Friction Points</h2>
+      <div class="chart-container">
+        <canvas id="frictionChart"></canvas>
+      </div>
+    </div>
+
+    <script>
+      // Productivity chart
+      new Chart(document.getElementById('productivityChart'), {
+        type: 'line',
+        data: {
+          labels: {{date_labels}},
+          datasets: [{
+            label: 'Tasks Completed',
+            data: {{tasks_data}},
+            borderColor: '#2563eb',
+            tension: 0.1
+          }]
+        }
+      });
+
+      // Friction chart
+      new Chart(document.getElementById('frictionChart'), {
+        type: 'doughnut',
+        data: {
+          labels: {{friction_labels}},
+          datasets: [{
+            data: {{friction_data}},
+            backgroundColor: ['#ef4444', '#f59e0b', '#10b981', '#6366f1']
+          }]
+        }
+      });
+    </script>
+  </body>
 </html>
 ```
 
@@ -384,15 +408,15 @@ For teams, aggregate individual metrics:
 
 ### Team Dashboard Metrics
 
-| Metric | Description | Target |
-|--------|-------------|--------|
-| Avg Session Length | Mean session duration | 90-150 min |
-| Task Completion Rate | Tasks done / tasks started | >90% |
-| Friction Mitigation Rate | Friction mitigated / encountered | >80% |
-| AI Success Rate | Successful queries / total | >85% |
-| Context Reset Frequency | Resets per session | <2 |
-| Security Issues Found | By SAST tools | 0 |
-| Test Coverage | % of code tested | >70% |
+| Metric                   | Description                      | Target     |
+| ------------------------ | -------------------------------- | ---------- |
+| Avg Session Length       | Mean session duration            | 90-150 min |
+| Task Completion Rate     | Tasks done / tasks started       | >90%       |
+| Friction Mitigation Rate | Friction mitigated / encountered | >80%       |
+| AI Success Rate          | Successful queries / total       | >85%       |
+| Context Reset Frequency  | Resets per session               | <2         |
+| Security Issues Found    | By SAST tools                    | 0          |
+| Test Coverage            | % of code tested                 | >70%       |
 
 ### Leaderboards (Optional)
 
@@ -404,16 +428,16 @@ Track team achievements (opt-in):
     "period": "2025-12",
     "categories": {
       "most_productive": [
-        {"developer": "alice", "tasks": 45},
-        {"developer": "bob", "tasks": 38}
+        { "developer": "alice", "tasks": 45 },
+        { "developer": "bob", "tasks": 38 }
       ],
       "best_quality": [
-        {"developer": "charlie", "coverage": 92},
-        {"developer": "alice", "coverage": 88}
+        { "developer": "charlie", "coverage": 92 },
+        { "developer": "alice", "coverage": 88 }
       ],
       "friction_fighter": [
-        {"developer": "diana", "mitigation_rate": 95},
-        {"developer": "bob", "mitigation_rate": 91}
+        { "developer": "diana", "mitigation_rate": 95 },
+        { "developer": "bob", "mitigation_rate": 91 }
       ]
     }
   }

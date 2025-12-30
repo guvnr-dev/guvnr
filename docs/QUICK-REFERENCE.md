@@ -23,16 +23,16 @@ claude
 
 ## 📋 Slash Commands
 
-| Command | When to Use | Key Output |
-|---------|-------------|------------|
-| `/plan [task]` | Before implementing anything | Structured plan with assumptions |
-| `/verify [task]` | Before marking work complete | Verification report with gaps |
-| `/handoff` | End of session | Session summary for continuity |
-| `/assumptions [task]` | When requirements are unclear | Documented assumptions + risks |
-| `/review [code]` | After significant changes | Multi-perspective code review |
-| `/security-review [path]` | For security-sensitive code | OWASP-aligned security audit |
-| `/refactor [target]` | Before refactoring | Safe refactoring plan |
-| `/test-coverage [target]` | When improving tests | Coverage gaps + test plan |
+| Command                   | When to Use                   | Key Output                       |
+| ------------------------- | ----------------------------- | -------------------------------- |
+| `/plan [task]`            | Before implementing anything  | Structured plan with assumptions |
+| `/verify [task]`          | Before marking work complete  | Verification report with gaps    |
+| `/handoff`                | End of session                | Session summary for continuity   |
+| `/assumptions [task]`     | When requirements are unclear | Documented assumptions + risks   |
+| `/review [code]`          | After significant changes     | Multi-perspective code review    |
+| `/security-review [path]` | For security-sensitive code   | OWASP-aligned security audit     |
+| `/refactor [target]`      | Before refactoring            | Safe refactoring plan            |
+| `/test-coverage [target]` | When improving tests          | Coverage gaps + test plan        |
 
 ---
 
@@ -41,12 +41,18 @@ claude
 ```markdown
 # Project Name
 
-## Overview          ← What the project does (1 paragraph)
-## Tech Stack        ← Languages, frameworks, versions
-## Architecture      ← Directory structure, key patterns
-## Conventions       ← Code style, commit messages
-## Common Commands   ← npm/yarn commands
-## Current State     ← Active work, recent decisions
+## Overview ← What the project does (1 paragraph)
+
+## Tech Stack ← Languages, frameworks, versions
+
+## Architecture ← Directory structure, key patterns
+
+## Conventions ← Code style, commit messages
+
+## Common Commands ← npm/yarn commands
+
+## Current State ← Active work, recent decisions
+
 ## Session Instructions ← Before/during/after session
 ```
 
@@ -100,6 +106,7 @@ your-project/
 ## ⚡ Workflow Patterns
 
 ### Starting a Session
+
 ```
 1. Read CLAUDE.md
 2. Check docs/session-notes/ for recent context
@@ -108,6 +115,7 @@ your-project/
 ```
 
 ### During Work
+
 ```
 1. Use /plan before implementing
 2. Use /assumptions if unclear
@@ -116,6 +124,7 @@ your-project/
 ```
 
 ### Ending a Session
+
 ```
 1. Run /handoff
 2. Update CLAUDE.md "Current State"
@@ -127,13 +136,13 @@ your-project/
 
 ## 🛡️ AI-Specific Security Risks
 
-| Risk | Prevalence | Prevention |
-|------|------------|------------|
-| XSS vulnerabilities | 86% of AI code | Use /security-review |
-| Log injection | 88% of AI code | Sanitize log inputs |
-| Hallucinated packages | 20% of suggestions | Run verify-deps.sh |
-| Privilege escalation | 322% more common | Review access control |
-| Hardcoded secrets | Common | Use pre-commit hooks |
+| Risk                  | Prevalence         | Prevention            |
+| --------------------- | ------------------ | --------------------- |
+| XSS vulnerabilities   | 86% of AI code     | Use /security-review  |
+| Log injection         | 88% of AI code     | Sanitize log inputs   |
+| Hallucinated packages | 20% of suggestions | Run verify-deps.sh    |
+| Privilege escalation  | 322% more common   | Review access control |
+| Hardcoded secrets     | Common             | Use pre-commit hooks  |
 
 ---
 
@@ -196,24 +205,24 @@ python scripts/mcp/project-memory-server.py
 
 ## 🔍 Troubleshooting
 
-| Problem | Solution |
-|---------|----------|
+| Problem                           | Solution                       |
+| --------------------------------- | ------------------------------ |
 | Context rebuilding takes too long | Update CLAUDE.md, use /handoff |
-| Commands not found | Check .claude/commands/ exists |
-| Pre-commit hooks failing | Run `pre-commit install` |
-| MCP server won't start | Run `pip install mcp` |
-| Tests failing | Run `npm install` first |
+| Commands not found                | Check .claude/commands/ exists |
+| Pre-commit hooks failing          | Run `pre-commit install`       |
+| MCP server won't start            | Run `pip install mcp`          |
+| Tests failing                     | Run `npm install` first        |
 
 ---
 
 ## 📚 Full Documentation
 
-| Document | Purpose |
-|----------|---------|
-| `ai-development-friction.md` | 59 friction points from AI perspective |
-| `ai-friction-mitigations.md` | 40+ evidence-based strategies |
-| `ai-friction-implementation.md` | Implementation blueprints |
-| `ai-friction-action-plan.md` | Strategic adoption roadmap |
+| Document                        | Purpose                                |
+| ------------------------------- | -------------------------------------- |
+| `ai-development-friction.md`    | 59 friction points from AI perspective |
+| `ai-friction-mitigations.md`    | 40+ evidence-based strategies          |
+| `ai-friction-implementation.md` | Implementation blueprints              |
+| `ai-friction-action-plan.md`    | Strategic adoption roadmap             |
 
 ---
 
@@ -227,4 +236,4 @@ python scripts/mcp/project-memory-server.py
 
 ---
 
-*AI Excellence Framework v1.0.0*
+_AI Excellence Framework v1.0.0_

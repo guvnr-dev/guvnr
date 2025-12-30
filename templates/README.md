@@ -18,6 +18,7 @@ npx degit ai-excellence-framework/templates/presets/standard .
 ## Available Presets
 
 ### Minimal
+
 Best for: Personal projects, quick experiments, learning
 
 ```bash
@@ -25,6 +26,7 @@ npx degit ai-excellence-framework/templates/presets/minimal .
 ```
 
 **Includes:**
+
 - Basic CLAUDE.md template
 - Minimal configuration
 - No hooks or security scanning
@@ -34,6 +36,7 @@ npx degit ai-excellence-framework/templates/presets/minimal .
 ---
 
 ### Standard (Recommended)
+
 Best for: Most projects, solo developers, small teams
 
 ```bash
@@ -41,6 +44,7 @@ npx degit ai-excellence-framework/templates/presets/standard .
 ```
 
 **Includes:**
+
 - Comprehensive CLAUDE.md template
 - All core slash commands
 - Pre-commit hooks for security
@@ -51,6 +55,7 @@ npx degit ai-excellence-framework/templates/presets/standard .
 ---
 
 ### Full
+
 Best for: Production projects, security-conscious teams
 
 ```bash
@@ -58,6 +63,7 @@ npx degit ai-excellence-framework/templates/presets/full .
 ```
 
 **Includes:**
+
 - Everything in Standard
 - MCP memory server
 - Metrics collection
@@ -69,6 +75,7 @@ npx degit ai-excellence-framework/templates/presets/full .
 ---
 
 ### Team
+
 Best for: Multi-developer projects, enterprise environments
 
 ```bash
@@ -76,6 +83,7 @@ npx degit ai-excellence-framework/templates/presets/team .
 ```
 
 **Includes:**
+
 - Everything in Full
 - Team coordination features
 - Shared MCP memory
@@ -107,16 +115,16 @@ rm -rf ai-excellence-framework
 
 ## Preset Comparison
 
-| Feature | Minimal | Standard | Full | Team |
-|---------|---------|----------|------|------|
-| CLAUDE.md | Basic | Full | Full+ | Full+ |
-| Slash Commands | 2 | 6 | 8 | 8 |
-| Pre-commit Hooks | No | Yes | Yes | Yes |
-| Security Scanning | No | Yes | Yes | Yes |
-| MCP Memory | No | No | Yes | Yes |
-| Metrics | No | No | Yes | Yes |
-| Team Features | No | No | No | Yes |
-| Dogfooding Log | No | No | Yes | Yes |
+| Feature           | Minimal | Standard | Full  | Team  |
+| ----------------- | ------- | -------- | ----- | ----- |
+| CLAUDE.md         | Basic   | Full     | Full+ | Full+ |
+| Slash Commands    | 2       | 6        | 8     | 8     |
+| Pre-commit Hooks  | No      | Yes      | Yes   | Yes   |
+| Security Scanning | No      | Yes      | Yes   | Yes   |
+| MCP Memory        | No      | No       | Yes   | Yes   |
+| Metrics           | No      | No       | Yes   | Yes   |
+| Team Features     | No      | No       | No    | Yes   |
+| Dogfooding Log    | No      | No       | Yes   | Yes   |
 
 ## Customization
 

@@ -21,6 +21,7 @@ This framework provides:
 ## Quick Start
 
 ### Option 1: CLI Installer (Recommended)
+
 ```bash
 # Initialize in your project
 npx ai-excellence-framework init
@@ -33,6 +34,7 @@ npx ai-excellence-framework doctor
 ```
 
 ### Option 2: degit (No Dependencies)
+
 ```bash
 # Clone a preset template directly
 npx degit ai-excellence-framework/templates/presets/standard .
@@ -41,6 +43,7 @@ npx degit ai-excellence-framework/templates/presets/standard .
 ```
 
 ### Option 3: Manual Copy
+
 ```bash
 # Copy the framework to your project
 cp -r .claude/ your-project/.claude/
@@ -52,6 +55,7 @@ pre-commit install
 ```
 
 ### After Installation
+
 ```bash
 # Start using Claude Code with the framework
 claude  # In your project directory
@@ -112,16 +116,17 @@ tests/
 
 ## Core Documents
 
-| Document | Purpose |
-|----------|---------|
-| [ai-development-friction.md](ai-development-friction.md) | 59 friction points from the AI's perspective |
-| [ai-friction-mitigations.md](ai-friction-mitigations.md) | 40+ evidence-based mitigation strategies |
-| [ai-friction-implementation.md](ai-friction-implementation.md) | Implementation blueprints and code |
-| [ai-friction-action-plan.md](ai-friction-action-plan.md) | Strategic roadmap for adoption |
+| Document                                                       | Purpose                                      |
+| -------------------------------------------------------------- | -------------------------------------------- |
+| [ai-development-friction.md](ai-development-friction.md)       | 59 friction points from the AI's perspective |
+| [ai-friction-mitigations.md](ai-friction-mitigations.md)       | 40+ evidence-based mitigation strategies     |
+| [ai-friction-implementation.md](ai-friction-implementation.md) | Implementation blueprints and code           |
+| [ai-friction-action-plan.md](ai-friction-action-plan.md)       | Strategic roadmap for adoption               |
 
 ## Key Commands
 
 ### `/plan` — Think Before Coding
+
 Forces structured planning before implementation. Surfaces assumptions, identifies risks, defines completion criteria.
 
 ```
@@ -129,6 +134,7 @@ Forces structured planning before implementation. Surfaces assumptions, identifi
 ```
 
 ### `/verify` — Skeptical Completion Check
+
 Adopts a validator mindset. Attempts to prove work is NOT complete before confirming.
 
 ```
@@ -136,6 +142,7 @@ Adopts a validator mindset. Attempts to prove work is NOT complete before confir
 ```
 
 ### `/handoff` — Session Continuity
+
 Generates comprehensive session summary for the next session to pick up seamlessly.
 
 ```
@@ -143,6 +150,7 @@ Generates comprehensive session summary for the next session to pick up seamless
 ```
 
 ### `/assumptions` — Surface the Hidden
+
 Explicitly documents assumptions before they become problems.
 
 ```
@@ -150,6 +158,7 @@ Explicitly documents assumptions before they become problems.
 ```
 
 ### `/security-review` — AI-Specific Security Audit
+
 OWASP-aligned security review specifically tuned for AI-generated code vulnerabilities.
 
 ```
@@ -157,6 +166,7 @@ OWASP-aligned security review specifically tuned for AI-generated code vulnerabi
 ```
 
 Checks for:
+
 - OWASP Top 10 vulnerabilities
 - XSS (86% of AI code fails)
 - Log injection (88% vulnerable)
@@ -171,18 +181,23 @@ The framework centers on `CLAUDE.md` — a persistent context file that loads au
 # Project: MyApp
 
 ## Overview
+
 [What this project does]
 
 ## Architecture
+
 [Key patterns and structure]
 
 ## Conventions
+
 [Coding standards and practices]
 
 ## Current State
+
 [What's in progress, recent decisions]
 
 ## Session Instructions
+
 [How to work effectively in this codebase]
 ```
 
@@ -205,6 +220,7 @@ This framework is developed using itself. Every pattern must prove useful during
 ## Contributing
 
 This framework improves through use. If you find:
+
 - A friction point not documented
 - A mitigation that works better
 - A pattern that should be removed
@@ -217,4 +233,4 @@ MIT
 
 ---
 
-*Built by observing what actually helps in AI-assisted development, not what theoretically should.*
+_Built by observing what actually helps in AI-assisted development, not what theoretically should._

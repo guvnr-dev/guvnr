@@ -46,36 +46,44 @@ features:
 - **45%** of AI-generated code contains security vulnerabilities
 - **19%** slower completion for experienced developers (despite believing they're faster)
 
-*Sources: [Stack Overflow 2025](https://survey.stackoverflow.co/2025/ai), [METR Study](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/), [Veracode](https://www.veracode.com/blog/genai-code-security-report/)*
+_Sources: [Stack Overflow 2025](https://survey.stackoverflow.co/2025/ai), [METR Study](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/), [Veracode](https://www.veracode.com/blog/genai-code-security-report/)_
 
 ## The Solution
 
 AI Excellence Framework provides **structured patterns** that address these friction points:
 
 ### 🎯 Context Management
+
 ```markdown
 # CLAUDE.md
+
 Every session starts with consistent project context.
 No more re-explaining your codebase.
 ```
 
 ### 🔍 Verification Protocol
+
 ```bash
 /verify  # Skeptical validation with falsification
 ```
-*"Assume nothing is complete until proven otherwise."*
+
+_"Assume nothing is complete until proven otherwise."_
 
 ### 🔒 Security Scanning
+
 ```bash
 /security-review src/api/
 ```
-*OWASP-aligned, with AI-specific vulnerability checks.*
+
+_OWASP-aligned, with AI-specific vulnerability checks._
 
 ### 🤝 Session Continuity
+
 ```bash
 /handoff  # Generate comprehensive session summary
 ```
-*Never lose context between sessions again.*
+
+_Never lose context between sessions again._
 
 ## Quick Start
 
@@ -93,26 +101,26 @@ npx ai-excellence-framework init
 
 ## What You Get
 
-| Component | Purpose |
-|-----------|---------|
-| **CLAUDE.md** | Project context for every session |
+| Component            | Purpose                                     |
+| -------------------- | ------------------------------------------- |
+| **CLAUDE.md**        | Project context for every session           |
 | **8 Slash Commands** | /plan, /verify, /handoff, /review, and more |
-| **3 Subagents** | Explorer, Reviewer, Tester |
-| **MCP Server** | Persistent memory with search |
-| **Git Hooks** | Security scanning, dependency verification |
-| **Metrics** | Track what's working |
+| **3 Subagents**      | Explorer, Reviewer, Tester                  |
+| **MCP Server**       | Persistent memory with search               |
+| **Git Hooks**        | Security scanning, dependency verification  |
+| **Metrics**          | Track what's working                        |
 
 ## Research Validation
 
 All claims in this framework are verified against authoritative sources:
 
-| Claim | Source | Verified |
-|-------|--------|----------|
-| 45% AI code has vulnerabilities | [Veracode 2025](https://www.veracode.com/blog/genai-code-security-report/) | ✅ |
-| 19% slowdown for experienced devs | [METR Study](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) | ✅ |
-| 86% XSS failure rate | [Veracode 2025](https://www.helpnetsecurity.com/2025/08/07/create-ai-code-security-risks/) | ✅ |
-| ~20% package hallucination | [Slopsquatting Research](https://www.bleepingcomputer.com/news/security/ai-hallucinated-code-dependencies-become-new-supply-chain-risk/) | ✅ |
-| 65% context loss in refactoring | [Developer Surveys](https://www.secondtalent.com/resources/ai-coding-assistant-statistics/) | ✅ |
+| Claim                             | Source                                                                                                                                   | Verified |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| 45% AI code has vulnerabilities   | [Veracode 2025](https://www.veracode.com/blog/genai-code-security-report/)                                                               | ✅       |
+| 19% slowdown for experienced devs | [METR Study](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)                                                   | ✅       |
+| 86% XSS failure rate              | [Veracode 2025](https://www.helpnetsecurity.com/2025/08/07/create-ai-code-security-risks/)                                               | ✅       |
+| ~20% package hallucination        | [Slopsquatting Research](https://www.bleepingcomputer.com/news/security/ai-hallucinated-code-dependencies-become-new-supply-chain-risk/) | ✅       |
+| 65% context loss in refactoring   | [Developer Surveys](https://www.secondtalent.com/resources/ai-coding-assistant-statistics/)                                              | ✅       |
 
 ## Dogfooded
 

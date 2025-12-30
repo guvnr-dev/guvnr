@@ -71,35 +71,43 @@ Safely refactor code with verification at each step.
 ## Refactoring Plan: [target]
 
 ### Current State
+
 [Description of what exists now]
 
 ### Goals
+
 - [Goal 1]: [Expected outcome]
 - [Goal 2]: [Expected outcome]
 
 ### Risk Analysis
-| Risk | Likelihood | Impact | Mitigation |
-|------|------------|--------|------------|
+
+| Risk   | Likelihood   | Impact   | Mitigation   |
+| ------ | ------------ | -------- | ------------ |
 | [risk] | High/Med/Low | [impact] | [mitigation] |
 
 ### Files to Modify
-| File | Change | Order |
-|------|--------|-------|
+
+| File   | Change        | Order      |
+| ------ | ------------- | ---------- |
 | [file] | [description] | [1/2/3...] |
 
 ### Test Coverage Check
+
 - [ ] Existing tests pass before refactoring
 - [ ] Coverage: [X%] of target code
 - [ ] Tests needed: [list]
 
 ### Boundaries
+
 - WILL change: [scope]
 - WON'T change: [out of scope]
 
 ### Rollback Plan
+
 [How to undo if something goes wrong]
 
 ### Execution Checklist
+
 - [ ] Step 1: [action] → verify [how]
 - [ ] Step 2: [action] → verify [how]
 - [ ] Final: All tests pass, behavior unchanged

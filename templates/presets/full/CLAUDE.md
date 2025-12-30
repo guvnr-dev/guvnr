@@ -1,14 +1,17 @@
 # Project: [PROJECT_NAME]
 
 ## Overview
+
 [One paragraph describing what this project does and its purpose]
 
 **Meta-nature**: [If this project dogfoods itself or has a self-referential quality, describe it here]
 
 ## Project Purpose
+
 [Detailed explanation of the project's goals and target audience]
 
 ## Tech Stack
+
 - **Primary**: [Main language, version]
 - **Runtime**: [e.g., Node.js 20.x]
 - **Framework**: [e.g., Next.js 14]
@@ -18,6 +21,7 @@
 ## Architecture
 
 ### Document Hierarchy
+
 ```
 docs/
 ├── architecture/     # Architecture decision records
@@ -33,26 +37,32 @@ src/
 ```
 
 ### Key Entry Points
+
 - API: `src/api/index.ts`
 - Main: `src/index.ts`
 
 ### Key Relationships
+
 - [Document important patterns and how components interact]
 
 ## Conventions
 
 ### File Naming
+
 - [Convention]: `example.ts`
 
 ### Code Style
+
 - [Naming conventions]
 - [File organization rules]
 - [Import ordering]
 
 ### Documentation Style
+
 - [Describe documentation conventions]
 
 ### Commit Messages
+
 - `feat:` new capabilities
 - `fix:` corrections
 - `docs:` documentation improvements
@@ -60,6 +70,7 @@ src/
 - `test:` test additions/changes
 
 ## Common Commands
+
 ```bash
 # Development
 npm run dev          # Start development server
@@ -75,18 +86,23 @@ npm run aix:doctor   # Check environment health
 ## Current State
 
 ### Phase
+
 [e.g., Phase 1: MVP Development]
 
 ### Active Work
+
 - [Current feature/task being developed]
 
 ### Recent Decisions
+
 - [DATE]: [Decision and rationale]
 
 ### Known Issues
+
 - [ ] [List known bugs or technical debt]
 
 ### Known Gaps
+
 - [ ] [Features not yet implemented]
 
 ## Critical Constraints
@@ -100,6 +116,7 @@ npm run aix:doctor   # Check environment health
 ## Session Instructions
 
 ### Before Starting
+
 1. Read this file completely
 2. Check `docs/session-notes/` for recent context
 3. Review recent git history
@@ -107,6 +124,7 @@ npm run aix:doctor   # Check environment health
 5. Note the current dogfooding status below
 
 ### During Work
+
 - Use `/plan` before implementing anything significant
 - Use `/assumptions` to surface hidden assumptions
 - Use `/verify` before marking tasks complete
@@ -118,6 +136,7 @@ npm run aix:doctor   # Check environment health
 - Search online before major architectural decisions
 
 ### Before Ending
+
 - Run `/handoff` to capture session state
 - Update "Current State" section above
 - Update "Dogfooding Log" with patterns used
@@ -125,7 +144,9 @@ npm run aix:doctor   # Check environment health
 - Run `scripts/metrics/collect-session-metrics.sh` if available
 
 ### Security Checklist (for AI-generated code)
+
 Before committing, verify:
+
 - [ ] No hardcoded secrets or credentials
 - [ ] Input validation present where needed
 - [ ] No SQL/command/XSS injection vulnerabilities
@@ -136,34 +157,37 @@ Before committing, verify:
 
 Track what patterns we use and their effectiveness:
 
-| Pattern | Used? | Effective? | Notes |
-|---------|-------|------------|-------|
-| CLAUDE.md | Yes | TBD | This file |
-| /plan command | Pending | TBD | |
-| /verify command | Pending | TBD | |
-| /handoff command | Pending | TBD | |
-| /assumptions command | Pending | TBD | |
-| /security-review command | Pending | TBD | |
-| /refactor command | Pending | TBD | |
-| /test-coverage command | Pending | TBD | |
-| Session notes | Pending | TBD | |
-| Pre-commit hooks | Pending | TBD | |
-| MCP memory | Pending | TBD | |
-| Metrics collection | Pending | TBD | |
-| TodoWrite tracking | Yes | TBD | |
-| Online research | Pending | TBD | |
+| Pattern                  | Used?   | Effective? | Notes     |
+| ------------------------ | ------- | ---------- | --------- |
+| CLAUDE.md                | Yes     | TBD        | This file |
+| /plan command            | Pending | TBD        |           |
+| /verify command          | Pending | TBD        |           |
+| /handoff command         | Pending | TBD        |           |
+| /assumptions command     | Pending | TBD        |           |
+| /security-review command | Pending | TBD        |           |
+| /refactor command        | Pending | TBD        |           |
+| /test-coverage command   | Pending | TBD        |           |
+| Session notes            | Pending | TBD        |           |
+| Pre-commit hooks         | Pending | TBD        |           |
+| MCP memory               | Pending | TBD        |           |
+| Metrics collection       | Pending | TBD        |           |
+| TodoWrite tracking       | Yes     | TBD        |           |
+| Online research          | Pending | TBD        |           |
 
 ### Dogfooding Observations
 
 **What's Working:**
+
 - [Add observations here]
 
 **What Needs Improvement:**
+
 - [ ] [Add observations here]
 
 **Friction Observed During Development:**
+
 - [Add observations here as work continues]
 
 ---
 
-*AI Excellence Framework - Full Preset*
+_AI Excellence Framework - Full Preset_
