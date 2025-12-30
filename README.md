@@ -20,16 +20,40 @@ This framework provides:
 
 ## Quick Start
 
+### Option 1: CLI Installer (Recommended)
+```bash
+# Initialize in your project
+npx ai-excellence-framework init
+
+# Or with specific preset
+npx ai-excellence-framework init --preset full
+
+# Check installation health
+npx ai-excellence-framework doctor
+```
+
+### Option 2: degit (No Dependencies)
+```bash
+# Clone a preset template directly
+npx degit ai-excellence-framework/templates/presets/standard .
+
+# Available presets: minimal, standard, full, team
+```
+
+### Option 3: Manual Copy
 ```bash
 # Copy the framework to your project
 cp -r .claude/ your-project/.claude/
 cp CLAUDE.md your-project/
 
-# Install pre-commit hooks
+# Install pre-commit hooks (optional)
 pip install pre-commit
 pre-commit install
+```
 
-# Start using
+### After Installation
+```bash
+# Start using Claude Code with the framework
 claude  # In your project directory
 /plan implement user authentication
 ```
@@ -38,29 +62,52 @@ claude  # In your project directory
 
 ```
 .claude/
-├── commands/               # Slash commands
-│   ├── plan.md             # Plan before implementing
-│   ├── verify.md           # Verify completion skeptically
-│   ├── handoff.md          # Generate session summaries
-│   ├── assumptions.md      # Surface hidden assumptions
-│   ├── review.md           # Multi-perspective code review
-│   └── security-review.md  # OWASP-aligned security review
-├── agents/                 # Custom subagents
-│   ├── reviewer.md         # Independent code reviewer
-│   ├── explorer.md         # Codebase exploration
-│   └── tester.md           # Test generation
+├── commands/                     # Slash commands
+│   ├── plan.md                   # Plan before implementing
+│   ├── verify.md                 # Verify completion skeptically
+│   ├── handoff.md                # Generate session summaries
+│   ├── assumptions.md            # Surface hidden assumptions
+│   ├── review.md                 # Multi-perspective code review
+│   ├── security-review.md        # OWASP-aligned security review
+│   ├── refactor.md               # Safe refactoring protocol
+│   └── test-coverage.md          # Test coverage analysis
+├── agents/                       # Custom subagents
+│   ├── reviewer.md               # Independent code reviewer
+│   ├── explorer.md               # Codebase exploration
+│   └── tester.md                 # Test generation
 scripts/
 ├── hooks/
-│   ├── post-edit.sh        # Auto-format after edits (with timeout/error handling)
-│   └── verify-deps.sh      # Slopsquatting prevention
+│   ├── post-edit.sh              # Auto-format after edits
+│   ├── verify-deps.sh            # Slopsquatting prevention
+│   ├── check-todos.sh            # Critical TODO detection
+│   └── check-claude-md.sh        # CLAUDE.md validation
 ├── mcp/
 │   └── project-memory-server.py  # Production MCP server (SQLite)
 ├── metrics/
-│   └── collect-session-metrics.sh  # Baseline & ongoing measurement
+│   └── collect-session-metrics.sh # Baseline & ongoing measurement
+src/
+├── commands/                     # CLI implementation
+│   ├── init.js                   # Framework installer
+│   ├── validate.js               # Configuration validator
+│   ├── doctor.js                 # Environment diagnostics
+│   └── update.js                 # Update checker
+├── schemas/                      # Validation schemas
+│   ├── config.schema.json        # Configuration schema
+│   └── claude-md.schema.json     # CLAUDE.md validation
 templates/
-├── .pre-commit-config.yaml # Security + quality hooks
-├── CLAUDE.md.template      # Project context template
-└── .env.example            # Environment variables template
+├── presets/                      # Ready-to-use presets
+│   ├── minimal/                  # Basic setup
+│   ├── standard/                 # Recommended setup
+│   ├── full/                     # Complete setup
+│   └── team/                     # Team collaboration
+├── .pre-commit-config.yaml       # Security + quality hooks
+└── CLAUDE.md.template            # Project context template
+docs/
+└── QUICK-REFERENCE.md            # One-page quick start
+tests/
+├── cli.test.js                   # CLI tests
+├── scripts.test.sh               # Shell script tests
+└── mcp/test_project_memory_server.py  # MCP server tests
 ```
 
 ## Core Documents
