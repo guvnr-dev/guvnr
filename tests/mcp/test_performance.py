@@ -10,7 +10,7 @@ These tests measure performance characteristics:
 Run with: pytest tests/mcp/test_performance.py -v
 """
 
-import os
+import importlib.util
 import sys
 import time
 import tempfile
@@ -21,17 +21,41 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import pytest
 
-# Add parent directory to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "scripts" / "mcp"))
+# Check if MCP SDK is available before loading the module
+try:
+    from mcp.server import Server  # noqa: F401
+    MCP_AVAILABLE = True
+except ImportError:
+    MCP_AVAILABLE = False
 
-# Import after path setup
-from project_memory_server import (
-    ProjectMemoryDB,
-    ConnectionPool,
-    RateLimiter,
-    sanitize_input,
-    validate_key,
+# Skip all tests in this module if MCP SDK is not available
+pytestmark = pytest.mark.skipif(
+    not MCP_AVAILABLE,
+    reason="MCP SDK not installed. Install with: pip install mcp"
 )
+
+# Only load module if MCP is available (prevents sys.exit during import)
+if MCP_AVAILABLE:
+    _mcp_path = Path(__file__).parent.parent.parent / "scripts" / "mcp" / "project-memory-server.py"
+    _spec = importlib.util.spec_from_file_location("project_memory_server", _mcp_path)
+    project_memory_server = importlib.util.module_from_spec(_spec)
+    sys.modules["project_memory_server"] = project_memory_server
+    _spec.loader.exec_module(project_memory_server)
+
+    # Import classes and functions from the loaded module
+    ProjectMemoryDB = project_memory_server.ProjectMemoryDB
+    ConnectionPool = project_memory_server.ConnectionPool
+    RateLimiter = project_memory_server.RateLimiter
+    sanitize_input = project_memory_server.sanitize_input
+    validate_key = project_memory_server.validate_key
+else:
+    # Define placeholders to prevent NameError during test collection
+    ProjectMemoryDB = None
+    ConnectionPool = None
+    RateLimiter = None
+    sanitize_input = None
+    validate_key = None
+    project_memory_server = None
 
 
 class TestConnectionPoolPerformance:

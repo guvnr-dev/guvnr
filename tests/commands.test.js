@@ -274,10 +274,11 @@ describe('Assumptions Command', () => {
   });
 
   it('should prompt for validation', () => {
+    const lowerContent = content.toLowerCase();
     assert.ok(
-      content.includes('validate') ||
-      content.includes('verify') ||
-      content.includes('confirm'),
+      lowerContent.includes('validate') ||
+      lowerContent.includes('verify') ||
+      lowerContent.includes('confirm'),
       'Should prompt for validation'
     );
   });

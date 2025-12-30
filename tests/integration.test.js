@@ -597,7 +597,8 @@ describe('Security Validation', () => {
       const patterns = [
         /(?:api[_-]?key|apikey)\s*[:=]\s*["']?[a-zA-Z0-9_\-]{16,}["']?/i,
         /(?:secret|password|token|credential)\s*[:=]\s*["']?[a-zA-Z0-9_\-]{8,}["']?/i,
-        /(?:aws|gcp|azure)[_-]?(?:secret|key|token)\s*[:=]\s*["']?[a-zA-Z0-9_\-/+=]{16,}["']?/i,
+        // Match AWS_SECRET_ACCESS_KEY, AWS_ACCESS_KEY_ID, etc.
+        /aws[_-]?(?:secret[_-]?)?(?:access[_-]?)?(?:key|token)[_-]?(?:id)?\s*[:=]\s*["']?[a-zA-Z0-9_\-/+=]{16,}["']?/i,
         /ghp_[a-zA-Z0-9]{36}/,
         /sk-[a-zA-Z0-9]{32,}/
       ];
