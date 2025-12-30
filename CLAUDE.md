@@ -13,25 +13,34 @@ Transform documented friction points, mitigation strategies, and implementation 
 ## Tech Stack
 
 - **Primary**: Shell scripts, Markdown
-- **CLI Tool**: Node.js (planned)
-- **MCP Server**: Python (planned)
-- **Documentation**: Markdown, potentially Astro/Docusaurus
+- **CLI Tool**: Node.js (implemented)
+- **MCP Server**: Python (implemented)
+- **Documentation**: Markdown
+- **Testing**: Node.js native test runner, pytest, bash
 
 ## Architecture
 
 ### Document Hierarchy
 ```
 Core Documents (source of truth)
-├── ai-development-friction.md      # Problem definition
-├── ai-friction-mitigations.md      # Strategy library
-├── ai-friction-implementation.md   # Implementation blueprints
+├── ai-development-friction.md      # Problem definition (with TL;DR)
+├── ai-friction-mitigations.md      # Strategy library (with TL;DR)
+├── ai-friction-implementation.md   # Implementation blueprints (with TL;DR)
 └── ai-friction-action-plan.md      # Strategic roadmap
 
 Deployable Assets
-├── .claude/commands/               # Slash commands
-├── .claude/agents/                 # Custom subagents
-├── scripts/hooks/                  # Git hook scripts
-└── scripts/mcp/                    # MCP server code
+├── .claude/commands/               # 8 slash commands
+├── .claude/agents/                 # 3 custom subagents
+├── scripts/hooks/                  # 4 hook scripts
+├── scripts/mcp/                    # MCP server (production-ready)
+└── scripts/metrics/                # Metrics collection
+
+CLI & Infrastructure
+├── bin/cli.js                      # CLI entry point
+├── src/commands/                   # CLI command implementations
+├── src/schemas/                    # JSON validation schemas
+├── templates/presets/              # 4 preset configurations
+└── tests/                          # Automated test suites
 ```
 
 ### Key Relationships
@@ -62,35 +71,56 @@ Deployable Assets
 ## Common Commands
 
 ```bash
+# Initialize framework in a project
+npx ai-excellence-framework init
+
+# Validate framework installation
+npx ai-excellence-framework validate
+
+# Check environment health
+npx ai-excellence-framework doctor
+
+# Run tests
+npm test
+
 # Validate markdown formatting
 npx markdownlint-cli2 "**/*.md"
 
-# Preview documentation (once site is set up)
-npm run docs:dev
-
-# Test CLI (once built)
-npm run cli -- init --dry-run
+# Collect session metrics
+./scripts/metrics/collect-session-metrics.sh --auto
 ```
 
 ## Current State
 
 ### Phase
-Phase 1: Validate — Initial dogfooding and structure setup
+Phase 2: Production-Ready — All core features implemented and tested
 
 ### Active Work
-- Setting up project structure
-- Deploying our own slash commands to ourselves
-- Establishing dogfooding workflow
+- Framework complete and ready for initial release
+- All identified concerns from review have been addressed
+- Ready for external testing and feedback
 
 ### Recent Decisions
 - 2024-12-30: Created dedicated project folder at ~/ai-excellence-framework
 - 2024-12-30: Decided to dogfood immediately rather than building first
+- 2024-12-30: Comprehensive review and enhancement pass completed
+- 2024-12-30: Added CLI installer, automated tests, degit templates, and configuration schemas
+
+### Completed Work
+- [x] CLI tool implemented (init, validate, doctor, update commands)
+- [x] MCP server implemented with export/import/health_check
+- [x] Automated tests for CLI, MCP server, and shell scripts
+- [x] All 8 slash commands implemented
+- [x] All 3 subagents implemented
+- [x] 4 preset templates (minimal, standard, full, team)
+- [x] Configuration validation schemas
+- [x] TL;DR summaries added to verbose documents
+- [x] Quick reference documentation
 
 ### Known Gaps
-- [ ] CLI tool not yet built
-- [ ] MCP server not yet implemented
-- [ ] No automated tests yet
-- [ ] Documentation site not set up
+- [ ] Documentation site not set up (Astro/Docusaurus)
+- [ ] npm package not yet published
+- [ ] CI/CD pipeline not configured
 
 ## Critical Constraints
 
@@ -140,30 +170,41 @@ Track what patterns we use and their effectiveness:
 
 | Pattern | Used? | Effective? | Notes |
 |---------|-------|------------|-------|
-| CLAUDE.md | Yes | Yes | This file; essential for context |
-| /plan command | Yes | TBD | Used for framework development |
-| /verify command | Pending | TBD | |
-| /handoff command | Pending | TBD | |
-| /assumptions command | Pending | TBD | |
-| /security-review command | Yes | TBD | Created and documented |
-| Session notes | Pending | TBD | |
-| Pre-commit hooks | Pending | TBD | Template created |
-| MCP memory | Pending | TBD | Production server created |
-| Metrics collection | Pending | TBD | Script created |
-| TodoWrite tracking | Yes | Yes | Used throughout development |
-| Online research | Yes | Yes | Validated all claims |
+| CLAUDE.md | Yes | Yes | Essential for context across sessions |
+| /plan command | Yes | Yes | Used for framework development planning |
+| /verify command | Yes | Yes | Used to verify implementation completeness |
+| /handoff command | Pending | TBD | Session continuity support ready |
+| /assumptions command | Pending | TBD | Available for complex decisions |
+| /security-review command | Yes | Yes | Guided security considerations in CLI/MCP |
+| /refactor command | Yes | Yes | Used during enhancement pass |
+| /test-coverage command | Yes | Yes | Guided test additions |
+| Session notes | Pending | TBD | Infrastructure ready |
+| Pre-commit hooks | Yes | Yes | Template comprehensive and tested |
+| MCP memory | Yes | Yes | Production server with export/import |
+| Metrics collection | Yes | TBD | Script implemented, awaiting data |
+| TodoWrite tracking | Yes | Yes | Critical for complex multi-step tasks |
+| Online research | Yes | Yes | Validated all claims against sources |
+| CLI installer | Yes | Yes | Used to structure project |
+| Configuration schemas | Yes | Yes | Provides validation structure |
+| Degit templates | Yes | Yes | 4 presets for different use cases |
 
 ### Dogfooding Observations
 
 **What's Working:**
-- CLAUDE.md provides essential project context
-- TodoWrite helps maintain focus during complex multi-step tasks
+- CLAUDE.md provides essential project context across sessions
+- TodoWrite helps maintain focus during complex 12+ step tasks
 - Online research before recommendations prevents architectural mistakes
+- Comprehensive testing catches issues before they become problems
+- TL;DR summaries make verbose documents accessible
+- Configuration schemas provide clear structure
+- Multiple preset templates cover different use cases
 
 **What Needs Improvement:**
-- [ ] Need to actually use /verify before completing tasks
-- [ ] Session handoffs not yet practiced
-- [ ] Metrics collection not yet active
+- [x] ~~Need to actually use /verify before completing tasks~~ (Done)
+- [ ] Session handoffs not yet practiced in multi-session workflow
+- [ ] Metrics collection script ready but needs real usage data
 
 **Friction Observed During Development:**
-- (Add observations here as work continues)
+- File creation requires reading first (Write tool constraint) - worked around
+- Large context conversations benefit from session summaries
+- Multiple verification passes valuable but need bounded scope (Two-Pass Rule)
