@@ -4,6 +4,51 @@
 
 ---
 
+## TL;DR — Copy-Paste Implementations
+
+**This document provides ready-to-use code.** If you want to skip reading and just deploy:
+
+### Instant Setup (2 commands)
+
+```bash
+# Option 1: Use the CLI
+npx ai-excellence-framework init
+
+# Option 2: Manual copy
+git clone https://github.com/your-username/ai-excellence-framework.git /tmp/aix
+cp -r /tmp/aix/.claude /tmp/aix/CLAUDE.md /tmp/aix/scripts ./
+rm -rf /tmp/aix
+```
+
+### What Gets Installed
+
+| Component | Files | Purpose |
+|-----------|-------|---------|
+| **CLAUDE.md** | `CLAUDE.md` | Project context for every session |
+| **Slash Commands** | `.claude/commands/*.md` | /plan, /verify, /handoff, /review, /security-review |
+| **Subagents** | `.claude/agents/*.md` | reviewer, explorer, tester |
+| **Security Hooks** | `scripts/hooks/*`, `.pre-commit-config.yaml` | Pre-commit security scanning |
+| **MCP Server** | `scripts/mcp/project-memory-server.py` | Persistent project memory |
+| **Metrics** | `scripts/metrics/collect-session-metrics.sh` | Session effectiveness tracking |
+
+### Priority Order (if implementing incrementally)
+
+1. **Week 1**: CLAUDE.md + /plan + /verify (immediate value)
+2. **Week 2**: Pre-commit hooks + /security-review (security)
+3. **Week 3**: /handoff + session notes (continuity)
+4. **Week 4**: MCP server + metrics (persistence)
+
+### Quick Links to Sections
+
+- §1: Directory Structure and CLAUDE.md template
+- §2: Slash command implementations
+- §3: MCP server setup
+- §4: Pre-commit security configuration
+- §5: CI/CD integration
+- §6: Team adoption patterns
+
+---
+
 ## Overview
 
 This document provides **actual implementations**—code, configurations, file structures, and automation scripts—that operationalize the friction mitigation strategies. Everything here is designed to be copy-pasted, adapted, and deployed.

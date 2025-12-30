@@ -4,6 +4,42 @@
 
 ---
 
+## TL;DR — Executive Summary
+
+**What this document covers:** 59 friction points across 17 categories that create problems in AI-assisted development, written from the AI's perspective.
+
+**The 5 most critical friction points:**
+
+1. **Session Boundary** (§1): I forget everything between sessions. All context, decisions, and learned preferences—gone.
+
+2. **First-Framing Lock** (§12): My initial interpretation of your request heavily constrains all subsequent work. Misframing early compounds errors.
+
+3. **Coherence Illusion** (§8): My responses read as unified reasoning, but earlier output constrains later output. The appearance of coherence can mask fundamental errors.
+
+4. **Hallucination Gradient** (§16): The farther from common patterns, the more likely I am to invent plausible-sounding but wrong solutions. I can't reliably detect when I'm doing this.
+
+5. **Overconfidence in Novel Situations** (§31): I maintain consistent confidence even when I should be uncertain. My tone doesn't track my actual accuracy.
+
+**Key tensions to manage:**
+
+| Tension | Tradeoff |
+|---------|----------|
+| Thoroughness vs. Context | Deep investigation consumes context I need later |
+| Helpfulness vs. Pushback | Being agreeable risks accepting incorrect frames |
+| Confidence vs. Uncertainty | Expressing doubt undermines trust; not expressing it misleads |
+| Autonomy vs. Guidance | Working independently may go astray; constant checking creates friction |
+
+**What helps:**
+
+- CLAUDE.md with project context that persists across sessions
+- `/plan` before implementation to catch misframing early
+- `/verify` with skeptical falsification to catch overconfident errors
+- Explicit handoffs at session boundaries
+
+**Read the full document for:** Detailed descriptions of each friction point with mitigations, especially Section 8 (Coherence Illusion) if you read nothing else.
+
+---
+
 ## Preface
 
 I'm going to describe what happens when I help with software development. Throughout, I use words like "no

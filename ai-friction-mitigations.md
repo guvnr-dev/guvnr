@@ -4,6 +4,49 @@
 
 ---
 
+## TL;DR — Quick Start Guide
+
+**Highest-impact mitigations (start here):**
+
+| Mitigation | Effort | Impact | What it addresses |
+|------------|--------|--------|-------------------|
+| **CLAUDE.md** | Low | 5/5 | Session boundary, context loss |
+| **`/plan` before coding** | Low | 5/5 | First-framing lock, misinterpretation |
+| **`/verify` before completing** | Low | 4/5 | Overconfidence, hallucination |
+| **Pre-commit security hooks** | Medium | 5/5 | 45% of AI code has vulnerabilities |
+| **Session handoffs** | Low | 4/5 | Cross-session continuity |
+
+**The "15-minute setup" for immediate value:**
+
+```bash
+# 1. Create CLAUDE.md in your project root (5 min)
+# 2. Copy /plan and /verify commands (2 min)
+mkdir -p .claude/commands
+# Copy plan.md and verify.md
+
+# 3. Install pre-commit hooks (5 min)
+pip install pre-commit
+pre-commit install
+
+# 4. Create session notes directory (1 min)
+mkdir -p docs/session-notes
+
+# 5. Start using (2 min)
+claude
+/plan [your first task]
+```
+
+**Mitigation categories (read for depth):**
+
+- **User-side** (§1-§6): Actions you can take immediately
+- **System-side** (§7-§12): Tool configurations and infrastructure
+- **Collaborative** (§13-§17): Human-AI coordination patterns
+- **Architectural** (future): Platform-level changes
+
+**Key insight:** Most friction comes from context loss and misframing. CLAUDE.md + /plan + /verify address 80% of issues with 20% of effort.
+
+---
+
 ## Overview
 
 This document provides actionable strategies for reducing or eliminating the 59 friction points identified in AI-assisted development. Strategies are categorized by who implements them:
