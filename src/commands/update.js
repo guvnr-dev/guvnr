@@ -4,7 +4,7 @@
  * Updates framework components to the latest version.
  */
 
-import { existsSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import chalk from 'chalk';
@@ -163,7 +163,7 @@ export async function updateCommand(options) {
   }
 
   if (updates.errors.length > 0) {
-    console.log(chalk.red(`\n  Errors:`));
+    console.log(chalk.red('\n  Errors:'));
     updates.errors.forEach(e => {
       console.log(chalk.red(`    ✗ ${e.file}: ${e.error}`));
     });

@@ -4,7 +4,7 @@
  * Initializes the framework in a project directory.
  */
 
-import { existsSync, mkdirSync, copyFileSync, writeFileSync, readFileSync } from 'fs';
+import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import chalk from 'chalk';
@@ -272,7 +272,7 @@ async function createDirectories(cwd, config, dryRun, results) {
       if (!dryRun) {
         mkdirSync(fullPath, { recursive: true });
       }
-      results.created.push(dir + '/');
+      results.created.push(`${dir}/`);
     }
   }
 }
@@ -571,7 +571,7 @@ docs/session-notes/*.local.md
     }
   } else {
     if (!dryRun) {
-      writeFileSync(gitignorePath, additions.trim() + '\n');
+      writeFileSync(gitignorePath, `${additions.trim()}\n`);
     }
     results.created.push('.gitignore');
   }
@@ -594,7 +594,7 @@ function printResults(results, dryRun) {
   }
 
   if (results.errors.length > 0) {
-    console.log(chalk.red(`\n  Errors:`));
+    console.log(chalk.red('\n  Errors:'));
     results.errors.forEach(e => console.log(chalk.red(`    ✗ ${e}`)));
   }
 }

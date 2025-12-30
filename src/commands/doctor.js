@@ -19,8 +19,8 @@ const DIAGNOSTICS = [
     name: 'Node.js version',
     category: 'environment',
     check: async () => {
-      const version = process.version;
-      const major = parseInt(version.slice(1).split('.')[0]);
+      const {version} = process;
+      const major = parseInt(version.slice(1).split('.')[0], 10);
       return {
         passed: major >= 18,
         value: version,
@@ -285,7 +285,7 @@ function printDiagnosticResults(results, verbose) {
 
   for (const category of categories) {
     const items = results[category.key];
-    if (items.length === 0) continue;
+    if (items.length === 0) {continue;}
 
     console.log(chalk.white(`  ${category.name}:`));
 

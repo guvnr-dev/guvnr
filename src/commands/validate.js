@@ -23,8 +23,8 @@ const VALIDATION_RULES = [
     id: 'claude-md-exists',
     name: 'CLAUDE.md exists',
     category: 'core',
-    check: (cwd) => existsSync(join(cwd, 'CLAUDE.md')),
-    fix: async (cwd) => {
+    check: cwd => existsSync(join(cwd, 'CLAUDE.md')),
+    fix: async cwd => {
       const template = `# Project Name
 
 ## Overview
@@ -92,15 +92,15 @@ Initial setup
     id: 'claude-md-has-overview',
     name: 'CLAUDE.md has Overview section',
     category: 'core',
-    check: (cwd) => {
+    check: cwd => {
       const path = join(cwd, 'CLAUDE.md');
-      if (!existsSync(path)) return false;
+      if (!existsSync(path)) {return false;}
       const content = readFileSync(path, 'utf-8');
       return /## Overview/i.test(content);
     },
-    fix: async (cwd) => {
+    fix: async cwd => {
       const path = join(cwd, 'CLAUDE.md');
-      if (!existsSync(path)) return false;
+      if (!existsSync(path)) {return false;}
       let content = readFileSync(path, 'utf-8');
       if (!/## Overview/i.test(content)) {
         // Find the first heading and insert after it
@@ -115,15 +115,15 @@ Initial setup
     id: 'claude-md-has-tech-stack',
     name: 'CLAUDE.md has Tech Stack section',
     category: 'core',
-    check: (cwd) => {
+    check: cwd => {
       const path = join(cwd, 'CLAUDE.md');
-      if (!existsSync(path)) return false;
+      if (!existsSync(path)) {return false;}
       const content = readFileSync(path, 'utf-8');
       return /## Tech Stack/i.test(content);
     },
-    fix: async (cwd) => {
+    fix: async cwd => {
       const path = join(cwd, 'CLAUDE.md');
-      if (!existsSync(path)) return false;
+      if (!existsSync(path)) {return false;}
       let content = readFileSync(path, 'utf-8');
       if (!/## Tech Stack/i.test(content)) {
         // Find Overview section and insert after it
@@ -142,15 +142,15 @@ Initial setup
     id: 'claude-md-has-current-state',
     name: 'CLAUDE.md has Current State section',
     category: 'core',
-    check: (cwd) => {
+    check: cwd => {
       const path = join(cwd, 'CLAUDE.md');
-      if (!existsSync(path)) return false;
+      if (!existsSync(path)) {return false;}
       const content = readFileSync(path, 'utf-8');
       return /## Current State/i.test(content);
     },
-    fix: async (cwd) => {
+    fix: async cwd => {
       const path = join(cwd, 'CLAUDE.md');
-      if (!existsSync(path)) return false;
+      if (!existsSync(path)) {return false;}
       let content = readFileSync(path, 'utf-8');
       if (!/## Current State/i.test(content)) {
         content += '\n\n## Current State\n\n### Phase\nIn development\n\n### Recent Decisions\n- [Add decisions here]\n';
@@ -164,8 +164,8 @@ Initial setup
     id: 'commands-dir-exists',
     name: '.claude/commands directory exists',
     category: 'commands',
-    check: (cwd) => existsSync(join(cwd, '.claude', 'commands')),
-    fix: async (cwd) => {
+    check: cwd => existsSync(join(cwd, '.claude', 'commands')),
+    fix: async cwd => {
       mkdirSync(join(cwd, '.claude', 'commands'), { recursive: true });
       return true;
     },
@@ -175,8 +175,8 @@ Initial setup
     id: 'plan-command-exists',
     name: '/plan command exists',
     category: 'commands',
-    check: (cwd) => existsSync(join(cwd, '.claude', 'commands', 'plan.md')),
-    fix: async (cwd) => {
+    check: cwd => existsSync(join(cwd, '.claude', 'commands', 'plan.md')),
+    fix: async cwd => {
       const source = join(PACKAGE_ROOT, '.claude', 'commands', 'plan.md');
       const target = join(cwd, '.claude', 'commands', 'plan.md');
       if (existsSync(source)) {
@@ -192,8 +192,8 @@ Initial setup
     id: 'verify-command-exists',
     name: '/verify command exists',
     category: 'commands',
-    check: (cwd) => existsSync(join(cwd, '.claude', 'commands', 'verify.md')),
-    fix: async (cwd) => {
+    check: cwd => existsSync(join(cwd, '.claude', 'commands', 'verify.md')),
+    fix: async cwd => {
       const source = join(PACKAGE_ROOT, '.claude', 'commands', 'verify.md');
       const target = join(cwd, '.claude', 'commands', 'verify.md');
       if (existsSync(source)) {
@@ -209,8 +209,8 @@ Initial setup
     id: 'pre-commit-config',
     name: 'Pre-commit configuration exists',
     category: 'security',
-    check: (cwd) => existsSync(join(cwd, '.pre-commit-config.yaml')),
-    fix: async (cwd) => {
+    check: cwd => existsSync(join(cwd, '.pre-commit-config.yaml')),
+    fix: async cwd => {
       const source = join(PACKAGE_ROOT, 'templates', '.pre-commit-config.yaml');
       const target = join(cwd, '.pre-commit-config.yaml');
       if (existsSync(source)) {
@@ -240,8 +240,8 @@ Initial setup
     id: 'gitignore-exists',
     name: '.gitignore exists',
     category: 'security',
-    check: (cwd) => existsSync(join(cwd, '.gitignore')),
-    fix: async (cwd) => {
+    check: cwd => existsSync(join(cwd, '.gitignore')),
+    fix: async cwd => {
       const content = `# AI Excellence Framework
 CLAUDE.local.md
 .claude/settings.local.json
@@ -279,15 +279,15 @@ Thumbs.db
     id: 'gitignore-has-tmp',
     name: '.gitignore ignores .tmp/',
     category: 'security',
-    check: (cwd) => {
+    check: cwd => {
       const path = join(cwd, '.gitignore');
-      if (!existsSync(path)) return false;
+      if (!existsSync(path)) {return false;}
       const content = readFileSync(path, 'utf-8');
       return content.includes('.tmp/') || content.includes('.tmp');
     },
-    fix: async (cwd) => {
+    fix: async cwd => {
       const path = join(cwd, '.gitignore');
-      if (!existsSync(path)) return false;
+      if (!existsSync(path)) {return false;}
       appendFileSync(path, '\n# AI Excellence Framework temp files\n.tmp/\n');
       return true;
     },
@@ -297,15 +297,15 @@ Thumbs.db
     id: 'gitignore-has-secrets',
     name: '.gitignore ignores .secrets.baseline',
     category: 'security',
-    check: (cwd) => {
+    check: cwd => {
       const path = join(cwd, '.gitignore');
-      if (!existsSync(path)) return false;
+      if (!existsSync(path)) {return false;}
       const content = readFileSync(path, 'utf-8');
       return content.includes('.secrets.baseline');
     },
-    fix: async (cwd) => {
+    fix: async cwd => {
       const path = join(cwd, '.gitignore');
-      if (!existsSync(path)) return false;
+      if (!existsSync(path)) {return false;}
       appendFileSync(path, '\n.secrets.baseline\n');
       return true;
     },
@@ -315,8 +315,8 @@ Thumbs.db
     id: 'session-notes-dir',
     name: 'Session notes directory exists',
     category: 'workflow',
-    check: (cwd) => existsSync(join(cwd, 'docs', 'session-notes')),
-    fix: async (cwd) => {
+    check: cwd => existsSync(join(cwd, 'docs', 'session-notes')),
+    fix: async cwd => {
       mkdirSync(join(cwd, 'docs', 'session-notes'), { recursive: true });
       writeFileSync(join(cwd, 'docs', 'session-notes', '.gitkeep'), '');
       return true;
@@ -327,8 +327,8 @@ Thumbs.db
     id: 'tmp-dir-exists',
     name: '.tmp directory exists',
     category: 'workflow',
-    check: (cwd) => existsSync(join(cwd, '.tmp')),
-    fix: async (cwd) => {
+    check: cwd => existsSync(join(cwd, '.tmp')),
+    fix: async cwd => {
       mkdirSync(join(cwd, '.tmp'), { recursive: true });
       writeFileSync(join(cwd, '.tmp', '.gitkeep'), '');
       return true;
@@ -339,9 +339,9 @@ Thumbs.db
     id: 'no-hardcoded-secrets',
     name: 'No obvious hardcoded secrets in CLAUDE.md',
     category: 'security',
-    check: (cwd) => {
+    check: cwd => {
       const path = join(cwd, 'CLAUDE.md');
-      if (!existsSync(path)) return true;
+      if (!existsSync(path)) {return true;}
       const content = readFileSync(path, 'utf-8');
       const patterns = [
         /password\s*[:=]\s*["'][^"']{8,}["']/i,
@@ -351,7 +351,7 @@ Thumbs.db
         /sk-[a-zA-Z0-9]{32,}/,
         /ghp_[a-zA-Z0-9]{36}/,
         /gho_[a-zA-Z0-9]{36}/,
-        /glpat-[a-zA-Z0-9\-]{20}/
+        /glpat-[a-zA-Z0-9-]{20}/
       ];
       return !patterns.some(p => p.test(content));
     },
@@ -362,8 +362,8 @@ Thumbs.db
     id: 'agents-dir-exists',
     name: '.claude/agents directory exists',
     category: 'agents',
-    check: (cwd) => existsSync(join(cwd, '.claude', 'agents')),
-    fix: async (cwd) => {
+    check: cwd => existsSync(join(cwd, '.claude', 'agents')),
+    fix: async cwd => {
       mkdirSync(join(cwd, '.claude', 'agents'), { recursive: true });
       return true;
     },
@@ -409,7 +409,7 @@ export async function validateCommand(options) {
               results.fixed.push(rule);
             }
           }
-        } catch (fixError) {
+        } catch {
           // Fix failed, continue with original result
         }
       }
@@ -427,6 +427,9 @@ export async function validateCommand(options) {
           case 'info':
             results.info.push(rule);
             break;
+          default:
+            // Unknown severity, treat as warning
+            results.warnings.push(rule);
         }
       }
     } catch (error) {
@@ -485,7 +488,7 @@ function printValidationResults(results, autoFix) {
         console.log(chalk.gray(`      Error: ${r.error}`));
       }
       if (r.fix && !autoFix) {
-        console.log(chalk.gray(`      Run with --fix to auto-repair`));
+        console.log(chalk.gray('      Run with --fix to auto-repair'));
       }
     });
     console.log('');
@@ -497,7 +500,7 @@ function printValidationResults(results, autoFix) {
     results.warnings.forEach(r => {
       console.log(chalk.yellow(`    ⚠ ${r.name}`));
       if (r.fix && !autoFix) {
-        console.log(chalk.gray(`      Run with --fix to auto-repair`));
+        console.log(chalk.gray('      Run with --fix to auto-repair'));
       }
     });
     console.log('');
@@ -509,7 +512,7 @@ function printValidationResults(results, autoFix) {
     results.info.forEach(r => {
       console.log(chalk.gray(`    ℹ ${r.name}`));
       if (r.fix && !autoFix) {
-        console.log(chalk.gray(`      Run with --fix to auto-repair`));
+        console.log(chalk.gray('      Run with --fix to auto-repair'));
       }
     });
     console.log('');
