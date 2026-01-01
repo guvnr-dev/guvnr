@@ -6,6 +6,7 @@ This guide covers integrating the AI Excellence Framework with popular IDEs and 
 
 - [VS Code](#vs-code)
 - [Cursor](#cursor)
+- [Windsurf & Google Antigravity](#windsurf--google-antigravity)
 - [JetBrains IDEs](#jetbrains-ides)
 - [Neovim](#neovim)
 - [Emacs](#emacs)
@@ -254,6 +255,84 @@ For Cursor's Composer feature, create `.cursor/composer.json`:
   "preferredModel": "claude-sonnet-4-20250514"
 }
 ```
+
+---
+
+## Windsurf & Google Antigravity
+
+[Windsurf](https://codeium.com/windsurf) is an AI-native IDE by Codeium. [Google Antigravity](https://cloud.google.com/products/antigravity) is Google's fork of Windsurf with Gemini integration.
+
+### Configuration Compatibility
+
+Both Windsurf and Antigravity share the same configuration format:
+
+| Location | Purpose |
+|----------|---------|
+| `.windsurf/rules/*.md` | Directory-based rules (recommended) |
+| `.windsurfrules` | Single-file rules (legacy/alternative) |
+| `AGENTS.md` | Falls back to standard agent config |
+
+### Windsurf Rules Directory
+
+Create `.windsurf/rules/project.md`:
+
+```markdown
+# Project Rules
+
+## Overview
+
+[Your project description]
+
+## Tech Stack
+
+- Language: TypeScript
+- Framework: Node.js
+
+## Conventions
+
+- Follow existing code patterns
+- Use conventional commits
+- Run tests before committing
+```
+
+### Memory Configuration
+
+Create `.windsurf/memories.md` for persistent context:
+
+```markdown
+# Project Memories
+
+## Key Decisions
+
+- [Document architectural decisions]
+
+## Patterns
+
+- [Document common patterns]
+```
+
+### Antigravity Compatibility
+
+Google Antigravity is fully compatible with Windsurf configurations. No additional setup required.
+
+**Key points:**
+- Antigravity reads `.windsurf/` configurations
+- Falls back to `.windsurfrules` single file
+- Reads `AGENTS.md` if Windsurf configs aren't present
+- Gemini-specific settings via Google Cloud Console
+
+### Generate Configurations
+
+Use the AI Excellence Framework to generate Windsurf/Antigravity configs:
+
+```bash
+npx ai-excellence-framework generate --tools windsurf
+```
+
+This creates:
+- `.windsurf/rules/project.md` - Project rules
+- `.windsurf/rules/security.md` - Security guidelines
+- `.windsurfrules` - Single-file fallback
 
 ---
 

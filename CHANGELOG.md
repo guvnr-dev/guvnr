@@ -13,6 +13,237 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VitePress documentation site deployment
 - Real-world team usage metrics dashboard
 
+## [1.9.0] - 2026-01-01
+
+### Added
+
+#### New AI Tool Support (2 new tools → 22 total)
+
+- **OpenCode AI** (`opencode.json`, `.opencode/`)
+  - JSON configuration with schema validation
+  - Markdown-based agent definitions (`.opencode/agents/`)
+  - Instructions file for project context
+  - Model, tools, and formatter configuration
+  - Rules array for coding standards
+
+- **Zencoder (Zen Rules)** (`.zencoder/rules/`)
+  - YAML frontmatter with globs and priority
+  - Project rules with coding conventions
+  - Security rules with OWASP guidelines
+  - Testing rules with coverage requirements
+  - JSON configuration (`zencoder.json`)
+
+#### Claude Agent SDK Documentation
+
+- **Agent SDK Guide** (`docs/AGENT-SDK.md`)
+  - Python and TypeScript SDK installation
+  - Built-in tools reference (Read, Write, Edit, Bash, Glob, Grep, etc.)
+  - Subagent configuration examples
+  - MCP server integration
+  - Hooks system for agent lifecycle
+  - Session management for context preservation
+  - Permission modes for tool control
+  - Integration with AI Excellence Framework
+
+#### Google Antigravity Compatibility
+
+- **IDE Integration** updated with Windsurf/Antigravity section
+  - Antigravity is Google's fork of Windsurf
+  - Fully compatible with Windsurf configurations
+  - Memory configuration support
+  - Generation command integration
+
+### Changed
+
+- **Generate Command** now supports 22 AI tools (up from 20)
+  - Added: opencode, zencoder
+  - Total output message updated to reflect 21 tools
+- **VitePress Configuration** updated to v1.9.0
+  - Added Claude Agent SDK documentation link
+  - Updated navigation version dropdown
+- **IDE Integration Guide** enhanced
+  - Added Windsurf & Google Antigravity section
+  - Updated table of contents
+- **Test Suite** expanded with v1.9.0 generator tests
+  - 4 new test cases for OpenCode and Zencoder
+  - Updated SUPPORTED_TOOLS count verification
+
+### Technical Details
+
+- **Files Added**:
+  - `docs/AGENT-SDK.md` - Claude Agent SDK documentation
+  - 2 new generator functions in `generate.js`
+  - 4 new test cases in `generate.test.js`
+
+- **Files Modified**:
+  - `src/commands/generate.js` - Added OpenCode and Zencoder generators
+  - `tests/generate.test.js` - Added v1.9.0 test suite
+  - `docs/.vitepress/config.mjs` - Updated to v1.9.0
+  - `docs/IDE-INTEGRATION.md` - Added Windsurf/Antigravity section
+  - `package.json` - Version bump to 1.9.0
+
+## [1.8.0] - 2026-01-01
+
+### Added
+
+#### New AI Tool Support (5 new tools → 20 total)
+
+- **Claude Code Plugins** (`.claude-plugin/`)
+  - Plugin manifest (`plugin.json`) generation
+  - Plugin README with structure documentation
+  - Supports commands, agents, skills, hooks, and MCP bundling
+  - Marketplace distribution support
+
+- **Kiro CLI** (`.kiro/`) - AWS Q Developer successor
+  - MCP configuration (`mcp.json`)
+  - Steering rules directory (`steering/`)
+  - Full backwards compatibility with Q Developer
+
+- **Continue.dev** (`.continue/`)
+  - `config.yaml` configuration file
+  - Rules directory for team standards
+  - Context providers configuration
+  - MCP server integration
+
+- **Augment Code** (`.augment/`)
+  - Augment Rules for agent behavior
+  - MCP configuration support
+  - Custom command guidance
+
+- **Qodo AI** (`qodo.toml`, `best_practices.md`)
+  - TOML-based agent configuration
+  - Best practices auto-generation
+  - Modes: Ask, Code, Plan
+  - CI/CD integration support
+
+#### AAIF (Agentic AI Foundation) Support
+
+- **AAIF Documentation** (`docs/AAIF.md`)
+  - Linux Foundation governance overview
+  - Core projects: MCP, AGENTS.md, Goose
+  - Founding members and timeline
+  - Integration guidelines
+
+- **AGENTS.md AAIF Attribution**
+  - All generated AGENTS.md files now reference AAIF
+  - Linux Foundation governance acknowledgment
+
+#### MCP June 2025 Specification Updates
+
+- **MCP OAuth Guide** (`docs/MCP-OAUTH.md`)
+  - OAuth-based authorization (RFC 6749)
+  - Resource Indicators (RFC 8707)
+  - Elicitation for server-initiated user interactions
+  - Structured tool outputs
+  - Security best practices
+
+#### Cross-Platform Skills Compatibility
+
+- **GitHub Copilot Auto-Discovery**
+  - Copilot now auto-discovers `.claude/skills/`
+  - Cross-platform compatibility matrix
+  - Updated Skills README documentation
+
+### Changed
+
+- **Generate Command** now supports 20 AI tools (up from 15)
+  - Added: plugins, kiro, continue, augment, qodo
+  - Total output message updated to reflect 19 tools
+- **VitePress Configuration** updated to v1.8.0
+  - Added AAIF and MCP OAuth documentation links
+  - Updated copyright to 2024-2026
+- **Test Suite** expanded with v1.8.0 generator tests
+  - 8 new test cases for new generators
+  - AAIF attribution verification
+
+### Technical Details
+
+- **Files Added**:
+  - `docs/AAIF.md` - AAIF documentation
+  - `docs/MCP-OAUTH.md` - MCP OAuth guide
+  - 5 new generator functions in `generate.js`
+  - 8 new test cases in `generate.test.js`
+
+- **Files Modified**:
+  - `src/commands/generate.js` - New generators
+  - `tests/generate.test.js` - New test suite
+  - `docs/.vitepress/config.mjs` - v1.8.0 navigation
+  - `templates/skills/README.md` - Compatibility matrix
+  - `package.json` - Version bump
+
+## [1.7.0] - 2026-01-01
+
+### Added
+
+#### Universal Agent Skills Support
+
+- **Skills (SKILL.md) Generation**
+  - Universal agent skills specification support
+  - Auto-generates `project-standards` and `security-review` skills
+  - Compatible with GitHub Copilot, OpenAI Codex, and Claude Code
+  - Skills templates in `templates/skills/` directory
+  - YAML frontmatter with name, description, and allowed-tools
+
+#### New AI Tool Integrations
+
+- **JetBrains Junie Support** (`.junie/guidelines.md`)
+  - Full guidelines.md generation
+  - Technology-specific conventions
+  - Antipatterns documentation
+  - References JetBrains guidelines catalog
+
+- **Cline Support** (`.clinerules`)
+  - Single-file rules format
+  - Plan Mode and Act Mode guidance
+  - Cline-specific workflow documentation
+
+- **Block Goose Support** (`.goose/`)
+  - Extensions.yaml with recommended MCP servers
+  - README with quick start guide
+  - AAIF-aligned configuration
+
+- **Windsurf Single-File Format** (`.windsurfrules`)
+  - Alternative to `.windsurf/rules/` directory
+  - Compact single-file configuration
+
+#### MCP Protocol Updates
+
+- **MCP Tasks Guide** (`docs/MCP-TASKS.md`)
+  - November 2025 specification (2025-11-25)
+  - Async task execution patterns
+  - Long-running operation support
+  - Task lifecycle management
+  - Integration examples
+
+- **MCP Registry Guide** (`docs/MCP-REGISTRY.md`)
+  - Official registry integration
+  - Docker MCP Catalog support
+  - GitHub MCP Registry documentation
+  - Security best practices for server installation
+
+#### Skills Templates
+
+- **Project Standards Skill** (`templates/skills/project-standards/`)
+- **Security Review Skill** (`templates/skills/security-review/`)
+- **Test-Driven Skill** (`templates/skills/test-driven/`)
+- Skills README with usage documentation
+
+### Changed
+
+- **Generate Command** now supports 15 AI tools (up from 11)
+  - Added: skills, junie, cline, goose
+  - Windsurf now generates both directory and single-file formats
+- **VitePress Configuration** updated to v1.7.0
+  - Added MCP Tasks and MCP Registry links
+  - Updated navigation with new documentation
+- **Test Suite** expanded with new generator tests
+
+### Technical
+
+- Generate command extended to 1900+ lines with new generators
+- Tests cover all new tool generators
+- Documentation aligned with January 2026 ecosystem
+
 ## [1.6.0] - 2025-12-30
 
 ### Added

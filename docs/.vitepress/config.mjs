@@ -37,9 +37,14 @@ export default defineConfig({
         ]
       },
       {
-        text: 'v1.5.0',
+        text: 'v1.9.0',
         items: [
           { text: 'Changelog', link: '/changelog' },
+          { text: 'Claude Agent SDK', link: '/AGENT-SDK' },
+          { text: 'AAIF Standard', link: '/AAIF' },
+          { text: 'MCP OAuth', link: '/MCP-OAUTH' },
+          { text: 'MCP Tasks', link: '/MCP-TASKS' },
+          { text: 'MCP Registry', link: '/MCP-REGISTRY' },
           { text: 'Research Citations', link: '/RESEARCH-CITATIONS' },
           { text: 'DORA Integration', link: '/DORA-INTEGRATION' },
           { text: 'PostgreSQL Deployment', link: '/POSTGRESQL-DEPLOYMENT' },
@@ -140,7 +145,12 @@ export default defineConfig({
             { text: 'DORA Integration', link: '/DORA-INTEGRATION' },
             { text: 'Team Memory', link: '/TEAM-MEMORY-FEDERATION' },
             { text: 'PostgreSQL Deployment', link: '/POSTGRESQL-DEPLOYMENT' },
+            { text: 'Claude Agent SDK', link: '/AGENT-SDK' },
             { text: 'MCP Security', link: '/MCP-SECURITY' },
+            { text: 'MCP OAuth', link: '/MCP-OAUTH' },
+            { text: 'MCP Tasks', link: '/MCP-TASKS' },
+            { text: 'MCP Registry', link: '/MCP-REGISTRY' },
+            { text: 'AAIF Standard', link: '/AAIF' },
             { text: 'Model Selection', link: '/MODEL-SELECTION' },
             { text: 'Troubleshooting', link: '/TROUBLESHOOTING' },
             { text: 'Research Citations', link: '/RESEARCH-CITATIONS' }
@@ -164,7 +174,7 @@ export default defineConfig({
     // Footer
     footer: {
       message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2024-2025 AI Excellence Framework Contributors'
+      copyright: 'Copyright © 2024-2026 AI Excellence Framework Contributors'
     },
 
     // Edit link
