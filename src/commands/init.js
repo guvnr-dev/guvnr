@@ -5,12 +5,13 @@
  */
 
 import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
-import { join, dirname } from 'path';
+import { join, dirname, basename } from 'path';
 import { fileURLToPath } from 'url';
 import chalk from 'chalk';
 import ora from 'ora';
 import enquirer from 'enquirer';
 import fse from 'fs-extra';
+import { createError, FrameworkError } from '../errors.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -79,6 +80,15 @@ const PRESETS = {
 
 /**
  * Main init command handler
+ *
+ * @param {object} options - Command options
+ * @param {string} [options.preset='standard'] - Preset configuration to use
+ * @param {boolean} [options.yes=false] - Skip prompts and use defaults
+ * @param {boolean} [options.force=false] - Overwrite existing files
+ * @param {boolean} [options.dryRun=false] - Show what would be created without creating
+ * @param {boolean} [options.verbose=false] - Show detailed output
+ * @returns {Promise<void>} Resolves when initialization is complete
+ * @throws {FrameworkError} If initialization fails
  */
 export async function initCommand(options) {
   const cwd = process.cwd();
@@ -198,11 +208,17 @@ export async function initCommand(options) {
     printNextSteps(config);
   } catch (error) {
     spinner.fail('Installation failed');
-    console.error(chalk.red(`\n  Error: ${error.message}\n`));
-    if (options.verbose) {
-      console.error(error.stack);
+
+    // Re-throw if already a FrameworkError
+    if (error instanceof FrameworkError) {
+      throw error;
     }
-    process.exit(1);
+
+    // Wrap in FrameworkError and throw (CLI will handle exit code)
+    throw createError('AIX-INIT-100', error.message, {
+      cause: error,
+      context: { preset: config?.name, cwd }
+    });
   }
 }
 
@@ -292,7 +308,7 @@ async function installClaudeMd(cwd, dryRun, results) {
   }
 
   // Replace placeholders
-  const projectName = dirname(cwd).split('/').pop() || 'Project';
+  const projectName = basename(cwd) || 'Project';
   content = content.replace(/\[PROJECT_NAME\]/g, projectName);
   content = content.replace(/\[DATE\]/g, new Date().toISOString().split('T')[0]);
 

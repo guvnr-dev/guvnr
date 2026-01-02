@@ -77,7 +77,7 @@ export class FrameworkError extends Error {
       output += `\n  Stack trace:\n  ${this.stack.split('\n').slice(1).join('\n  ')}\n`;
     }
 
-    output += `\n  Documentation: https://ai-excellence-framework.github.io/errors/${this.code}\n`;
+    output += `\n  Documentation: https://ai-excellence-framework.github.io/ERROR-CODES.html#${this.code.toLowerCase()}\n`;
 
     return output;
   }

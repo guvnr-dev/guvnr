@@ -233,6 +233,69 @@ export function validateConfig(config) {
   // Validate mcp object
   if (config.mcp && typeof config.mcp !== 'object' && typeof config.mcp !== 'boolean') {
     result.errors.push('mcp must be a boolean or object');
+  } else if (config.mcp && typeof config.mcp === 'object') {
+    // Validate mcp nested structure
+    if (config.mcp.storage && !['sqlite', 'postgres'].includes(config.mcp.storage)) {
+      result.errors.push('mcp.storage must be "sqlite" or "postgres"');
+    }
+    if (config.mcp.limits && typeof config.mcp.limits !== 'object') {
+      result.errors.push('mcp.limits must be an object');
+    }
+  }
+
+  // Validate metrics object
+  if (config.metrics && typeof config.metrics !== 'object' && typeof config.metrics !== 'boolean') {
+    result.errors.push('metrics must be a boolean or object');
+  } else if (config.metrics && typeof config.metrics === 'object') {
+    // Validate metrics nested structure
+    if (config.metrics.enabled !== undefined && typeof config.metrics.enabled !== 'boolean') {
+      result.errors.push('metrics.enabled must be a boolean');
+    }
+    if (config.metrics.autoCollect !== undefined && typeof config.metrics.autoCollect !== 'boolean') {
+      result.errors.push('metrics.autoCollect must be a boolean');
+    }
+    if (config.metrics.directory !== undefined && typeof config.metrics.directory !== 'string') {
+      result.errors.push('metrics.directory must be a string');
+    }
+  }
+
+  // Validate security object
+  if (config.security && typeof config.security !== 'object' && typeof config.security !== 'boolean') {
+    result.errors.push('security must be a boolean or object');
+  } else if (config.security && typeof config.security === 'object') {
+    const securityBoolFields = ['preCommit', 'secretsDetection', 'dependencyScanning', 'aiPatternChecks'];
+    for (const field of securityBoolFields) {
+      if (config.security[field] !== undefined && typeof config.security[field] !== 'boolean') {
+        result.errors.push(`security.${field} must be a boolean`);
+      }
+    }
+  }
+
+  // Validate team object
+  if (config.team && typeof config.team !== 'object' && typeof config.team !== 'boolean') {
+    result.errors.push('team must be a boolean or object');
+  } else if (config.team && typeof config.team === 'object') {
+    const teamBoolFields = ['enabled', 'sharedMemory', 'enforceConventions'];
+    for (const field of teamBoolFields) {
+      if (config.team[field] !== undefined && typeof config.team[field] !== 'boolean') {
+        result.errors.push(`team.${field} must be a boolean`);
+      }
+    }
+  }
+
+  // Validate project object
+  if (config.project && typeof config.project !== 'object') {
+    result.errors.push('project must be an object');
+  } else if (config.project && typeof config.project === 'object') {
+    if (config.project.name !== undefined && typeof config.project.name !== 'string') {
+      result.errors.push('project.name must be a string');
+    }
+    if (config.project.language !== undefined) {
+      const validLanguages = ['typescript', 'javascript', 'python', 'go', 'rust', 'java', 'other'];
+      if (!validLanguages.includes(config.project.language)) {
+        result.errors.push(`project.language must be one of: ${validLanguages.join(', ')}`);
+      }
+    }
   }
 
   if (result.errors.length === 0) {

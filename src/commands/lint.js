@@ -12,6 +12,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'fs';
 import { join } from 'path';
 import chalk from 'chalk';
 import ora from 'ora';
+import { createError, FrameworkError } from '../errors.js';
 
 /**
  * Configuration file checks
@@ -103,6 +104,12 @@ const CHECKS = {
 
 /**
  * Main lint command handler
+ *
+ * @param {object} options - Command options
+ * @param {boolean} [options.ignoreErrors=false] - Don't exit with error on lint failures
+ * @param {boolean} [options.verbose=false] - Show detailed output
+ * @returns {Promise<void>} Resolves when linting is complete
+ * @throws {FrameworkError} If linting fails with errors
  */
 export async function lintCommand(options) {
   const cwd = process.cwd();
@@ -159,14 +166,20 @@ export async function lintCommand(options) {
     // Print results
     printLintResults(results, options);
 
-    // Exit code based on errors
+    // Throw error if lint failed (CLI will handle exit code)
     if (results.errors.length > 0 && !options.ignoreErrors) {
-      process.exit(1);
+      throw createError('AIX-VALID-200', `Lint found ${results.errors.length} error(s)`);
     }
   } catch (error) {
     spinner.fail('Lint failed');
-    console.error(chalk.red(`\n  Error: ${error.message}\n`));
-    process.exit(1);
+
+    // Re-throw if already a FrameworkError
+    if (error instanceof FrameworkError) {
+      throw error;
+    }
+
+    // Wrap and throw (CLI will handle exit code)
+    throw createError('AIX-GEN-900', error.message, { cause: error });
   }
 }
 
