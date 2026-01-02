@@ -44,12 +44,21 @@ const COMMAND_TIMEOUT = parseInt(process.env.AIX_TIMEOUT || String(DEFAULT_TIMEO
 const DEBUG_MODE = process.env.AIX_DEBUG === 'true';
 
 /**
- * Wrap a command handler with timeout support.
- * If the command takes longer than the configured timeout, it will be aborted.
+ * Wrap a command handler with timeout support using AbortController.
+ *
+ * Uses the modern AbortSignal.timeout() API for cleaner cancellation semantics.
+ * This approach provides:
+ * - Automatic cleanup when the timeout fires
+ * - Proper signal propagation for cancellable operations
+ * - Clear abort reason for debugging
+ *
+ * If the command takes longer than the configured timeout, it will be aborted
+ * with an appropriate error message.
  *
  * @param {Function} handler - Command handler function
  * @param {string} commandName - Name of the command for error messages
- * @returns {Function} Wrapped handler with timeout
+ * @returns {Function} Wrapped handler with timeout and abort support
+ * @see https://nodejs.org/api/globals.html#class-abortsignal
  */
 function withTimeout(handler, commandName) {
   return async function (...args) {
@@ -59,26 +68,60 @@ function withTimeout(handler, commandName) {
       console.log(chalk.gray(`[DEBUG] Starting ${commandName} with timeout: ${timeoutMs}ms`));
     }
 
-    let timerId = null;
+    // Create an AbortController for manual cancellation (future use)
+    const controller = new AbortController();
 
-    const timeoutPromise = new Promise((_, reject) => {
-      timerId = setTimeout(() => {
-        reject(
-          createError(
-            'AIX-GEN-901',
-            `Command '${commandName}' timed out after ${timeoutMs}ms. Set AIX_TIMEOUT environment variable to increase the timeout.`,
-            { context: { command: commandName, timeout: timeoutMs } }
-          )
-        );
-      }, timeoutMs);
+    // Create a timeout signal using AbortSignal.timeout()
+    // This automatically cleans up when the timeout fires
+    const timeoutSignal = AbortSignal.timeout(timeoutMs);
+
+    // Combine signals: abort on either timeout OR manual abort
+    // AbortSignal.any() allows combining multiple abort reasons
+    const combinedSignal = AbortSignal.any([controller.signal, timeoutSignal]);
+
+    // Store signal on args options if present (allows handlers to check for abort)
+    // This enables cooperative cancellation within command handlers
+    const lastArg = args[args.length - 1];
+    if (lastArg && typeof lastArg === 'object' && !Array.isArray(lastArg)) {
+      lastArg._abortSignal = combinedSignal;
+    }
+
+    // Listen for abort to throw appropriate error
+    const abortPromise = new Promise((_, reject) => {
+      combinedSignal.addEventListener(
+        'abort',
+        () => {
+          const { reason } = combinedSignal;
+          // Check if this was a timeout (reason will be a TimeoutError)
+          const isTimeout = reason?.name === 'TimeoutError';
+
+          reject(
+            createError(
+              'AIX-GEN-901',
+              isTimeout
+                ? `Command '${commandName}' timed out after ${timeoutMs}ms. Set AIX_TIMEOUT environment variable to increase the timeout.`
+                : `Command '${commandName}' was aborted: ${reason?.message || 'Unknown reason'}`,
+              {
+                context: {
+                  command: commandName,
+                  timeout: timeoutMs,
+                  reason: reason?.name || 'AbortError'
+                }
+              }
+            )
+          );
+        },
+        { once: true }
+      );
     });
 
     try {
-      const result = await Promise.race([handler.apply(this, args), timeoutPromise]);
-      clearTimeout(timerId);
+      // Race between command execution and abort
+      const result = await Promise.race([handler.apply(this, args), abortPromise]);
       return result;
     } catch (error) {
-      clearTimeout(timerId);
+      // Abort any ongoing operations (cleanup)
+      controller.abort(error);
       throw error;
     }
   };
@@ -96,6 +139,16 @@ program
   .name('ai-excellence')
   .description('AI Excellence Framework - Reduce friction in AI-assisted development')
   .version(packageJson.version)
+  .option('--no-color', 'Disable colored output (also respects NO_COLOR env var)')
+  .hook('preAction', thisCommand => {
+    // Check for --no-color flag or NO_COLOR environment variable
+    // Chalk automatically respects NO_COLOR, but we also support the CLI flag
+    const opts = thisCommand.opts();
+    if (opts.color === false || process.env.NO_COLOR) {
+      // Disable chalk colors by setting the level to 0
+      chalk.level = 0;
+    }
+  })
   .addHelpText('after', `
 Examples:
   $ ai-excellence init                    # Initialize with standard preset
@@ -105,6 +158,12 @@ Examples:
   $ ai-excellence doctor                  # Check framework health
   $ ai-excellence generate cursor         # Generate Cursor IDE rules
   $ ai-excellence generate --all          # Generate configs for all tools
+  $ ai-excellence --no-color init         # Run without colors
+
+Environment variables:
+  NO_COLOR=1                              # Disable colored output
+  AIX_TIMEOUT=300000                      # Command timeout (ms, default: 5 min)
+  AIX_DEBUG=true                          # Enable debug output
 
 More info: https://ai-excellence-framework.github.io/
 `);
