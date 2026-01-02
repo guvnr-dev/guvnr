@@ -25,9 +25,9 @@ import { relative, isAbsolute } from 'path';
  * Sanitize context object to prevent sensitive path leakage.
  * Replaces home directory paths with ~ and absolute paths with relative versions.
  *
- * @param {Object} context - Context object to sanitize
+ * @param {Object.<string, *>} context - Context object to sanitize
  * @param {string} [basePath=process.cwd()] - Base path for relative conversion
- * @returns {Object} Sanitized context object
+ * @returns {Object.<string, *>} Sanitized context object with paths replaced
  */
 function sanitizeContext(context, basePath = process.cwd()) {
   if (!context || typeof context !== 'object') {
@@ -535,8 +535,9 @@ export function getExitCode(errorCode) {
  * Wraps an async function with error handling.
  * Catches errors, formats them, and exits with appropriate code.
  *
- * @param {Function} fn - Async function to wrap
- * @returns {Function} Wrapped function with error handling
+ * @template {(...args: any[]) => Promise<any>} T
+ * @param {T} fn - Async function to wrap
+ * @returns {(...args: Parameters<T>) => Promise<ReturnType<T> | void>} Wrapped function with error handling
  *
  * @example
  * const safeInit = asyncHandler(async (options) => {
@@ -571,6 +572,7 @@ export function asyncHandler(fn) {
  * @param {string} code - Error code to throw if condition is false
  * @param {string} [message] - Custom error message
  * @param {Object} [options] - Error options
+ * @returns {void} Returns nothing; throws if condition is false
  * @throws {FrameworkError} If condition is false
  *
  * @example

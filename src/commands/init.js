@@ -493,47 +493,67 @@ async function installHooks(cwd, dryRun, results) {
  * Validate basic YAML structure without a full parser.
  * Checks for common issues that would cause pre-commit to fail.
  *
+ * Errors are classified as:
+ * - critical: Template is fundamentally broken and should not be copied
+ * - warning: Template has issues but may still work
+ *
  * @param {string} content - YAML file content
- * @returns {{valid: boolean, errors: string[]}}
+ * @returns {{valid: boolean, errors: string[], warnings: string[], hasCriticalErrors: boolean}}
  */
 function validateBasicYaml(content) {
   const errors = [];
+  const warnings = [];
 
-  // Check for tabs (YAML requires spaces)
+  // CRITICAL: Check for tabs (YAML requires spaces) - this breaks YAML parsing
   if (content.includes('\t')) {
     errors.push('YAML file contains tabs (use spaces for indentation)');
   }
 
-  // Check for required pre-commit config keys
+  // CRITICAL: Check for required pre-commit config keys
   if (!content.includes('repos:')) {
     errors.push('Missing required "repos:" key in pre-commit config');
   }
 
-  // Check for consistent indentation (basic check)
+  // WARNING: Check for consistent indentation (basic check)
+  // Odd indentation is often a warning, not always a breaking error
   const lines = content.split('\n');
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     // Check for odd indentation that would break YAML
     const leadingSpaces = line.match(/^( *)/)?.[1]?.length || 0;
     if (leadingSpaces % 2 !== 0 && !line.trim().startsWith('#')) {
-      errors.push(`Line ${i + 1}: Odd indentation (${leadingSpaces} spaces) may cause YAML parsing issues`);
+      warnings.push(`Line ${i + 1}: Odd indentation (${leadingSpaces} spaces) may cause YAML parsing issues`);
       break; // Only report first occurrence
     }
   }
 
-  // Check for empty file
+  // CRITICAL: Check for empty file
   if (content.trim().length === 0) {
     errors.push('YAML file is empty');
   }
 
+  // Determine if there are critical errors that should block installation
+  // Critical errors: tabs, missing repos:, empty file
+  const hasCriticalErrors = errors.length > 0;
+
   return {
-    valid: errors.length === 0,
-    errors
+    valid: errors.length === 0 && warnings.length === 0,
+    errors,
+    warnings,
+    hasCriticalErrors
   };
 }
 
 /**
  * Install pre-commit configuration
+ *
+ * Validates the template before copying. Critical errors (tabs, missing repos:,
+ * empty file) will block installation. Warnings are displayed but don't block.
+ *
+ * @param {string} cwd - Current working directory
+ * @param {boolean} dryRun - If true, don't actually copy files
+ * @param {Object} results - Results object to track created/skipped files
+ * @throws {FrameworkError} If template has critical YAML errors
  */
 async function installPreCommit(cwd, dryRun, results) {
   const sourcePath = join(PACKAGE_ROOT, 'templates', '.pre-commit-config.yaml');
@@ -544,11 +564,21 @@ async function installPreCommit(cwd, dryRun, results) {
     const content = await readFile(sourcePath, 'utf-8');
     const validation = validateBasicYaml(content);
 
-    if (!validation.valid) {
+    // Critical errors block installation - template is fundamentally broken
+    if (validation.hasCriticalErrors) {
+      const errorMsg = `Pre-commit template has critical errors and cannot be installed:\n${validation.errors.map(e => `  - ${e}`).join('\n')}`;
+      console.error(chalk.red(`\n❌ ${errorMsg}\n`));
+      throw createError('AIX-HOOK-700', errorMsg, {
+        context: { templatePath: sourcePath, errors: validation.errors },
+        suggestion: 'The pre-commit template in the framework package is malformed. Please report this issue.'
+      });
+    }
+
+    // Warnings are displayed but don't block installation
+    if (validation.warnings.length > 0) {
       console.warn(
-        `Warning: Pre-commit template has potential issues:\n${validation.errors.map(e => `  - ${e}`).join('\n')}`
+        chalk.yellow(`\n⚠️  Pre-commit template has potential issues:\n${validation.warnings.map(e => `  - ${e}`).join('\n')}\n`)
       );
-      // Still proceed with copy but warn the user
     }
 
     if (!dryRun) {

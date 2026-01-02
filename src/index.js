@@ -363,9 +363,22 @@ export function listInstalledAgents(cwd = process.cwd()) {
 
 /**
  * Read and parse CLAUDE.md (synchronous version)
+ *
+ * **WARNING:** This function uses synchronous I/O which blocks the event loop.
+ * It is retained only for backward compatibility with existing integrations.
+ *
  * @param {string} [cwd=process.cwd()] - Directory to read from
- * @returns {Object|null} Parsed CLAUDE.md or null
- * @deprecated Use readClaudeMdAsync for better performance in async contexts
+ * @returns {{raw: string, sections: Object.<string, string>}|null} Parsed CLAUDE.md or null
+ * @deprecated Since v1.0.0. Use {@link readClaudeMdAsync} instead for better performance.
+ *   This function will be removed in v2.0.0.
+ * @internal This function is not recommended for new code. It remains exported
+ *   only for backward compatibility and may be removed in future major versions.
+ * @example
+ * // Preferred: Use async version
+ * const parsed = await readClaudeMdAsync('/path/to/project');
+ *
+ * // Legacy: Synchronous version (deprecated)
+ * const parsed = readClaudeMd('/path/to/project');
  */
 export function readClaudeMd(cwd = process.cwd()) {
   const path = join(cwd, 'CLAUDE.md');
@@ -379,9 +392,17 @@ export function readClaudeMd(cwd = process.cwd()) {
 
 /**
  * Read and parse CLAUDE.md (async version)
+ *
  * Preferred for command handlers and async contexts to avoid blocking the event loop.
+ * This is the recommended way to read CLAUDE.md files.
+ *
  * @param {string} [cwd=process.cwd()] - Directory to read from
- * @returns {Promise<Object|null>} Parsed CLAUDE.md or null
+ * @returns {Promise<{raw: string, sections: Object.<string, string>}|null>} Parsed CLAUDE.md or null if file doesn't exist
+ * @example
+ * const parsed = await readClaudeMdAsync('/path/to/project');
+ * if (parsed) {
+ *   console.log(parsed.sections['Overview']);
+ * }
  */
 export async function readClaudeMdAsync(cwd = process.cwd()) {
   const path = join(cwd, 'CLAUDE.md');
@@ -395,8 +416,14 @@ export async function readClaudeMdAsync(cwd = process.cwd()) {
 
 /**
  * Parse CLAUDE.md content into sections
+ *
+ * Extracts level-2 headings (## Section) and their content into a structured object.
+ *
  * @param {string} content - CLAUDE.md content
- * @returns {Object} Parsed sections
+ * @returns {{raw: string, sections: Object.<string, string>}} Object containing raw content and parsed sections
+ * @example
+ * const { sections } = parseClaudeMd(markdownContent);
+ * console.log(sections['Overview']); // Content under ## Overview
  */
 export function parseClaudeMd(content) {
   const sections = {};
@@ -425,93 +452,101 @@ export function parseClaudeMd(content) {
 }
 
 /**
- * Secret detection patterns organized by category
- * @type {Object.<string, Array<{name: string, pattern: RegExp}>>}
+ * Secret detection patterns organized by category.
+ *
+ * All patterns are pre-compiled RegExp literals for optimal performance.
+ * RegExp literals in JavaScript are compiled once at parse time, making them
+ * more efficient than creating new RegExp objects at runtime.
+ *
+ * The object is frozen with Object.freeze() to prevent accidental mutation.
+ *
+ * @type {Readonly<Object.<string, ReadonlyArray<{name: string, pattern: RegExp}>>>}
+ * @see detectSecrets for usage
  */
-export const SECRET_PATTERNS = {
+export const SECRET_PATTERNS = Object.freeze({
   // Generic credential patterns
-  generic: [
-    { name: 'API Key', pattern: /api[_-]?key\s*[:=]\s*["'][^"']{16,}["']/gi },
-    { name: 'Password', pattern: /password\s*[:=]\s*["'][^"']{8,}["']/gi },
-    { name: 'Secret', pattern: /secret\s*[:=]\s*["'][^"']{8,}["']/gi },
-    { name: 'Bearer Token', pattern: /bearer\s+[a-zA-Z0-9_.-]{20,}/gi }
-  ],
+  generic: Object.freeze([
+    Object.freeze({ name: 'API Key', pattern: /api[_-]?key\s*[:=]\s*["'][^"']{16,}["']/gi }),
+    Object.freeze({ name: 'Password', pattern: /password\s*[:=]\s*["'][^"']{8,}["']/gi }),
+    Object.freeze({ name: 'Secret', pattern: /secret\s*[:=]\s*["'][^"']{8,}["']/gi }),
+    Object.freeze({ name: 'Bearer Token', pattern: /bearer\s+[a-zA-Z0-9_.-]{20,}/gi })
+  ]),
 
   // AI/ML API Keys
-  ai_ml: [
-    { name: 'OpenAI Key', pattern: /sk-[a-zA-Z0-9]{32,}/g },
-    { name: 'Anthropic Key', pattern: /sk-ant-[a-zA-Z0-9_-]{32,}/g },
-    { name: 'Google AI Key', pattern: /AIza[a-zA-Z0-9_-]{35}/g }
-  ],
+  ai_ml: Object.freeze([
+    Object.freeze({ name: 'OpenAI Key', pattern: /sk-[a-zA-Z0-9]{32,}/g }),
+    Object.freeze({ name: 'Anthropic Key', pattern: /sk-ant-[a-zA-Z0-9_-]{32,}/g }),
+    Object.freeze({ name: 'Google AI Key', pattern: /AIza[a-zA-Z0-9_-]{35}/g })
+  ]),
 
   // Cloud Provider Keys
-  cloud: [
-    { name: 'AWS Access Key', pattern: /AKIA[0-9A-Z]{16}/g },
-    { name: 'AWS Secret Key', pattern: /aws[_-]?secret[_-]?access[_-]?key\s*[:=]\s*["'][a-zA-Z0-9/+=]{40}["']/gi },
-    { name: 'Azure Connection String', pattern: /DefaultEndpointsProtocol=https;AccountName=[^;]+;AccountKey=[a-zA-Z0-9+/=]{88}/g },
-    { name: 'GCP Service Account', pattern: /"type"\s*:\s*"service_account"/g }
-  ],
+  cloud: Object.freeze([
+    Object.freeze({ name: 'AWS Access Key', pattern: /AKIA[0-9A-Z]{16}/g }),
+    Object.freeze({ name: 'AWS Secret Key', pattern: /aws[_-]?secret[_-]?access[_-]?key\s*[:=]\s*["'][a-zA-Z0-9/+=]{40}["']/gi }),
+    Object.freeze({ name: 'Azure Connection String', pattern: /DefaultEndpointsProtocol=https;AccountName=[^;]+;AccountKey=[a-zA-Z0-9+/=]{88}/g }),
+    Object.freeze({ name: 'GCP Service Account', pattern: /"type"\s*:\s*"service_account"/g })
+  ]),
 
   // Version Control Systems
-  vcs: [
-    { name: 'GitHub Token', pattern: /ghp_[a-zA-Z0-9]{36}/g },
-    { name: 'GitHub OAuth', pattern: /gho_[a-zA-Z0-9]{36}/g },
-    { name: 'GitHub App Token', pattern: /ghu_[a-zA-Z0-9]{36}/g },
-    { name: 'GitHub Refresh Token', pattern: /ghr_[a-zA-Z0-9]{36}/g },
-    { name: 'GitLab Token', pattern: /glpat-[a-zA-Z0-9-]{20}/g },
-    { name: 'Bitbucket Token', pattern: /ATBB[a-zA-Z0-9]{32}/g }
-  ],
+  vcs: Object.freeze([
+    Object.freeze({ name: 'GitHub Token', pattern: /ghp_[a-zA-Z0-9]{36}/g }),
+    Object.freeze({ name: 'GitHub OAuth', pattern: /gho_[a-zA-Z0-9]{36}/g }),
+    Object.freeze({ name: 'GitHub App Token', pattern: /ghu_[a-zA-Z0-9]{36}/g }),
+    Object.freeze({ name: 'GitHub Refresh Token', pattern: /ghr_[a-zA-Z0-9]{36}/g }),
+    Object.freeze({ name: 'GitLab Token', pattern: /glpat-[a-zA-Z0-9-]{20}/g }),
+    Object.freeze({ name: 'Bitbucket Token', pattern: /ATBB[a-zA-Z0-9]{32}/g })
+  ]),
 
   // Communication Platforms
-  communication: [
-    { name: 'Slack Token', pattern: /xox[baprs]-[a-zA-Z0-9-]{10,}/g },
-    { name: 'Slack Webhook', pattern: /hooks\.slack\.com\/services\/T[a-zA-Z0-9_]+\/B[a-zA-Z0-9_]+\/[a-zA-Z0-9_]+/g },
-    { name: 'Discord Webhook', pattern: /discord(?:app)?\.com\/api\/webhooks\/[0-9]+\/[a-zA-Z0-9_-]+/g },
-    { name: 'Twilio Key', pattern: /SK[a-f0-9]{32}/g },
-    { name: 'Twilio Auth Token', pattern: /twilio[_-]?auth[_-]?token\s*[:=]\s*["'][a-f0-9]{32}["']/gi }
-  ],
+  communication: Object.freeze([
+    Object.freeze({ name: 'Slack Token', pattern: /xox[baprs]-[a-zA-Z0-9-]{10,}/g }),
+    Object.freeze({ name: 'Slack Webhook', pattern: /hooks\.slack\.com\/services\/T[a-zA-Z0-9_]+\/B[a-zA-Z0-9_]+\/[a-zA-Z0-9_]+/g }),
+    Object.freeze({ name: 'Discord Webhook', pattern: /discord(?:app)?\.com\/api\/webhooks\/[0-9]+\/[a-zA-Z0-9_-]+/g }),
+    Object.freeze({ name: 'Twilio Key', pattern: /SK[a-f0-9]{32}/g }),
+    Object.freeze({ name: 'Twilio Auth Token', pattern: /twilio[_-]?auth[_-]?token\s*[:=]\s*["'][a-f0-9]{32}["']/gi })
+  ]),
 
   // Payment Providers
-  payment: [
-    { name: 'Stripe Live Key', pattern: /sk_live_[a-zA-Z0-9]{24,}/g },
-    { name: 'Stripe Test Key', pattern: /sk_test_[a-zA-Z0-9]{24,}/g },
-    { name: 'Stripe Publishable', pattern: /pk_(live|test)_[a-zA-Z0-9]{24,}/g },
-    { name: 'PayPal Secret', pattern: /paypal[_-]?secret\s*[:=]\s*["'][a-zA-Z0-9]{32,}["']/gi }
-  ],
+  payment: Object.freeze([
+    Object.freeze({ name: 'Stripe Live Key', pattern: /sk_live_[a-zA-Z0-9]{24,}/g }),
+    Object.freeze({ name: 'Stripe Test Key', pattern: /sk_test_[a-zA-Z0-9]{24,}/g }),
+    Object.freeze({ name: 'Stripe Publishable', pattern: /pk_(live|test)_[a-zA-Z0-9]{24,}/g }),
+    Object.freeze({ name: 'PayPal Secret', pattern: /paypal[_-]?secret\s*[:=]\s*["'][a-zA-Z0-9]{32,}["']/gi })
+  ]),
 
   // Database Connection Strings
   // Note: Length limits {1,100} added to prevent ReDoS on malformed input
-  database: [
-    { name: 'MongoDB URI', pattern: /mongodb(\+srv)?:\/\/[^:\s]{1,100}:[^@\s]{1,100}@[^\s]{1,200}/g },
-    { name: 'PostgreSQL URI', pattern: /postgres(ql)?:\/\/[^:\s]{1,100}:[^@\s]{1,100}@[^\s]{1,200}/g },
-    { name: 'MySQL URI', pattern: /mysql:\/\/[^:\s]{1,100}:[^@\s]{1,100}@[^\s]{1,200}/g },
-    { name: 'Redis URI', pattern: /redis:\/\/[^:\s]{1,100}:[^@\s]{1,100}@[^\s]{1,200}/g }
-  ],
+  database: Object.freeze([
+    Object.freeze({ name: 'MongoDB URI', pattern: /mongodb(\+srv)?:\/\/[^:\s]{1,100}:[^@\s]{1,100}@[^\s]{1,200}/g }),
+    Object.freeze({ name: 'PostgreSQL URI', pattern: /postgres(ql)?:\/\/[^:\s]{1,100}:[^@\s]{1,100}@[^\s]{1,200}/g }),
+    Object.freeze({ name: 'MySQL URI', pattern: /mysql:\/\/[^:\s]{1,100}:[^@\s]{1,100}@[^\s]{1,200}/g }),
+    Object.freeze({ name: 'Redis URI', pattern: /redis:\/\/[^:\s]{1,100}:[^@\s]{1,100}@[^\s]{1,200}/g })
+  ]),
 
   // Package Registry Tokens
-  registry: [
-    { name: 'npm Token', pattern: /npm_[a-zA-Z0-9]{36}/g },
-    { name: 'PyPI Token', pattern: /pypi-[a-zA-Z0-9_-]{100,}/g }
-  ],
+  registry: Object.freeze([
+    Object.freeze({ name: 'npm Token', pattern: /npm_[a-zA-Z0-9]{36}/g }),
+    Object.freeze({ name: 'PyPI Token', pattern: /pypi-[a-zA-Z0-9_-]{100,}/g })
+  ]),
 
   // Email/Marketing Services
-  email: [
-    { name: 'SendGrid Key', pattern: /SG\.[a-zA-Z0-9_-]{22}\.[a-zA-Z0-9_-]{43}/g },
-    { name: 'Mailchimp Key', pattern: /[a-f0-9]{32}-us[0-9]{1,2}/g }
-  ],
+  email: Object.freeze([
+    Object.freeze({ name: 'SendGrid Key', pattern: /SG\.[a-zA-Z0-9_-]{22}\.[a-zA-Z0-9_-]{43}/g }),
+    Object.freeze({ name: 'Mailchimp Key', pattern: /[a-f0-9]{32}-us[0-9]{1,2}/g })
+  ]),
 
   // Cryptographic Material
-  crypto: [
-    { name: 'Private Key', pattern: /-----BEGIN (RSA |EC |DSA |OPENSSH |PGP )?PRIVATE KEY-----/g },
+  crypto: Object.freeze([
+    Object.freeze({ name: 'Private Key', pattern: /-----BEGIN (RSA |EC |DSA |OPENSSH |PGP )?PRIVATE KEY-----/g }),
     // JWT pattern with min/max lengths to reduce false positives and prevent ReDoS:
     // - Header (eyJ...): 17-200 chars (typical: 30-100, allows for custom claims)
     // - Payload (eyJ...): 17-5000 chars (typical: 50-2000, allows for large payloads)
     // - Signature: 40-500 chars (HS256: 43, RS256: 342, EdDSA: 86-88)
     // Upper bounds prevent catastrophic backtracking on malformed input
     // @see https://jwt.io for JWT structure reference
-    { name: 'JWT Token', pattern: /eyJ[a-zA-Z0-9_-]{17,200}\.eyJ[a-zA-Z0-9_-]{17,5000}\.[a-zA-Z0-9_-]{40,500}/g }
-  ]
-};
+    Object.freeze({ name: 'JWT Token', pattern: /eyJ[a-zA-Z0-9_-]{17,200}\.eyJ[a-zA-Z0-9_-]{17,5000}\.[a-zA-Z0-9_-]{40,500}/g })
+  ])
+});
 
 /**
  * Get all secret patterns as a flat array

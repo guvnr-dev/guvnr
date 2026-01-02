@@ -44,11 +44,37 @@ import { readFile } from 'fs/promises';
 import { join, dirname, basename } from 'path';
 import { fileURLToPath } from 'url';
 import chalk from 'chalk';
-import ora from 'ora';
 import { createError, FrameworkError } from '../errors.js';
 
-// Import shared utilities from generators module
-import { parseProjectContext } from '../generators/index.js';
+/**
+ * Lazy-loaded modules cache.
+ * These are loaded on-demand to improve CLI startup time.
+ * @type {Object.<string, any>}
+ */
+const lazyModules = {};
+
+/**
+ * Lazy load ora spinner (only needed during CLI execution)
+ * @returns {Promise<import('ora').default>}
+ */
+async function getOra() {
+  if (!lazyModules.ora) {
+    lazyModules.ora = (await import('ora')).default;
+  }
+  return lazyModules.ora;
+}
+
+/**
+ * Lazy load parseProjectContext from generators module
+ * @returns {Promise<typeof import('../generators/index.js').parseProjectContext>}
+ */
+async function getParseProjectContext() {
+  if (!lazyModules.parseProjectContext) {
+    const { parseProjectContext } = await import('../generators/index.js');
+    lazyModules.parseProjectContext = parseProjectContext;
+  }
+  return lazyModules.parseProjectContext;
+}
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -142,12 +168,16 @@ export async function generateCommand(options) {
   if (existsSync(claudeMdPath)) {
     console.log(chalk.gray('  Using CLAUDE.md as source of truth\n'));
     const claudeMdContent = await readFile(claudeMdPath, 'utf-8');
+    // Lazy load parseProjectContext to improve CLI startup time
+    const parseProjectContext = await getParseProjectContext();
     projectContext = parseProjectContext(claudeMdContent);
   } else if (!options.force) {
     console.log(chalk.yellow('  No CLAUDE.md found. Run "aix init" first or use --force.\n'));
     return;
   }
 
+  // Lazy load ora spinner
+  const ora = await getOra();
   const spinner = ora('Generating configuration files...').start();
 
   const results = {
