@@ -126,6 +126,120 @@ POOL_SIZE = int(os.environ.get("PROJECT_MEMORY_POOL_SIZE", "5"))
 RATE_LIMIT = int(os.environ.get("PROJECT_MEMORY_RATE_LIMIT", "100"))  # ops per minute
 MAX_STRING_LENGTH = 10000  # Maximum length for any string input
 
+# Import data schema definition
+# Validates structure of imported data to prevent malformed imports
+IMPORT_SCHEMA = {
+    "type": "object",
+    "required": ["data"],
+    "properties": {
+        "version": {"type": "string"},
+        "exported_at": {"type": "string"},
+        "data": {
+            "type": "object",
+            "properties": {
+                "decisions": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "timestamp": {"type": "string"},
+                            "decision": {"type": "string"},
+                            "rationale": {"type": "string"},
+                            "context": {"type": "string"},
+                            "alternatives": {"type": "string"}
+                        }
+                    }
+                },
+                "patterns": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "name": {"type": "string"},
+                            "description": {"type": "string"},
+                            "example": {"type": "string"},
+                            "when_to_use": {"type": "string"}
+                        }
+                    }
+                },
+                "context": {
+                    "type": "object",
+                    "additionalProperties": {"type": "string"}
+                }
+            }
+        },
+        "stats": {"type": "object"}
+    }
+}
+
+
+def validate_import_schema(data: dict) -> tuple[bool, str]:
+    """
+    Validate import data against the expected schema.
+
+    This is a lightweight schema validation that doesn't require external dependencies.
+    It validates structure, types, and constraints.
+
+    Args:
+        data: The data to validate
+
+    Returns:
+        Tuple of (is_valid, error_message)
+    """
+    if not isinstance(data, dict):
+        return False, "Import data must be a dictionary"
+
+    # Check required 'data' key
+    if "data" not in data:
+        return False, "Missing required 'data' key"
+
+    inner_data = data["data"]
+    if not isinstance(inner_data, dict):
+        return False, "'data' must be a dictionary"
+
+    # Validate decisions if present
+    if "decisions" in inner_data:
+        decisions = inner_data["decisions"]
+        if not isinstance(decisions, list):
+            return False, "'data.decisions' must be an array"
+
+        for i, decision in enumerate(decisions):
+            if not isinstance(decision, dict):
+                return False, f"Decision at index {i} must be an object"
+
+            # Check all values are strings if present
+            for key in ["timestamp", "decision", "rationale", "context", "alternatives"]:
+                if key in decision and not isinstance(decision[key], str):
+                    return False, f"Decision at index {i}: '{key}' must be a string"
+
+    # Validate patterns if present
+    if "patterns" in inner_data:
+        patterns = inner_data["patterns"]
+        if not isinstance(patterns, list):
+            return False, "'data.patterns' must be an array"
+
+        for i, pattern in enumerate(patterns):
+            if not isinstance(pattern, dict):
+                return False, f"Pattern at index {i} must be an object"
+
+            for key in ["name", "description", "example", "when_to_use"]:
+                if key in pattern and not isinstance(pattern[key], str):
+                    return False, f"Pattern at index {i}: '{key}' must be a string"
+
+    # Validate context if present
+    if "context" in inner_data:
+        context = inner_data["context"]
+        if not isinstance(context, dict):
+            return False, "'data.context' must be a dictionary"
+
+        for key, value in context.items():
+            if not isinstance(key, str):
+                return False, f"Context key must be a string, got {type(key).__name__}"
+            if not isinstance(value, str):
+                return False, f"Context value for key '{key}' must be a string"
+
+    return True, ""
+
 # Purge confirmation tokens (thread-safe)
 # Token format: "PURGE-{random_hex}" with 60 second expiry
 _purge_token_lock = threading.Lock()
@@ -272,8 +386,19 @@ class ConnectionPool:
                     f"Consider increasing PROJECT_MEMORY_POOL_SIZE (current: {self.pool_size})"
                 )
 
-            # Create temporary connection
-            conn = self._create_connection()
+            # Create temporary connection with proper cleanup on failure
+            # This ensures _active_temp_connections is decremented if creation fails
+            try:
+                conn = self._create_connection()
+            except Exception as e:
+                # Connection creation failed - decrement counter to prevent leak
+                with self._temp_conn_lock:
+                    self._active_temp_connections -= 1
+                logger.error(f"Failed to create temporary connection: {e}")
+                raise RuntimeError(
+                    f"Failed to create temporary database connection: {e}"
+                ) from e
+
             try:
                 yield conn
             finally:
@@ -886,9 +1011,14 @@ class ProjectMemoryDB:
 
         Returns:
             Dict with import statistics
+
+        Raises:
+            ValueError: If the data fails schema validation
         """
-        if "data" not in data:
-            raise ValueError("Invalid export format: missing 'data' key")
+        # Validate import data schema
+        is_valid, error_msg = validate_import_schema(data)
+        if not is_valid:
+            raise ValueError(f"Invalid import data: {error_msg}")
 
         stats = {"decisions": 0, "patterns": 0, "context": 0, "skipped": 0}
 
