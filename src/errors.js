@@ -24,17 +24,38 @@ import { relative, isAbsolute } from 'path';
 /**
  * Sanitize context object to prevent sensitive path leakage.
  * Replaces home directory paths with ~ and absolute paths with relative versions.
+ * Handles circular references safely to prevent stack overflow.
  *
  * @param {Object.<string, *>} context - Context object to sanitize
  * @param {string} [basePath=process.cwd()] - Base path for relative conversion
+ * @param {WeakSet} [seen] - Set of already-seen objects for circular reference detection
  * @returns {Object.<string, *>} Sanitized context object with paths replaced
  */
-function sanitizeContext(context, basePath = process.cwd()) {
+function sanitizeContext(context, basePath = process.cwd(), seen = new WeakSet()) {
   if (!context || typeof context !== 'object') {
     return context;
   }
 
+  // Handle circular references - return placeholder if we've seen this object before
+  if (seen.has(context)) {
+    return '[Circular Reference]';
+  }
+
+  // Track this object to detect circular references
+  seen.add(context);
+
   const home = homedir();
+
+  // Handle arrays
+  if (Array.isArray(context)) {
+    return context.map(item => {
+      if (typeof item === 'object' && item !== null) {
+        return sanitizeContext(item, basePath, seen);
+      }
+      return item;
+    });
+  }
+
   const result = {};
 
   for (const [key, value] of Object.entries(context)) {
@@ -67,8 +88,8 @@ function sanitizeContext(context, basePath = process.cwd()) {
 
       result[key] = sanitized;
     } else if (typeof value === 'object' && value !== null) {
-      // Recursively sanitize nested objects
-      result[key] = sanitizeContext(value, basePath);
+      // Recursively sanitize nested objects (circular references handled by seen set)
+      result[key] = sanitizeContext(value, basePath, seen);
     } else {
       result[key] = value;
     }
