@@ -42,6 +42,61 @@ import { FrameworkError, createError, getExitCode } from '../src/errors.js';
 const DEFAULT_TIMEOUT = 300000; // 5 minutes
 const COMMAND_TIMEOUT = parseInt(process.env.AIX_TIMEOUT || String(DEFAULT_TIMEOUT), 10);
 const DEBUG_MODE = process.env.AIX_DEBUG === 'true';
+const STRUCTURED_LOGGING = process.env.AIX_STRUCTURED_LOGGING === 'true';
+
+/**
+ * Structured logger for CI/CD integration.
+ * When AIX_STRUCTURED_LOGGING=true, outputs JSON-formatted log lines
+ * that can be easily parsed by log aggregation tools.
+ *
+ * Log format:
+ * {"timestamp":"ISO8601","level":"info|warn|error|debug","message":"...","context":{...}}
+ *
+ * @param {string} level - Log level (info, warn, error, debug)
+ * @param {string} message - Log message
+ * @param {Object} [context={}] - Additional context data
+ */
+function log(level, message, context = {}) {
+  if (level === 'debug' && !DEBUG_MODE) {
+    return;
+  }
+
+  if (STRUCTURED_LOGGING) {
+    const logEntry = {
+      timestamp: new Date().toISOString(),
+      level,
+      message,
+      ...context
+    };
+    console.log(JSON.stringify(logEntry));
+  } else {
+    const colors = {
+      info: chalk.blue,
+      warn: chalk.yellow,
+      error: chalk.red,
+      debug: chalk.gray
+    };
+    const prefix = level === 'debug' ? '[DEBUG] ' : '';
+    const colorFn = colors[level] || (x => x);
+
+    if (level === 'error') {
+      console.error(colorFn(`${prefix}${message}`));
+    } else {
+      console.log(colorFn(`${prefix}${message}`));
+    }
+  }
+}
+
+/**
+ * Logger object with convenience methods for different log levels.
+ * Respects AIX_STRUCTURED_LOGGING for JSON output and AIX_DEBUG for debug messages.
+ */
+const logger = {
+  info: (msg, ctx) => log('info', msg, ctx),
+  warn: (msg, ctx) => log('warn', msg, ctx),
+  error: (msg, ctx) => log('error', msg, ctx),
+  debug: (msg, ctx) => log('debug', msg, ctx)
+};
 
 /**
  * Wrap a command handler with timeout support using AbortController.
@@ -64,9 +119,7 @@ function withTimeout(handler, commandName) {
   return async function (...args) {
     const timeoutMs = COMMAND_TIMEOUT;
 
-    if (DEBUG_MODE) {
-      console.log(chalk.gray(`[DEBUG] Starting ${commandName} with timeout: ${timeoutMs}ms`));
-    }
+    logger.debug(`Starting ${commandName} with timeout: ${timeoutMs}ms`, { command: commandName, timeout: timeoutMs });
 
     // Create an AbortController for manual cancellation (future use)
     const controller = new AbortController();
@@ -133,6 +186,33 @@ const __dirname = dirname(__filename);
 // Read package.json for version
 const packageJson = JSON.parse(readFileSync(join(__dirname, '..', 'package.json'), 'utf-8'));
 
+// Maximum length for any single CLI argument value
+const MAX_ARG_LENGTH = 1000;
+
+/**
+ * Validate that all option values are within acceptable length bounds.
+ * Prevents denial-of-service via extremely long inputs and memory exhaustion.
+ *
+ * @param {Object} opts - Options object from commander
+ * @throws {Error} If any option value exceeds MAX_ARG_LENGTH
+ */
+function validateInputLengths(opts) {
+  for (const [key, value] of Object.entries(opts)) {
+    if (typeof value === 'string' && value.length > MAX_ARG_LENGTH) {
+      const truncated = sanitizeForDisplay(value, 30);
+      logger.error(`Option '${key}' value is too long (${value.length} chars, max: ${MAX_ARG_LENGTH})`, {
+        option: key,
+        length: value.length,
+        maxLength: MAX_ARG_LENGTH
+      });
+      console.error(chalk.red('\nError: Option value too long'));
+      console.error(chalk.gray(`Option '${key}' is ${value.length} characters (max: ${MAX_ARG_LENGTH})`));
+      console.error(chalk.gray(`Value starts with: "${truncated}"`));
+      process.exit(1);
+    }
+  }
+}
+
 const program = new Command();
 
 program
@@ -148,6 +228,9 @@ program
       // Disable chalk colors by setting the level to 0
       chalk.level = 0;
     }
+
+    // Validate input lengths to prevent DoS via extremely long arguments
+    validateInputLengths(opts);
   })
   .addHelpText('after', `
 Examples:
@@ -164,6 +247,7 @@ Environment variables:
   NO_COLOR=1                              # Disable colored output
   AIX_TIMEOUT=300000                      # Command timeout (ms, default: 5 min)
   AIX_DEBUG=true                          # Enable debug output
+  AIX_STRUCTURED_LOGGING=true             # Enable JSON log output for CI/CD
 
 More info: https://ai-excellence-framework.github.io/
 `);
