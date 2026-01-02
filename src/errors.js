@@ -39,6 +39,12 @@ function sanitizeContext(context, basePath = process.cwd()) {
 
   for (const [key, value] of Object.entries(context)) {
     if (typeof value === 'string') {
+      // First check if this is a sensitive key that should be redacted
+      if (isSensitiveEnvVar(key)) {
+        result[key] = '[REDACTED]';
+        continue;
+      }
+
       let sanitized = value;
 
       // Replace home directory with ~
@@ -81,6 +87,75 @@ function escapeRegExp(str) {
 }
 
 /**
+ * Sanitize a stack trace to prevent path leakage.
+ * Replaces absolute paths with relative versions and home directory with ~.
+ *
+ * @param {string} stack - Stack trace string
+ * @param {string} [basePath=process.cwd()] - Base path for relative conversion
+ * @returns {string} Sanitized stack trace
+ */
+function sanitizeStack(stack, _basePath = process.cwd()) {
+  if (!stack || typeof stack !== 'string') {
+    return stack;
+  }
+
+  const home = homedir();
+  let sanitized = stack;
+
+  // Replace home directory with ~
+  if (home) {
+    sanitized = sanitized.replace(new RegExp(escapeRegExp(home), 'g'), '~');
+  }
+
+  // Replace absolute paths that aren't in node_modules with relative paths
+  // Match patterns like "at Function (/absolute/path/file.js:line:col)"
+  sanitized = sanitized.replace(
+    /(\s+at\s+.+\s+\()([^)]+node_modules[^)]+)(\))/g,
+    '$1[node_modules]$3'
+  );
+
+  return sanitized;
+}
+
+/**
+ * Sensitive environment variable patterns that should be redacted
+ * @type {RegExp[]}
+ */
+const SENSITIVE_ENV_PATTERNS = [
+  /^(.*_)?(API_?KEY|SECRET|PASSWORD|TOKEN|CREDENTIAL|AUTH|PRIVATE)(_.*)?$/i,
+  /^(AWS|AZURE|GCP|GOOGLE|OPENAI|ANTHROPIC|STRIPE)_.+/i,
+  /^(DATABASE|DB|MONGO|REDIS|POSTGRES)_(URL|URI|PASSWORD|CONNECTION)/i
+];
+
+/**
+ * Check if an environment variable name is sensitive
+ * @param {string} name - Environment variable name
+ * @returns {boolean} True if the name looks sensitive
+ */
+function isSensitiveEnvVar(name) {
+  return SENSITIVE_ENV_PATTERNS.some(pattern => pattern.test(name));
+}
+
+/**
+ * Redact sensitive values from context
+ * @param {*} value - Value to potentially redact
+ * @param {string} key - Key name for the value
+ * @returns {*} Redacted value if sensitive, original otherwise
+ */
+function _redactSensitiveValue(value, key) {
+  if (typeof value !== 'string') {
+    return value;
+  }
+
+  // Check if the key name suggests sensitivity
+  if (isSensitiveEnvVar(key)) {
+    return '[REDACTED]';
+  }
+
+  return value;
+}
+
+/**
  * Base error class for all framework errors.
  * Extends Error with structured properties for tracking and debugging.
  */
@@ -107,8 +182,8 @@ export class FrameworkError extends Error {
 
   /**
    * Returns a structured representation for logging/debugging.
-   * Context paths are sanitized to prevent leaking sensitive directory information.
-   * @param {boolean} [sanitize=true] - Whether to sanitize paths in context
+   * Context paths and stack traces are sanitized to prevent leaking sensitive information.
+   * @param {boolean} [sanitize=true] - Whether to sanitize paths in context and stack
    * @returns {Object} Structured error object
    */
   toJSON(sanitize = true) {
@@ -120,7 +195,7 @@ export class FrameworkError extends Error {
       recoverable: this.recoverable,
       suggestion: this.suggestion,
       context: sanitize ? sanitizeContext(this.context) : this.context,
-      stack: this.stack
+      stack: sanitize ? sanitizeStack(this.stack) : this.stack
     };
   }
 

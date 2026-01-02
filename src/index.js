@@ -283,6 +283,7 @@ export function mergeConfig(userConfig = {}) {
 // ============================================
 
 import { existsSync, readFileSync, readdirSync } from 'fs';
+import { readFile } from 'fs/promises';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -361,9 +362,10 @@ export function listInstalledAgents(cwd = process.cwd()) {
 }
 
 /**
- * Read and parse CLAUDE.md
+ * Read and parse CLAUDE.md (synchronous version)
  * @param {string} [cwd=process.cwd()] - Directory to read from
  * @returns {Object|null} Parsed CLAUDE.md or null
+ * @deprecated Use readClaudeMdAsync for better performance in async contexts
  */
 export function readClaudeMd(cwd = process.cwd()) {
   const path = join(cwd, 'CLAUDE.md');
@@ -372,6 +374,22 @@ export function readClaudeMd(cwd = process.cwd()) {
   }
 
   const content = readFileSync(path, 'utf-8');
+  return parseClaudeMd(content);
+}
+
+/**
+ * Read and parse CLAUDE.md (async version)
+ * Preferred for command handlers and async contexts to avoid blocking the event loop.
+ * @param {string} [cwd=process.cwd()] - Directory to read from
+ * @returns {Promise<Object|null>} Parsed CLAUDE.md or null
+ */
+export async function readClaudeMdAsync(cwd = process.cwd()) {
+  const path = join(cwd, 'CLAUDE.md');
+  if (!existsSync(path)) {
+    return null;
+  }
+
+  const content = await readFile(path, 'utf-8');
   return parseClaudeMd(content);
 }
 
@@ -485,12 +503,13 @@ export const SECRET_PATTERNS = {
   // Cryptographic Material
   crypto: [
     { name: 'Private Key', pattern: /-----BEGIN (RSA |EC |DSA |OPENSSH |PGP )?PRIVATE KEY-----/g },
-    // JWT pattern with minimum lengths to reduce false positives:
-    // - Header (eyJ...): minimum 20 chars (typical: 30+)
-    // - Payload (eyJ...): minimum 20 chars (typical: 50+)
-    // - Signature: minimum 40 chars (HS256: 43 chars, RS256: 342 chars)
-    // Total minimum: ~100 chars for a real JWT
-    { name: 'JWT Token', pattern: /eyJ[a-zA-Z0-9_-]{17,}\.eyJ[a-zA-Z0-9_-]{17,}\.[a-zA-Z0-9_-]{40,}/g }
+    // JWT pattern with min/max lengths to reduce false positives and prevent ReDoS:
+    // - Header (eyJ...): 17-200 chars (typical: 30-100, allows for custom claims)
+    // - Payload (eyJ...): 17-5000 chars (typical: 50-2000, allows for large payloads)
+    // - Signature: 40-500 chars (HS256: 43, RS256: 342, EdDSA: 86-88)
+    // Upper bounds prevent catastrophic backtracking on malformed input
+    // @see https://jwt.io for JWT structure reference
+    { name: 'JWT Token', pattern: /eyJ[a-zA-Z0-9_-]{17,200}\.eyJ[a-zA-Z0-9_-]{17,5000}\.[a-zA-Z0-9_-]{40,500}/g }
   ]
 };
 
@@ -592,6 +611,7 @@ export default {
   listInstalledCommands,
   listInstalledAgents,
   readClaudeMd,
+  readClaudeMdAsync,
   parseClaudeMd,
   detectSecrets,
   validateClaudeMdStructure,

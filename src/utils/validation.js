@@ -346,7 +346,61 @@ export function sanitizeString(input, options = {}) {
 }
 
 /**
+ * Comprehensive patterns for detecting standalone secret values.
+ * These patterns are designed to match isolated values (not embedded in context).
+ * Aligned with SECRET_PATTERNS in index.js but adapted for single-value checking.
+ *
+ * @see {@link ../index.js} SECRET_PATTERNS for content scanning patterns
+ */
+const STANDALONE_SECRET_PATTERNS = [
+  // AI/ML API Keys
+  /^sk-[a-zA-Z0-9]{32,}$/, // OpenAI
+  /^sk-ant-[a-zA-Z0-9_-]{32,}$/, // Anthropic
+  /^AIza[a-zA-Z0-9_-]{35}$/, // Google AI
+
+  // Cloud Provider Keys
+  /^AKIA[0-9A-Z]{16}$/, // AWS Access Key
+  /^[a-zA-Z0-9/+=]{40}$/, // AWS Secret Key (base64-like, 40 chars)
+
+  // Version Control Systems
+  /^ghp_[a-zA-Z0-9]{36}$/, // GitHub Personal Access Token
+  /^gho_[a-zA-Z0-9]{36}$/, // GitHub OAuth Token
+  /^ghu_[a-zA-Z0-9]{36}$/, // GitHub User Token
+  /^ghr_[a-zA-Z0-9]{36}$/, // GitHub Refresh Token
+  /^glpat-[a-zA-Z0-9-]{20,}$/, // GitLab Token
+  /^ATBB[a-zA-Z0-9]{32}$/, // Bitbucket Token
+
+  // Communication Platforms
+  /^xox[baprs]-[a-zA-Z0-9-]{10,}$/, // Slack Token
+  /^SK[a-f0-9]{32}$/, // Twilio Key
+
+  // Payment Providers
+  /^sk_live_[a-zA-Z0-9]{24,}$/, // Stripe Live Key
+  /^sk_test_[a-zA-Z0-9]{24,}$/, // Stripe Test Key
+  /^pk_(live|test)_[a-zA-Z0-9]{24,}$/, // Stripe Publishable Key
+
+  // Package Registry Tokens
+  /^npm_[a-zA-Z0-9]{36}$/, // npm Token
+  /^pypi-[a-zA-Z0-9_-]{100,}$/, // PyPI Token
+
+  // Email Services
+  /^SG\.[a-zA-Z0-9_-]{22}\.[a-zA-Z0-9_-]{43}$/, // SendGrid
+
+  // Cryptographic Material
+  /^-----BEGIN (RSA |EC |DSA |OPENSSH |PGP )?PRIVATE KEY-----/, // Private Keys
+  /^eyJ[a-zA-Z0-9_-]{17,200}\.eyJ[a-zA-Z0-9_-]{17,500}\.[a-zA-Z0-9_-]{40,500}$/, // JWT (bounded)
+
+  // Generic patterns (last resort, more prone to false positives)
+  /^[a-f0-9]{32}$/, // 32-char hex (MD5-like, API keys)
+  /^[a-f0-9]{40}$/, // 40-char hex (SHA1-like)
+  /^[a-f0-9]{64}$/i // 64-char hex (SHA256-like)
+];
+
+/**
  * Check if a string looks like a secret
+ *
+ * Uses comprehensive patterns aligned with SECRET_PATTERNS from index.js,
+ * but optimized for checking standalone values rather than scanning content.
  *
  * @param {string} value - Value to check
  * @returns {boolean} True if value looks like a secret
@@ -356,17 +410,15 @@ export function looksLikeSecret(value) {
     return false;
   }
 
-  const secretPatterns = [
-    /^sk-[a-zA-Z0-9]{32,}$/,
-    /^ghp_[a-zA-Z0-9]{36}$/,
-    /^gho_[a-zA-Z0-9]{36}$/,
-    /^glpat-[a-zA-Z0-9-]{20,}$/,
-    /^AKIA[0-9A-Z]{16}$/,
-    /^-----BEGIN .*PRIVATE KEY-----/,
-    /^[a-f0-9]{32,64}$/i
-  ];
+  // Trim whitespace for matching
+  const trimmed = value.trim();
 
-  return secretPatterns.some(pattern => pattern.test(value));
+  // Quick length check - secrets are usually 16+ characters
+  if (trimmed.length < 16) {
+    return false;
+  }
+
+  return STANDALONE_SECRET_PATTERNS.some(pattern => pattern.test(trimmed));
 }
 
 export default {
