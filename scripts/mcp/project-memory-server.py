@@ -46,13 +46,68 @@ from pathlib import Path
 from queue import Queue, Empty
 from typing import Any, Optional, Generator
 
+# Structured logging configuration
+# Set STRUCTURED_LOGGING=true for JSON output (useful for log aggregation)
+STRUCTURED_LOGGING = os.environ.get("STRUCTURED_LOGGING", "false").lower() == "true"
+
+
+class StructuredFormatter(logging.Formatter):
+    """JSON formatter for structured logging output."""
+
+    def format(self, record: logging.LogRecord) -> str:
+        log_data = {
+            "timestamp": datetime.now().isoformat(),
+            "level": record.levelname,
+            "logger": record.name,
+            "message": record.getMessage(),
+        }
+
+        # Add extra fields if present
+        if hasattr(record, 'extra_data') and record.extra_data:
+            log_data.update(record.extra_data)
+
+        # Add exception info if present
+        if record.exc_info:
+            log_data["exception"] = self.formatException(record.exc_info)
+
+        return json.dumps(log_data)
+
+
+class StructuredLoggerAdapter(logging.LoggerAdapter):
+    """Logger adapter that supports structured extra fields."""
+
+    def process(self, msg, kwargs):
+        # Move 'extra' dict content to be accessible by formatter
+        extra = kwargs.get('extra', {})
+        kwargs['extra'] = {'extra_data': extra}
+        return msg, kwargs
+
+
+def get_logger(name: str) -> logging.Logger | StructuredLoggerAdapter:
+    """Get a logger with optional structured logging support."""
+    base_logger = logging.getLogger(name)
+
+    if STRUCTURED_LOGGING:
+        return StructuredLoggerAdapter(base_logger, {})
+    return base_logger
+
+
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[logging.StreamHandler(sys.stderr)]
-)
-logger = logging.getLogger("project-memory")
+if STRUCTURED_LOGGING:
+    handler = logging.StreamHandler(sys.stderr)
+    handler.setFormatter(StructuredFormatter())
+    logging.basicConfig(
+        level=logging.INFO,
+        handlers=[handler]
+    )
+else:
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        handlers=[logging.StreamHandler(sys.stderr)]
+    )
+
+logger = get_logger("project-memory")
 
 # Try to import MCP SDK
 try:
@@ -71,9 +126,54 @@ POOL_SIZE = int(os.environ.get("PROJECT_MEMORY_POOL_SIZE", "5"))
 RATE_LIMIT = int(os.environ.get("PROJECT_MEMORY_RATE_LIMIT", "100"))  # ops per minute
 MAX_STRING_LENGTH = 10000  # Maximum length for any string input
 
+# Purge confirmation tokens (thread-safe)
+# Token format: "PURGE-{random_hex}" with 60 second expiry
+_purge_token_lock = threading.Lock()
+_pending_purge_token: Optional[str] = None
+_purge_token_expires: float = 0
+PURGE_TOKEN_TTL = 60  # seconds
+
+
+def generate_purge_token() -> str:
+    """Generate a random purge confirmation token."""
+    return f"PURGE-{random.randbytes(4).hex().upper()}"
+
+
+def get_pending_purge_token() -> Optional[tuple[str, float]]:
+    """Get the current pending purge token if valid, or None if expired."""
+    global _pending_purge_token, _purge_token_expires
+    with _purge_token_lock:
+        if _pending_purge_token and time.time() < _purge_token_expires:
+            return (_pending_purge_token, _purge_token_expires - time.time())
+        return None
+
+
+def set_purge_token(token: str) -> float:
+    """Set a new purge token and return its expiry time."""
+    global _pending_purge_token, _purge_token_expires
+    with _purge_token_lock:
+        _pending_purge_token = token
+        _purge_token_expires = time.time() + PURGE_TOKEN_TTL
+        return PURGE_TOKEN_TTL
+
+
+def validate_and_clear_purge_token(provided_token: str) -> bool:
+    """Validate the provided token and clear it if valid."""
+    global _pending_purge_token, _purge_token_expires
+    with _purge_token_lock:
+        if _pending_purge_token and time.time() < _purge_token_expires:
+            if provided_token == _pending_purge_token:
+                _pending_purge_token = None
+                _purge_token_expires = 0
+                return True
+        return False
+
 
 class ConnectionPool:
     """Thread-safe SQLite connection pool for team deployments."""
+
+    # Maximum temporary connections to prevent unbounded resource usage
+    MAX_TEMP_CONNECTIONS = 10
 
     def __init__(self, db_path: Path, pool_size: int = 5):
         self.db_path = db_path
@@ -85,9 +185,19 @@ class ConnectionPool:
         self._exhaustion_count = 0
         self._last_exhaustion_warning = 0.0
         self._temp_connections_created = 0
+        # Active temporary connection tracking
+        self._active_temp_connections = 0
+        self._temp_conn_lock = threading.Lock()
 
     def _create_connection(self) -> sqlite3.Connection:
-        """Create a new database connection with optimal settings."""
+        """Create a new database connection with optimal settings.
+
+        Configures the connection with:
+        - 30 second connection timeout
+        - 5 second busy timeout for lock contention
+        - WAL mode for better concurrency
+        - Optimized cache and temp storage settings
+        """
         conn = sqlite3.connect(
             str(self.db_path),
             check_same_thread=False,
@@ -99,6 +209,9 @@ class ConnectionPool:
         conn.execute("PRAGMA synchronous=NORMAL")
         conn.execute("PRAGMA cache_size=10000")
         conn.execute("PRAGMA temp_store=MEMORY")
+        # Set busy timeout to handle lock contention (5 seconds)
+        # This prevents immediate failures when the database is locked
+        conn.execute("PRAGMA busy_timeout=5000")
         return conn
 
     def initialize(self) -> None:
@@ -113,18 +226,40 @@ class ConnectionPool:
 
     @contextmanager
     def get_connection(self) -> Generator[sqlite3.Connection, None, None]:
-        """Get a connection from the pool (context manager)."""
+        """Get a connection from the pool (context manager).
+
+        If the pool is exhausted and temp connection limit is reached,
+        raises RuntimeError to prevent unbounded resource usage.
+        """
         if not self._initialized:
             self.initialize()
 
         conn = None
+        is_temp_connection = False
         try:
             conn = self._pool.get(timeout=30.0)
             yield conn
         except Empty:
-            # Pool exhausted - track and alert
-            self._exhaustion_count += 1
-            self._temp_connections_created += 1
+            # Pool exhausted - check if we can create a temp connection
+            with self._temp_conn_lock:
+                if self._active_temp_connections >= self.MAX_TEMP_CONNECTIONS:
+                    logger.error(
+                        f"Connection pool exhausted and temp connection limit "
+                        f"({self.MAX_TEMP_CONNECTIONS}) reached. "
+                        f"Rejecting request to prevent resource exhaustion."
+                    )
+                    raise RuntimeError(
+                        f"Database connection pool exhausted. "
+                        f"Max temporary connections ({self.MAX_TEMP_CONNECTIONS}) reached. "
+                        f"Please retry later or increase PROJECT_MEMORY_POOL_SIZE."
+                    )
+
+                # Track and create temporary connection
+                self._exhaustion_count += 1
+                self._temp_connections_created += 1
+                self._active_temp_connections += 1
+                is_temp_connection = True
+
             now = time.time()
 
             # Rate-limit exhaustion warnings (max once per 10 seconds)
@@ -133,17 +268,21 @@ class ConnectionPool:
                 logger.warning(
                     f"⚠️ Connection pool exhausted! "
                     f"Total exhaustions: {self._exhaustion_count}, "
-                    f"Temp connections created: {self._temp_connections_created}. "
+                    f"Active temp connections: {self._active_temp_connections}/{self.MAX_TEMP_CONNECTIONS}. "
                     f"Consider increasing PROJECT_MEMORY_POOL_SIZE (current: {self.pool_size})"
                 )
 
             # Create temporary connection
             conn = self._create_connection()
-            yield conn
-            conn.close()
-            conn = None
+            try:
+                yield conn
+            finally:
+                conn.close()
+                with self._temp_conn_lock:
+                    self._active_temp_connections -= 1
+                conn = None
         finally:
-            if conn is not None:
+            if conn is not None and not is_temp_connection:
                 try:
                     self._pool.put_nowait(conn)
                 except Exception:
@@ -156,6 +295,8 @@ class ConnectionPool:
             "available": self._pool.qsize() if self._initialized else 0,
             "exhaustion_count": self._exhaustion_count,
             "temp_connections_created": self._temp_connections_created,
+            "active_temp_connections": self._active_temp_connections,
+            "max_temp_connections": self.MAX_TEMP_CONNECTIONS,
             "initialized": self._initialized
         }
 
@@ -240,8 +381,146 @@ class RateLimiter:
             logger.info("Rate limiter reset")
 
 
-# Global rate limiter
-rate_limiter = RateLimiter(max_ops=RATE_LIMIT, window_seconds=60)
+class PersistentRateLimiter(RateLimiter):
+    """Rate limiter with SQLite persistence for surviving server restarts.
+
+    Stores operation timestamps in a SQLite table, loading on startup
+    and persisting on each operation. Useful for team deployments where
+    rate limits should survive restarts.
+
+    Enable via: PROJECT_MEMORY_PERSIST_RATE_LIMIT=true
+    """
+
+    def __init__(self, db_path: Path, max_ops: int = 100, window_seconds: int = 60):
+        super().__init__(max_ops, window_seconds)
+        self.db_path = db_path
+        self._init_db()
+        self._load_from_db()
+
+    def _init_db(self) -> None:
+        """Initialize the rate limit persistence table."""
+        try:
+            with sqlite3.connect(str(self.db_path), timeout=5.0) as conn:
+                conn.execute("""
+                    CREATE TABLE IF NOT EXISTS rate_limit_ops (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        timestamp REAL NOT NULL
+                    )
+                """)
+                conn.execute("""
+                    CREATE INDEX IF NOT EXISTS idx_rate_limit_timestamp
+                    ON rate_limit_ops(timestamp)
+                """)
+                conn.commit()
+        except Exception as e:
+            logger.warning(f"Failed to initialize rate limit persistence: {e}")
+
+    def _load_from_db(self) -> None:
+        """Load existing rate limit operations from database."""
+        now = time.time()
+        cutoff = now - self.window_seconds
+
+        try:
+            with sqlite3.connect(str(self.db_path), timeout=5.0) as conn:
+                # Clean up old entries first
+                conn.execute("DELETE FROM rate_limit_ops WHERE timestamp < ?", (cutoff,))
+                conn.commit()
+
+                # Load valid entries
+                cursor = conn.execute(
+                    "SELECT timestamp FROM rate_limit_ops WHERE timestamp >= ? ORDER BY timestamp",
+                    (cutoff,)
+                )
+                with self._lock:
+                    self._operations.clear()
+                    for (ts,) in cursor:
+                        self._operations.append(ts)
+
+                logger.info(f"Loaded {len(self._operations)} rate limit operations from persistence")
+        except Exception as e:
+            logger.warning(f"Failed to load rate limit state: {e}")
+
+    def _persist_operation(self, timestamp: float) -> None:
+        """Persist a single operation timestamp to the database."""
+        try:
+            with sqlite3.connect(str(self.db_path), timeout=5.0) as conn:
+                conn.execute("INSERT INTO rate_limit_ops (timestamp) VALUES (?)", (timestamp,))
+                conn.commit()
+        except Exception as e:
+            logger.warning(f"Failed to persist rate limit operation: {e}")
+
+    def _cleanup_db(self, cutoff: float) -> None:
+        """Remove old entries from the database."""
+        try:
+            with sqlite3.connect(str(self.db_path), timeout=5.0) as conn:
+                conn.execute("DELETE FROM rate_limit_ops WHERE timestamp < ?", (cutoff,))
+                conn.commit()
+        except Exception as e:
+            logger.warning(f"Failed to cleanup old rate limit entries: {e}")
+
+    def check(self) -> bool:
+        """Check if operation is allowed and persist if so."""
+        now = time.time()
+        cutoff = now - self.window_seconds
+
+        with self._lock:
+            # Remove old operations
+            while self._operations and self._operations[0] < cutoff:
+                self._operations.popleft()
+
+            # Check limit
+            if len(self._operations) >= self.max_ops:
+                return False
+
+            # Record operation
+            self._operations.append(now)
+
+        # Persist outside the lock to avoid blocking
+        self._persist_operation(now)
+
+        # Periodic DB cleanup (every 100 ops or so)
+        if random.random() < 0.01:
+            self._cleanup_db(cutoff)
+
+        return True
+
+    def reset(self) -> None:
+        """Reset the rate limiter, clearing all tracked operations and persistence."""
+        with self._lock:
+            self._operations.clear()
+        try:
+            with sqlite3.connect(str(self.db_path), timeout=5.0) as conn:
+                conn.execute("DELETE FROM rate_limit_ops")
+                conn.commit()
+        except Exception as e:
+            logger.warning(f"Failed to clear rate limit persistence: {e}")
+        logger.info("Rate limiter reset (including persistence)")
+
+
+# Configuration for rate limiter persistence
+PERSIST_RATE_LIMIT = os.environ.get("PROJECT_MEMORY_PERSIST_RATE_LIMIT", "false").lower() == "true"
+
+
+def create_rate_limiter() -> RateLimiter:
+    """Create the appropriate rate limiter based on configuration."""
+    if PERSIST_RATE_LIMIT:
+        db_path = get_db_path()
+        logger.info(f"Using persistent rate limiter with database: {db_path}")
+        return PersistentRateLimiter(db_path, max_ops=RATE_LIMIT, window_seconds=60)
+    else:
+        return RateLimiter(max_ops=RATE_LIMIT, window_seconds=60)
+
+
+# Global rate limiter (lazily initialized to ensure db_path is available)
+rate_limiter: Optional[RateLimiter] = None
+
+
+def get_rate_limiter() -> RateLimiter:
+    """Get or create the global rate limiter."""
+    global rate_limiter
+    if rate_limiter is None:
+        rate_limiter = create_rate_limiter()
+    return rate_limiter
 
 
 def with_retry(
@@ -316,9 +595,35 @@ def escape_like_pattern(value: str) -> str:
     """Escape SQL LIKE wildcard characters to prevent pattern injection.
 
     SQLite LIKE patterns use % and _ as wildcards. This function escapes
-    these characters so user input is treated literally.
+    these characters so user input is treated literally when used with
+    the ESCAPE '\\' clause.
+
+    The escape order is critical:
+    1. Escape backslashes first (\ -> \\) so existing backslashes don't
+       interfere with subsequent escape sequences
+    2. Then escape wildcards (% -> \%, _ -> \_)
+
+    Examples:
+        Input: "100%"    -> Output: "100\\%"   (matches literal "100%")
+        Input: "C:\\path" -> Output: "C:\\\\path" (matches literal "C:\\path")
+        Input: "\\%"     -> Output: "\\\\\\%"  (matches literal "\\%")
+        Input: "test_1"  -> Output: "test\\_1" (matches literal "test_1")
+
+    Args:
+        value: The string to escape for use in LIKE patterns
+
+    Returns:
+        The escaped string safe for LIKE pattern matching
+
+    Note:
+        Must be used with SQL ESCAPE '\\' clause, e.g.:
+        WHERE column LIKE ? ESCAPE '\\\\'
     """
+    if not isinstance(value, str):
+        value = str(value)
+
     # Escape the escape character first, then the wildcards
+    # Order matters: backslash must be escaped before wildcards
     value = value.replace('\\', '\\\\')
     value = value.replace('%', '\\%')
     value = value.replace('_', '\\_')
@@ -762,17 +1067,71 @@ def get_db_path() -> Path:
 server = Server("project-memory")
 db: Optional[ProjectMemoryDB] = None
 _db_lock = threading.Lock()  # Lock for thread-safe db access
+_db_init_failed = False  # Track initialization failure to avoid retry loops
+_db_init_error: Optional[Exception] = None  # Store initialization error
 
 
 def get_db() -> ProjectMemoryDB:
-    """Get or initialize the database (thread-safe)."""
-    global db
-    if db is None:
-        with _db_lock:
-            # Double-check locking pattern
-            if db is None:
-                db = ProjectMemoryDB(get_db_path())
-    return db
+    """Get or initialize the database (thread-safe).
+
+    Uses double-checked locking with proper exception handling to ensure:
+    1. Thread-safe lazy initialization
+    2. Proper cleanup on initialization failure
+    3. Clear error reporting if initialization fails
+
+    Raises:
+        RuntimeError: If database initialization previously failed
+        Exception: If database initialization fails on this attempt
+    """
+    global db, _db_init_failed, _db_init_error
+
+    # Fast path: already initialized
+    if db is not None:
+        return db
+
+    # Check for previous initialization failure
+    if _db_init_failed:
+        raise RuntimeError(
+            f"Database initialization previously failed: {_db_init_error}. "
+            "Restart the server to retry."
+        )
+
+    with _db_lock:
+        # Double-check after acquiring lock
+        if db is not None:
+            return db
+
+        if _db_init_failed:
+            raise RuntimeError(
+                f"Database initialization previously failed: {_db_init_error}. "
+                "Restart the server to retry."
+            )
+
+        # Attempt initialization with proper exception handling
+        try:
+            new_db = ProjectMemoryDB(get_db_path())
+            # Only assign to global after successful initialization
+            db = new_db
+            logger.info("Database initialized successfully")
+            return db
+        except Exception as e:
+            _db_init_failed = True
+            _db_init_error = e
+            logger.error(f"Database initialization failed: {e}")
+            raise
+
+
+def reset_db_state() -> None:
+    """Reset database state to allow re-initialization (for testing/recovery).
+
+    This should only be called after close_db() or in test scenarios.
+    """
+    global db, _db_init_failed, _db_init_error
+    with _db_lock:
+        db = None
+        _db_init_failed = False
+        _db_init_error = None
+        logger.info("Database state reset")
 
 
 def close_db() -> None:
@@ -955,33 +1314,44 @@ async def list_tools():
         ),
         Tool(
             name="purge_memory",
-            description="Delete ALL stored memory. Use with caution! Requires confirmation.",
+            description="Delete ALL stored memory. Two-step process: first call returns a unique token, second call with that token confirms deletion.",
             inputSchema={
                 "type": "object",
                 "properties": {
                     "confirm": {
                         "type": "string",
-                        "description": "Must be 'CONFIRM_PURGE' to proceed"
+                        "description": "Confirmation token from the first call. Omit to initiate purge and receive token."
                     }
-                },
-                "required": ["confirm"]
+                }
             }
         )
     ]
 
 
+# Operations exempt from rate limiting (administrative/bulk operations)
+RATE_LIMIT_EXEMPT_OPERATIONS = frozenset({
+    'import_memory',   # Bulk operation that would hit limits unfairly
+    'export_memory',   # Read-only bulk operation
+    'health_check',    # Monitoring should not be rate limited
+    'memory_stats',    # Monitoring should not be rate limited
+    'purge_memory',    # Requires confirmation, infrequent
+})
+
+
 @server.call_tool()
 async def call_tool(name: str, arguments: dict) -> list:
     """Handle tool calls."""
-    # Check rate limit before processing
-    if not rate_limiter.check():
-        remaining = rate_limiter.remaining()
-        logger.warning(f"Rate limit exceeded for tool {name}. Remaining: {remaining}")
-        return [TextContent(
-            type="text",
-            text=f"❌ Rate limit exceeded. Please wait before making more requests. "
-                 f"Limit: {RATE_LIMIT} operations per minute."
-        )]
+    # Check rate limit before processing (unless exempt)
+    limiter = get_rate_limiter()
+    if name not in RATE_LIMIT_EXEMPT_OPERATIONS:
+        if not limiter.check():
+            remaining = limiter.remaining()
+            logger.warning(f"Rate limit exceeded for tool {name}. Remaining: {remaining}")
+            return [TextContent(
+                type="text",
+                text=f"❌ Rate limit exceeded. Please wait before making more requests. "
+                     f"Limit: {RATE_LIMIT} operations per minute."
+            )]
 
     try:
         database = get_db()
@@ -1184,13 +1554,45 @@ async def call_tool(name: str, arguments: dict) -> list:
         elif name == "purge_memory":
             confirm = arguments.get("confirm", "")
 
-            if confirm != "CONFIRM_PURGE":
+            # Two-step confirmation: first call generates token, second verifies it
+            if not confirm:
+                # Step 1: Generate a new purge token
+                token = generate_purge_token()
+                ttl = set_purge_token(token)
                 return [TextContent(
                     type="text",
-                    text="⚠️ To purge all memory, you must pass confirm='CONFIRM_PURGE'\n\n"
-                         "This will permanently delete ALL decisions, patterns, and context!"
+                    text=f"⚠️ **DANGER: Memory Purge Requested**\n\n"
+                         f"This will permanently delete ALL:\n"
+                         f"- Decisions\n"
+                         f"- Patterns\n"
+                         f"- Context keys\n\n"
+                         f"To confirm, call purge_memory with:\n"
+                         f"```\nconfirm='{token}'\n```\n\n"
+                         f"⏱️ Token expires in {int(ttl)} seconds."
                 )]
 
+            # Step 2: Validate the provided token
+            if not validate_and_clear_purge_token(confirm):
+                # Check if there's a pending token
+                pending = get_pending_purge_token()
+                if pending:
+                    token, remaining = pending
+                    return [TextContent(
+                        type="text",
+                        text=f"❌ Invalid confirmation token.\n\n"
+                             f"Expected: `{token}`\n"
+                             f"Received: `{confirm}`\n\n"
+                             f"⏱️ Token expires in {int(remaining)} seconds."
+                    )]
+                else:
+                    return [TextContent(
+                        type="text",
+                        text="❌ No pending purge request or token expired.\n\n"
+                             "Please call purge_memory without confirm parameter first "
+                             "to initiate a new purge request."
+                    )]
+
+            # Token validated - proceed with purge
             result = database.purge_all()
 
             output = "## Memory Purged ⚠️\n\n"
@@ -1214,7 +1616,8 @@ async def main():
     logger.info(f"Starting Project Memory MCP Server v{VERSION}")
     logger.info(f"Database: {get_db_path()}")
     logger.info(f"Limits: {MAX_DECISIONS} decisions, {MAX_PATTERNS} patterns, {MAX_CONTEXT_KEYS} context keys")
-    logger.info(f"Rate limit: {RATE_LIMIT} ops/min, Pool size: {POOL_SIZE}")
+    persist_str = "persistent" if PERSIST_RATE_LIMIT else "in-memory"
+    logger.info(f"Rate limit: {RATE_LIMIT} ops/min ({persist_str}), Pool size: {POOL_SIZE}")
 
     # Set up graceful shutdown
     import signal
