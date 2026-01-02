@@ -126,7 +126,7 @@ All claims in this framework are verified against authoritative sources:
 
 This framework was built using itself. Every pattern you see here was validated through actual use during development.
 
-See the [Dogfooding Log](/docs/dogfooding) for real-world effectiveness data.
+See the dogfooding log in [CLAUDE.md](https://github.com/ai-excellence-framework/ai-excellence-framework/blob/main/CLAUDE.md#dogfooding-log) for real-world effectiveness data.
 
 ## License
 

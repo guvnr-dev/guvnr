@@ -69,4 +69,4 @@ The framework provides mitigations for each friction category:
 | Security blindness | Pre-commit hooks |
 | Context decay      | Session handoffs |
 
-Read the full [friction analysis](/ai-development-friction.md) for all 59 points.
+Read the full [friction analysis](https://github.com/ai-excellence-framework/ai-excellence-framework/blob/main/ai-development-friction.md) for all 59 points.

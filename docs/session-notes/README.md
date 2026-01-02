@@ -103,5 +103,5 @@ Examples:
 
 ## See Also
 
-- [CLAUDE.md](../../CLAUDE.md) - Project context file
-- [/handoff command](../../.claude/commands/handoff.md) - Session handoff command
+- [CLAUDE.md Best Practices](/docs/mitigations/claude-md) - Project context file guide
+- [/handoff command](/commands/handoff) - Session handoff command

@@ -33,7 +33,8 @@ export default defineConfig({
           { text: 'Metrics Dashboard', link: '/METRICS-VISUALIZATION' },
           { text: 'Team Memory', link: '/TEAM-MEMORY-FEDERATION' },
           { text: 'Model Selection', link: '/MODEL-SELECTION' },
-          { text: 'Troubleshooting', link: '/TROUBLESHOOTING' }
+          { text: 'Troubleshooting', link: '/TROUBLESHOOTING' },
+          { text: 'Error Codes', link: '/ERROR-CODES' }
         ]
       },
       {
@@ -153,6 +154,7 @@ export default defineConfig({
             { text: 'AAIF Standard', link: '/AAIF' },
             { text: 'Model Selection', link: '/MODEL-SELECTION' },
             { text: 'Troubleshooting', link: '/TROUBLESHOOTING' },
+            { text: 'Error Codes', link: '/ERROR-CODES' },
             { text: 'Research Citations', link: '/RESEARCH-CITATIONS' }
           ]
         },

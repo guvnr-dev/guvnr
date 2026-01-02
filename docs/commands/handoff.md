@@ -196,4 +196,4 @@ Completing OAuth2 refresh token handling
 ## See Also
 
 - [/plan](/commands/plan) — Start new task with plan
-- [Session Notes](/docs/session-notes/) — Example handoffs
+- [Session Notes](/session-notes/) — Example handoffs

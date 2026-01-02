@@ -76,4 +76,4 @@ Then save the output as `YYYY-MM-DD-description.md`.
 ## See Also
 
 - [/handoff command](/commands/handoff) — Generate handoff notes
-- [Example session](/docs/session-notes/EXAMPLE-SESSION) — Sample handoff
+- [Example session](./EXAMPLE-SESSION) — Sample handoff
