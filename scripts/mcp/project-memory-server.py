@@ -39,6 +39,7 @@ import sqlite3
 import sys
 import threading
 import time
+import uuid
 from collections import deque
 from contextlib import contextmanager
 from datetime import datetime
@@ -424,6 +425,59 @@ class ConnectionPool:
             "max_temp_connections": self.MAX_TEMP_CONNECTIONS,
             "initialized": self._initialized
         }
+
+    def get_prometheus_metrics(self) -> str:
+        """Get connection pool metrics in Prometheus/OpenMetrics format.
+
+        Returns metrics in the standard Prometheus exposition format for easy
+        integration with monitoring systems like Prometheus, Grafana, etc.
+
+        @see https://prometheus.io/docs/instrumenting/exposition_formats/
+        @see https://github.com/prometheus/OpenMetrics/blob/main/specification/OpenMetrics.md
+
+        Returns:
+            str: Metrics in Prometheus exposition format
+        """
+        stats = self.get_pool_stats()
+        timestamp_ms = int(time.time() * 1000)
+
+        lines = [
+            "# HELP mcp_pool_size_total Configured size of the connection pool",
+            "# TYPE mcp_pool_size_total gauge",
+            f"mcp_pool_size_total {stats['pool_size']}",
+            "",
+            "# HELP mcp_pool_available_connections Number of available connections in pool",
+            "# TYPE mcp_pool_available_connections gauge",
+            f"mcp_pool_available_connections {stats['available']}",
+            "",
+            "# HELP mcp_pool_exhaustion_total Total number of times pool was exhausted",
+            "# TYPE mcp_pool_exhaustion_total counter",
+            f"mcp_pool_exhaustion_total {stats['exhaustion_count']}",
+            "",
+            "# HELP mcp_pool_temp_connections_created_total Total temporary connections created",
+            "# TYPE mcp_pool_temp_connections_created_total counter",
+            f"mcp_pool_temp_connections_created_total {stats['temp_connections_created']}",
+            "",
+            "# HELP mcp_pool_active_temp_connections Currently active temporary connections",
+            "# TYPE mcp_pool_active_temp_connections gauge",
+            f"mcp_pool_active_temp_connections {stats['active_temp_connections']}",
+            "",
+            "# HELP mcp_pool_max_temp_connections Maximum allowed temporary connections",
+            "# TYPE mcp_pool_max_temp_connections gauge",
+            f"mcp_pool_max_temp_connections {stats['max_temp_connections']}",
+            "",
+            "# HELP mcp_pool_initialized Connection pool initialization state (1=initialized)",
+            "# TYPE mcp_pool_initialized gauge",
+            f"mcp_pool_initialized {1 if stats['initialized'] else 0}",
+            "",
+            "# HELP mcp_pool_utilization_ratio Current pool utilization (1 - available/size)",
+            "# TYPE mcp_pool_utilization_ratio gauge",
+            f"mcp_pool_utilization_ratio {1 - (stats['available'] / stats['pool_size']) if stats['pool_size'] > 0 else 0:.4f}",
+            "",
+            f"# EOF (timestamp: {timestamp_ms})",
+        ]
+
+        return "\n".join(lines)
 
     def close_all(self) -> None:
         """Close all connections in the pool."""
@@ -1196,7 +1250,8 @@ def get_db_path() -> Path:
 # Initialize server and database
 server = Server("project-memory")
 db: Optional[ProjectMemoryDB] = None
-_db_lock = threading.Lock()  # Lock for thread-safe db access
+# Use RLock to allow recursive calls (e.g., if get_db is called during initialization)
+_db_lock = threading.RLock()  # Reentrant lock for thread-safe db access
 _db_init_failed = False  # Track initialization failure to avoid retry loops
 _db_init_error: Optional[Exception] = None  # Store initialization error
 
@@ -1204,22 +1259,37 @@ _db_init_error: Optional[Exception] = None  # Store initialization error
 def get_db() -> ProjectMemoryDB:
     """Get or initialize the database (thread-safe).
 
-    Uses double-checked locking with proper exception handling to ensure:
-    1. Thread-safe lazy initialization
-    2. Proper cleanup on initialization failure
-    3. Clear error reporting if initialization fails
+    Uses double-checked locking pattern (DCLP) with proper exception handling.
+
+    Thread Safety Notes:
+        - This implementation relies on Python's Global Interpreter Lock (GIL)
+          for atomic reads of `db` and `_db_init_failed` outside the lock.
+        - The GIL ensures that reading a single variable is atomic in CPython.
+        - The second check inside the lock ensures correctness even if the GIL
+          behavior changes or this code is ported to a non-GIL Python.
+        - We use RLock instead of Lock to safely handle recursive calls.
+
+    The pattern ensures:
+        1. Thread-safe lazy initialization (only one thread initializes)
+        2. Fast path for already-initialized case (no lock acquisition)
+        3. Proper cleanup on initialization failure
+        4. Clear error reporting if initialization fails
 
     Raises:
         RuntimeError: If database initialization previously failed
         Exception: If database initialization fails on this attempt
+
+    Returns:
+        ProjectMemoryDB: The initialized database instance
     """
     global db, _db_init_failed, _db_init_error
 
-    # Fast path: already initialized
+    # Fast path: already initialized (atomic read due to GIL)
+    # This avoids lock acquisition overhead for the common case
     if db is not None:
         return db
 
-    # Check for previous initialization failure
+    # Check for previous initialization failure (atomic read due to GIL)
     if _db_init_failed:
         raise RuntimeError(
             f"Database initialization previously failed: {_db_init_error}. "
@@ -1227,7 +1297,8 @@ def get_db() -> ProjectMemoryDB:
         )
 
     with _db_lock:
-        # Double-check after acquiring lock
+        # Double-check after acquiring lock to handle race conditions
+        # Another thread may have initialized while we were waiting
         if db is not None:
             return db
 
@@ -1240,11 +1311,13 @@ def get_db() -> ProjectMemoryDB:
         # Attempt initialization with proper exception handling
         try:
             new_db = ProjectMemoryDB(get_db_path())
-            # Only assign to global after successful initialization
+            # Assignment to global happens last - ensures db is fully initialized
+            # before other threads can see it (atomic assignment due to GIL)
             db = new_db
             logger.info("Database initialized successfully")
             return db
         except Exception as e:
+            # Mark as failed to prevent retry loops
             _db_init_failed = True
             _db_init_error = e
             logger.error(f"Database initialization failed: {e}")
@@ -1471,16 +1544,25 @@ RATE_LIMIT_EXEMPT_OPERATIONS = frozenset({
 @server.call_tool()
 async def call_tool(name: str, arguments: dict) -> list:
     """Handle tool calls."""
+    # Generate a unique request ID for tracing (short UUID for readability)
+    request_id = str(uuid.uuid4())[:8]
+
     # Check rate limit before processing (unless exempt)
     limiter = get_rate_limiter()
     if name not in RATE_LIMIT_EXEMPT_OPERATIONS:
         if not limiter.check():
             remaining = limiter.remaining()
-            logger.warning(f"Rate limit exceeded for tool {name}. Remaining: {remaining}")
+            timestamp = datetime.now().isoformat()
+            logger.warning(
+                f"Rate limit exceeded for tool {name}. "
+                f"Request ID: {request_id}, Remaining: {remaining}"
+            )
             return [TextContent(
                 type="text",
-                text=f"❌ Rate limit exceeded. Please wait before making more requests. "
-                     f"Limit: {RATE_LIMIT} operations per minute."
+                text=f"❌ Rate limit exceeded. Please wait before making more requests.\n"
+                     f"   Limit: {RATE_LIMIT} operations per minute.\n"
+                     f"   Request ID: {request_id}\n"
+                     f"   Timestamp: {timestamp}"
             )]
 
     try:
@@ -1508,7 +1590,11 @@ async def call_tool(name: str, arguments: dict) -> list:
 
         elif name == "recall_decisions":
             keyword = arguments.get("keyword")
-            limit = min(arguments.get("limit", 20), 100)
+            # Clamp limit to valid range [1, 100] to prevent:
+            # - Negative values causing unexpected SQL behavior
+            # - Zero values returning no results
+            # - Excessive values causing memory issues
+            limit = max(1, min(arguments.get("limit", 20), 100))
 
             decisions = database.search_decisions(keyword=keyword, limit=limit)
 
