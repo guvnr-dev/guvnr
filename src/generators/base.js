@@ -5,14 +5,46 @@
  */
 
 import { basename } from 'path';
+import { createHash } from 'crypto';
 import chalk from 'chalk';
 
 /**
- * Parse CLAUDE.md into structured project context
+ * Simple cache for parsed CLAUDE.md content.
+ * Uses content hash as key to detect changes.
+ * @type {Map<string, {context: object, timestamp: number}>}
+ */
+const parseCache = new Map();
+
+// Cache TTL: 5 minutes (in case file changes during long sessions)
+const CACHE_TTL_MS = 5 * 60 * 1000;
+
+/**
+ * Get content hash for cache key
+ * @param {string} content - Content to hash
+ * @returns {string} SHA-256 hash (first 16 chars)
+ */
+function getContentHash(content) {
+  return createHash('sha256').update(content).digest('hex').slice(0, 16);
+}
+
+/**
+ * Parse CLAUDE.md into structured project context.
+ * Results are cached based on content hash for performance.
+ *
  * @param {string} content - Raw CLAUDE.md content
+ * @param {boolean} [skipCache=false] - Force re-parsing even if cached
  * @returns {object} Parsed project context
  */
-export function parseProjectContext(content) {
+export function parseProjectContext(content, skipCache = false) {
+  // Check cache first
+  if (!skipCache) {
+    const hash = getContentHash(content);
+    const cached = parseCache.get(hash);
+
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
+      return cached.context;
+    }
+  }
   const context = {
     projectName: '',
     overview: '',
@@ -43,6 +75,21 @@ export function parseProjectContext(content) {
   context.currentState = sections['Current State'] || '';
   context.sessionInstructions = sections['Session Instructions'] || '';
   context.securityChecklist = extractSecurityChecklist(content);
+
+  // Store in cache for future lookups
+  if (!skipCache) {
+    const hash = getContentHash(content);
+    parseCache.set(hash, {
+      context,
+      timestamp: Date.now()
+    });
+
+    // Clean up old entries (simple LRU-like cleanup)
+    if (parseCache.size > 100) {
+      const oldestKey = parseCache.keys().next().value;
+      parseCache.delete(oldestKey);
+    }
+  }
 
   return context;
 }
