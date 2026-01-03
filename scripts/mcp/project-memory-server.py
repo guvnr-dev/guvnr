@@ -954,6 +954,8 @@ class ConnectionPool:
                 - temp_connections_created: Total temp connections created
                 - active_temp_connections: Currently active temp connections
                 - max_temp_connections: Maximum allowed temp connections
+                - waiting_count: Requests currently in wait queue
+                - max_wait_queue: Maximum wait queue size
                 - initialized: Whether pool is initialized
         """
         # Respect global EXPOSE_STATS setting (can be overridden by argument)
@@ -973,6 +975,8 @@ class ConnectionPool:
             "temp_connections_created": self._temp_connections_created,
             "active_temp_connections": self._active_temp_connections,
             "max_temp_connections": self.MAX_TEMP_CONNECTIONS,
+            "waiting_count": self._waiting_count,
+            "max_wait_queue": self.MAX_WAIT_QUEUE_SIZE,
             "initialized": self._initialized
         }
 
@@ -1052,6 +1056,14 @@ class ConnectionPool:
             "# HELP mcp_pool_initialized Connection pool initialization state (1=initialized)",
             "# TYPE mcp_pool_initialized gauge",
             f"mcp_pool_initialized {1 if stats['initialized'] else 0}",
+            "",
+            "# HELP mcp_pool_waiting_count Requests currently waiting for a connection",
+            "# TYPE mcp_pool_waiting_count gauge",
+            f"mcp_pool_waiting_count {stats['waiting_count']}",
+            "",
+            "# HELP mcp_pool_max_wait_queue Maximum wait queue size",
+            "# TYPE mcp_pool_max_wait_queue gauge",
+            f"mcp_pool_max_wait_queue {stats['max_wait_queue']}",
             "",
             "# HELP mcp_pool_utilization_ratio Current pool utilization (1 - available/size)",
             "# TYPE mcp_pool_utilization_ratio gauge",
@@ -1810,8 +1822,14 @@ class ProjectMemoryDB:
         """
         Import data from exported JSON with optional checksum verification.
 
+        Security Note:
+            This method expects already-parsed data. Callers MUST check JSON string
+            size BEFORE calling json.loads() to prevent memory exhaustion attacks.
+            See MAX_IMPORT_JSON_SIZE constant and the import_memory tool handler
+            for the reference implementation of pre-parse size checking.
+
         Args:
-            data: Exported data dictionary
+            data: Exported data dictionary (already parsed from JSON)
             merge: If True, merge with existing data. If False, replace all.
             verify_checksum: If True, verify checksum when present (default: True)
 
@@ -2791,7 +2809,11 @@ async def main():
                     if database._pool and EXPOSE_STATS:
                         pool_stats = database._pool.get_pool_stats()
                         log_entry["pool_available"] = pool_stats.get("available", 0)
+                        log_entry["pool_size"] = pool_stats.get("pool_size", 0)
                         log_entry["pool_exhaustion_count"] = pool_stats.get("exhaustion_count", 0)
+                        log_entry["pool_temp_conns_active"] = pool_stats.get("active_temp_connections", 0)
+                        log_entry["pool_temp_conns_created"] = pool_stats.get("temp_connections_created", 0)
+                        log_entry["pool_waiting_count"] = pool_stats.get("waiting_count", 0)
 
                     # Add rate limiter stats if exposed
                     if EXPOSE_STATS:
