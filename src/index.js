@@ -332,6 +332,7 @@ import { existsSync, readFileSync, readdirSync } from 'fs';
 import { readFile } from 'fs/promises';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { deprecate } from 'util';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -408,6 +409,25 @@ export function listInstalledAgents(cwd = process.cwd()) {
 }
 
 /**
+ * Internal implementation of synchronous CLAUDE.md reading.
+ * This is wrapped with util.deprecate() and exported as readClaudeMd.
+ *
+ * @param {string} [cwd=process.cwd()] - Directory to read from
+ * @returns {{raw: string, sections: Object.<string, string>}|null} Parsed CLAUDE.md or null
+ * @throws {Error} If file exists but cannot be read (permissions, encoding issues)
+ * @private
+ */
+function _readClaudeMdSync(cwd = process.cwd()) {
+  const path = join(cwd, 'CLAUDE.md');
+  if (!existsSync(path)) {
+    return null;
+  }
+
+  const content = readFileSync(path, 'utf-8');
+  return parseClaudeMd(content);
+}
+
+/**
  * Read and parse CLAUDE.md (synchronous version)
  *
  * @deprecated **DEPRECATED - WILL BE REMOVED IN v2.0.0**
@@ -430,39 +450,26 @@ export function listInstalledAgents(cwd = process.cwd()) {
  * const parsed = await readClaudeMdAsync('/path/to/project');
  * ```
  *
+ * **Implementation Note:**
+ * Uses Node.js `util.deprecate()` which is the official deprecation API.
+ * This automatically handles:
+ * - Emitting the warning only once per unique deprecation code
+ * - Proper integration with --no-deprecation and --throw-deprecation flags
+ * - Consistent behavior across Node.js versions
+ *
  * @param {string} [cwd=process.cwd()] - Directory to read from
  * @returns {{raw: string, sections: Object.<string, string>}|null} Parsed CLAUDE.md or null
  * @throws {Error} If file exists but cannot be read (permissions, encoding issues)
  * @see {@link readClaudeMdAsync} - The recommended async replacement
+ * @see https://nodejs.org/api/util.html#utildeprecatefn-msg-code - Node.js util.deprecate
  * @see https://nodejs.org/api/deprecations.html - Node.js deprecation guidelines
  */
-export function readClaudeMd(cwd = process.cwd()) {
-  // Emit deprecation warning (only once per process)
-  // Note: This pattern is safe in Node.js's single-threaded execution model.
-  // The flag is set synchronously before emitWarning, preventing re-entrancy.
-  // In clustered environments, each worker process correctly emits one warning.
-  if (!readClaudeMd._warned) {
-    readClaudeMd._warned = true;
-    process.emitWarning(
-      'readClaudeMd() is deprecated. Use readClaudeMdAsync() instead for better performance.',
-      {
-        type: 'DeprecationWarning',
-        code: 'AIX_DEP_001',
-        detail: 'Synchronous file reads block the event loop. See: https://nodejs.org/api/deprecations.html'
-      }
-    );
-  }
-
-  const path = join(cwd, 'CLAUDE.md');
-  if (!existsSync(path)) {
-    return null;
-  }
-
-  const content = readFileSync(path, 'utf-8');
-  return parseClaudeMd(content);
-}
-// Track if deprecation warning has been emitted
-readClaudeMd._warned = false;
+export const readClaudeMd = deprecate(
+  _readClaudeMdSync,
+  'readClaudeMd() is deprecated. Use readClaudeMdAsync() instead for better performance. ' +
+  'Synchronous file reads block the event loop.',
+  'AIX_DEP_001'
+);
 
 /**
  * Read and parse CLAUDE.md (async version)
@@ -729,9 +736,13 @@ export function getAllSecretPatterns() {
  *
  * @param {RegExp} pattern - Pattern to clone
  * @returns {RegExp} Fresh RegExp instance with same pattern and flags
- * @private
+ * @example
+ * const original = /test/g;
+ * original.lastIndex = 5;
+ * const cloned = cloneRegExp(original);
+ * console.log(cloned.lastIndex); // 0
  */
-function cloneRegExp(pattern) {
+export function cloneRegExp(pattern) {
   return new RegExp(pattern.source, pattern.flags);
 }
 
