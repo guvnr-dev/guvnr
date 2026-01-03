@@ -55,7 +55,10 @@
     "prepare": "node scripts/prepare.js",
     "postinstall": "node scripts/postinstall.js || true",
     "benchmark": "node scripts/benchmark.js",
-    "benchmark:json": "node scripts/benchmark.js --json"
+    "benchmark:json": "node scripts/benchmark.js --json",
+    "context-analysis": "node scripts/context-analysis.js",
+    "context-analysis:json": "node scripts/context-analysis.js --json",
+    "context-analysis:verbose": "node scripts/context-analysis.js --verbose"
   },
   "keywords": [
     "ai",
@@ -136,6 +139,8 @@
     "scripts/mcp/*.py",
     "scripts/health/",
     "scripts/metrics/",
+    "scripts/context-analysis.js",
+    "scripts/benchmark.js",
     "completions/",
     "CLAUDE.md",
     "README.md",
