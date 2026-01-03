@@ -8,9 +8,6 @@ export default defineConfig({
   // Clean URLs (no .html extension)
   cleanUrls: true,
 
-  // Build output
-  outDir: '../dist',
-
   // Theme configuration
   themeConfig: {
     // Logo and title
@@ -217,8 +214,8 @@ export default defineConfig({
 
   // Head metadata
   head: [
-    ['link', { rel: 'icon', href: '/favicon.ico' }],
-    ['meta', { name: 'theme-color', content: '#3eaf7c' }],
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
+    ['meta', { name: 'theme-color', content: '#2563eb' }],
     ['meta', { name: 'og:type', content: 'website' }],
     ['meta', { name: 'og:locale', content: 'en' }],
     ['meta', { name: 'og:site_name', content: 'AI Excellence Framework' }],
