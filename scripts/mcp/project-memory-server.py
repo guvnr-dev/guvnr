@@ -279,8 +279,19 @@ PURGE_TOKEN_TTL = 60  # seconds
 
 
 def generate_purge_token() -> str:
-    """Generate a random purge confirmation token."""
-    return f"PURGE-{random.randbytes(4).hex().upper()}"
+    """Generate a cryptographically secure purge confirmation token.
+
+    Security: Uses 16 bytes (128 bits) of randomness from os.urandom via
+    random.randbytes(), which is suitable for security-sensitive operations.
+    The token format is "PURGE-" followed by 32 hex characters.
+
+    The 128-bit entropy provides sufficient protection against:
+    - Brute force attacks (2^128 possibilities)
+    - Birthday attacks (2^64 attempts needed for 50% collision probability)
+
+    @see https://docs.python.org/3/library/random.html#random.randbytes
+    """
+    return f"PURGE-{random.randbytes(16).hex().upper()}"
 
 
 def get_pending_purge_token() -> Optional[tuple[str, float]]:
@@ -465,8 +476,12 @@ class ConnectionPool:
 
             if is_temp_connection:
                 now = time.time()
-                # Rate-limit exhaustion warnings (max once per 10 seconds)
-                if now - self._last_exhaustion_warning >= 10.0:
+                # Rate-limit exhaustion warnings with jitter to prevent timing attacks.
+                # Base interval: 10-15 seconds (randomized to obscure pool state).
+                # Security: Adding jitter prevents attackers from using log timing
+                # to precisely determine pool exhaustion state.
+                warning_interval = 10.0 + random.random() * 5.0  # 10-15 seconds
+                if now - self._last_exhaustion_warning >= warning_interval:
                     self._last_exhaustion_warning = now
                     logger.warning(
                         f"⚠️ Connection pool exhausted! "

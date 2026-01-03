@@ -20,6 +20,7 @@
 
 import { homedir } from 'os';
 import { relative, isAbsolute } from 'path';
+import { randomUUID } from 'crypto';
 
 /**
  * Base URL for error documentation.
@@ -186,6 +187,10 @@ function _redactSensitiveValue(value, key) {
 /**
  * Base error class for all framework errors.
  * Extends Error with structured properties for tracking and debugging.
+ *
+ * Each error instance has a unique errorId (UUID) for log correlation in
+ * team environments. This allows tracking errors across distributed systems
+ * and correlating logs from different sources.
  */
 export class FrameworkError extends Error {
   /**
@@ -196,11 +201,13 @@ export class FrameworkError extends Error {
    * @param {Object} [options.context] - Additional context for debugging
    * @param {boolean} [options.recoverable=true] - Whether the error is recoverable
    * @param {string} [options.suggestion] - Suggested fix for the error
+   * @param {string} [options.errorId] - Custom error ID (defaults to UUID)
    */
   constructor(code, message, options = {}) {
     super(message);
     this.name = 'FrameworkError';
     this.code = code;
+    this.errorId = options.errorId || randomUUID();
     this.timestamp = new Date().toISOString();
     this.cause = options.cause || null;
     this.context = options.context || {};
@@ -212,12 +219,13 @@ export class FrameworkError extends Error {
    * Returns a structured representation for logging/debugging.
    * Context paths and stack traces are sanitized to prevent leaking sensitive information.
    * @param {boolean} [sanitize=true] - Whether to sanitize paths in context and stack
-   * @returns {Object} Structured error object
+   * @returns {Object} Structured error object with errorId for correlation
    */
   toJSON(sanitize = true) {
     return {
       name: this.name,
       code: this.code,
+      errorId: this.errorId,
       message: this.message,
       timestamp: this.timestamp,
       recoverable: this.recoverable,
@@ -230,7 +238,9 @@ export class FrameworkError extends Error {
   /**
    * Returns a formatted string for CLI output.
    * Stack traces are sanitized to prevent path information leakage.
-   * @param {boolean} [verbose=false] - Include stack trace
+   * Includes errorId for log correlation.
+   *
+   * @param {boolean} [verbose=false] - Include stack trace and errorId
    * @returns {string} Formatted error message
    */
   format(verbose = false) {
@@ -241,10 +251,15 @@ export class FrameworkError extends Error {
       output += `\n  Suggestion: ${this.suggestion}\n`;
     }
 
-    if (verbose && this.stack) {
-      // Sanitize stack trace to prevent path information leakage
-      const sanitizedStack = sanitizeStack(this.stack);
-      output += `\n  Stack trace:\n  ${sanitizedStack.split('\n').slice(1).join('\n  ')}\n`;
+    if (verbose) {
+      // Include error ID for correlation in verbose mode
+      output += `\n  Error ID: ${this.errorId}\n`;
+
+      if (this.stack) {
+        // Sanitize stack trace to prevent path information leakage
+        const sanitizedStack = sanitizeStack(this.stack);
+        output += `\n  Stack trace:\n  ${sanitizedStack.split('\n').slice(1).join('\n  ')}\n`;
+      }
     }
 
     output += `\n  Documentation: ${DOCS_BASE_URL}/ERROR-CODES.html#${this.code.toLowerCase()}\n`;

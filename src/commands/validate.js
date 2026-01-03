@@ -2,15 +2,19 @@
  * AI Excellence Framework - Validate Command
  *
  * Validates the framework configuration and setup with auto-fix capabilities.
+ *
+ * Performance: Uses async file I/O to avoid blocking the event loop during
+ * validation, which is especially important for large CLAUDE.md files.
  */
 
-import { existsSync, readFileSync, writeFileSync, mkdirSync, appendFileSync } from 'fs';
+import { readFile, writeFile, mkdir, appendFile, access, constants } from 'fs/promises';
+import { existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import chalk from 'chalk';
 import ora from 'ora';
 import fse from 'fs-extra';
-import { detectSecrets } from '../index.js';
+import { detectSecrets, checkAbortSignal } from '../index.js';
 import { createError } from '../errors.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -18,14 +22,42 @@ const __dirname = dirname(__filename);
 const PACKAGE_ROOT = join(__dirname, '..', '..');
 
 /**
- * Validation rules with auto-fix capabilities
+ * Check if a file exists asynchronously
+ * @param {string} filePath - Path to check
+ * @returns {Promise<boolean>} True if file exists
+ */
+async function fileExists(filePath) {
+  try {
+    await access(filePath, constants.F_OK);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Safely read a file, returning null if it doesn't exist
+ * @param {string} filePath - Path to read
+ * @returns {Promise<string|null>} File contents or null
+ */
+async function safeReadFile(filePath) {
+  try {
+    return await readFile(filePath, 'utf-8');
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Validation rules with auto-fix capabilities.
+ * All check and fix functions are async for non-blocking I/O.
  */
 const VALIDATION_RULES = [
   {
     id: 'claude-md-exists',
     name: 'CLAUDE.md exists',
     category: 'core',
-    check: cwd => existsSync(join(cwd, 'CLAUDE.md')),
+    check: async cwd => fileExists(join(cwd, 'CLAUDE.md')),
     fix: async cwd => {
       const template = `# Project Name
 
@@ -85,7 +117,7 @@ Initial setup
 - Update "Current State" section
 - Commit work in progress
 `;
-      writeFileSync(join(cwd, 'CLAUDE.md'), template);
+      await writeFile(join(cwd, 'CLAUDE.md'), template);
       return true;
     },
     severity: 'error'
@@ -94,27 +126,23 @@ Initial setup
     id: 'claude-md-has-overview',
     name: 'CLAUDE.md has Overview section',
     category: 'core',
-    check: cwd => {
-      const path = join(cwd, 'CLAUDE.md');
-      if (!existsSync(path)) {
-        return false;
-      }
-      const content = readFileSync(path, 'utf-8');
-      return /## Overview/i.test(content);
+    check: async cwd => {
+      const content = await safeReadFile(join(cwd, 'CLAUDE.md'));
+      return content !== null && /## Overview/i.test(content);
     },
     fix: async cwd => {
       const path = join(cwd, 'CLAUDE.md');
-      if (!existsSync(path)) {
+      let content = await safeReadFile(path);
+      if (content === null) {
         return false;
       }
-      let content = readFileSync(path, 'utf-8');
       if (!/## Overview/i.test(content)) {
         // Find the first heading and insert after it
         content = content.replace(
           /^(# .+\n)/m,
           '$1\n## Overview\n\n[Brief description of what this project does]\n\n'
         );
-        writeFileSync(path, content);
+        await writeFile(path, content);
       }
       return true;
     },
@@ -124,20 +152,16 @@ Initial setup
     id: 'claude-md-has-tech-stack',
     name: 'CLAUDE.md has Tech Stack section',
     category: 'core',
-    check: cwd => {
-      const path = join(cwd, 'CLAUDE.md');
-      if (!existsSync(path)) {
-        return false;
-      }
-      const content = readFileSync(path, 'utf-8');
-      return /## Tech Stack/i.test(content);
+    check: async cwd => {
+      const content = await safeReadFile(join(cwd, 'CLAUDE.md'));
+      return content !== null && /## Tech Stack/i.test(content);
     },
     fix: async cwd => {
       const path = join(cwd, 'CLAUDE.md');
-      if (!existsSync(path)) {
+      let content = await safeReadFile(path);
+      if (content === null) {
         return false;
       }
-      let content = readFileSync(path, 'utf-8');
       if (!/## Tech Stack/i.test(content)) {
         // Find Overview section and insert after it
         if (/## Overview/i.test(content)) {
@@ -148,7 +172,7 @@ Initial setup
         } else {
           content += '\n\n## Tech Stack\n\n- Language: [specify]\n- Framework: [specify]\n';
         }
-        writeFileSync(path, content);
+        await writeFile(path, content);
       }
       return true;
     },
@@ -158,24 +182,20 @@ Initial setup
     id: 'claude-md-has-current-state',
     name: 'CLAUDE.md has Current State section',
     category: 'core',
-    check: cwd => {
-      const path = join(cwd, 'CLAUDE.md');
-      if (!existsSync(path)) {
-        return false;
-      }
-      const content = readFileSync(path, 'utf-8');
-      return /## Current State/i.test(content);
+    check: async cwd => {
+      const content = await safeReadFile(join(cwd, 'CLAUDE.md'));
+      return content !== null && /## Current State/i.test(content);
     },
     fix: async cwd => {
       const path = join(cwd, 'CLAUDE.md');
-      if (!existsSync(path)) {
+      let content = await safeReadFile(path);
+      if (content === null) {
         return false;
       }
-      let content = readFileSync(path, 'utf-8');
       if (!/## Current State/i.test(content)) {
         content +=
           '\n\n## Current State\n\n### Phase\nIn development\n\n### Recent Decisions\n- [Add decisions here]\n';
-        writeFileSync(path, content);
+        await writeFile(path, content);
       }
       return true;
     },
@@ -185,9 +205,9 @@ Initial setup
     id: 'commands-dir-exists',
     name: '.claude/commands directory exists',
     category: 'commands',
-    check: cwd => existsSync(join(cwd, '.claude', 'commands')),
+    check: async cwd => fileExists(join(cwd, '.claude', 'commands')),
     fix: async cwd => {
-      mkdirSync(join(cwd, '.claude', 'commands'), { recursive: true });
+      await mkdir(join(cwd, '.claude', 'commands'), { recursive: true });
       return true;
     },
     severity: 'info'
@@ -196,13 +216,13 @@ Initial setup
     id: 'plan-command-exists',
     name: '/plan command exists',
     category: 'commands',
-    check: cwd => existsSync(join(cwd, '.claude', 'commands', 'plan.md')),
+    check: async cwd => fileExists(join(cwd, '.claude', 'commands', 'plan.md')),
     fix: async cwd => {
       const source = join(PACKAGE_ROOT, '.claude', 'commands', 'plan.md');
       const target = join(cwd, '.claude', 'commands', 'plan.md');
       if (existsSync(source)) {
-        mkdirSync(dirname(target), { recursive: true });
-        fse.copySync(source, target);
+        await mkdir(dirname(target), { recursive: true });
+        await fse.copy(source, target);
         return true;
       }
       return false;
@@ -213,13 +233,13 @@ Initial setup
     id: 'verify-command-exists',
     name: '/verify command exists',
     category: 'commands',
-    check: cwd => existsSync(join(cwd, '.claude', 'commands', 'verify.md')),
+    check: async cwd => fileExists(join(cwd, '.claude', 'commands', 'verify.md')),
     fix: async cwd => {
       const source = join(PACKAGE_ROOT, '.claude', 'commands', 'verify.md');
       const target = join(cwd, '.claude', 'commands', 'verify.md');
       if (existsSync(source)) {
-        mkdirSync(dirname(target), { recursive: true });
-        fse.copySync(source, target);
+        await mkdir(dirname(target), { recursive: true });
+        await fse.copy(source, target);
         return true;
       }
       return false;
@@ -230,12 +250,12 @@ Initial setup
     id: 'pre-commit-config',
     name: 'Pre-commit configuration exists',
     category: 'security',
-    check: cwd => existsSync(join(cwd, '.pre-commit-config.yaml')),
+    check: async cwd => fileExists(join(cwd, '.pre-commit-config.yaml')),
     fix: async cwd => {
       const source = join(PACKAGE_ROOT, 'templates', '.pre-commit-config.yaml');
       const target = join(cwd, '.pre-commit-config.yaml');
       if (existsSync(source)) {
-        fse.copySync(source, target);
+        await fse.copy(source, target);
         return true;
       }
       // Create a basic pre-commit config
@@ -252,7 +272,7 @@ Initial setup
       - id: detect-private-key
       - id: check-merge-conflict
 `;
-      writeFileSync(target, config);
+      await writeFile(target, config);
       return true;
     },
     severity: 'info'
@@ -261,7 +281,7 @@ Initial setup
     id: 'gitignore-exists',
     name: '.gitignore exists',
     category: 'security',
-    check: cwd => existsSync(join(cwd, '.gitignore')),
+    check: async cwd => fileExists(join(cwd, '.gitignore')),
     fix: async cwd => {
       const content = `# AI Excellence Framework
 CLAUDE.local.md
@@ -291,7 +311,7 @@ build/
 .DS_Store
 Thumbs.db
 `;
-      writeFileSync(join(cwd, '.gitignore'), content);
+      await writeFile(join(cwd, '.gitignore'), content);
       return true;
     },
     severity: 'warning'
@@ -300,20 +320,16 @@ Thumbs.db
     id: 'gitignore-has-tmp',
     name: '.gitignore ignores .tmp/',
     category: 'security',
-    check: cwd => {
-      const path = join(cwd, '.gitignore');
-      if (!existsSync(path)) {
-        return false;
-      }
-      const content = readFileSync(path, 'utf-8');
-      return content.includes('.tmp/') || content.includes('.tmp');
+    check: async cwd => {
+      const content = await safeReadFile(join(cwd, '.gitignore'));
+      return content !== null && (content.includes('.tmp/') || content.includes('.tmp'));
     },
     fix: async cwd => {
       const path = join(cwd, '.gitignore');
-      if (!existsSync(path)) {
+      if (!(await fileExists(path))) {
         return false;
       }
-      appendFileSync(path, '\n# AI Excellence Framework temp files\n.tmp/\n');
+      await appendFile(path, '\n# AI Excellence Framework temp files\n.tmp/\n');
       return true;
     },
     severity: 'warning'
@@ -322,20 +338,16 @@ Thumbs.db
     id: 'gitignore-has-secrets',
     name: '.gitignore ignores .secrets.baseline',
     category: 'security',
-    check: cwd => {
-      const path = join(cwd, '.gitignore');
-      if (!existsSync(path)) {
-        return false;
-      }
-      const content = readFileSync(path, 'utf-8');
-      return content.includes('.secrets.baseline');
+    check: async cwd => {
+      const content = await safeReadFile(join(cwd, '.gitignore'));
+      return content !== null && content.includes('.secrets.baseline');
     },
     fix: async cwd => {
       const path = join(cwd, '.gitignore');
-      if (!existsSync(path)) {
+      if (!(await fileExists(path))) {
         return false;
       }
-      appendFileSync(path, '\n.secrets.baseline\n');
+      await appendFile(path, '\n.secrets.baseline\n');
       return true;
     },
     severity: 'info'
@@ -344,10 +356,10 @@ Thumbs.db
     id: 'session-notes-dir',
     name: 'Session notes directory exists',
     category: 'workflow',
-    check: cwd => existsSync(join(cwd, 'docs', 'session-notes')),
+    check: async cwd => fileExists(join(cwd, 'docs', 'session-notes')),
     fix: async cwd => {
-      mkdirSync(join(cwd, 'docs', 'session-notes'), { recursive: true });
-      writeFileSync(join(cwd, 'docs', 'session-notes', '.gitkeep'), '');
+      await mkdir(join(cwd, 'docs', 'session-notes'), { recursive: true });
+      await writeFile(join(cwd, 'docs', 'session-notes', '.gitkeep'), '');
       return true;
     },
     severity: 'info'
@@ -356,10 +368,10 @@ Thumbs.db
     id: 'tmp-dir-exists',
     name: '.tmp directory exists',
     category: 'workflow',
-    check: cwd => existsSync(join(cwd, '.tmp')),
+    check: async cwd => fileExists(join(cwd, '.tmp')),
     fix: async cwd => {
-      mkdirSync(join(cwd, '.tmp'), { recursive: true });
-      writeFileSync(join(cwd, '.tmp', '.gitkeep'), '');
+      await mkdir(join(cwd, '.tmp'), { recursive: true });
+      await writeFile(join(cwd, '.tmp', '.gitkeep'), '');
       return true;
     },
     severity: 'info'
@@ -368,12 +380,11 @@ Thumbs.db
     id: 'no-hardcoded-secrets',
     name: 'No obvious hardcoded secrets in CLAUDE.md',
     category: 'security',
-    check: cwd => {
-      const path = join(cwd, 'CLAUDE.md');
-      if (!existsSync(path)) {
+    check: async cwd => {
+      const content = await safeReadFile(join(cwd, 'CLAUDE.md'));
+      if (content === null) {
         return true;
       }
-      const content = readFileSync(path, 'utf-8');
       // Use comprehensive detectSecrets from index.js for consistency
       const result = detectSecrets(content);
       return result.clean;
@@ -385,9 +396,9 @@ Thumbs.db
     id: 'agents-dir-exists',
     name: '.claude/agents directory exists',
     category: 'agents',
-    check: cwd => existsSync(join(cwd, '.claude', 'agents')),
+    check: async cwd => fileExists(join(cwd, '.claude', 'agents')),
     fix: async cwd => {
-      mkdirSync(join(cwd, '.claude', 'agents'), { recursive: true });
+      await mkdir(join(cwd, '.claude', 'agents'), { recursive: true });
       return true;
     },
     severity: 'info'
@@ -400,13 +411,16 @@ Thumbs.db
  * @param {object} options - Command options
  * @param {boolean} [options.fix=false] - Automatically fix issues where possible
  * @param {boolean} [options.json=false] - Output results as JSON
+ * @param {AbortSignal} [options._abortSignal] - Signal for cancellation support
  * @returns {Promise<void>} Resolves when validation is complete
  * @throws {FrameworkError} If validation fails with errors
+ * @throws {Error} If aborted via signal
  */
 export async function validateCommand(options) {
   const cwd = process.cwd();
   const autoFix = options.fix || false;
   const json = options.json || false;
+  const signal = options._abortSignal;
 
   if (!json) {
     console.log(chalk.cyan('\n  AI Excellence Framework Validator\n'));
@@ -428,6 +442,9 @@ export async function validateCommand(options) {
 
   // Run all validation rules
   for (const rule of VALIDATION_RULES) {
+    // Check for abort signal between each rule (cooperative cancellation)
+    checkAbortSignal(signal, 'Validation');
+
     try {
       let passed = await rule.check(cwd);
 

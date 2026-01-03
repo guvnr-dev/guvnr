@@ -20,6 +20,70 @@ const __dirname = dirname(__filename);
 const PACKAGE_ROOT = join(__dirname, '..', '..');
 
 /**
+ * Valid preset names for input validation
+ * @type {ReadonlySet<string>}
+ */
+const VALID_PRESETS = new Set(Object.keys(PRESET_CONFIGS));
+
+/**
+ * Sanitize and validate command options to prevent injection and invalid input.
+ *
+ * Security: This function protects against:
+ * - Prototype pollution via __proto__, constructor, prototype keys
+ * - Invalid preset names
+ * - Type coercion issues
+ * - Excessively long string inputs
+ *
+ * @param {object} options - Raw command options
+ * @returns {object} Sanitized options with validated types
+ * @throws {FrameworkError} If critical validation fails
+ */
+function sanitizeOptions(options) {
+  // Guard against null/undefined
+  if (!options || typeof options !== 'object') {
+    return { preset: 'standard', yes: false, force: false, dryRun: false, verbose: false, json: false };
+  }
+
+  // Protect against prototype pollution
+  const dangerousKeys = ['__proto__', 'constructor', 'prototype'];
+  for (const key of dangerousKeys) {
+    if (key in options) {
+      throw createError('AIX-INIT-110', `Invalid option key: ${key}`);
+    }
+  }
+
+  // Create sanitized copy using Object.create(null) to avoid prototype chain
+  const sanitized = Object.create(null);
+
+  // Validate and sanitize preset
+  const presetRaw = options.preset;
+  if (presetRaw !== undefined && presetRaw !== null) {
+    const presetStr = String(presetRaw).toLowerCase().trim();
+    // Limit length and validate characters
+    if (presetStr.length > 50 || !/^[a-z][a-z0-9_-]*$/.test(presetStr)) {
+      throw createError('AIX-INIT-111', `Invalid preset name format: ${presetStr.slice(0, 50)}`);
+    }
+    sanitized.preset = VALID_PRESETS.has(presetStr) ? presetStr : 'standard';
+  } else {
+    sanitized.preset = 'standard';
+  }
+
+  // Sanitize boolean options (coerce to boolean)
+  sanitized.yes = Boolean(options.yes);
+  sanitized.force = Boolean(options.force);
+  sanitized.dryRun = Boolean(options.dryRun);
+  sanitized.verbose = Boolean(options.verbose);
+  sanitized.json = Boolean(options.json);
+
+  // Pass through AbortSignal if present (for timeout support)
+  if (options._abortSignal instanceof AbortSignal) {
+    sanitized._abortSignal = options._abortSignal;
+  }
+
+  return sanitized;
+}
+
+/**
  * Convert the shared PRESET_CONFIGS format to init command format.
  * This ensures preset definitions are centralized in index.js while
  * providing the component structure needed by the init command.
@@ -55,17 +119,21 @@ const PRESETS = Object.fromEntries(
 /**
  * Main init command handler
  *
- * @param {object} options - Command options
- * @param {string} [options.preset='standard'] - Preset configuration to use
- * @param {boolean} [options.yes=false] - Skip prompts and use defaults
- * @param {boolean} [options.force=false] - Overwrite existing files
- * @param {boolean} [options.dryRun=false] - Show what would be created without creating
- * @param {boolean} [options.verbose=false] - Show detailed output
- * @param {boolean} [options.json=false] - Output results as JSON
+ * @param {object} rawOptions - Command options (will be sanitized)
+ * @param {string} [rawOptions.preset='standard'] - Preset configuration to use
+ * @param {boolean} [rawOptions.yes=false] - Skip prompts and use defaults
+ * @param {boolean} [rawOptions.force=false] - Overwrite existing files
+ * @param {boolean} [rawOptions.dryRun=false] - Show what would be created without creating
+ * @param {boolean} [rawOptions.verbose=false] - Show detailed output
+ * @param {boolean} [rawOptions.json=false] - Output results as JSON
+ * @param {AbortSignal} [rawOptions._abortSignal] - Signal for cancellation support
  * @returns {Promise<void>} Resolves when initialization is complete
- * @throws {FrameworkError} If initialization fails
+ * @throws {FrameworkError} If initialization fails or input validation fails
  */
-export async function initCommand(options) {
+export async function initCommand(rawOptions) {
+  // Sanitize and validate all input options
+  const options = sanitizeOptions(rawOptions);
+
   const cwd = process.cwd();
   const jsonOutput = options.json === true;
 

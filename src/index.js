@@ -527,23 +527,42 @@ export function parseClaudeMd(content) {
  *
  * The object is frozen with Object.freeze() to prevent accidental mutation.
  *
+ * ReDoS Prevention: All patterns use bounded quantifiers (e.g., {16,256} instead of {16,})
+ * to prevent catastrophic backtracking on malformed input. Upper bounds are set based on
+ * typical maximum lengths for each credential type plus reasonable buffer.
+ * @see https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS
+ *
  * @type {Readonly<Object.<string, ReadonlyArray<{name: string, pattern: RegExp}>>>}
  * @see detectSecrets for usage
  */
 export const SECRET_PATTERNS = Object.freeze({
   // Generic credential patterns
+  // Upper bounds: API keys typically 32-128 chars, passwords/secrets up to 256 chars
   generic: Object.freeze([
-    Object.freeze({ name: 'API Key', pattern: /api[_-]?key\s*[:=]\s*["'][^"']{16,}["']/gi }),
-    Object.freeze({ name: 'Password', pattern: /password\s*[:=]\s*["'][^"']{8,}["']/gi }),
-    Object.freeze({ name: 'Secret', pattern: /secret\s*[:=]\s*["'][^"']{8,}["']/gi }),
-    Object.freeze({ name: 'Bearer Token', pattern: /bearer\s+[a-zA-Z0-9_.-]{20,}/gi })
+    Object.freeze({ name: 'API Key', pattern: /api[_-]?key\s{0,5}[:=]\s{0,5}["'][^"']{16,256}["']/gi }),
+    Object.freeze({ name: 'Password', pattern: /password\s{0,5}[:=]\s{0,5}["'][^"']{8,256}["']/gi }),
+    Object.freeze({ name: 'Secret', pattern: /secret\s{0,5}[:=]\s{0,5}["'][^"']{8,256}["']/gi }),
+    Object.freeze({ name: 'Bearer Token', pattern: /bearer\s{1,5}[a-zA-Z0-9_.-]{20,2048}/gi })
   ]),
 
-  // AI/ML API Keys
+  // AI/ML API Keys (2024-2025 formats)
+  // OpenAI: sk-[48 chars] or sk-proj-[variable], Anthropic: sk-ant-api03-[93+ chars]
+  // Google: AIza[35 chars], xAI: xai-[variable], Perplexity: pplx-[variable]
+  // Hugging Face: hf_[variable], Cohere: co-[variable], Replicate: r8_[variable]
+  // @see https://docs.x.ai/docs/overview (xAI Grok)
+  // @see https://docs.perplexity.ai/guides/api-key-management (Perplexity)
+  // @see https://huggingface.co/docs/hub/en/security-tokens (Hugging Face)
   ai_ml: Object.freeze([
-    Object.freeze({ name: 'OpenAI Key', pattern: /sk-[a-zA-Z0-9]{32,}/g }),
-    Object.freeze({ name: 'Anthropic Key', pattern: /sk-ant-[a-zA-Z0-9_-]{32,}/g }),
-    Object.freeze({ name: 'Google AI Key', pattern: /AIza[a-zA-Z0-9_-]{35}/g })
+    Object.freeze({ name: 'OpenAI Key', pattern: /sk-[a-zA-Z0-9]{32,128}/g }),
+    Object.freeze({ name: 'OpenAI Project Key', pattern: /sk-proj-[a-zA-Z0-9_-]{32,200}/g }),
+    Object.freeze({ name: 'Anthropic Key', pattern: /sk-ant-[a-zA-Z0-9_-]{32,128}/g }),
+    Object.freeze({ name: 'Google AI Key', pattern: /AIza[a-zA-Z0-9_-]{35}/g }),
+    Object.freeze({ name: 'xAI Grok Key', pattern: /xai-[a-zA-Z0-9_-]{32,128}/g }),
+    Object.freeze({ name: 'Perplexity Key', pattern: /pplx-[a-zA-Z0-9]{32,128}/g }),
+    Object.freeze({ name: 'Hugging Face Token', pattern: /hf_[a-zA-Z0-9]{32,128}/g }),
+    Object.freeze({ name: 'Cohere Key', pattern: /co-[a-zA-Z0-9]{32,64}/g }),
+    Object.freeze({ name: 'Replicate Token', pattern: /r8_[a-zA-Z0-9]{32,64}/g }),
+    Object.freeze({ name: 'Mistral Key', pattern: /mistral[_-]?api[_-]?key\s{0,5}[:=]\s{0,5}["'][a-zA-Z0-9]{32,64}["']/gi })
   ]),
 
   // Cloud Provider Keys
@@ -552,9 +571,10 @@ export const SECRET_PATTERNS = Object.freeze({
     // AWS STS temporary credentials use ASIA prefix (Security Token Service)
     // @see https://summitroute.com/blog/2018/06/20/aws_security_credential_formats/
     Object.freeze({ name: 'AWS STS Key', pattern: /ASIA[0-9A-Z]{16}/g }),
-    Object.freeze({ name: 'AWS Secret Key', pattern: /aws[_-]?secret[_-]?access[_-]?key\s*[:=]\s*["'][a-zA-Z0-9/+=]{40}["']/gi }),
-    Object.freeze({ name: 'Azure Connection String', pattern: /DefaultEndpointsProtocol=https;AccountName=[^;]+;AccountKey=[a-zA-Z0-9+/=]{88}/g }),
-    Object.freeze({ name: 'GCP Service Account', pattern: /"type"\s*:\s*"service_account"/g })
+    Object.freeze({ name: 'AWS Secret Key', pattern: /aws[_-]?secret[_-]?access[_-]?key\s{0,5}[:=]\s{0,5}["'][a-zA-Z0-9/+=]{40}["']/gi }),
+    // Azure account names: 3-24 chars; account keys: 88 chars base64
+    Object.freeze({ name: 'Azure Connection String', pattern: /DefaultEndpointsProtocol=https;AccountName=[^;]{3,24};AccountKey=[a-zA-Z0-9+/=]{88}/g }),
+    Object.freeze({ name: 'GCP Service Account', pattern: /"type"\s{0,5}:\s{0,5}"service_account"/g })
   ]),
 
   // Version Control Systems
@@ -563,25 +583,28 @@ export const SECRET_PATTERNS = Object.freeze({
     Object.freeze({ name: 'GitHub OAuth', pattern: /gho_[a-zA-Z0-9]{36}/g }),
     Object.freeze({ name: 'GitHub App Token', pattern: /ghu_[a-zA-Z0-9]{36}/g }),
     Object.freeze({ name: 'GitHub Refresh Token', pattern: /ghr_[a-zA-Z0-9]{36}/g }),
-    Object.freeze({ name: 'GitLab Token', pattern: /glpat-[a-zA-Z0-9-]{20}/g }),
+    // GitLab PATs are typically 20-26 chars
+    Object.freeze({ name: 'GitLab Token', pattern: /glpat-[a-zA-Z0-9-]{20,64}/g }),
     Object.freeze({ name: 'Bitbucket Token', pattern: /ATBB[a-zA-Z0-9]{32}/g })
   ]),
 
   // Communication Platforms
+  // Slack tokens: typically 50-80 chars total; webhooks have bounded segment lengths
   communication: Object.freeze([
-    Object.freeze({ name: 'Slack Token', pattern: /xox[baprs]-[a-zA-Z0-9-]{10,}/g }),
-    Object.freeze({ name: 'Slack Webhook', pattern: /hooks\.slack\.com\/services\/T[a-zA-Z0-9_]+\/B[a-zA-Z0-9_]+\/[a-zA-Z0-9_]+/g }),
-    Object.freeze({ name: 'Discord Webhook', pattern: /discord(?:app)?\.com\/api\/webhooks\/[0-9]+\/[a-zA-Z0-9_-]+/g }),
+    Object.freeze({ name: 'Slack Token', pattern: /xox[baprs]-[a-zA-Z0-9-]{10,255}/g }),
+    Object.freeze({ name: 'Slack Webhook', pattern: /hooks\.slack\.com\/services\/T[a-zA-Z0-9_]{8,12}\/B[a-zA-Z0-9_]{8,12}\/[a-zA-Z0-9_]{20,30}/g }),
+    Object.freeze({ name: 'Discord Webhook', pattern: /discord(?:app)?\.com\/api\/webhooks\/[0-9]{17,20}\/[a-zA-Z0-9_-]{60,80}/g }),
     Object.freeze({ name: 'Twilio Key', pattern: /SK[a-f0-9]{32}/g }),
-    Object.freeze({ name: 'Twilio Auth Token', pattern: /twilio[_-]?auth[_-]?token\s*[:=]\s*["'][a-f0-9]{32}["']/gi })
+    Object.freeze({ name: 'Twilio Auth Token', pattern: /twilio[_-]?auth[_-]?token\s{0,5}[:=]\s{0,5}["'][a-f0-9]{32}["']/gi })
   ]),
 
   // Payment Providers
+  // Stripe keys: 24-256 chars after prefix; PayPal secrets: 32-80 chars
   payment: Object.freeze([
-    Object.freeze({ name: 'Stripe Live Key', pattern: /sk_live_[a-zA-Z0-9]{24,}/g }),
-    Object.freeze({ name: 'Stripe Test Key', pattern: /sk_test_[a-zA-Z0-9]{24,}/g }),
-    Object.freeze({ name: 'Stripe Publishable', pattern: /pk_(live|test)_[a-zA-Z0-9]{24,}/g }),
-    Object.freeze({ name: 'PayPal Secret', pattern: /paypal[_-]?secret\s*[:=]\s*["'][a-zA-Z0-9]{32,}["']/gi })
+    Object.freeze({ name: 'Stripe Live Key', pattern: /sk_live_[a-zA-Z0-9]{24,256}/g }),
+    Object.freeze({ name: 'Stripe Test Key', pattern: /sk_test_[a-zA-Z0-9]{24,256}/g }),
+    Object.freeze({ name: 'Stripe Publishable', pattern: /pk_(live|test)_[a-zA-Z0-9]{24,256}/g }),
+    Object.freeze({ name: 'PayPal Secret', pattern: /paypal[_-]?secret\s{0,5}[:=]\s{0,5}["'][a-zA-Z0-9]{32,80}["']/gi })
   ]),
 
   // Database Connection Strings
@@ -594,9 +617,10 @@ export const SECRET_PATTERNS = Object.freeze({
   ]),
 
   // Package Registry Tokens
+  // npm tokens: 36 chars; PyPI tokens: 100-200 chars (project scoped are longer)
   registry: Object.freeze([
     Object.freeze({ name: 'npm Token', pattern: /npm_[a-zA-Z0-9]{36}/g }),
-    Object.freeze({ name: 'PyPI Token', pattern: /pypi-[a-zA-Z0-9_-]{100,}/g })
+    Object.freeze({ name: 'PyPI Token', pattern: /pypi-[a-zA-Z0-9_-]{100,256}/g })
   ]),
 
   // Email/Marketing Services
@@ -703,6 +727,82 @@ export function getPresetPath(preset) {
 }
 
 // ============================================
+// Abort Signal Utilities
+// ============================================
+
+/**
+ * Check if an abort signal has been triggered and throw if aborted.
+ *
+ * This enables cooperative cancellation within command handlers. Commands
+ * should call this at natural checkpoints (e.g., between file operations)
+ * to allow graceful cancellation.
+ *
+ * @param {AbortSignal|undefined} signal - The abort signal to check
+ * @param {string} [context='Operation'] - Context for the error message
+ * @throws {Error} If the signal has been aborted
+ *
+ * @example
+ * async function longRunningCommand(options) {
+ *   const signal = options._abortSignal;
+ *
+ *   // Check at natural checkpoints
+ *   for (const file of files) {
+ *     checkAbortSignal(signal, 'File processing');
+ *     await processFile(file);
+ *   }
+ * }
+ */
+export function checkAbortSignal(signal, context = 'Operation') {
+  if (signal?.aborted) {
+    const error = new Error(`${context} aborted: ${signal.reason?.message || 'Cancelled'}`);
+    error.name = 'AbortError';
+    error.code = 'ERR_ABORT';
+    throw error;
+  }
+}
+
+/**
+ * Wrap an async operation to respect abort signal.
+ *
+ * Creates a race between the operation and the abort signal,
+ * rejecting immediately if the signal is triggered.
+ *
+ * @template T
+ * @param {Promise<T>} promise - The promise to wrap
+ * @param {AbortSignal|undefined} signal - The abort signal
+ * @param {string} [context='Operation'] - Context for the error message
+ * @returns {Promise<T>} The result of the original promise
+ * @throws {Error} If aborted before completion
+ *
+ * @example
+ * const result = await withAbortSignal(
+ *   fetchData(url),
+ *   options._abortSignal,
+ *   'Data fetch'
+ * );
+ */
+export async function withAbortSignal(promise, signal, context = 'Operation') {
+  if (!signal) {
+    return promise;
+  }
+
+  // Check if already aborted
+  checkAbortSignal(signal, context);
+
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => {
+      signal.addEventListener('abort', () => {
+        const error = new Error(`${context} aborted: ${signal.reason?.message || 'Cancelled'}`);
+        error.name = 'AbortError';
+        error.code = 'ERR_ABORT';
+        reject(error);
+      }, { once: true });
+    })
+  ]);
+}
+
+// ============================================
 // Default Export
 // ============================================
 
@@ -723,6 +823,8 @@ export default {
   parseClaudeMd,
   detectSecrets,
   validateClaudeMdStructure,
+  checkAbortSignal,
+  withAbortSignal,
   getPackageRoot,
   getPresetPath
 };

@@ -20,9 +20,11 @@ const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes TTL
 const CACHE_MAX_SIZE = 50; // Maximum cached entries
 
 /**
- * Get content hash for cache key
+ * Get content hash for cache key.
+ * Uses SHA-256 truncated to 16 characters for efficient cache keys.
+ *
  * @param {string} content - Content to hash
- * @returns {string} SHA-256 hash (first 16 chars)
+ * @returns {string} SHA-256 hash (first 16 chars) - e.g., "a1b2c3d4e5f6g7h8"
  */
 function getContentHash(content) {
   return createHash('sha256').update(content).digest('hex').slice(0, 16);
@@ -31,6 +33,8 @@ function getContentHash(content) {
 /**
  * Remove expired entries from cache.
  * Called automatically when cache grows too large.
+ *
+ * @returns {number} Number of expired entries removed
  */
 function cleanupExpiredEntries() {
   const now = Date.now();
@@ -52,6 +56,8 @@ function cleanupExpiredEntries() {
 /**
  * Enforce cache size limit using LRU eviction.
  * Removes least recently accessed entries.
+ *
+ * @returns {void}
  */
 function enforceCacheSizeLimit() {
   if (parseCache.size <= CACHE_MAX_SIZE) {
@@ -76,6 +82,8 @@ function enforceCacheSizeLimit() {
 /**
  * Clear the parse cache.
  * Useful for testing or when CLAUDE.md is known to have changed.
+ *
+ * @returns {void}
  */
 export function clearParseCache() {
   parseCache.clear();
@@ -262,9 +270,14 @@ export function formatTechStack(context) {
 }
 
 /**
- * Print generation results
+ * Print generation results to stdout.
+ *
  * @param {object} results - Results object with created, skipped, errors arrays
+ * @param {string[]} results.created - Files that were created
+ * @param {string[]} results.skipped - Files that were skipped
+ * @param {string[]} results.errors - Error messages
  * @param {boolean} dryRun - Whether this was a dry run
+ * @returns {void}
  */
 export function printResults(results, dryRun) {
   console.log('');
