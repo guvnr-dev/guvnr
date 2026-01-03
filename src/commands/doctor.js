@@ -6,7 +6,7 @@
 
 import { existsSync, statSync, readdirSync, readFileSync } from 'fs';
 import { join, dirname } from 'path';
-import { execSync } from 'child_process';
+import { execSync, spawnSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import chalk from 'chalk';
 import ora from 'ora';
@@ -259,10 +259,22 @@ const DIAGNOSTICS = [
       }
 
       try {
-        execSync(`python3 -m py_compile "${mcpServerPath}"`, { encoding: 'utf-8', stdio: 'pipe' });
+        // Use spawnSync with array arguments to prevent command injection
+        // (avoids shell metacharacter interpretation in mcpServerPath)
+        const result = spawnSync('python3', ['-m', 'py_compile', mcpServerPath], {
+          encoding: 'utf-8',
+          stdio: 'pipe'
+        });
+        if (result.status === 0) {
+          return {
+            passed: true,
+            value: 'Valid'
+          };
+        }
         return {
-          passed: true,
-          value: 'Valid'
+          passed: false,
+          value: 'Syntax errors',
+          hint: 'Check MCP server for Python syntax errors'
         };
       } catch {
         return {

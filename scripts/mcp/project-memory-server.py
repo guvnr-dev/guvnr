@@ -387,91 +387,160 @@ def verify_data_checksum(data: dict) -> tuple[bool, str]:
         return False, f"checksum mismatch: expected {stored_checksum[:16]}..., got {computed[:16]}..."
 
 
-# Purge confirmation tokens (thread-safe)
-# Token format: "PURGE-{random_hex}" with 60 second expiry
-#
-# Security Design Notes:
-# ----------------------
-# The two-step purge process provides protection against accidental data loss:
-# 1. First call: Generates a unique token with 60-second TTL
-# 2. Second call: Must provide the exact token to confirm deletion
-#
-# Timing Considerations:
-# - There is a small window between token generation and validation where the
-#   token could expire (if user waits >60 seconds between calls)
-# - This is intentional: it forces deliberate action within a reasonable timeframe
-# - The 60-second TTL balances security (preventing stale confirmations) with
-#   usability (giving users time to review the warning and confirm)
-# - If the token expires, the user simply needs to initiate a new purge request
-#
-# Thread Safety:
-# - All token operations are protected by _purge_token_lock
-# - validate_and_clear_purge_token() is atomic to prevent race conditions
-#   between reading the expected token and clearing it
-_purge_token_lock = threading.Lock()
-_pending_purge_token: Optional[str] = None
-_purge_token_expires: float = 0
-PURGE_TOKEN_TTL = 60  # seconds
+class PurgeTokenManager:
+    """Thread-safe manager for purge confirmation tokens.
 
+    Security Design Notes:
+    ----------------------
+    The two-step purge process provides protection against accidental data loss:
+    1. First call: Generates a unique token with 60-second TTL
+    2. Second call: Must provide the exact token to confirm deletion
 
-def generate_purge_token() -> str:
-    """Generate a cryptographically secure purge confirmation token.
+    Timing Considerations:
+    - There is a small window between token generation and validation where the
+      token could expire (if user waits >60 seconds between calls)
+    - This is intentional: it forces deliberate action within a reasonable timeframe
+    - The 60-second TTL balances security (preventing stale confirmations) with
+      usability (giving users time to review the warning and confirm)
+    - If the token expires, the user simply needs to initiate a new purge request
 
-    Security: Uses 16 bytes (128 bits) of randomness from os.urandom via
-    random.randbytes(), which is suitable for security-sensitive operations.
-    The token format is "PURGE-" followed by 32 hex characters.
+    Thread Safety:
+    - All token operations are protected by an internal lock
+    - validate_and_clear() is atomic to prevent race conditions
+      between reading the expected token and clearing it
 
-    The 128-bit entropy provides sufficient protection against:
-    - Brute force attacks (2^128 possibilities)
-    - Birthday attacks (2^64 attempts needed for 50% collision probability)
-
-    @see https://docs.python.org/3/library/random.html#random.randbytes
+    Usage:
+        manager = PurgeTokenManager()
+        token = manager.generate_token()
+        # ... later ...
+        success, expected, remaining = manager.validate_and_clear(user_token)
     """
-    return f"PURGE-{random.randbytes(16).hex().upper()}"
+
+    DEFAULT_TTL = 60  # seconds
+
+    def __init__(self, ttl_seconds: int = DEFAULT_TTL):
+        """Initialize the purge token manager.
+
+        Args:
+            ttl_seconds: Time-to-live for tokens in seconds (default: 60)
+        """
+        self._lock = threading.Lock()
+        self._pending_token: Optional[str] = None
+        self._expires_at: float = 0
+        self._ttl = ttl_seconds
+
+    @staticmethod
+    def _generate_secure_token() -> str:
+        """Generate a cryptographically secure purge confirmation token.
+
+        Security: Uses 16 bytes (128 bits) of randomness from os.urandom via
+        random.randbytes(), which is suitable for security-sensitive operations.
+        The token format is "PURGE-" followed by 32 hex characters.
+
+        The 128-bit entropy provides sufficient protection against:
+        - Brute force attacks (2^128 possibilities)
+        - Birthday attacks (2^64 attempts needed for 50% collision probability)
+
+        @see https://docs.python.org/3/library/random.html#random.randbytes
+        """
+        return f"PURGE-{random.randbytes(16).hex().upper()}"
+
+    def generate_token(self) -> str:
+        """Generate and store a new purge token.
+
+        Returns:
+            str: The newly generated token
+        """
+        token = self._generate_secure_token()
+        with self._lock:
+            self._pending_token = token
+            self._expires_at = time.time() + self._ttl
+        return token
+
+    def get_pending(self) -> Optional[tuple[str, float]]:
+        """Get the current pending purge token if valid.
+
+        Returns:
+            Optional[tuple[str, float]]: (token, remaining_seconds) or None if expired
+        """
+        with self._lock:
+            if self._pending_token and time.time() < self._expires_at:
+                return (self._pending_token, self._expires_at - time.time())
+            return None
+
+    def get_ttl(self) -> int:
+        """Get the configured token TTL in seconds."""
+        return self._ttl
+
+    def validate_and_clear(self, provided_token: str) -> tuple[bool, Optional[str], float]:
+        """Validate the provided token and clear it if valid.
+
+        This atomic operation prevents race conditions between validation
+        and error message generation.
+
+        Args:
+            provided_token: The token provided by the user
+
+        Returns:
+            tuple of (success, expected_token, remaining_seconds):
+            - If validation succeeds: (True, None, 0)
+            - If token doesn't match: (False, expected_token, remaining_seconds)
+            - If no pending token or expired: (False, None, 0)
+        """
+        with self._lock:
+            now = time.time()
+            if self._pending_token and now < self._expires_at:
+                if provided_token == self._pending_token:
+                    self._pending_token = None
+                    self._expires_at = 0
+                    return (True, None, 0)
+                else:
+                    # Token doesn't match - return expected token for error message
+                    return (False, self._pending_token, self._expires_at - now)
+            # No pending token or expired
+            return (False, None, 0)
+
+    def clear(self) -> None:
+        """Clear any pending token (useful for testing)."""
+        with self._lock:
+            self._pending_token = None
+            self._expires_at = 0
+
+
+# Global purge token manager instance
+_purge_token_manager = PurgeTokenManager()
+
+
+# Backwards-compatible module-level functions
+def generate_purge_token() -> str:
+    """Generate a new purge token. Returns the token string."""
+    return _purge_token_manager.generate_token()
 
 
 def get_pending_purge_token() -> Optional[tuple[str, float]]:
     """Get the current pending purge token if valid, or None if expired."""
-    global _pending_purge_token, _purge_token_expires
-    with _purge_token_lock:
-        if _pending_purge_token and time.time() < _purge_token_expires:
-            return (_pending_purge_token, _purge_token_expires - time.time())
-        return None
+    return _purge_token_manager.get_pending()
 
 
 def set_purge_token(token: str) -> float:
-    """Set a new purge token and return its expiry time."""
-    global _pending_purge_token, _purge_token_expires
-    with _purge_token_lock:
-        _pending_purge_token = token
-        _purge_token_expires = time.time() + PURGE_TOKEN_TTL
-        return PURGE_TOKEN_TTL
+    """Set a new purge token and return its TTL.
+
+    Note: This function is provided for backwards compatibility.
+    Prefer using generate_purge_token() which generates and stores atomically.
+    """
+    with _purge_token_manager._lock:
+        _purge_token_manager._pending_token = token
+        _purge_token_manager._expires_at = time.time() + _purge_token_manager._ttl
+        return _purge_token_manager._ttl
 
 
 def validate_and_clear_purge_token(provided_token: str) -> tuple[bool, Optional[str], float]:
-    """Validate the provided token and clear it if valid.
+    """Validate the provided token and clear it if valid."""
+    return _purge_token_manager.validate_and_clear(provided_token)
 
-    Returns a tuple of (success, expected_token, remaining_seconds):
-    - If validation succeeds: (True, None, 0)
-    - If token doesn't match: (False, expected_token, remaining_seconds)
-    - If no pending token or expired: (False, None, 0)
 
-    This atomic operation prevents race conditions between validation
-    and error message generation.
-    """
-    global _pending_purge_token, _purge_token_expires
-    with _purge_token_lock:
-        now = time.time()
-        if _pending_purge_token and now < _purge_token_expires:
-            if provided_token == _pending_purge_token:
-                _pending_purge_token = None
-                _purge_token_expires = 0
-                return (True, None, 0)
-            else:
-                # Token doesn't match - return expected token for error message
-                return (False, _pending_purge_token, _purge_token_expires - now)
-        # No pending token or expired
-        return (False, None, 0)
+# Constant for backwards compatibility
+PURGE_TOKEN_TTL = PurgeTokenManager.DEFAULT_TTL
 
 
 class ConnectionPool:
@@ -912,6 +981,8 @@ class RateLimiter:
         self.window_seconds = window_seconds
         self._operations: deque = deque()
         self._lock = threading.Lock()
+        # Counter for rejected operations (for monitoring)
+        self._rejected_count: int = 0
 
     def check(self) -> bool:
         """Check if operation is allowed. Returns True if allowed."""
@@ -925,6 +996,7 @@ class RateLimiter:
 
             # Check limit
             if len(self._operations) >= self.max_ops:
+                self._rejected_count += 1
                 return False
 
             # Record operation
@@ -957,13 +1029,34 @@ class RateLimiter:
             return self.get_config()
 
     def get_config(self) -> dict:
-        """Get current rate limiter configuration."""
-        return {
-            "max_ops": self.max_ops,
-            "window_seconds": self.window_seconds,
-            "current_usage": len(self._operations),
-            "remaining": self.remaining()
-        }
+        """Get current rate limiter configuration and status."""
+        now = time.time()
+        cutoff = now - self.window_seconds
+
+        with self._lock:
+            # Remove old operations while counting
+            while self._operations and self._operations[0] < cutoff:
+                self._operations.popleft()
+
+            current_usage = len(self._operations)
+            remaining = max(0, self.max_ops - current_usage)
+
+            # Calculate time until oldest operation expires (window resets)
+            if self._operations:
+                oldest_op = self._operations[0]
+                time_to_reset = max(0, (oldest_op + self.window_seconds) - now)
+            else:
+                time_to_reset = 0  # No operations tracked, no reset needed
+
+            return {
+                "max_ops": self.max_ops,
+                "window_seconds": self.window_seconds,
+                "current_usage": current_usage,
+                "remaining": remaining,
+                "time_to_reset_seconds": round(time_to_reset, 1),
+                "utilization_percent": round((current_usage / self.max_ops) * 100, 1) if self.max_ops > 0 else 0,
+                "total_rejected": self._rejected_count
+            }
 
     def get_prometheus_metrics(self) -> str:
         """Get rate limiter metrics in Prometheus/OpenMetrics format.
@@ -974,6 +1067,8 @@ class RateLimiter:
         - mcp_rate_limit_current_usage: Current operations in window
         - mcp_rate_limit_remaining: Remaining operations in window
         - mcp_rate_limit_utilization_ratio: Current usage as fraction of max
+        - mcp_rate_limit_time_to_reset_seconds: Seconds until oldest operation expires
+        - mcp_rate_limit_rejected_total: Total rejected operations since server start
 
         @see https://prometheus.io/docs/instrumenting/exposition_formats/
 
@@ -1003,14 +1098,23 @@ class RateLimiter:
             "# HELP mcp_rate_limit_utilization_ratio Current usage as fraction of max",
             "# TYPE mcp_rate_limit_utilization_ratio gauge",
             f"mcp_rate_limit_utilization_ratio {utilization:.4f}",
+            "",
+            "# HELP mcp_rate_limit_time_to_reset_seconds Seconds until oldest operation expires",
+            "# TYPE mcp_rate_limit_time_to_reset_seconds gauge",
+            f"mcp_rate_limit_time_to_reset_seconds {config['time_to_reset_seconds']}",
+            "",
+            "# HELP mcp_rate_limit_rejected_total Total rejected operations since server start",
+            "# TYPE mcp_rate_limit_rejected_total counter",
+            f"mcp_rate_limit_rejected_total {config['total_rejected']}",
         ]
 
         return "\n".join(lines)
 
     def reset(self) -> None:
-        """Reset the rate limiter, clearing all tracked operations."""
+        """Reset the rate limiter, clearing all tracked operations and counters."""
         with self._lock:
             self._operations.clear()
+            self._rejected_count = 0
             logger.info("Rate limiter reset")
 
 
@@ -1779,10 +1883,10 @@ class ProjectMemoryDB:
             limiter = get_rate_limiter()
             rate_config = limiter.get_config()
             health["checks"]["rate_limiter"] = rate_config
-            utilization = rate_config["current_usage"] / rate_config["max_ops"] if rate_config["max_ops"] > 0 else 0
-            if utilization > 0.8:
+            utilization_percent = rate_config.get("utilization_percent", 0)
+            if utilization_percent > 80:
                 health["checks"]["rate_limiter"]["warning"] = (
-                    f"Rate limit {utilization:.0%} utilized - "
+                    f"Rate limit {utilization_percent:.0f}% utilized - "
                     "consider increasing PROJECT_MEMORY_RATE_LIMIT"
                 )
                 if health["status"] == "healthy":
@@ -2137,16 +2241,33 @@ async def call_tool(name: str, arguments: dict) -> list:
     limiter = get_rate_limiter()
     if name not in RATE_LIMIT_EXEMPT_OPERATIONS:
         if not limiter.check():
-            remaining = limiter.remaining()
+            # Get rate limiter state for detailed logging
+            limiter_config = limiter.get_config()
             timestamp = datetime.now().isoformat()
+
+            # Log with structured context for security monitoring and debugging
             logger.warning(
-                f"Rate limit exceeded for tool {name}. "
-                f"Request ID: {request_id}, Remaining: {remaining}"
+                f"Rate limit exceeded",
+                extra={
+                    "event": "rate_limit_exceeded",
+                    "tool": name,
+                    "request_id": request_id,
+                    "timestamp": timestamp,
+                    "rate_limit_config": {
+                        "max_ops": limiter_config["max_ops"],
+                        "window_seconds": limiter_config["window_seconds"],
+                        "current_usage": limiter_config["current_usage"],
+                        "time_to_reset_seconds": limiter_config["time_to_reset_seconds"]
+                    }
+                }
             )
+
             return [TextContent(
                 type="text",
                 text=f"❌ Rate limit exceeded. Please wait before making more requests.\n"
-                     f"   Limit: {RATE_LIMIT} operations per minute.\n"
+                     f"   Limit: {limiter_config['max_ops']} operations per {limiter_config['window_seconds']} seconds.\n"
+                     f"   Current usage: {limiter_config['current_usage']}/{limiter_config['max_ops']}\n"
+                     f"   Time until reset: {limiter_config['time_to_reset_seconds']:.0f} seconds\n"
                      f"   Request ID: {request_id}\n"
                      f"   Timestamp: {timestamp}"
             )]

@@ -1,878 +1,510 @@
 /**
- * AI Excellence Framework - TypeScript Type Definitions
+ * AI Excellence Framework - TypeScript Declarations
  *
- * @packageDocumentation
- * @module ai-excellence-framework
+ * Provides type definitions for the main module exports.
  */
 
 // ============================================
-// Core Types
+// Version and Constants
 // ============================================
 
-/**
- * Framework version string
- */
+/** Current framework version (semver) */
 export const VERSION: string;
 
-/**
- * Available preset names for framework initialization
- */
-export type PresetName = 'minimal' | 'standard' | 'full' | 'team';
+/** Available preset names */
+export const PRESETS: readonly string[];
 
-/**
- * List of available presets
- */
-export const PRESETS: PresetName[];
+/** Available slash command names */
+export const COMMANDS: readonly string[];
 
-/**
- * Available slash command names
- */
-export type CommandName =
-  | 'plan'
-  | 'verify'
-  | 'handoff'
-  | 'assumptions'
-  | 'review'
-  | 'security-review'
-  | 'refactor'
-  | 'test-coverage';
-
-/**
- * Available agent names
- */
-export type AgentName = 'explorer' | 'reviewer' | 'tester';
+/** Available subagent names */
+export const AGENTS: readonly string[];
 
 // ============================================
 // Configuration Types
 // ============================================
 
-/**
- * Framework configuration options
- */
-export interface FrameworkConfig {
-  /** Configuration version */
-  version: string;
-
-  /** Selected preset */
-  preset: PresetName | 'custom';
-
-  /** Enabled slash commands */
-  commands: CommandName[];
-
-  /** Enabled agents */
-  agents: AgentName[];
-
-  /** Enable git hooks */
-  hooks: boolean;
-
-  /** Enable MCP server */
-  mcp: boolean;
-
-  /** Enable pre-commit integration */
-  preCommit: boolean;
-
-  /** Additional custom configuration */
-  custom?: CustomConfig;
+/** Hook configuration */
+export interface HooksConfig {
+  /** Post-edit hook timeout in ms */
+  postEditTimeout?: number;
+  /** Verify deps hook timeout in ms */
+  verifyDepsTimeout?: number;
 }
 
-/**
- * Custom configuration options
- */
-export interface CustomConfig {
-  /** Custom slash commands directory */
-  commandsDir?: string;
-
-  /** Custom agents directory */
-  agentsDir?: string;
-
-  /** MCP server configuration */
-  mcpServer?: MCPServerConfig;
-
-  /** Metrics configuration */
-  metrics?: MetricsConfig;
-}
-
-/**
- * MCP server configuration
- */
-export interface MCPServerConfig {
-  /** Database file path */
-  dbPath?: string;
-
+/** MCP server limits */
+export interface McpLimits {
   /** Maximum stored decisions */
   maxDecisions?: number;
-
   /** Maximum stored patterns */
   maxPatterns?: number;
-
   /** Maximum context keys */
   maxContextKeys?: number;
-
-  /** Connection pool size */
-  poolSize?: number;
-
-  /** Rate limit (ops per minute) */
-  rateLimit?: number;
 }
 
-/**
- * Metrics configuration
- */
+/** MCP configuration */
+export interface McpConfig {
+  /** Enable MCP server */
+  enabled?: boolean;
+  /** Storage backend: 'sqlite' or 'postgres' */
+  storage?: 'sqlite' | 'postgres';
+  /** Resource limits */
+  limits?: McpLimits;
+}
+
+/** Security configuration */
+export interface SecurityConfig {
+  /** Enable pre-commit hooks */
+  preCommit?: boolean;
+  /** Enable secrets detection */
+  secretsDetection?: boolean;
+  /** Enable dependency scanning */
+  dependencyScanning?: boolean;
+  /** Enable AI-specific pattern checks */
+  aiPatternChecks?: boolean;
+}
+
+/** Metrics configuration */
 export interface MetricsConfig {
   /** Enable metrics collection */
-  enabled: boolean;
-
-  /** Auto-collect on git commit */
+  enabled?: boolean;
+  /** Auto-collect metrics at session end */
   autoCollect?: boolean;
-
-  /** Metrics storage path */
-  storagePath?: string;
-
-  /** Alert thresholds */
-  alerts?: AlertConfig[];
+  /** Metrics storage directory */
+  directory?: string;
 }
 
-/**
- * Alert configuration
- */
-export interface AlertConfig {
-  /** Alert identifier */
-  id: string;
-
-  /** Threshold value */
-  threshold: number;
-
-  /** Time window */
-  window?: 'session' | 'daily' | 'weekly' | 'monthly';
-
-  /** Action to take */
-  action: 'notify' | 'suggest' | 'block';
-
-  /** Alert message */
-  message: string;
+/** Team configuration */
+export interface TeamConfig {
+  /** Enable team features */
+  enabled?: boolean;
+  /** Enable shared memory */
+  sharedMemory?: boolean;
+  /** Enforce team conventions */
+  enforceConventions?: boolean;
 }
 
-/**
- * Default configuration values
- */
+/** Project configuration */
+export interface ProjectConfig {
+  /** Project name */
+  name?: string;
+  /** Primary language */
+  language?: 'typescript' | 'javascript' | 'python' | 'go' | 'rust' | 'java' | 'other';
+}
+
+/** Framework configuration */
+export interface FrameworkConfig {
+  /** Configuration version (semver) */
+  version: string;
+  /** Preset name */
+  preset: 'minimal' | 'standard' | 'full' | 'team' | 'custom';
+  /** Enabled commands */
+  commands?: string[];
+  /** Enabled agents */
+  agents?: string[];
+  /** Hooks configuration */
+  hooks?: boolean | HooksConfig;
+  /** MCP configuration */
+  mcp?: boolean | McpConfig;
+  /** Security configuration */
+  security?: boolean | SecurityConfig;
+  /** Metrics configuration */
+  metrics?: boolean | MetricsConfig;
+  /** Team configuration */
+  team?: boolean | TeamConfig;
+  /** Project configuration */
+  project?: ProjectConfig;
+  /** Enable federation for team memory */
+  federation?: boolean;
+}
+
+/** Preset configuration (extends FrameworkConfig with description) */
+export interface PresetConfig extends FrameworkConfig {
+  /** Human-readable description */
+  description: string;
+}
+
+/** Default configuration object */
 export const DEFAULT_CONFIG: FrameworkConfig;
 
+/** All preset configurations */
+export const PRESET_CONFIGS: Record<string, PresetConfig>;
+
 // ============================================
-// Command Types
+// Configuration Functions
 // ============================================
 
 /**
- * Options for the init command
+ * Get configuration for a specific preset
+ * @param presetName - Name of the preset
+ * @returns Preset configuration or undefined if not found
  */
-export interface InitOptions {
-  /** Preset to use */
-  preset?: PresetName;
+export function getPresetConfig(presetName: string): PresetConfig | undefined;
 
-  /** Run in non-interactive mode */
-  yes?: boolean;
+/**
+ * Deep merge two configuration objects
+ * @param base - Base configuration
+ * @param override - Override configuration
+ * @returns Merged configuration
+ */
+export function mergeConfig(base: Partial<FrameworkConfig>, override: Partial<FrameworkConfig>): FrameworkConfig;
 
-  /** Preview changes without writing */
-  dryRun?: boolean;
+// ============================================
+// Installation Types
+// ============================================
 
-  /** Overwrite existing files */
-  force?: boolean;
-
-  /** Skip hooks installation */
-  hooks?: boolean;
-
-  /** Skip MCP server installation */
-  mcp?: boolean;
-
-  /** Verbose output */
-  verbose?: boolean;
+/** Installation check result */
+export interface InstallationCheck {
+  /** Whether framework is installed */
+  installed: boolean;
+  /** Whether CLAUDE.md exists */
+  hasClaudeMd: boolean;
+  /** Whether commands directory exists */
+  hasCommands: boolean;
+  /** Whether agents directory exists */
+  hasAgents: boolean;
+  /** Whether configuration file exists */
+  hasConfig: boolean;
+  /** Configuration file path if exists */
+  configPath?: string;
 }
 
 /**
- * Options for the validate command
+ * Check if framework is installed in a directory
+ * @param cwd - Directory to check (defaults to process.cwd())
+ * @returns Installation check result
  */
-export interface ValidateOptions {
-  /** Verbose output */
-  verbose?: boolean;
+export function checkInstallation(cwd?: string): InstallationCheck;
 
-  /** Output format */
-  format?: 'text' | 'json';
+/**
+ * List installed slash commands
+ * @param cwd - Directory to check (defaults to process.cwd())
+ * @returns Array of installed command names
+ */
+export function listInstalledCommands(cwd?: string): string[];
 
-  /** Strict mode (fail on warnings) */
-  strict?: boolean;
+/**
+ * List installed subagents
+ * @param cwd - Directory to check (defaults to process.cwd())
+ * @returns Array of installed agent names
+ */
+export function listInstalledAgents(cwd?: string): string[];
+
+// ============================================
+// CLAUDE.md Types
+// ============================================
+
+/** Parsed CLAUDE.md section */
+export interface ClaudeMdSection {
+  /** Section heading */
+  heading: string;
+  /** Section level (1-6) */
+  level: number;
+  /** Section content */
+  content: string;
+}
+
+/** Parsed CLAUDE.md structure */
+export interface ParsedClaudeMd {
+  /** Raw file content */
+  raw: string;
+  /** Parsed sections */
+  sections: ClaudeMdSection[];
+  /** Project overview (first section) */
+  overview?: string;
+  /** Tech stack section */
+  techStack?: string;
+  /** Architecture section */
+  architecture?: string;
+  /** Conventions section */
+  conventions?: string;
+  /** Current state section */
+  currentState?: string;
 }
 
 /**
- * Options for the doctor command
+ * Read CLAUDE.md synchronously
+ * @deprecated Use readClaudeMdAsync for non-blocking operation
+ * @param cwd - Directory containing CLAUDE.md
+ * @returns Parsed CLAUDE.md or null if not found
  */
-export interface DoctorOptions {
-  /** Attempt to fix issues */
-  fix?: boolean;
-
-  /** Verbose output */
-  verbose?: boolean;
-}
+export function readClaudeMd(cwd?: string): ParsedClaudeMd | null;
 
 /**
- * Options for the update command
+ * Read CLAUDE.md asynchronously (recommended)
+ * @param cwd - Directory containing CLAUDE.md
+ * @returns Promise resolving to parsed CLAUDE.md or null
  */
-export interface UpdateOptions {
-  /** Target version */
-  version?: string;
-
-  /** Preview changes */
-  dryRun?: boolean;
-
-  /** Migrate configuration */
-  migrate?: boolean;
-}
+export function readClaudeMdAsync(cwd?: string): Promise<ParsedClaudeMd | null>;
 
 /**
- * Supported AI coding tools for multi-tool generation
+ * Parse CLAUDE.md content into structured sections
+ * @param content - Raw markdown content
+ * @returns Parsed structure
  */
-export type SupportedTool =
-  | 'agents'
-  | 'cursor'
-  | 'copilot'
-  | 'windsurf'
-  | 'aider'
-  | 'claude'
-  | 'gemini'
-  | 'codex'
-  | 'zed'
-  | 'amp'
-  | 'roo'
-  | 'junie'
-  | 'cline'
-  | 'goose'
-  | 'kiro'
-  | 'continue'
-  | 'augment'
-  | 'qodo'
-  | 'opencode'
-  | 'zencoder'
-  | 'tabnine'
-  | 'amazonq'
-  | 'plugins'
-  | 'skills'
-  | 'all';
+export function parseClaudeMd(content: string): ParsedClaudeMd;
 
-/**
- * List of supported AI tools
- */
-export const SUPPORTED_TOOLS: SupportedTool[];
-
-/**
- * Options for the generate command
- */
-export interface GenerateOptions {
-  /** Tools to generate configuration for */
-  tools?: SupportedTool | SupportedTool[] | string;
-
-  /** Overwrite existing files */
-  force?: boolean;
-
-  /** Preview changes without writing */
-  dryRun?: boolean;
-}
-
-/**
- * Options for the lint command
- */
-export interface LintOptions {
-  /** Show detailed output */
-  verbose?: boolean;
-
-  /** Only check specific files */
-  only?: string | string[];
-
-  /** Exit 0 even with errors */
-  ignoreErrors?: boolean;
-}
-
-/**
- * Lint check result
- */
-export interface LintResult {
-  /** Check passed */
-  passed: boolean;
-
-  /** Result message */
-  message: string;
-
-  /** Suggestion for fixing */
-  suggestion?: string;
-}
-
-/**
- * Lint results summary
- */
-export interface LintResults {
-  /** Errors (severity: error) */
-  errors: LintFinding[];
-
-  /** Warnings (severity: warning) */
-  warnings: LintFinding[];
-
-  /** Informational (severity: info) */
-  info: LintFinding[];
-
-  /** Passed checks */
-  passed: LintFinding[];
-}
-
-/**
- * Individual lint finding
- */
-export interface LintFinding {
-  /** File checked */
-  file: string;
-
-  /** Check name */
-  check: string;
-
-  /** Finding message */
-  message: string;
-
-  /** Suggestion for fixing */
-  suggestion?: string;
-}
-
-/**
- * Result of init command
- */
-export interface InitResult {
-  /** Files created */
-  created: string[];
-
-  /** Files skipped */
-  skipped: string[];
-
-  /** Errors encountered */
-  errors: Array<{ file: string; error: string }>;
-
-  /** Overall success */
-  success: boolean;
-}
-
-/**
- * Result of validate command
- */
-export interface ValidateResult {
-  /** Validation passed */
+/** CLAUDE.md validation result */
+export interface ClaudeMdValidation {
+  /** Whether structure is valid */
   valid: boolean;
-
-  /** Errors found */
-  errors: ValidationError[];
-
-  /** Warnings found */
-  warnings: ValidationWarning[];
-
-  /** Validated components */
-  components: ComponentValidation[];
+  /** Validation errors */
+  errors: string[];
+  /** Validation warnings */
+  warnings: string[];
 }
 
 /**
- * Validation error details
+ * Validate CLAUDE.md structure
+ * @param content - Raw markdown content or parsed structure
+ * @returns Validation result
  */
-export interface ValidationError {
-  /** Error code */
-  code: string;
-
-  /** Error message */
-  message: string;
-
-  /** File path (if applicable) */
-  file?: string;
-
-  /** Line number (if applicable) */
-  line?: number;
-}
-
-/**
- * Validation warning details
- */
-export interface ValidationWarning {
-  /** Warning code */
-  code: string;
-
-  /** Warning message */
-  message: string;
-
-  /** Suggestion for resolution */
-  suggestion?: string;
-}
-
-/**
- * Component validation result
- */
-export interface ComponentValidation {
-  /** Component name */
-  name: string;
-
-  /** Validation status */
-  status: 'valid' | 'invalid' | 'missing' | 'outdated';
-
-  /** Details */
-  details?: string;
-}
-
-/**
- * Result of doctor command
- */
-export interface DoctorResult {
-  /** Overall health status */
-  healthy: boolean;
-
-  /** Health checks performed */
-  checks: HealthCheck[];
-
-  /** Issues fixed (if --fix used) */
-  fixed?: string[];
-}
-
-/**
- * Health check result
- */
-export interface HealthCheck {
-  /** Check name */
-  name: string;
-
-  /** Check passed */
-  passed: boolean;
-
-  /** Details */
-  message: string;
-
-  /** Suggestion if failed */
-  suggestion?: string;
-}
+export function validateClaudeMdStructure(content: string | ParsedClaudeMd): ClaudeMdValidation;
 
 // ============================================
-// Command Functions
+// Security Types
+// ============================================
+
+/** Secret detection finding */
+export interface SecretFinding {
+  /** Type of secret detected */
+  type: string;
+  /** Pattern that matched */
+  pattern: string;
+  /** Line number (1-indexed) */
+  line: number;
+  /** Column offset */
+  column: number;
+  /** Matched text (redacted) */
+  match: string;
+  /** Confidence level */
+  confidence: 'high' | 'medium' | 'low';
+}
+
+/** Secret detection result */
+export interface SecretDetectionResult {
+  /** Whether any secrets were found */
+  hasSecrets: boolean;
+  /** Number of findings */
+  count: number;
+  /** Detailed findings */
+  findings: SecretFinding[];
+}
+
+/**
+ * Detect secrets in file content
+ * @param content - File content to scan
+ * @param options - Detection options
+ * @returns Detection result
+ */
+export function detectSecrets(
+  content: string,
+  options?: {
+    /** Include low-confidence matches */
+    includeLowConfidence?: boolean;
+    /** Maximum findings to return */
+    maxFindings?: number;
+  }
+): SecretDetectionResult;
+
+// ============================================
+// Abort Signal Utilities
 // ============================================
 
 /**
- * Initialize the framework in a project
- * @param options - Initialization options
- * @returns Promise resolving to init result
+ * Check if an abort signal has been triggered
+ * @param signal - AbortSignal to check
+ * @throws Error if signal is aborted
  */
-export function initCommand(options?: InitOptions): Promise<InitResult>;
+export function checkAbortSignal(signal?: AbortSignal): void;
 
 /**
- * Validate framework installation
- * @param options - Validation options
- * @returns Promise resolving to validation result
+ * Wrap an async function with abort signal support
+ * @param fn - Async function to wrap
+ * @param signal - AbortSignal to monitor
+ * @returns Wrapped function
  */
-export function validateCommand(options?: ValidateOptions): Promise<ValidateResult>;
+export function withAbortSignal<T>(
+  fn: () => Promise<T>,
+  signal?: AbortSignal
+): Promise<T>;
+
+// ============================================
+// Package Utilities
+// ============================================
 
 /**
- * Check framework health
- * @param options - Doctor options
- * @returns Promise resolving to health check result
+ * Get the framework package root directory
+ * @returns Absolute path to package root
  */
-export function doctorCommand(options?: DoctorOptions): Promise<DoctorResult>;
+export function getPackageRoot(): string;
 
 /**
- * Update framework to latest version
- * @param options - Update options
- * @returns Promise resolving to success status
+ * Get path to a preset template directory
+ * @param presetName - Name of the preset
+ * @returns Absolute path to preset directory
  */
-export function updateCommand(options?: UpdateOptions): Promise<boolean>;
+export function getPresetPath(presetName: string): string;
 
-/**
- * Generate configurations for AI coding tools
- * @param options - Generate options
- * @returns Promise resolving when generation is complete
- */
-export function generateCommand(options?: GenerateOptions): Promise<void>;
+// ============================================
+// Command Exports
+// ============================================
 
-/**
- * Lint framework configuration files
- * @param options - Lint options
- * @returns Promise resolving to lint results
- */
-export function lintCommand(options?: LintOptions): Promise<LintResults>;
-
-/**
- * Options for the uninstall command
- */
-export interface UninstallOptions {
-  /** Force removal without confirmation */
+/** Init command options */
+export interface InitCommandOptions {
+  /** Preset to use */
+  preset?: string;
+  /** Skip confirmation prompts */
+  yes?: boolean;
+  /** Overwrite existing files */
   force?: boolean;
-
-  /** Keep configuration files */
-  keepConfig?: boolean;
-
-  /** Preview removal without executing */
+  /** Dry run (show what would be created) */
   dryRun?: boolean;
-}
-
-/**
- * Uninstall framework from project
- * @param options - Uninstall options
- * @returns Promise resolving when uninstall is complete
- */
-export function uninstall(options?: UninstallOptions): Promise<void>;
-
-/**
- * Options for the detect command
- */
-export interface DetectOptions {
-  /** Directory to scan */
-  targetDir?: string;
-
-  /** Show detailed information */
+  /** Verbose output */
   verbose?: boolean;
-
-  /** Output as JSON */
+  /** JSON output */
   json?: boolean;
 }
 
 /**
- * Result of tool detection
+ * Initialize framework in a directory
+ * @param options - Command options
  */
-export interface DetectResult {
-  /** Detected tools */
-  detected: Array<{
-    id: string;
-    name: string;
-    foundFiles: string[];
-  }>;
+export function initCommand(options?: InitCommandOptions): Promise<void>;
 
-  /** Tools not detected */
-  notDetected: Array<{
-    id: string;
-    name: string;
-  }>;
+/** Validate command options */
+export interface ValidateCommandOptions {
+  /** Verbose output */
+  verbose?: boolean;
+  /** JSON output */
+  json?: boolean;
 }
 
 /**
- * Detect configured AI tools in a directory
- * @param cwd - Directory to scan
- * @returns Detection result
+ * Validate framework installation
+ * @param options - Command options
  */
-export function detectTools(cwd: string): DetectResult;
+export function validateCommand(options?: ValidateCommandOptions): Promise<void>;
+
+/** Doctor command options */
+export interface DoctorCommandOptions {
+  /** Verbose output */
+  verbose?: boolean;
+  /** JSON output */
+  json?: boolean;
+}
 
 /**
- * Detect command handler
- * @param options - Detect options
- * @returns Promise resolving when detection is complete
+ * Run diagnostic checks
+ * @param options - Command options
  */
-export function detectCommand(options?: DetectOptions): Promise<void>;
+export function doctorCommand(options?: DoctorCommandOptions): Promise<void>;
+
+/** Update command options */
+export interface UpdateCommandOptions {
+  /** Force update even if up-to-date */
+  force?: boolean;
+  /** Dry run */
+  dryRun?: boolean;
+  /** JSON output */
+  json?: boolean;
+}
+
+/**
+ * Update framework to latest version
+ * @param options - Command options
+ */
+export function updateCommand(options?: UpdateCommandOptions): Promise<void>;
+
+/** Generate command options */
+export interface GenerateCommandOptions {
+  /** Tools to generate for (comma-separated or 'all') */
+  tools?: string;
+  /** Force overwrite existing files */
+  force?: boolean;
+  /** Verbose output */
+  verbose?: boolean;
+  /** JSON output */
+  json?: boolean;
+}
+
+/**
+ * Generate tool-specific configuration files
+ * @param options - Command options
+ */
+export function generateCommand(options?: GenerateCommandOptions): Promise<void>;
+
+/** Lint command options */
+export interface LintCommandOptions {
+  /** Only check specific file types */
+  only?: string;
+  /** Attempt to fix issues */
+  fix?: boolean;
+  /** JSON output */
+  json?: boolean;
+}
+
+/**
+ * Lint configuration files
+ * @param options - Command options
+ */
+export function lintCommand(options?: LintCommandOptions): Promise<void>;
+
+/** Uninstall options */
+export interface UninstallOptions {
+  /** Force removal without confirmation */
+  force?: boolean;
+  /** Keep configuration file */
+  keepConfig?: boolean;
+  /** Dry run */
+  dryRun?: boolean;
+  /** JSON output */
+  json?: boolean;
+}
+
+/**
+ * Uninstall framework from a directory
+ * @param options - Command options
+ */
+export function uninstall(options?: UninstallOptions): Promise<void>;
+
+/** Detect command options */
+export interface DetectCommandOptions {
+  /** JSON output */
+  json?: boolean;
+}
+
+/**
+ * Detect installed AI coding tools
+ * @param options - Command options
+ */
+export function detectCommand(options?: DetectCommandOptions): Promise<void>;
 
 // ============================================
-// Error Types
+// Default Export
 // ============================================
 
-/**
- * Error categories
- */
-export type ErrorCategory =
-  | 'INIT'
-  | 'VALID'
-  | 'CONFIG'
-  | 'FS'
-  | 'NET'
-  | 'MCP'
-  | 'HOOK'
-  | 'GEN';
-
-/**
- * Framework error class
- */
-export class FrameworkError extends Error {
-  /** Error code (e.g., 'AIX-INIT-101') */
-  code: string;
-
-  /** Error timestamp */
-  timestamp: string;
-
-  /** Original error cause */
-  cause: Error | null;
-
-  /** Additional context */
-  context: Record<string, unknown>;
-
-  /** Whether error is recoverable */
-  recoverable: boolean;
-
-  /** Suggested fix */
-  suggestion: string | null;
-
-  constructor(
-    code: string,
-    message: string,
-    options?: {
-      cause?: Error;
-      context?: Record<string, unknown>;
-      recoverable?: boolean;
-      suggestion?: string;
-    }
-  );
-
-  /** Get JSON representation */
-  toJSON(): {
-    name: string;
-    code: string;
-    message: string;
-    timestamp: string;
-    recoverable: boolean;
-    suggestion: string | null;
-    context: Record<string, unknown>;
-    stack?: string;
-  };
-
-  /** Format for CLI output */
-  format(verbose?: boolean): string;
-}
-
-/**
- * Error code definition
- */
-export interface ErrorCodeDefinition {
-  category: string;
-  description: string;
-  suggestion: string;
-}
-
-/**
- * Catalog of all error codes
- */
-export const ERROR_CODES: Record<string, ErrorCodeDefinition>;
-
-/**
- * Exit codes for CLI commands
- */
-export const EXIT_CODES: {
-  SUCCESS: 0;
-  GENERAL_ERROR: 1;
-  MISUSE: 2;
-  CANNOT_EXECUTE: 126;
-  NOT_FOUND: 127;
-  INVALID_ARG: 128;
-  CTRL_C: 130;
-  INIT_ERROR: 64;
-  VALIDATION_ERROR: 65;
-  CONFIG_ERROR: 66;
-  IO_ERROR: 74;
-  TEMP_FAILURE: 75;
-  PROTOCOL_ERROR: 76;
-  PERMISSION_ERROR: 77;
-  CONFIG_MISSING: 78;
+declare const _default: {
+  VERSION: typeof VERSION;
+  PRESETS: typeof PRESETS;
+  COMMANDS: typeof COMMANDS;
+  AGENTS: typeof AGENTS;
+  DEFAULT_CONFIG: typeof DEFAULT_CONFIG;
+  PRESET_CONFIGS: typeof PRESET_CONFIGS;
+  getPresetConfig: typeof getPresetConfig;
+  mergeConfig: typeof mergeConfig;
+  checkInstallation: typeof checkInstallation;
+  listInstalledCommands: typeof listInstalledCommands;
+  listInstalledAgents: typeof listInstalledAgents;
+  readClaudeMdAsync: typeof readClaudeMdAsync;
+  readClaudeMd: typeof readClaudeMd;
+  parseClaudeMd: typeof parseClaudeMd;
+  validateClaudeMdStructure: typeof validateClaudeMdStructure;
+  detectSecrets: typeof detectSecrets;
+  checkAbortSignal: typeof checkAbortSignal;
+  withAbortSignal: typeof withAbortSignal;
+  getPackageRoot: typeof getPackageRoot;
+  getPresetPath: typeof getPresetPath;
 };
 
-/**
- * Create a framework error
- * @param code - Error code from ERROR_CODES
- * @param customMessage - Optional custom message
- * @param options - Error options
- */
-export function createError(
-  code: string,
-  customMessage?: string,
-  options?: {
-    cause?: Error;
-    context?: Record<string, unknown>;
-    recoverable?: boolean;
-    suggestion?: string;
-  }
-): FrameworkError;
-
-/**
- * Get exit code for an error code
- * @param errorCode - Framework error code
- */
-export function getExitCode(errorCode: string): number;
-
-/**
- * Wrap async function with error handling
- * @param fn - Async function to wrap
- */
-export function asyncHandler<T extends (...args: unknown[]) => Promise<unknown>>(
-  fn: T
-): T;
-
-/**
- * Assert a condition or throw error
- * @param condition - Condition to check
- * @param code - Error code if condition is false
- * @param message - Error message
- * @param options - Error options
- */
-export function assertCondition(
-  condition: boolean,
-  code: string,
-  message?: string,
-  options?: {
-    cause?: Error;
-    context?: Record<string, unknown>;
-  }
-): asserts condition;
-
-// ============================================
-// MCP Types
-// ============================================
-
-/**
- * Decision stored in MCP memory
- */
-export interface Decision {
-  id: number;
-  timestamp: string;
-  decision: string;
-  rationale: string;
-  context?: string;
-  alternatives?: string;
-  created_at: string;
-}
-
-/**
- * Pattern stored in MCP memory
- */
-export interface Pattern {
-  id: number;
-  name: string;
-  description: string;
-  example?: string;
-  when_to_use?: string;
-  updated_at: string;
-}
-
-/**
- * MCP memory statistics
- */
-export interface MemoryStats {
-  decisions: number;
-  patterns: number;
-  context_keys: number;
-  db_size_bytes: number;
-  limits: {
-    max_decisions: number;
-    max_patterns: number;
-    max_context_keys: number;
-  };
-}
-
-/**
- * MCP health check result
- */
-export interface MCPHealthCheck {
-  status: 'healthy' | 'degraded' | 'unhealthy';
-  version: string;
-  checks: {
-    database_connection: string;
-    database_integrity: string;
-    write_capability: string;
-    capacity: {
-      decisions_used_percent: number;
-      patterns_used_percent: number;
-      warning?: string;
-    };
-  };
-  db_path: string;
-}
-
-/**
- * MCP export data format
- */
-export interface MCPExportData {
-  version: string;
-  exported_at: string;
-  project: string;
-  data: {
-    decisions: Decision[];
-    patterns: Pattern[];
-    context: Record<string, string>;
-  };
-  stats: MemoryStats;
-}
-
-// ============================================
-// Metrics Types
-// ============================================
-
-/**
- * Session metrics
- */
-export interface SessionMetrics {
-  session: {
-    id: string;
-    started_at: string;
-    ended_at: string;
-    duration_minutes: number;
-    project: string;
-  };
-  tasks: {
-    total: number;
-    completed: number;
-    in_progress: number;
-    blocked: number;
-  };
-  ai_interactions: {
-    total_queries: number;
-    successful: number;
-    required_retry: number;
-    context_resets: number;
-  };
-  friction_points: {
-    encountered: string[];
-    mitigated: string[];
-    unresolved: string[];
-  };
-  quality: {
-    commits: number;
-    tests_added: number;
-    tests_passed: boolean;
-    lint_errors: number;
-    security_issues: number;
-  };
-}
-
-/**
- * Aggregate metrics over a period
- */
-export interface AggregateMetrics {
-  period: {
-    start: string;
-    end: string;
-    type: 'daily' | 'weekly' | 'monthly';
-  };
-  sessions: {
-    count: number;
-    total_hours: number;
-    avg_session_minutes: number;
-  };
-  productivity: {
-    tasks_completed: number;
-    completion_rate: number;
-    avg_tasks_per_session: number;
-  };
-  friction: {
-    most_common: Array<{
-      type: string;
-      count: number;
-      mitigation_rate: number;
-    }>;
-  };
-  quality_trends: {
-    test_coverage: number[];
-    security_issues: number[];
-    lint_errors: number[];
-  };
-}
-
-// ============================================
-// Utility Types
-// ============================================
-
-/**
- * Deep partial type
- */
-export type DeepPartial<T> = {
-  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
-};
-
-/**
- * Configuration with partial overrides
- */
-export type PartialConfig = DeepPartial<FrameworkConfig>;
+export default _default;

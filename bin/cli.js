@@ -159,33 +159,36 @@ function withTimeout(handler, commandName) {
       lastArg._abortSignal = combinedSignal;
     }
 
+    // Create abort handler that can be cleaned up
+    let abortReject = null;
+    const abortHandler = () => {
+      const { reason } = combinedSignal;
+      // Check if this was a timeout (reason will be a TimeoutError)
+      const isTimeout = reason?.name === 'TimeoutError';
+
+      if (abortReject) {
+        abortReject(
+          createError(
+            'AIX-GEN-901',
+            isTimeout
+              ? `Command '${commandName}' timed out after ${timeoutMs}ms. Set AIX_TIMEOUT environment variable to increase the timeout.`
+              : `Command '${commandName}' was aborted: ${reason?.message || 'Unknown reason'}`,
+            {
+              context: {
+                command: commandName,
+                timeout: timeoutMs,
+                reason: reason?.name || 'AbortError'
+              }
+            }
+          )
+        );
+      }
+    };
+
     // Listen for abort to throw appropriate error
     const abortPromise = new Promise((_, reject) => {
-      combinedSignal.addEventListener(
-        'abort',
-        () => {
-          const { reason } = combinedSignal;
-          // Check if this was a timeout (reason will be a TimeoutError)
-          const isTimeout = reason?.name === 'TimeoutError';
-
-          reject(
-            createError(
-              'AIX-GEN-901',
-              isTimeout
-                ? `Command '${commandName}' timed out after ${timeoutMs}ms. Set AIX_TIMEOUT environment variable to increase the timeout.`
-                : `Command '${commandName}' was aborted: ${reason?.message || 'Unknown reason'}`,
-              {
-                context: {
-                  command: commandName,
-                  timeout: timeoutMs,
-                  reason: reason?.name || 'AbortError'
-                }
-              }
-            )
-          );
-        },
-        { once: true }
-      );
+      abortReject = reject;
+      combinedSignal.addEventListener('abort', abortHandler, { once: true });
     });
 
     try {
@@ -197,6 +200,9 @@ function withTimeout(handler, commandName) {
       controller.abort(error);
       throw error;
     } finally {
+      // Clean up: remove abort listener to prevent memory leaks on successful completion
+      combinedSignal.removeEventListener('abort', abortHandler);
+      abortReject = null;
       // Clean up operation ID after command completes (success or failure)
       currentOperationId = null;
     }
@@ -296,7 +302,12 @@ const program = new Command();
 
 program
   .name('ai-excellence')
-  .description('AI Excellence Framework - Reduce friction in AI-assisted development')
+  .description(
+    'AI Excellence Framework - Reduce friction in AI-assisted development\n\n' +
+    'Input Limits:\n' +
+    `  - String arguments: max ${MAX_ARG_LENGTH} characters\n` +
+    '  - Timeout: default 120s (set AIX_TIMEOUT env var to customize, max 600s)'
+  )
   .version(packageJson.version)
   .option('--no-color', 'Disable colored output (also respects NO_COLOR env var)')
   .hook('preAction', thisCommand => {
@@ -500,7 +511,11 @@ async function main() {
     // Handle unexpected errors
     const wrapped = createError('AIX-GEN-900', error.message, {
       cause: error,
-      context: { originalStack: error.stack }
+      context: {
+        originalErrorType: error.name || 'Error',
+        originalErrorCode: error.code || null,
+        originalStack: error.stack
+      }
     });
     console.error(wrapped.format(process.env.VERBOSE === 'true'));
     process.exit(1);

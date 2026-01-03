@@ -609,10 +609,14 @@ export function asyncHandler(fn) {
         console.error(error.format(process.env.VERBOSE === 'true'));
         process.exit(getExitCode(error.code));
       } else {
-        // Wrap unknown errors
+        // Wrap unknown errors, preserving original error type and code for debugging
         const wrapped = createError('AIX-GEN-900', error.message, {
           cause: error,
-          context: { originalStack: error.stack }
+          context: {
+            originalErrorType: error.name || 'Error',
+            originalErrorCode: error.code || null,
+            originalStack: error.stack
+          }
         });
         console.error(wrapped.format(true));
         process.exit(EXIT_CODES.GENERAL_ERROR);

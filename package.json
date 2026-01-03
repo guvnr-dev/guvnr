@@ -11,7 +11,10 @@
       "import": "./src/index.js"
     },
     "./cli": "./bin/cli.js",
-    "./errors": "./src/errors.js",
+    "./errors": {
+      "types": "./types/errors.d.ts",
+      "import": "./src/errors.js"
+    },
     "./commands/generate": "./src/commands/generate.js",
     "./commands/lint": "./src/commands/lint.js",
     "./commands/init": "./src/commands/init.js",

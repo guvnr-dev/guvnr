@@ -947,24 +947,37 @@ export async function withAbortSignal(promise, signal, context = 'Operation') {
 // ============================================
 
 export default {
+  // Version and constants
   VERSION,
   PRESETS,
   COMMANDS,
   AGENTS,
   DEFAULT_CONFIG,
   PRESET_CONFIGS,
+
+  // Configuration utilities
   getPresetConfig,
   mergeConfig,
+
+  // Installation checks
   checkInstallation,
   listInstalledCommands,
   listInstalledAgents,
-  readClaudeMd,
-  readClaudeMdAsync,
+
+  // CLAUDE.md utilities (async preferred)
+  readClaudeMdAsync, // Recommended: non-blocking async version
+  readClaudeMd, // Deprecated: use readClaudeMdAsync instead
   parseClaudeMd,
-  detectSecrets,
   validateClaudeMdStructure,
+
+  // Security
+  detectSecrets,
+
+  // Abort signal utilities
   checkAbortSignal,
   withAbortSignal,
+
+  // Package paths
   getPackageRoot,
   getPresetPath
 };
