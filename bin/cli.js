@@ -24,6 +24,7 @@ import chalk from 'chalk';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { readFileSync } from 'fs';
+import { randomUUID } from 'crypto';
 
 // Import commands
 import { initCommand } from '../src/commands/init.js';
@@ -43,6 +44,9 @@ const DEFAULT_TIMEOUT = 300000; // 5 minutes
 const COMMAND_TIMEOUT = parseInt(process.env.AIX_TIMEOUT || String(DEFAULT_TIMEOUT), 10);
 const DEBUG_MODE = process.env.AIX_DEBUG === 'true';
 const STRUCTURED_LOGGING = process.env.AIX_STRUCTURED_LOGGING === 'true';
+
+// Current operation ID for log correlation (set per-command execution)
+let currentOperationId = null;
 
 /**
  * Structured logger for CI/CD integration.
@@ -66,6 +70,8 @@ function log(level, message, context = {}) {
       timestamp: new Date().toISOString(),
       level,
       message,
+      // Include operation ID for log correlation if set
+      ...(currentOperationId && { operationId: currentOperationId }),
       ...context
     };
     console.log(JSON.stringify(logEntry));
@@ -118,6 +124,9 @@ const logger = {
 function withTimeout(handler, commandName) {
   return async function (...args) {
     const timeoutMs = COMMAND_TIMEOUT;
+
+    // Generate unique operation ID for log correlation
+    currentOperationId = randomUUID();
 
     logger.debug(`Starting ${commandName} with timeout: ${timeoutMs}ms`, { command: commandName, timeout: timeoutMs });
 
@@ -176,6 +185,9 @@ function withTimeout(handler, commandName) {
       // Abort any ongoing operations (cleanup)
       controller.abort(error);
       throw error;
+    } finally {
+      // Clean up operation ID after command completes (success or failure)
+      currentOperationId = null;
     }
   };
 }
