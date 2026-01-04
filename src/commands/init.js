@@ -80,7 +80,14 @@ function sanitizeForError(input, maxLength = 50) {
 function sanitizeOptions(options) {
   // Guard against null/undefined
   if (!options || typeof options !== 'object') {
-    return { preset: 'standard', yes: false, force: false, dryRun: false, verbose: false, json: false };
+    return {
+      preset: 'standard',
+      yes: false,
+      force: false,
+      dryRun: false,
+      verbose: false,
+      json: false
+    };
   }
 
   // Protect against prototype pollution
@@ -102,7 +109,10 @@ function sanitizeOptions(options) {
     // Limit length and validate characters
     if (presetStr.length > 50 || !/^[a-z][a-z0-9_-]*$/.test(presetStr)) {
       // Use sanitizeForError to prevent log injection via control characters
-      throw createError('AIX-INIT-111', `Invalid preset name format: ${sanitizeForError(presetStr)}`);
+      throw createError(
+        'AIX-INIT-111',
+        `Invalid preset name format: ${sanitizeForError(presetStr)}`
+      );
     }
     sanitized.preset = getValidPresets().has(presetStr) ? presetStr : 'standard';
   } else {
@@ -161,7 +171,10 @@ let _presets = null;
 function getPresets() {
   if (!_presets) {
     _presets = Object.fromEntries(
-      Object.entries(PRESET_CONFIGS).map(([name, config]) => [name, convertPresetFormat(name, config)])
+      Object.entries(PRESET_CONFIGS).map(([name, config]) => [
+        name,
+        convertPresetFormat(name, config)
+      ])
     );
   }
   return _presets;
@@ -235,7 +248,13 @@ export async function initCommand(rawOptions) {
     } else if (!options.force) {
       log(chalk.gray('\n  Use --force to overwrite.\n'));
       if (jsonOutput) {
-        console.log(JSON.stringify({ success: false, existingFiles, error: 'Use --force to overwrite' }, null, 2));
+        console.log(
+          JSON.stringify(
+            { success: false, existingFiles, error: 'Use --force to overwrite' },
+            null,
+            2
+          )
+        );
       }
       return;
     }
@@ -704,7 +723,9 @@ function validateBasicYaml(content) {
     // Check for odd indentation that would break YAML
     const leadingSpaces = line.match(/^( *)/)?.[1]?.length || 0;
     if (leadingSpaces % 2 !== 0 && !line.trim().startsWith('#')) {
-      warnings.push(`Line ${i + 1}: Odd indentation (${leadingSpaces} spaces) may cause YAML parsing issues`);
+      warnings.push(
+        `Line ${i + 1}: Odd indentation (${leadingSpaces} spaces) may cause YAML parsing issues`
+      );
       break; // Only report first occurrence
     }
   }
@@ -752,14 +773,17 @@ async function installPreCommit(cwd, dryRun, results) {
       console.error(chalk.red(`\n❌ ${errorMsg}\n`));
       throw createError('AIX-HOOK-700', errorMsg, {
         context: { templatePath: sourcePath, errors: validation.errors },
-        suggestion: 'The pre-commit template in the framework package is malformed. Please report this issue.'
+        suggestion:
+          'The pre-commit template in the framework package is malformed. Please report this issue.'
       });
     }
 
     // Warnings are displayed but don't block installation
     if (validation.warnings.length > 0) {
       console.warn(
-        chalk.yellow(`\n⚠️  Pre-commit template has potential issues:\n${validation.warnings.map(e => `  - ${e}`).join('\n')}\n`)
+        chalk.yellow(
+          `\n⚠️  Pre-commit template has potential issues:\n${validation.warnings.map(e => `  - ${e}`).join('\n')}\n`
+        )
       );
     }
 

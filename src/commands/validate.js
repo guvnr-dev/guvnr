@@ -504,14 +504,32 @@ export async function validateCommand(options) {
       valid: results.errors.length === 0,
       passed: results.passed.length,
       total: VALIDATION_RULES.length,
-      errors: results.errors.map(r => ({ id: r.id, name: r.name, category: r.category, fixable: !!r.fix })),
-      warnings: results.warnings.map(r => ({ id: r.id, name: r.name, category: r.category, fixable: !!r.fix })),
-      info: results.info.map(r => ({ id: r.id, name: r.name, category: r.category, fixable: !!r.fix })),
+      errors: results.errors.map(r => ({
+        id: r.id,
+        name: r.name,
+        category: r.category,
+        fixable: !!r.fix
+      })),
+      warnings: results.warnings.map(r => ({
+        id: r.id,
+        name: r.name,
+        category: r.category,
+        fixable: !!r.fix
+      })),
+      info: results.info.map(r => ({
+        id: r.id,
+        name: r.name,
+        category: r.category,
+        fixable: !!r.fix
+      })),
       fixed: results.fixed.map(r => ({ id: r.id, name: r.name, category: r.category }))
     };
     console.log(JSON.stringify(jsonOutput, null, 2));
     if (results.errors.length > 0) {
-      throw createError('AIX-VALID-200', `Validation failed with ${results.errors.length} error(s)`);
+      throw createError(
+        'AIX-VALID-200',
+        `Validation failed with ${results.errors.length} error(s)`
+      );
     }
     return;
   }

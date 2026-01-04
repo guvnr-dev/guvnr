@@ -360,7 +360,7 @@ const DIAGNOSTICS = [
         };
         countFiles(tmpPath);
 
-        const sizeMb = Math.round(totalSize / (1024 * 1024) * 10) / 10;
+        const sizeMb = Math.round((totalSize / (1024 * 1024)) * 10) / 10;
         const sizeWarning = sizeMb > 100; // Warn if over 100MB
 
         return {
@@ -513,14 +513,16 @@ const DIAGNOSTICS = [
 
       try {
         const content = readFileSync(gitignorePath, 'utf-8');
-        const hasTmp = content.split('\n').some(
-          line => line.trim() === '.tmp' || line.trim() === '.tmp/'
-        );
+        const hasTmp = content
+          .split('\n')
+          .some(line => line.trim() === '.tmp' || line.trim() === '.tmp/');
 
         return {
           passed: hasTmp,
           value: hasTmp ? 'Yes' : 'No',
-          hint: !hasTmp ? 'Add .tmp/ to .gitignore to prevent committing temporary files' : undefined
+          hint: !hasTmp
+            ? 'Add .tmp/ to .gitignore to prevent committing temporary files'
+            : undefined
         };
       } catch {
         return {

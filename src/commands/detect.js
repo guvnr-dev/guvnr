@@ -236,7 +236,9 @@ export async function detectCommand(options) {
   if (detected.length === 0) {
     console.log(chalk.yellow('  No AI tools detected in this project.\n'));
     console.log(chalk.gray('  Run "npx ai-excellence init" to set up the framework.'));
-    console.log(chalk.gray('  Run "npx ai-excellence generate --tools all" to generate configurations.\n'));
+    console.log(
+      chalk.gray('  Run "npx ai-excellence generate --tools all" to generate configurations.\n')
+    );
     return;
   }
 
@@ -262,7 +264,9 @@ export async function detectCommand(options) {
   console.log('');
   if (detected.length < 5) {
     console.log(
-      chalk.cyan('  💡 Tip: Run "npx ai-excellence generate --tools all" to add more tool support.\n')
+      chalk.cyan(
+        '  💡 Tip: Run "npx ai-excellence generate --tools all" to add more tool support.\n'
+      )
     );
   }
 
@@ -278,9 +282,7 @@ export async function detectCommand(options) {
   const hasAgents = detected.some(t => t.id === 'agents');
   if (!hasAgents) {
     console.log(
-      chalk.gray(
-        '  Note: Consider adding AGENTS.md for Linux Foundation AAIF compatibility.'
-      )
+      chalk.gray('  Note: Consider adding AGENTS.md for Linux Foundation AAIF compatibility.')
     );
     console.log(chalk.gray('        Run: npx ai-excellence generate --tools agents\n'));
   }

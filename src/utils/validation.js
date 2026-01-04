@@ -270,7 +270,10 @@ export function validateConfig(config) {
     if (config.metrics.enabled !== undefined && typeof config.metrics.enabled !== 'boolean') {
       result.errors.push('metrics.enabled must be a boolean');
     }
-    if (config.metrics.autoCollect !== undefined && typeof config.metrics.autoCollect !== 'boolean') {
+    if (
+      config.metrics.autoCollect !== undefined &&
+      typeof config.metrics.autoCollect !== 'boolean'
+    ) {
       result.errors.push('metrics.autoCollect must be a boolean');
     }
     if (config.metrics.directory !== undefined && typeof config.metrics.directory !== 'string') {
@@ -279,10 +282,19 @@ export function validateConfig(config) {
   }
 
   // Validate security object
-  if (config.security && typeof config.security !== 'object' && typeof config.security !== 'boolean') {
+  if (
+    config.security &&
+    typeof config.security !== 'object' &&
+    typeof config.security !== 'boolean'
+  ) {
     result.errors.push('security must be a boolean or object');
   } else if (config.security && typeof config.security === 'object') {
-    const securityBoolFields = ['preCommit', 'secretsDetection', 'dependencyScanning', 'aiPatternChecks'];
+    const securityBoolFields = [
+      'preCommit',
+      'secretsDetection',
+      'dependencyScanning',
+      'aiPatternChecks'
+    ];
     for (const field of securityBoolFields) {
       if (config.security[field] !== undefined && typeof config.security[field] !== 'boolean') {
         result.errors.push(`security.${field} must be a boolean`);

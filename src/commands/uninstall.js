@@ -170,12 +170,14 @@ export async function uninstall(options = {}) {
 
   if (toRemove.length === 0) {
     if (json) {
-      console.log(JSON.stringify({
-        success: true,
-        message: 'No framework files found',
-        removed: [],
-        preserved: toPreserve
-      }));
+      console.log(
+        JSON.stringify({
+          success: true,
+          message: 'No framework files found',
+          removed: [],
+          preserved: toPreserve
+        })
+      );
     } else {
       console.log(chalk.yellow('No AI Excellence Framework files found in this directory.'));
     }
@@ -208,11 +210,13 @@ export async function uninstall(options = {}) {
   // Dry run - just show what would happen
   if (dryRun) {
     if (json) {
-      console.log(JSON.stringify({
-        dryRun: true,
-        wouldRemove: toRemove.map(f => f.path),
-        wouldPreserve: toPreserve
-      }));
+      console.log(
+        JSON.stringify({
+          dryRun: true,
+          wouldRemove: toRemove.map(f => f.path),
+          wouldPreserve: toPreserve
+        })
+      );
     } else {
       console.log(chalk.cyan('Dry run - no files were removed.'));
     }
@@ -263,12 +267,14 @@ export async function uninstall(options = {}) {
   }
 
   if (json) {
-    console.log(JSON.stringify({
-      success: result.errors.length === 0,
-      removed: result.removed,
-      preserved: result.preserved,
-      errors: result.errors
-    }));
+    console.log(
+      JSON.stringify({
+        success: result.errors.length === 0,
+        removed: result.removed,
+        preserved: result.preserved,
+        errors: result.errors
+      })
+    );
   } else {
     if (result.errors.length > 0) {
       console.log('');

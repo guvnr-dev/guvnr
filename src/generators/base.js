@@ -325,11 +325,7 @@ export function printResults(results, dryRun) {
   console.log(
     chalk.gray('  Your project now works with: Claude, Cursor, Copilot, Windsurf, Aider,')
   );
-  console.log(
-    chalk.gray('  Gemini CLI, Codex CLI, Zed, Amp, Roo, Junie, Cline, Goose, Kiro,')
-  );
-  console.log(
-    chalk.gray('  Continue, Augment, Qodo, OpenCode, Zencoder, Tabnine, Amazon Q,')
-  );
+  console.log(chalk.gray('  Gemini CLI, Codex CLI, Zed, Amp, Roo, Junie, Cline, Goose, Kiro,'));
+  console.log(chalk.gray('  Continue, Augment, Qodo, OpenCode, Zencoder, Tabnine, Amazon Q,'));
   console.log(chalk.gray('  Skills, and Plugins (23 tools total)\n'));
 }

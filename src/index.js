@@ -467,7 +467,7 @@ function _readClaudeMdSync(cwd = process.cwd()) {
 export const readClaudeMd = deprecate(
   _readClaudeMdSync,
   'readClaudeMd() is deprecated. Use readClaudeMdAsync() instead for better performance. ' +
-  'Synchronous file reads block the event loop.',
+    'Synchronous file reads block the event loop.',
   'AIX_DEP_001'
 );
 
@@ -571,8 +571,14 @@ export const SECRET_PATTERNS = Object.freeze({
   // Bearer tokens: Most OAuth2 tokens are under 500 chars, ~2KB is HTTP header limit
   //   @see https://datatracker.ietf.org/doc/html/rfc6750 - Bearer Token Usage
   generic: Object.freeze([
-    Object.freeze({ name: 'API Key', pattern: /api[_-]?key\s{0,5}[:=]\s{0,5}["'][^"']{16,256}["']/gi }),
-    Object.freeze({ name: 'Password', pattern: /password\s{0,5}[:=]\s{0,5}["'][^"']{8,256}["']/gi }),
+    Object.freeze({
+      name: 'API Key',
+      pattern: /api[_-]?key\s{0,5}[:=]\s{0,5}["'][^"']{16,256}["']/gi
+    }),
+    Object.freeze({
+      name: 'Password',
+      pattern: /password\s{0,5}[:=]\s{0,5}["'][^"']{8,256}["']/gi
+    }),
     Object.freeze({ name: 'Secret', pattern: /secret\s{0,5}[:=]\s{0,5}["'][^"']{8,256}["']/gi }),
     Object.freeze({ name: 'Bearer Token', pattern: /bearer\s{1,5}[a-zA-Z0-9_.-]{20,500}/gi })
   ]),
@@ -601,7 +607,10 @@ export const SECRET_PATTERNS = Object.freeze({
     Object.freeze({ name: 'Hugging Face Token', pattern: /hf_[a-zA-Z0-9]{32,128}/g }),
     Object.freeze({ name: 'Cohere Key', pattern: /co-[a-zA-Z0-9]{32,64}/g }),
     Object.freeze({ name: 'Replicate Token', pattern: /r8_[a-zA-Z0-9]{32,64}/g }),
-    Object.freeze({ name: 'Mistral Key', pattern: /mistral[_-]?api[_-]?key\s{0,5}[:=]\s{0,5}["'][a-zA-Z0-9]{32,64}["']/gi })
+    Object.freeze({
+      name: 'Mistral Key',
+      pattern: /mistral[_-]?api[_-]?key\s{0,5}[:=]\s{0,5}["'][a-zA-Z0-9]{32,64}["']/gi
+    })
   ]),
 
   // Cloud Provider Keys
@@ -616,9 +625,19 @@ export const SECRET_PATTERNS = Object.freeze({
   cloud: Object.freeze([
     Object.freeze({ name: 'AWS Access Key', pattern: /AKIA[0-9A-Z]{16}/g }),
     Object.freeze({ name: 'AWS STS Key', pattern: /ASIA[0-9A-Z]{16}/g }),
-    Object.freeze({ name: 'AWS Secret Key', pattern: /aws[_-]?secret[_-]?access[_-]?key\s{0,5}[:=]\s{0,5}["'][a-zA-Z0-9/+=]{40}["']/gi }),
-    Object.freeze({ name: 'Azure Connection String', pattern: /DefaultEndpointsProtocol=https;AccountName=[^;]{3,24};AccountKey=[a-zA-Z0-9+/=]{88}/g }),
-    Object.freeze({ name: 'GCP Service Account', pattern: /"type"\s{0,5}:\s{0,5}"service_account"/g })
+    Object.freeze({
+      name: 'AWS Secret Key',
+      pattern: /aws[_-]?secret[_-]?access[_-]?key\s{0,5}[:=]\s{0,5}["'][a-zA-Z0-9/+=]{40}["']/gi
+    }),
+    Object.freeze({
+      name: 'Azure Connection String',
+      pattern:
+        /DefaultEndpointsProtocol=https;AccountName=[^;]{3,24};AccountKey=[a-zA-Z0-9+/=]{88}/g
+    }),
+    Object.freeze({
+      name: 'GCP Service Account',
+      pattern: /"type"\s{0,5}:\s{0,5}"service_account"/g
+    })
   ]),
 
   // Version Control Systems
@@ -648,10 +667,20 @@ export const SECRET_PATTERNS = Object.freeze({
   //   @see https://www.twilio.com/docs/iam/keys/api-key
   communication: Object.freeze([
     Object.freeze({ name: 'Slack Token', pattern: /xox[baprs]-[a-zA-Z0-9-]{10,255}/g }),
-    Object.freeze({ name: 'Slack Webhook', pattern: /hooks\.slack\.com\/services\/T[a-zA-Z0-9_]{8,12}\/B[a-zA-Z0-9_]{8,12}\/[a-zA-Z0-9_]{20,30}/g }),
-    Object.freeze({ name: 'Discord Webhook', pattern: /discord(?:app)?\.com\/api\/webhooks\/[0-9]{17,20}\/[a-zA-Z0-9_-]{60,80}/g }),
+    Object.freeze({
+      name: 'Slack Webhook',
+      pattern:
+        /hooks\.slack\.com\/services\/T[a-zA-Z0-9_]{8,12}\/B[a-zA-Z0-9_]{8,12}\/[a-zA-Z0-9_]{20,30}/g
+    }),
+    Object.freeze({
+      name: 'Discord Webhook',
+      pattern: /discord(?:app)?\.com\/api\/webhooks\/[0-9]{17,20}\/[a-zA-Z0-9_-]{60,80}/g
+    }),
     Object.freeze({ name: 'Twilio Key', pattern: /SK[a-f0-9]{32}/g }),
-    Object.freeze({ name: 'Twilio Auth Token', pattern: /twilio[_-]?auth[_-]?token\s{0,5}[:=]\s{0,5}["'][a-f0-9]{32}["']/gi })
+    Object.freeze({
+      name: 'Twilio Auth Token',
+      pattern: /twilio[_-]?auth[_-]?token\s{0,5}[:=]\s{0,5}["'][a-f0-9]{32}["']/gi
+    })
   ]),
 
   // Payment Providers
@@ -664,7 +693,10 @@ export const SECRET_PATTERNS = Object.freeze({
     Object.freeze({ name: 'Stripe Live Key', pattern: /sk_live_[a-zA-Z0-9]{24,256}/g }),
     Object.freeze({ name: 'Stripe Test Key', pattern: /sk_test_[a-zA-Z0-9]{24,256}/g }),
     Object.freeze({ name: 'Stripe Publishable', pattern: /pk_(live|test)_[a-zA-Z0-9]{24,256}/g }),
-    Object.freeze({ name: 'PayPal Secret', pattern: /paypal[_-]?secret\s{0,5}[:=]\s{0,5}["'][a-zA-Z0-9]{32,80}["']/gi })
+    Object.freeze({
+      name: 'PayPal Secret',
+      pattern: /paypal[_-]?secret\s{0,5}[:=]\s{0,5}["'][a-zA-Z0-9]{32,80}["']/gi
+    })
   ]),
 
   // Database Connection Strings
@@ -675,10 +707,22 @@ export const SECRET_PATTERNS = Object.freeze({
   //   @see https://dev.mysql.com/doc/connector-python/en/connector-python-connectargs.html
   //   @see https://redis.io/docs/connect/clients/
   database: Object.freeze([
-    Object.freeze({ name: 'MongoDB URI', pattern: /mongodb(\+srv)?:\/\/[^:\s]{1,100}:[^@\s]{1,100}@[^\s]{1,200}/g }),
-    Object.freeze({ name: 'PostgreSQL URI', pattern: /postgres(ql)?:\/\/[^:\s]{1,100}:[^@\s]{1,100}@[^\s]{1,200}/g }),
-    Object.freeze({ name: 'MySQL URI', pattern: /mysql:\/\/[^:\s]{1,100}:[^@\s]{1,100}@[^\s]{1,200}/g }),
-    Object.freeze({ name: 'Redis URI', pattern: /redis:\/\/[^:\s]{1,100}:[^@\s]{1,100}@[^\s]{1,200}/g })
+    Object.freeze({
+      name: 'MongoDB URI',
+      pattern: /mongodb(\+srv)?:\/\/[^:\s]{1,100}:[^@\s]{1,100}@[^\s]{1,200}/g
+    }),
+    Object.freeze({
+      name: 'PostgreSQL URI',
+      pattern: /postgres(ql)?:\/\/[^:\s]{1,100}:[^@\s]{1,100}@[^\s]{1,200}/g
+    }),
+    Object.freeze({
+      name: 'MySQL URI',
+      pattern: /mysql:\/\/[^:\s]{1,100}:[^@\s]{1,100}@[^\s]{1,200}/g
+    }),
+    Object.freeze({
+      name: 'Redis URI',
+      pattern: /redis:\/\/[^:\s]{1,100}:[^@\s]{1,100}@[^\s]{1,200}/g
+    })
   ]),
 
   // Package Registry Tokens
@@ -711,8 +755,14 @@ export const SECRET_PATTERNS = Object.freeze({
   //   Payload bound: 2000 chars based on industry recommendation (~2KB max)
   //   @see https://learn.microsoft.com/en-us/answers/questions/1657854/ - Token size limits
   crypto: Object.freeze([
-    Object.freeze({ name: 'Private Key', pattern: /-----BEGIN (RSA |EC |DSA |OPENSSH |PGP )?PRIVATE KEY-----/g }),
-    Object.freeze({ name: 'JWT Token', pattern: /eyJ[a-zA-Z0-9_-]{17,200}\.eyJ[a-zA-Z0-9_-]{17,2000}\.[a-zA-Z0-9_-]{40,500}/g })
+    Object.freeze({
+      name: 'Private Key',
+      pattern: /-----BEGIN (RSA |EC |DSA |OPENSSH |PGP )?PRIVATE KEY-----/g
+    }),
+    Object.freeze({
+      name: 'JWT Token',
+      pattern: /eyJ[a-zA-Z0-9_-]{17,200}\.eyJ[a-zA-Z0-9_-]{17,2000}\.[a-zA-Z0-9_-]{40,500}/g
+    })
   ])
 });
 
@@ -783,9 +833,14 @@ function getLineNumber(content, position) {
  * // { clean: false, findings: [{ type: 'API Key', category: 'generic', count: 1, filePath: 'src/config.js', lines: [42] }] }
  */
 export function detectSecrets(content, options = {}) {
-  const patterns = options.categories
-    ? options.categories.flatMap(cat => (SECRET_PATTERNS[cat] || []).map(p => ({ ...p, category: cat })))
-    : getAllSecretPatterns();
+  let patterns;
+  if (options.categories) {
+    patterns = options.categories.flatMap(cat =>
+      (SECRET_PATTERNS[cat] || []).map(p => ({ ...p, category: cat }))
+    );
+  } else {
+    patterns = getAllSecretPatterns();
+  }
 
   const findings = [];
   for (const { name, pattern, category } of patterns) {
@@ -943,12 +998,16 @@ export async function withAbortSignal(promise, signal, context = 'Operation') {
   return Promise.race([
     promise,
     new Promise((_, reject) => {
-      signal.addEventListener('abort', () => {
-        const error = new Error(`${context} aborted: ${signal.reason?.message || 'Cancelled'}`);
-        error.name = 'AbortError';
-        error.code = 'ERR_ABORT';
-        reject(error);
-      }, { once: true });
+      signal.addEventListener(
+        'abort',
+        () => {
+          const error = new Error(`${context} aborted: ${signal.reason?.message || 'Cancelled'}`);
+          error.name = 'AbortError';
+          error.code = 'ERR_ABORT';
+          reject(error);
+        },
+        { once: true }
+      );
     })
   ]);
 }
