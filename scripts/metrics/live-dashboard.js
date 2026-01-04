@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * AI Excellence Framework - Real-Time Metrics Dashboard
+ * Guvnr - Real-Time Metrics Dashboard
  *
  * A lightweight HTTP server that provides a live-updating web dashboard
  * for visualizing session metrics in real-time.
@@ -42,7 +42,7 @@ for (let i = 0; i < args.length; i++) {
     openBrowser = true;
   } else if (args[i] === '--help' || args[i] === '-h') {
     console.log(`
-AI Excellence Framework - Live Metrics Dashboard
+Guvnr - Live Metrics Dashboard
 
 Usage:
   node live-dashboard.js [options]
@@ -223,7 +223,7 @@ function generateDashboard() {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Excellence - Live Dashboard</title>
+    <title>Guvnr - Live Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
@@ -479,9 +479,9 @@ function generateDashboard() {
     <div class="container">
         <header>
             <div class="logo">
-                <div class="logo-icon">AI</div>
+                <div class="logo-icon">G</div>
                 <div>
-                    <h1>AI Excellence Dashboard</h1>
+                    <h1>Guvnr Dashboard</h1>
                     <span class="status">
                         <span class="status-dot"></span>
                         <span id="last-update">Connecting...</span>
@@ -557,7 +557,7 @@ function generateDashboard() {
         </div>
 
         <footer>
-            <p>AI Excellence Framework - Real-Time Dashboard</p>
+            <p>Guvnr - Real-Time Dashboard</p>
             <p>Auto-refreshing every 30 seconds. <a href="/api/metrics">View JSON API</a></p>
         </footer>
     </div>
@@ -757,7 +757,7 @@ server.listen(port, () => {
   const url = `http://localhost:${port}`;
   console.log(`
 ╔════════════════════════════════════════════════════════╗
-║  AI Excellence Framework - Live Metrics Dashboard      ║
+║  Guvnr - Live Metrics Dashboard                        ║
 ╠════════════════════════════════════════════════════════╣
 ║                                                        ║
 ║  Dashboard: ${url.padEnd(41)}║

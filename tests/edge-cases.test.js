@@ -1,5 +1,5 @@
 /**
- * Edge Case Tests for AI Excellence Framework
+ * Edge Case Tests for Guvnr
  *
  * Tests boundary conditions, error handling, and unusual inputs.
  *
@@ -22,7 +22,7 @@ const PROJECT_ROOT = join(__dirname, '..');
 function createTempDir() {
   const tempDir = join(
     tmpdir(),
-    `ai-excellence-edge-${Date.now()}-${Math.random().toString(36).slice(2)}`
+    `guvnr-edge-${Date.now()}-${Math.random().toString(36).slice(2)}`
   );
   mkdirSync(tempDir, { recursive: true });
   return tempDir;
@@ -94,11 +94,11 @@ Status: ✅ Working
 
   it('should handle malformed JSON config', () => {
     const malformedJson = '{ "version": "1.0.0", "preset": }';
-    writeFileSync(join(tempDir, 'ai-excellence.config.json'), malformedJson);
+    writeFileSync(join(tempDir, 'guvnr.config.json'), malformedJson);
 
     assert.throws(
       () => {
-        JSON.parse(readFileSync(join(tempDir, 'ai-excellence.config.json'), 'utf-8'));
+        JSON.parse(readFileSync(join(tempDir, 'guvnr.config.json'), 'utf-8'));
       },
       /Unexpected token|Expected/,
       'Should throw on malformed JSON'
@@ -107,11 +107,11 @@ Status: ✅ Working
 
   it('should handle JSON with trailing commas', () => {
     const trailingCommaJson = '{ "version": "1.0.0", "preset": "minimal", }';
-    writeFileSync(join(tempDir, 'ai-excellence.config.json'), trailingCommaJson);
+    writeFileSync(join(tempDir, 'guvnr.config.json'), trailingCommaJson);
 
     assert.throws(
       () => {
-        JSON.parse(readFileSync(join(tempDir, 'ai-excellence.config.json'), 'utf-8'));
+        JSON.parse(readFileSync(join(tempDir, 'guvnr.config.json'), 'utf-8'));
       },
       /Unexpected token|Expected/,
       'Should throw on trailing comma'
@@ -119,9 +119,9 @@ Status: ✅ Working
   });
 
   it('should handle empty JSON config', () => {
-    writeFileSync(join(tempDir, 'ai-excellence.config.json'), '{}');
+    writeFileSync(join(tempDir, 'guvnr.config.json'), '{}');
 
-    const config = JSON.parse(readFileSync(join(tempDir, 'ai-excellence.config.json'), 'utf-8'));
+    const config = JSON.parse(readFileSync(join(tempDir, 'guvnr.config.json'), 'utf-8'));
     assert.deepStrictEqual(config, {}, 'Should parse empty object');
   });
 });
@@ -485,30 +485,30 @@ describe('Semver Validation', () => {
 
 describe('Error Code Format', () => {
   function isValidErrorCode(code) {
-    // Format: AIX-{CATEGORY}-{NUMBER}
-    return /^AIX-[A-Z]+-\d{3}$/.test(code);
+    // Format: GUVNR-{CATEGORY}-{NUMBER}
+    return /^GUVNR-[A-Z]+-\d{3}$/.test(code);
   }
 
   const validCodes = [
-    'AIX-INIT-100',
-    'AIX-VALID-200',
-    'AIX-CONFIG-300',
-    'AIX-FS-400',
-    'AIX-NET-500',
-    'AIX-MCP-600',
-    'AIX-HOOK-700',
-    'AIX-GEN-900'
+    'GUVNR-INIT-100',
+    'GUVNR-VALID-200',
+    'GUVNR-CONFIG-300',
+    'GUVNR-FS-400',
+    'GUVNR-NET-500',
+    'GUVNR-MCP-600',
+    'GUVNR-HOOK-700',
+    'GUVNR-GEN-900'
   ];
 
   const invalidCodes = [
     'INIT-100',
-    'AIX-100',
-    'AIX-INIT',
-    'AIX-init-100',
-    'AIX-INIT-1000',
-    'AIX-INIT-10',
-    'aix-INIT-100',
-    'AIX_INIT_100'
+    'GUVNR-100',
+    'GUVNR-INIT',
+    'GUVNR-init-100',
+    'GUVNR-INIT-1000',
+    'GUVNR-INIT-10',
+    'guvnr-INIT-100',
+    'GUVNR_INIT_100'
   ];
 
   for (const code of validCodes) {

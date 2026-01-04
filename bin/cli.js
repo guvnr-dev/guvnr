@@ -1,22 +1,21 @@
 #!/usr/bin/env node
 
 /**
- * AI Excellence Framework CLI
+ * Guvnr CLI - Universal AI Coding Assistant Configuration
  *
- * A comprehensive framework for reducing friction in AI-assisted software development.
+ * One config to govern all your AI coding tools:
+ * Claude, Cursor, Copilot, Windsurf, Aider, and 15+ others.
  *
  * Usage:
- *   npx ai-excellence-framework init [options]
- *   npx ai-excellence-framework validate
- *   npx ai-excellence-framework update
- *   npx ai-excellence-framework doctor
- *   npx ai-excellence-framework generate
- *   npx ai-excellence-framework lint
- *   npx ai-excellence-framework uninstall
+ *   npx guvnr init [options]
+ *   npx guvnr generate
+ *   npx guvnr validate
+ *   npx guvnr doctor
+ *   npx guvnr sync
  *
  * Configuration:
- *   AIX_TIMEOUT       - Command timeout in milliseconds (default: 300000 = 5 minutes)
- *   AIX_DEBUG         - Enable debug output (default: false)
+ *   GUVNR_TIMEOUT     - Command timeout in milliseconds (default: 300000 = 5 minutes)
+ *   GUVNR_DEBUG       - Enable debug output (default: false)
  */
 
 // Node.js version check - must run before any imports that might fail on older versions
@@ -52,9 +51,9 @@ import { FrameworkError, createError, getExitCode } from '../src/errors.js';
 
 // Configuration from environment
 const DEFAULT_TIMEOUT = 300000; // 5 minutes
-const COMMAND_TIMEOUT = parseInt(process.env.AIX_TIMEOUT || String(DEFAULT_TIMEOUT), 10);
-const DEBUG_MODE = process.env.AIX_DEBUG === 'true';
-const STRUCTURED_LOGGING = process.env.AIX_STRUCTURED_LOGGING === 'true';
+const COMMAND_TIMEOUT = parseInt(process.env.GUVNR_TIMEOUT || String(DEFAULT_TIMEOUT), 10);
+const DEBUG_MODE = process.env.GUVNR_DEBUG === 'true';
+const STRUCTURED_LOGGING = process.env.GUVNR_STRUCTURED_LOGGING === 'true';
 
 // Maximum length for any single CLI argument value
 // Can be increased for legitimate long inputs (e.g., complex configurations)
@@ -62,7 +61,7 @@ const STRUCTURED_LOGGING = process.env.AIX_STRUCTURED_LOGGING === 'true';
 const DEFAULT_MAX_ARG_LENGTH = 1000;
 const MAX_ARG_LENGTH_LIMIT = 100000; // Safety cap
 const MAX_ARG_LENGTH = Math.min(
-  parseInt(process.env.AIX_MAX_ARG_LENGTH || String(DEFAULT_MAX_ARG_LENGTH), 10),
+  parseInt(process.env.GUVNR_MAX_ARG_LENGTH || String(DEFAULT_MAX_ARG_LENGTH), 10),
   MAX_ARG_LENGTH_LIMIT
 );
 
@@ -71,7 +70,7 @@ let currentOperationId = null;
 
 /**
  * Structured logger for CI/CD integration.
- * When AIX_STRUCTURED_LOGGING=true, outputs JSON-formatted log lines
+ * When GUVNR_STRUCTURED_LOGGING=true, outputs JSON-formatted log lines
  * that can be easily parsed by log aggregation tools.
  *
  * Log format:
@@ -116,7 +115,7 @@ function log(level, message, context = {}) {
 
 /**
  * Logger object with convenience methods for different log levels.
- * Respects AIX_STRUCTURED_LOGGING for JSON output and AIX_DEBUG for debug messages.
+ * Respects GUVNR_STRUCTURED_LOGGING for JSON output and GUVNR_DEBUG for debug messages.
  */
 const logger = {
   info: (msg, ctx) => log('info', msg, ctx),
@@ -137,9 +136,9 @@ const logger = {
 function createAbortError(commandName, timeoutMs, reason) {
   const isTimeout = reason?.name === 'TimeoutError';
   return createError(
-    'AIX-GEN-901',
+    'GUVNR-GEN-901',
     isTimeout
-      ? `Command '${commandName}' timed out after ${timeoutMs}ms. Set AIX_TIMEOUT environment variable to increase the timeout.`
+      ? `Command '${commandName}' timed out after ${timeoutMs}ms. Set GUVNR_TIMEOUT environment variable to increase the timeout.`
       : `Command '${commandName}' was aborted: ${reason?.message || 'Unknown reason'}`,
     {
       context: {
@@ -414,12 +413,13 @@ function validateInputLengths(opts) {
 const program = new Command();
 
 program
-  .name('ai-excellence')
+  .name('guvnr')
   .description(
-    'AI Excellence Framework - Reduce friction in AI-assisted development\n\n' +
+    'Guvnr - Universal AI coding assistant configuration\n\n' +
+      'One config governs Claude, Cursor, Copilot, Windsurf, Aider, and 15+ other AI tools.\n\n' +
       'Input Limits:\n' +
-      `  - String arguments: max ${MAX_ARG_LENGTH} characters (set AIX_MAX_ARG_LENGTH to customize)\n` +
-      '  - Timeout: default 5min (set AIX_TIMEOUT env var to customize, max 600s)'
+      `  - String arguments: max ${MAX_ARG_LENGTH} characters (set GUVNR_MAX_ARG_LENGTH to customize)\n` +
+      '  - Timeout: default 5min (set GUVNR_TIMEOUT env var to customize, max 600s)'
   )
   .version(packageJson.version)
   .option('--no-color', 'Disable colored output (also respects NO_COLOR env var)')
@@ -442,22 +442,22 @@ program
     'after',
     `
 Examples:
-  $ ai-excellence init                    # Initialize with standard preset
-  $ ai-excellence init --preset full      # Full setup with MCP and metrics
-  $ ai-excellence init --preset minimal   # Minimal setup (CLAUDE.md only)
-  $ ai-excellence validate --fix          # Validate and auto-fix issues
-  $ ai-excellence doctor                  # Check framework health
-  $ ai-excellence generate cursor         # Generate Cursor IDE rules
-  $ ai-excellence generate --all          # Generate configs for all tools
-  $ ai-excellence --no-color init         # Run without colors
+  $ guvnr init                    # Create guvnr.yaml with standard preset
+  $ guvnr init --preset full      # Full setup with all tools + MCP
+  $ guvnr init --preset minimal   # Minimal single-tool setup
+  $ guvnr generate                # Generate configs for all configured tools
+  $ guvnr generate --tools claude # Generate only Claude Code config
+  $ guvnr validate                # Validate guvnr.yaml configuration
+  $ guvnr doctor                  # Check environment health
+  $ guvnr --no-color init         # Run without colors
 
 Environment variables:
-  NO_COLOR=1                              # Disable colored output
-  AIX_TIMEOUT=300000                      # Command timeout (ms, default: 5 min)
-  AIX_DEBUG=true                          # Enable debug output
-  AIX_STRUCTURED_LOGGING=true             # Enable JSON log output for CI/CD
+  NO_COLOR=1                      # Disable colored output
+  GUVNR_TIMEOUT=300000            # Command timeout (ms, default: 5 min)
+  GUVNR_DEBUG=true                # Enable debug output
+  GUVNR_STRUCTURED_LOGGING=true   # Enable JSON log output for CI/CD
 
-More info: https://ai-excellence-framework.github.io/
+More info: https://guvnr.dev
 `
   );
 
@@ -494,7 +494,7 @@ function sanitizeForDisplay(input, maxLength = 50) {
 // Init command
 program
   .command('init')
-  .description('Initialize the AI Excellence Framework in your project')
+  .description('Initialize Guvnr in your project (creates guvnr.yaml)')
   .option(
     '-p, --preset <preset>',
     'Preset configuration (minimal, standard, full, team)',
@@ -521,7 +521,7 @@ program
 // Validate command
 program
   .command('validate')
-  .description('Validate your AI Excellence Framework configuration')
+  .description('Validate your guvnr.yaml configuration')
   .option('--fix', 'Attempt to fix issues automatically', false)
   .option('--json', 'Output results as JSON', false)
   .option('--verbose', 'Show detailed validation output', false)
@@ -530,7 +530,7 @@ program
 // Update command
 program
   .command('update')
-  .description('Update the framework to the latest version')
+  .description('Update Guvnr to the latest version')
   .option('--check', 'Check for updates without installing', false)
   .option('-f, --force', 'Force update even if no changes detected', false)
   .option('--verbose', 'Show detailed update progress', false)
@@ -549,7 +549,7 @@ program
 program
   .command('generate')
   .alias('gen')
-  .description('Generate configuration files for multiple AI coding tools')
+  .description('Generate tool-specific configs from guvnr.yaml')
   .option('-t, --tools <tools>', `Tools to generate for: ${SUPPORTED_TOOLS.join(', ')}`, 'all')
   .option('-f, --force', 'Overwrite existing files', false)
   .option('--dry-run', 'Show what would be created without making changes', false)
@@ -569,10 +569,10 @@ program
 // Uninstall command
 program
   .command('uninstall')
-  .description('Remove AI Excellence Framework files from your project')
+  .description('Remove Guvnr files from your project')
   .option('--dry-run', 'Show what would be removed without making changes', false)
   .option('-f, --force', 'Skip confirmation prompt', false)
-  .option('--keep-config', 'Preserve CLAUDE.md file', false)
+  .option('--keep-config', 'Preserve guvnr.yaml file', false)
   .option('--json', 'Output results as JSON', false)
   .option('--verbose', 'Show detailed removal progress', false)
   .action(withTimeout(uninstall, 'uninstall'));
@@ -607,8 +607,8 @@ async function main() {
 
     // Show help if no command provided
     if (!process.argv.slice(2).length) {
-      console.log(chalk.cyan('\n  AI Excellence Framework'));
-      console.log(chalk.gray('  Reduce friction in AI-assisted development\n'));
+      console.log(chalk.cyan('\n  Guvnr'));
+      console.log(chalk.gray('  Universal AI coding assistant configuration\n'));
       program.help();
     }
   } catch (error) {

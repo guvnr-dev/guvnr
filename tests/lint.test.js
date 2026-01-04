@@ -12,7 +12,7 @@ import { tmpdir } from 'os';
 let testDir;
 
 beforeEach(() => {
-  testDir = mkdtempSync(join(tmpdir(), 'aix-lint-test-'));
+  testDir = mkdtempSync(join(tmpdir(), 'guvnr-lint-test-'));
 });
 
 afterEach(() => {

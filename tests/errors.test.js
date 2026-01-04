@@ -1,5 +1,5 @@
 /**
- * Error System Tests for AI Excellence Framework
+ * Error System Tests for Guvnr
  *
  * Tests the error handling system from src/errors.js including:
  * - FrameworkError class

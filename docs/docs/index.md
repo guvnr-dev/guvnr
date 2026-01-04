@@ -1,6 +1,6 @@
-# What is AI Excellence Framework?
+# What is Guvnr?
 
-AI Excellence Framework is a comprehensive toolkit for reducing friction in AI-assisted software development. It addresses the fundamental architectural constraints of AI coding assistants with evidence-based solutions.
+Guvnr is a comprehensive toolkit for reducing friction in AI-assisted software development. It addresses the fundamental architectural constraints of AI coding assistants with evidence-based solutions.
 
 ## The Problem
 
@@ -26,7 +26,7 @@ Research from 2024-2025 shows:
 
 ```bash
 # Install
-npx ai-excellence-framework init
+npx guvnr init
 
 # Start using
 claude

@@ -1,5 +1,5 @@
 /**
- * Generator Base Utilities Tests for AI Excellence Framework
+ * Generator Base Utilities Tests for Guvnr
  *
  * Tests the generator utilities from src/generators/base.js including:
  * - Project context parsing

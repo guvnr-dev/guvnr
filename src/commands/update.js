@@ -1,5 +1,5 @@
 /**
- * AI Excellence Framework - Update Command
+ * Guvnr - Update Command
  *
  * Updates framework components to the latest version.
  */
@@ -133,7 +133,7 @@ export async function updateCommand(options) {
     }
   };
 
-  log(chalk.cyan('\n  AI Excellence Framework Updater\n'));
+  log(chalk.cyan('\n  Guvnr Updater\n'));
 
   if (options.check) {
     await checkForUpdates(cwd, jsonOutput);
@@ -327,7 +327,7 @@ async function checkForUpdates(cwd, jsonOutput = false) {
   } else {
     console.log(
       chalk.yellow(
-        `  ${updatesAvailable} updates available. Run "npx ai-excellence update --force" to apply.\n`
+        `  ${updatesAvailable} updates available. Run "npx guvnr update --force" to apply.\n`
       )
     );
   }

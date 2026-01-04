@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# AI Excellence Framework - Team Metrics Aggregator
+# Guvnr - Team Metrics Aggregator
 #
 # Aggregates metrics from multiple team members using the MCP server
 # or shared file storage.

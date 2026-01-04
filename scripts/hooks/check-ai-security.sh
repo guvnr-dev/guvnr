@@ -8,8 +8,8 @@
 # - Command injection patterns
 #
 # Configuration:
-#   AIX_SECURITY_ENFORCE=true|false  - Block commits on issues (default: false)
-#   AIX_SECURITY_STRICT=true|false   - Enable strict mode with more patterns (default: false)
+#   GUVNR_SECURITY_ENFORCE=true|false  - Block commits on issues (default: false)
+#   GUVNR_SECURITY_STRICT=true|false   - Enable strict mode with more patterns (default: false)
 #   --enforce                        - Command-line flag to block commits on issues
 #   --strict                         - Command-line flag for strict mode
 #
@@ -42,15 +42,15 @@
 #      which means some patterns are simplified. For comprehensive scanning,
 #      run dedicated security tools in CI/CD pipelines.
 #
-# Part of the AI Excellence Framework
-# https://github.com/ai-excellence-framework/ai-excellence-framework
+# Part of Guvnr
+# https://github.com/guvnr-dev/guvnr
 
 set -euo pipefail
 
 # Parse command-line arguments
-ENFORCE="${AIX_SECURITY_ENFORCE:-false}"
-STRICT="${AIX_SECURITY_STRICT:-false}"
-STRUCTURED_LOGGING="${AIX_STRUCTURED_LOGGING:-false}"
+ENFORCE="${GUVNR_SECURITY_ENFORCE:-false}"
+STRICT="${GUVNR_SECURITY_STRICT:-false}"
+STRUCTURED_LOGGING="${GUVNR_STRUCTURED_LOGGING:-false}"
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -269,16 +269,16 @@ else
         echo "See: https://owasp.org/www-project-top-ten/"
         echo ""
         echo "To configure enforcement:"
-        echo "  export AIX_SECURITY_ENFORCE=true  # Block commits on issues"
-        echo "  export AIX_SECURITY_STRICT=true   # Enable strict mode"
-        echo "  export AIX_STRUCTURED_LOGGING=true # Enable JSON output"
+        echo "  export GUVNR_SECURITY_ENFORCE=true  # Block commits on issues"
+        echo "  export GUVNR_SECURITY_STRICT=true   # Enable strict mode"
+        echo "  export GUVNR_STRUCTURED_LOGGING=true # Enable JSON output"
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
         # Block commit if enforcement is enabled and there are critical issues
         if [ "$ENFORCE" = "true" ] && [ $ISSUES -gt 0 ]; then
             echo ""
             echo "❌ Commit blocked due to security issues."
-            echo "   Fix the issues above or set AIX_SECURITY_ENFORCE=false to skip."
+            echo "   Fix the issues above or set GUVNR_SECURITY_ENFORCE=false to skip."
             exit 1
         fi
     else

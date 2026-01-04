@@ -1,6 +1,6 @@
 # MCP Registry Submission
 
-This document contains the information needed to submit the AI Excellence Framework's MCP server to the official [MCP Registry](https://github.com/modelcontextprotocol/servers).
+This document contains the information needed to submit Guvnr's MCP server to the official [MCP Registry](https://github.com/modelcontextprotocol/servers).
 
 ## Server Information
 
@@ -25,7 +25,7 @@ A comprehensive MCP server for maintaining project context across AI coding sess
 - **Export/Import**: Backup and portability support
 - **Health Checks**: Database integrity verification
 
-Part of the [AI Excellence Framework](https://github.com/ai-excellence-framework/ai-excellence-framework).
+Part of [Guvnr](https://github.com/guvnr-dev/guvnr).
 
 ### Category
 
@@ -55,8 +55,8 @@ mcp>=1.0.0
 ### Installation
 
 ```bash
-# Via AI Excellence Framework CLI
-npx ai-excellence-framework init --preset full
+# Via Guvnr CLI
+npx guvnr init --preset full
 
 # Or manually
 pip install mcp
@@ -115,10 +115,10 @@ Key security features:
 
 ## Repository Information
 
-- **Repository**: https://github.com/ai-excellence-framework/ai-excellence-framework
+- **Repository**: https://github.com/guvnr-dev/guvnr
 - **License**: MIT
-- **Maintainers**: AI Excellence Framework Contributors
-- **Issues**: https://github.com/ai-excellence-framework/ai-excellence-framework/issues
+- **Maintainers**: Guvnr Contributors
+- **Issues**: https://github.com/guvnr-dev/guvnr/issues
 
 ## Submission Checklist
 
@@ -141,7 +141,7 @@ Key security features:
 {
   "name": "project-memory-server",
   "description": "Production-ready project memory with SQLite, connection pooling, and team collaboration",
-  "repository": "https://github.com/ai-excellence-framework/ai-excellence-framework",
+  "repository": "https://github.com/guvnr-dev/guvnr",
   "path": "scripts/mcp/project-memory-server.py",
   "language": "python",
   "categories": ["memory", "developer-tools"],
@@ -153,4 +153,4 @@ Key security features:
 
 ## Contact
 
-For questions about this submission, open an issue in the [AI Excellence Framework repository](https://github.com/ai-excellence-framework/ai-excellence-framework/issues).
+For questions about this submission, open an issue in the [Guvnr repository](https://github.com/guvnr-dev/guvnr/issues).

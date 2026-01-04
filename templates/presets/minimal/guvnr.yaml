@@ -1,0 +1,58 @@
+# Guvnr Configuration - Minimal Preset
+# Universal AI coding assistant configuration
+# Learn more: https://guvnr.dev/docs/configuration
+
+version: "1.0"
+
+project:
+  name: "My Project"
+  description: "Project description"
+
+tech_stack:
+  primary_language: "JavaScript"
+  runtime: "Node.js 20.x"
+
+context:
+  overview: |
+    One paragraph describing what this project does and its purpose.
+
+current_state:
+  phase: "Development"
+  active_work:
+    - "Current task or feature"
+
+# Minimal preset: Essential skills only
+skills:
+  plan:
+    description: "Create implementation plan before coding"
+  verify:
+    description: "Verify task completion with skeptical review"
+
+# No agents in minimal preset
+agents: {}
+
+# Simplified tool generation
+tools:
+  claude:
+    generate: true
+  cursor:
+    generate: false
+  copilot:
+    generate: false
+  windsurf:
+    generate: false
+  aider:
+    generate: false
+
+# Hooks disabled in minimal preset
+hooks:
+  enabled: false
+
+# Security disabled in minimal preset
+security:
+  pre_commit: false
+  secrets_detection: false
+
+# Memory disabled in minimal preset
+memory:
+  enabled: false

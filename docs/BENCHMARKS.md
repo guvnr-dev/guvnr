@@ -1,6 +1,6 @@
-# AI Excellence Framework Benchmarks
+# Guvnr Benchmarks
 
-This document provides benchmarks and performance measurements for the AI Excellence Framework.
+This document provides benchmarks and performance measurements for Guvnr.
 
 ## TL;DR
 
@@ -173,7 +173,7 @@ Based on survey of 50+ developers:
 
 ### Feature Comparison
 
-| Feature                  | AI Excellence | awesome-cursorrules | context-engineering-intro |
+| Feature                  | Guvnr         | awesome-cursorrules | context-engineering-intro |
 | ------------------------ | ------------- | ------------------- | ------------------------- |
 | Multi-tool support       | 10 tools      | Cursor only         | 3 tools                   |
 | Security scanning        | Yes           | No                  | Partial                   |
@@ -184,7 +184,7 @@ Based on survey of 50+ developers:
 
 ### Adoption Complexity
 
-| Metric              | AI Excellence | Alternatives |
+| Metric              | Guvnr         | Alternatives |
 | ------------------- | ------------- | ------------ |
 | Time to first value | 5 min         | 2-15 min     |
 | Configuration files | 1 (CLAUDE.md) | 1-5          |
@@ -199,7 +199,7 @@ Based on survey of 50+ developers:
 
 ```bash
 # Time command execution
-time npx ai-excellence-framework init --preset standard
+time npx guvnr init --preset standard
 
 # Memory profiling
 node --max-old-space-size=256 bin/cli.js init

@@ -1,5 +1,5 @@
 /**
- * Uninstall command - Remove AI Excellence Framework from a project
+ * Uninstall command - Remove Guvnr from a project
  */
 
 import fs from 'fs-extra';
@@ -12,7 +12,7 @@ const FRAMEWORK_FILES = [
   '.claude/commands/',
   '.claude/agents/',
   '.claude/skills/',
-  'ai-excellence.config.json',
+  'guvnr.config.json',
   '.pre-commit-config.yaml',
   'scripts/hooks/post-edit.sh',
   'scripts/hooks/verify-deps.sh',
@@ -129,7 +129,7 @@ async function removeItem(targetDir, itemPath) {
 }
 
 /**
- * Uninstall the AI Excellence Framework from a project.
+ * Uninstall Guvnr from a project.
  *
  * Removes framework files including commands, agents, hooks, MCP server,
  * and optionally the CLAUDE.md configuration file.
@@ -179,7 +179,7 @@ export async function uninstall(options = {}) {
         })
       );
     } else {
-      console.log(chalk.yellow('No AI Excellence Framework files found in this directory.'));
+      console.log(chalk.yellow('No Guvnr files found in this directory.'));
     }
     return result;
   }
@@ -285,7 +285,7 @@ export async function uninstall(options = {}) {
     }
 
     console.log('');
-    console.log(chalk.green('AI Excellence Framework has been removed.'));
+    console.log(chalk.green('Guvnr has been removed.'));
 
     if (keepConfig) {
       console.log(chalk.cyan('Your CLAUDE.md file was preserved.'));

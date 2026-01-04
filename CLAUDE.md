@@ -1,55 +1,68 @@
-# AI Excellence Framework
+# Guvnr
 
 ## Overview
 
-A comprehensive framework for reducing friction in AI-assisted software development. This project dogfoods itself—we use the framework to build the framework.
+Universal AI coding assistant configuration — one config governs Claude, Cursor, Copilot, Windsurf, Aider, and 15+ other AI tools. This project dogfoods itself—we use Guvnr to build Guvnr.
 
-**Meta-nature**: Every improvement to this framework should be validated by using the framework during development. If a pattern doesn't help us build this project, it won't help others.
+**Meta-nature**: Every improvement to Guvnr should be validated by using Guvnr during development. If a pattern doesn't help us build this project, it won't help others.
 
 ## Project Purpose
 
-Transform documented friction points, mitigation strategies, and implementation blueprints into a distributable, installable framework that developers can adopt in minutes.
+Provide a single source of truth (`guvnr.yaml`) that generates tool-specific configurations for all major AI coding assistants, eliminating the need to maintain separate config files for each tool.
 
 ## Tech Stack
 
-- **Primary**: Shell scripts, Markdown
-- **CLI Tool**: Node.js (implemented)
-- **MCP Server**: Python (implemented)
-- **Documentation**: Markdown
+- **Primary**: Node.js, JavaScript (ES Modules)
+- **CLI Tool**: Commander.js, Enquirer
+- **Config Format**: YAML (js-yaml)
+- **MCP Server**: Python (SQLite backend)
+- **Documentation**: Markdown, VitePress
 - **Testing**: Node.js native test runner, pytest, bash
 
 ## Architecture
 
-### Document Hierarchy
+### Core Files
 
 ```
-Core Documents (source of truth)
-├── ai-development-friction.md      # Problem definition (with TL;DR)
-├── ai-friction-mitigations.md      # Strategy library (with TL;DR)
-├── ai-friction-implementation.md   # Implementation blueprints (with TL;DR)
-└── ai-friction-action-plan.md      # Strategic roadmap
+guvnr.yaml                          # Single source of truth (abstract config)
+├── generates → CLAUDE.md           # Claude Code context
+├── generates → .claude/commands/   # Claude slash commands
+├── generates → .claude/agents/     # Claude subagents
+├── generates → .cursor/rules/      # Cursor IDE rules
+├── generates → .github/copilot-instructions.md
+├── generates → AGENTS.md           # Linux Foundation standard
+└── generates → [other tool configs]
 
-Deployable Assets
-├── .claude/commands/               # 8 slash commands
-├── .claude/agents/                 # 3 custom subagents
-├── scripts/hooks/                  # 4 hook scripts
-├── scripts/mcp/                    # MCP server (production-ready)
-└── scripts/metrics/                # Metrics collection
+src/
+├── commands/
+│   ├── init.js                     # Initialize guvnr.yaml
+│   ├── generate.js                 # Generate tool configs from guvnr.yaml
+│   ├── validate.js                 # Validate configuration
+│   ├── doctor.js                   # Environment diagnostics
+│   ├── lint.js                     # Configuration linter
+│   ├── detect.js                   # Detect installed AI tools
+│   ├── update.js                   # Check for updates
+│   └── uninstall.js                # Remove guvnr files
+├── schemas/
+│   ├── guvnr.schema.json           # guvnr.yaml JSON Schema
+│   └── claude-md.schema.json       # CLAUDE.md validation
+├── index.js                        # Main module exports
+└── errors.js                       # Error handling
 
-CLI & Infrastructure
-├── bin/cli.js                      # CLI entry point
-├── src/commands/                   # CLI command implementations
-├── src/schemas/                    # JSON validation schemas
-├── templates/presets/              # 4 preset configurations
-└── tests/                          # Automated test suites
+templates/
+├── guvnr.yaml.template             # Base guvnr.yaml template
+└── presets/
+    ├── minimal/guvnr.yaml          # Minimal preset
+    ├── standard/guvnr.yaml         # Standard preset
+    ├── full/guvnr.yaml             # Full preset
+    └── team/guvnr.yaml             # Team preset
 ```
 
 ### Key Relationships
 
-- Friction points → inform → Mitigations
-- Mitigations → implemented by → Blueprints
-- Blueprints → packaged as → Deployable assets
-- Dogfooding → validates → All of the above
+- guvnr.yaml → (guvnr generate) → Tool-specific configs
+- All AI tools are treated equally (no tool is "primary")
+- Legacy CLAUDE.md support for migration
 
 ## Conventions
 
@@ -57,13 +70,7 @@ CLI & Infrastructure
 
 - Markdown: `kebab-case.md`
 - Scripts: `kebab-case.sh` or `kebab-case.py`
-- Commands: `command-name.md` (in .claude/commands/)
-
-### Documentation Style
-
-- First-person from AI perspective in friction doc
-- Second-person (instructional) in implementation docs
-- Imperative mood in commands and checklists
+- Config: `guvnr.yaml` (source), `CLAUDE.md` (generated)
 
 ### Commit Messages
 
@@ -76,78 +83,75 @@ CLI & Infrastructure
 ## Common Commands
 
 ```bash
-# Initialize framework in a project
-npx ai-excellence-framework init
+# Initialize guvnr in a project
+guvnr init
 
-# Validate framework installation
-npx ai-excellence-framework validate
+# Generate tool configs from guvnr.yaml
+guvnr generate
+
+# Validate configuration
+guvnr validate
 
 # Check environment health
-npx ai-excellence-framework doctor
+guvnr doctor
 
 # Run tests
 npm test
 
-# Validate markdown formatting
-npx markdownlint-cli2 "**/*.md"
-
-# Collect session metrics
-./scripts/metrics/collect-session-metrics.sh --auto
+# Run all tests
+npm run test:all
 ```
 
 ## Current State
 
 ### Phase
 
-Phase 3: 5-Star Production Ready — All features complete, tested, documented
+Phase 4: Guvnr Rebrand — Transforming to true multi-tool architecture
 
 ### Active Work
 
-- Framework complete with comprehensive test coverage
-- Ready for npm publishing and external adoption
-- VitePress documentation site configured
+- Completing rebrand from former package name to "guvnr"
+- Implementing guvnr.yaml as single source of truth
+- Updating all documentation and tests
 
 ### Recent Decisions
 
-- 2024-12-30: Comprehensive external evaluation and enhancement pass
-- 2024-12-30: Created 30+ VitePress documentation pages covering all commands, agents, and concepts
-- 2024-12-30: Added <300 lines CLAUDE.md best practice guidance to all templates
-- 2024-12-30: Updated research citations with December 2024 verification
-- 2024-12-30: All research claims validated against authoritative 2024-2025 sources
+- 2025-01-03: Rebrand to "guvnr" (npm name available, guvnr-dev org on GitHub)
+- 2025-01-03: guvnr.yaml becomes single source of truth, all tool configs generated
+- 2025-01-03: True multi-tool architecture — no AI tool is privileged
 
 ### Completed Work
 
-- [x] CLI tool implemented (init, validate, doctor, update commands)
-- [x] MCP server with connection pooling, rate limiting, WAL mode
-- [x] Comprehensive test suites (unit, integration, E2E, performance)
-- [x] All 8 slash commands implemented
-- [x] All 3 subagents implemented
-- [x] 4 preset templates (minimal, standard, full, team)
-- [x] Configuration validation schemas
-- [x] TL;DR summaries added to verbose documents
-- [x] Quick reference documentation
-- [x] CHANGELOG.md with semantic versioning
-- [x] VitePress documentation site configuration
-- [x] MCP security documentation
-- [x] Research citations verification document
-- [x] CI/CD pipeline with comprehensive checks
-- [x] npm publishing preparation complete
+- [x] guvnr.yaml JSON Schema created
+- [x] package.json updated with new branding
+- [x] CLI branding updated
+- [x] init.js rewritten for guvnr.yaml
+- [x] generate.js updated to read guvnr.yaml
+- [x] validate.js updated for new format
+- [x] index.js exports updated
+- [x] Preset templates created (minimal, standard, full, team)
+- [x] README.md rewritten
+
+### In Progress
+
+- [ ] Update remaining documentation files
+- [ ] Update tests for new architecture
+- [ ] Update git remote to guvnr-dev org
 
 ### Known Gaps
 
-- [ ] npm package not yet published (ready for publishing)
-- [ ] VitePress site not deployed (30+ pages created, needs hosting)
-- [ ] Real-world team usage data pending
+- [ ] Not yet published to npm
+- [ ] VitePress site needs hosting at guvnr.dev
 
 ## Critical Constraints
 
-1. **Dogfood Everything**: Every pattern in the framework must be used during development of the framework. If we skip using something, that's a signal it's not valuable enough.
+1. **Single Source of Truth**: guvnr.yaml defines everything once; tool configs are generated.
 
-2. **Simplicity First**: Remove complexity that isn't earning its keep. Track what actually gets used.
+2. **Tool Agnostic**: No AI tool is privileged. All are generated equally from guvnr.yaml.
 
-3. **Evidence-Based**: Changes should be motivated by observed friction or measured improvement, not theoretical elegance.
+3. **Dogfood Everything**: Every pattern must be used during development.
 
-4. **Copy-Paste Ready**: All deployable assets must work when literally copy-pasted. No "adapt to your needs" hand-waving for core functionality.
+4. **Copy-Paste Ready**: Generated configs must work without modification.
 
 ## Session Instructions
 
@@ -155,89 +159,30 @@ Phase 3: 5-Star Production Ready — All features complete, tested, documented
 
 1. Read this file completely
 2. Check `docs/session-notes/` for recent context
-3. Review the action plan for current phase goals
-4. Note the current dogfooding status below
+3. Run `guvnr validate` to check current state
 
 ### During Work
 
 - Use `/plan` before implementing anything significant
-- Use `/assumptions` to surface hidden assumptions
 - Use `/verify` before marking tasks complete
 - Use `/security-review` for security-sensitive code
-- Track assumptions explicitly using TodoWrite
-- Note what's working and what isn't
-- Search online before major architectural decisions
+- Track progress using TodoWrite
 
 ### Before Ending
 
 - Run `/handoff` to capture session state
 - Update "Current State" section above
-- Update "Dogfooding Log" with patterns used
 - Commit work in progress
-- Run `scripts/metrics/collect-session-metrics.sh` if available
 
-### Security Checklist (for AI-generated code)
+### Security Checklist
 
 Before committing, verify:
 
 - [ ] No hardcoded secrets or credentials
 - [ ] Input validation present where needed
-- [ ] No SQL/command/XSS injection vulnerabilities
 - [ ] Dependencies exist (not hallucinated names)
 - [ ] Error handling doesn't expose internal details
 
-## Dogfooding Log
+---
 
-Track what patterns we use and their effectiveness:
-
-| Pattern                  | Used? | Effective? | Notes                                      |
-| ------------------------ | ----- | ---------- | ------------------------------------------ |
-| CLAUDE.md                | Yes   | Yes        | Essential for context across sessions      |
-| /plan command            | Yes   | Yes        | Used for framework development planning    |
-| /verify command          | Yes   | Yes        | Used to verify implementation completeness |
-| /handoff command         | Yes   | Yes        | Used for session documentation             |
-| /assumptions command     | Yes   | Yes        | Surfaces hidden requirements               |
-| /security-review command | Yes   | Yes        | Guided security considerations in CLI/MCP  |
-| /refactor command        | Yes   | Yes        | Used during enhancement pass               |
-| /test-coverage command   | Yes   | Yes        | Guided test additions                      |
-| Session notes            | Yes   | Yes        | Documented in session-notes/               |
-| Pre-commit hooks         | Yes   | Yes        | Template comprehensive and tested          |
-| MCP memory               | Yes   | Yes        | Production server with export/import       |
-| Metrics collection       | Yes   | TBD        | Script implemented, awaiting data          |
-| TodoWrite tracking       | Yes   | Yes        | Critical for complex multi-step tasks      |
-| Online research          | Yes   | Yes        | Validated all claims against sources       |
-| CLI installer            | Yes   | Yes        | Used to structure project                  |
-| Configuration schemas    | Yes   | Yes        | Provides validation structure              |
-| Degit templates          | Yes   | Yes        | 4 presets for different use cases          |
-
-### Dogfooding Observations
-
-**What's Working:**
-
-- CLAUDE.md provides essential project context across sessions
-- TodoWrite helps maintain focus during complex 12+ step tasks
-- Online research before recommendations prevents architectural mistakes
-- Comprehensive testing catches issues before they become problems
-- TL;DR summaries make verbose documents accessible
-- Configuration schemas provide clear structure
-- Multiple preset templates cover different use cases
-- Connection pooling in MCP server improves team deployment readiness
-- Rate limiting prevents abuse in shared environments
-- VitePress provides modern documentation experience
-- Research citations document ensures claims are verifiable
-
-**What Needs Improvement:**
-
-- [x] ~~Need to actually use /verify before completing tasks~~ (Done)
-- [x] ~~MCP server needed connection pooling for team use~~ (Done)
-- [x] ~~Research citations needed verification~~ (Done - 100% verified)
-- [x] ~~Session handoffs not yet practiced~~ (Done - used in this session)
-- [ ] Metrics collection script ready but needs real usage data
-
-**Friction Observed During Development:**
-
-- File creation requires reading first (Write tool constraint) - worked around
-- Large context conversations benefit from session summaries
-- Multiple verification passes valuable but need bounded scope (Two-Pass Rule)
-- Parallel tool execution significantly speeds up multi-file operations
-- Web search validation critical for ensuring accuracy of claims
+_Guvnr: One config to govern them all._

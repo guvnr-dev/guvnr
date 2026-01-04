@@ -1,6 +1,6 @@
-# Contributing to AI Excellence Framework
+# Contributing to Guvnr
 
-Thank you for your interest in contributing to the AI Excellence Framework! This document provides guidelines and instructions for contributing.
+Thank you for your interest in contributing to Guvnr! This document provides guidelines and instructions for contributing.
 
 ## Table of Contents
 
@@ -39,14 +39,14 @@ This project adheres to a Code of Conduct that all contributors are expected to 
 2. Clone your fork locally:
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/ai-excellence-framework.git
-cd ai-excellence-framework
+git clone https://github.com/YOUR-USERNAME/guvnr.git
+cd guvnr
 ```
 
 3. Add the upstream remote:
 
 ```bash
-git remote add upstream https://github.com/ai-excellence-framework/ai-excellence-framework.git
+git remote add upstream https://github.com/guvnr-dev/guvnr.git
 ```
 
 ## Development Setup
@@ -106,7 +106,7 @@ Before reporting a bug:
 
 When reporting, include:
 
-- Framework version (`npm list ai-excellence-framework`)
+- Framework version (`npm list guvnr`)
 - Node.js version (`node --version`)
 - Operating system
 - Steps to reproduce
@@ -481,4 +481,4 @@ Update `CHANGELOG.md` for user-facing changes:
 - **Bug reports**: Open an Issue
 - **Security issues**: Email maintainers directly
 
-Thank you for contributing to the AI Excellence Framework!
+Thank you for contributing to Guvnr!

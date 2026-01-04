@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "description": "Security pattern configuration for AI Excellence Framework security hook",
+  "description": "Security pattern configuration for Guvnr security hook",
   "version": "1.0.0",
   "patterns": {
     "eval_usage": {
@@ -77,7 +77,7 @@
   "customPatterns": [],
   "notes": {
     "severity_levels": ["critical", "warning", "info"],
-    "critical_blocks_commit": "When AIX_SECURITY_ENFORCE=true, critical issues block commits",
-    "strictModeOnly": "These patterns only run when AIX_SECURITY_STRICT=true"
+    "critical_blocks_commit": "When GUVNR_SECURITY_ENFORCE=true, critical issues block commits",
+    "strictModeOnly": "These patterns only run when GUVNR_SECURITY_STRICT=true"
   }
 }

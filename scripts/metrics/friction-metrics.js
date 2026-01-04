@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * AI Excellence Framework - Friction Metrics Collection
+ * Guvnr - Friction Metrics Collection
  *
  * Collects opt-in metrics about AI development friction reduction.
  * All data is stored locally and never transmitted without explicit consent.
@@ -17,7 +17,7 @@ import { join, dirname } from 'path';
 import { homedir } from 'os';
 
 // Configuration
-const METRICS_DIR = process.env.AIX_METRICS_DIR || join(homedir(), '.ai-excellence', 'metrics');
+const METRICS_DIR = process.env.GUVNR_METRICS_DIR || join(homedir(), '.guvnr', 'metrics');
 const METRICS_FILE = join(METRICS_DIR, 'friction-metrics.jsonl');
 const CONFIG_FILE = join(METRICS_DIR, 'metrics-config.json');
 
@@ -67,7 +67,7 @@ function loadConfig() {
 
 // Generate anonymous ID (no PII)
 function generateAnonymousId() {
-  return 'aix_' + Math.random().toString(36).substring(2, 15);
+  return 'guvnr_' + Math.random().toString(36).substring(2, 15);
 }
 
 // Record an event
@@ -216,7 +216,7 @@ function generateReport(days = 30) {
 function printReport(report) {
   if (!report) return;
 
-  console.log('\n📊 AI Excellence Framework - Friction Metrics Report');
+  console.log('\n📊 Guvnr - Friction Metrics Report');
   console.log('='.repeat(55));
   console.log(
     `Period: ${report.period.start.split('T')[0]} to ${report.period.end.split('T')[0]} (${report.period.days} days)`
@@ -317,7 +317,7 @@ function setEnabled(enabled) {
   if (enabled) {
     console.log('');
     console.log('Privacy notice:');
-    console.log('- All data is stored locally in ~/.ai-excellence/metrics/');
+    console.log('- All data is stored locally in ~/.guvnr/metrics/');
     console.log('- No data is transmitted without explicit export');
     console.log('- No personally identifiable information is collected');
     console.log('- You can clear all data at any time with: node friction-metrics.js clear');
@@ -377,7 +377,7 @@ function main() {
     }
 
     default:
-      console.log('AI Excellence Framework - Friction Metrics');
+      console.log('Guvnr - Friction Metrics');
       console.log('');
       console.log('Usage:');
       console.log('  node friction-metrics.js enable              Enable metrics collection');

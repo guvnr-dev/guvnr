@@ -50,7 +50,7 @@ Agents live in `.claude/agents/`:
 Install with CLI:
 
 ```bash
-npx ai-excellence-framework init --preset standard
+npx guvnr init --preset standard
 ```
 
 ## Custom Agents

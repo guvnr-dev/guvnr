@@ -372,7 +372,7 @@ Before storing, verify:
 
 ## OWASP LLM Top 10 (2025) Alignment
 
-The AI Excellence Framework addresses key risks from the [OWASP Top 10 for LLM Applications 2025](https://genai.owasp.org/llm-top-10/):
+Guvnr addresses key risks from the [OWASP Top 10 for LLM Applications 2025](https://genai.owasp.org/llm-top-10/):
 
 | OWASP LLM Risk                                  | Framework Mitigation                                           |
 | ----------------------------------------------- | -------------------------------------------------------------- |

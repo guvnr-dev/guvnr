@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# AI Excellence Framework - Post-Edit Hook
+# Guvnr - Post-Edit Hook
 #
 # Auto-lint and format files after Claude Code edits them.
 # Runs appropriate formatters based on file extension.
@@ -10,15 +10,15 @@
 #   ./post-edit.sh <file-path>
 #
 # Environment:
-#   AI_EXCELLENCE_QUIET=1    Suppress output
-#   AI_EXCELLENCE_DRY_RUN=1  Show what would be done without doing it
+#   GUVNR_QUIET=1    Suppress output
+#   GUVNR_DRY_RUN=1  Show what would be done without doing it
 #
 
 set -euo pipefail
 
 # Configuration
-QUIET="${AI_EXCELLENCE_QUIET:-0}"
-DRY_RUN="${AI_EXCELLENCE_DRY_RUN:-0}"
+QUIET="${GUVNR_QUIET:-0}"
+DRY_RUN="${GUVNR_DRY_RUN:-0}"
 TIMEOUT_SECONDS=30
 
 # Logging
@@ -31,7 +31,7 @@ log_error() {
 }
 
 log_debug() {
-    [ "${AI_EXCELLENCE_DEBUG:-0}" = "1" ] && echo "[DEBUG] $1" >&2 || true
+    [ "${GUVNR_DEBUG:-0}" = "1" ] && echo "[DEBUG] $1" >&2 || true
 }
 
 # Check if a command exists

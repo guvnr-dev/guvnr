@@ -1,12 +1,12 @@
 # Architecture
 
-This document describes the architecture of the AI Excellence Framework, including component interactions, data flows, and design decisions.
+This document describes the architecture of Guvnr, including component interactions, data flows, and design decisions.
 
 ## System Overview
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                         AI Excellence Framework                              │
+│                               Guvnr                                          │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │  ┌─────────────────┐   ┌─────────────────┐   ┌─────────────────┐           │
@@ -333,7 +333,7 @@ MCP Server Rate Limiter
 ## Directory Structure
 
 ```
-ai-excellence-framework/
+guvnr/
 ├── .claude/
 │   ├── commands/          # Slash command definitions
 │   │   ├── plan.md

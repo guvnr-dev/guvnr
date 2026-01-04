@@ -1,6 +1,6 @@
 # npm Publishing Checklist
 
-Complete checklist for publishing the AI Excellence Framework to npm.
+Complete checklist for publishing Guvnr to npm.
 
 ---
 
@@ -40,7 +40,7 @@ npm pack --dry-run
 
 # Create tarball and inspect
 npm pack
-tar -tzf ai-excellence-framework-*.tgz | head -50
+tar -tzf guvnr-*.tgz | head -50
 ```
 
 Expected contents:
@@ -88,7 +88,7 @@ npm audit
 
 ```json
 {
-  "name": "ai-excellence-framework",
+  "name": "guvnr",
   "version": "1.0.0",
   "description": "Universal framework for AI-assisted development",
   "main": "src/index.js",
@@ -103,7 +103,7 @@ npm audit
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ai-excellence-framework/ai-excellence-framework.git"
+    "url": "git+https://github.com/guvnr-dev/guvnr.git"
   }
 }
 ```
@@ -112,8 +112,8 @@ npm audit
 
 ```bash
 # Test that exports work
-node -e "import('ai-excellence-framework').then(m => console.log(Object.keys(m)))"
-node -e "import('ai-excellence-framework/cli')"
+node -e "import('guvnr').then(m => console.log(Object.keys(m)))"
+node -e "import('guvnr/cli')"
 ```
 
 ---
@@ -156,13 +156,13 @@ npm publish --tag beta
 
 ```bash
 # Check package on npm
-npm view ai-excellence-framework
+npm view guvnr
 
 # Test installation
 mkdir /tmp/test-install && cd /tmp/test-install
 npm init -y
-npx ai-excellence-framework --version
-npx ai-excellence-framework init --preset minimal --non-interactive
+npx guvnr --version
+npx guvnr init --preset minimal --non-interactive
 ```
 
 ### Step 5: Create Git Tag
@@ -249,13 +249,13 @@ If a problematic version is published:
 ### Option 1: Unpublish (within 72 hours)
 
 ```bash
-npm unpublish ai-excellence-framework@1.0.1
+npm unpublish guvnr@1.0.1
 ```
 
 ### Option 2: Deprecate
 
 ```bash
-npm deprecate ai-excellence-framework@1.0.1 "Critical bug, use 1.0.2"
+npm deprecate guvnr@1.0.1 "Critical bug, use 1.0.2"
 ```
 
 ### Option 3: Patch Release
@@ -295,9 +295,9 @@ git push && git push --tags
 Add to README.md:
 
 ```markdown
-[![npm version](https://img.shields.io/npm/v/ai-excellence-framework.svg)](https://www.npmjs.com/package/ai-excellence-framework)
-[![npm downloads](https://img.shields.io/npm/dm/ai-excellence-framework.svg)](https://www.npmjs.com/package/ai-excellence-framework)
-[![Node.js Version](https://img.shields.io/node/v/ai-excellence-framework.svg)](https://nodejs.org)
+[![npm version](https://img.shields.io/npm/v/guvnr.svg)](https://www.npmjs.com/package/guvnr)
+[![npm downloads](https://img.shields.io/npm/dm/guvnr.svg)](https://www.npmjs.com/package/guvnr)
+[![Node.js Version](https://img.shields.io/node/v/guvnr.svg)](https://nodejs.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ```
 
@@ -317,9 +317,9 @@ VERSION=$(node -p "require('./package.json').version")
 gh release create "v${VERSION}" --generate-notes
 
 # Verify installation
-npx ai-excellence-framework --version
+npx guvnr --version
 ```
 
 ---
 
-_Part of the AI Excellence Framework_
+_Part of Guvnr_

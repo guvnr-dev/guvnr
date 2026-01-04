@@ -1,6 +1,6 @@
 # Team Adoption
 
-This section covers adopting the AI Excellence Framework across teams.
+This section covers adopting Guvnr across teams.
 
 ## Adoption Paths
 
@@ -9,7 +9,7 @@ This section covers adopting the AI Excellence Framework across teams.
 **Time:** 15 minutes
 
 ```bash
-npx ai-excellence-framework init --preset minimal
+npx guvnr init --preset minimal
 ```
 
 Includes:
@@ -22,7 +22,7 @@ Includes:
 **Time:** 1 hour
 
 ```bash
-npx ai-excellence-framework init --preset standard
+npx guvnr init --preset standard
 ```
 
 Includes:
@@ -37,7 +37,7 @@ Includes:
 **Time:** 2-4 hours
 
 ```bash
-npx ai-excellence-framework init --preset full
+npx guvnr init --preset full
 ```
 
 Includes:
@@ -52,7 +52,7 @@ Includes:
 **Time:** Half day
 
 ```bash
-npx ai-excellence-framework init --preset team
+npx guvnr init --preset team
 ```
 
 Includes:

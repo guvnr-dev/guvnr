@@ -1,4 +1,4 @@
-# AI Excellence Framework Templates
+# Guvnr Templates
 
 Quick-start templates for different project needs. Use degit or direct copy.
 
@@ -9,10 +9,10 @@ Quick-start templates for different project needs. Use degit or direct copy.
 npm install -g degit
 
 # Clone a preset directly into your project
-degit ai-excellence-framework/templates/presets/standard .
+degit guvnr-dev/guvnr/templates/presets/standard .
 
 # Or use npx without global install
-npx degit ai-excellence-framework/templates/presets/standard .
+npx degit guvnr-dev/guvnr/templates/presets/standard .
 ```
 
 ## Available Presets
@@ -22,7 +22,7 @@ npx degit ai-excellence-framework/templates/presets/standard .
 Best for: Personal projects, quick experiments, learning
 
 ```bash
-npx degit ai-excellence-framework/templates/presets/minimal .
+npx degit guvnr-dev/guvnr/templates/presets/minimal .
 ```
 
 **Includes:**
@@ -40,7 +40,7 @@ npx degit ai-excellence-framework/templates/presets/minimal .
 Best for: Most projects, solo developers, small teams
 
 ```bash
-npx degit ai-excellence-framework/templates/presets/standard .
+npx degit guvnr-dev/guvnr/templates/presets/standard .
 ```
 
 **Includes:**
@@ -59,7 +59,7 @@ npx degit ai-excellence-framework/templates/presets/standard .
 Best for: Production projects, security-conscious teams
 
 ```bash
-npx degit ai-excellence-framework/templates/presets/full .
+npx degit guvnr-dev/guvnr/templates/presets/full .
 ```
 
 **Includes:**
@@ -79,7 +79,7 @@ npx degit ai-excellence-framework/templates/presets/full .
 Best for: Multi-developer projects, enterprise environments
 
 ```bash
-npx degit ai-excellence-framework/templates/presets/team .
+npx degit guvnr-dev/guvnr/templates/presets/team .
 ```
 
 **Includes:**
@@ -98,20 +98,20 @@ If you prefer not to use degit:
 
 ```bash
 # Clone the entire repository
-git clone https://github.com/ai-excellence-framework/ai-excellence-framework.git
+git clone https://github.com/guvnr-dev/guvnr.git
 
 # Copy the preset you want
-cp -r ai-excellence-framework/templates/presets/standard/* your-project/
+cp -r guvnr/templates/presets/standard/* your-project/
 
 # Clean up
-rm -rf ai-excellence-framework
+rm -rf guvnr
 ```
 
 ## After Installation
 
 1. **Update CLAUDE.md** - Replace all `[PLACEHOLDER]` values with your project info
 2. **Configure hooks** - Run `pre-commit install` if using pre-commit
-3. **Validate setup** - Run `npx ai-excellence validate` to check configuration
+3. **Validate setup** - Run `npx guvnr validate` to check configuration
 
 ## Preset Comparison
 
@@ -128,7 +128,7 @@ rm -rf ai-excellence-framework
 
 ## Customization
 
-After installation, modify `ai-excellence.config.json` to enable/disable features:
+After installation, modify `guvnr.config.json` to enable/disable features:
 
 ```json
 {

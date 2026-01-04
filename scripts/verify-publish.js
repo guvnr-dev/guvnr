@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Pre-publish verification script for AI Excellence Framework
+ * Pre-publish verification script for Guvnr
  *
  * Run before npm publish to verify:
  * - Package size is acceptable
@@ -272,7 +272,7 @@ async function main() {
   const skipTests = args.includes('--skip-tests');
 
   console.log('');
-  log(`${BOLD}AI Excellence Framework - Pre-Publish Verification${RESET}`, BLUE);
+  log(`${BOLD}Guvnr - Pre-Publish Verification${RESET}`, BLUE);
   log('━'.repeat(50), BLUE);
 
   const pkg = getPackageJson();

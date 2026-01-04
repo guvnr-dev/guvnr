@@ -1,5 +1,5 @@
 /**
- * Integration Tests for AI Excellence Framework
+ * Integration Tests for Guvnr
  *
  * These tests verify the complete CLI workflow including:
  * - Full initialization with all presets
@@ -28,7 +28,7 @@ const PROJECT_ROOT = join(__dirname, '..');
 function createTempDir() {
   const tempDir = join(
     tmpdir(),
-    `ai-excellence-integration-${Date.now()}-${Math.random().toString(36).slice(2)}`
+    `guvnr-integration-${Date.now()}-${Math.random().toString(36).slice(2)}`
   );
   mkdirSync(tempDir, { recursive: true });
   return tempDir;
@@ -444,7 +444,7 @@ describe('Configuration Schema Validation', () => {
       mcp: { enabled: false }
     };
 
-    const configPath = join(tempDir, 'ai-excellence.config.json');
+    const configPath = join(tempDir, 'guvnr.config.json');
     writeFileSync(configPath, JSON.stringify(minimalConfig, null, 2));
 
     const validation = validateConfig(configPath);
@@ -466,7 +466,7 @@ describe('Configuration Schema Validation', () => {
       }
     };
 
-    const configPath = join(tempDir, 'ai-excellence.config.json');
+    const configPath = join(tempDir, 'guvnr.config.json');
     writeFileSync(configPath, JSON.stringify(standardConfig, null, 2));
 
     const validation = validateConfig(configPath);
@@ -503,7 +503,7 @@ describe('Configuration Schema Validation', () => {
       metrics: { enabled: true, autoCollect: false }
     };
 
-    const configPath = join(tempDir, 'ai-excellence.config.json');
+    const configPath = join(tempDir, 'guvnr.config.json');
     writeFileSync(configPath, JSON.stringify(fullConfig, null, 2));
 
     const validation = validateConfig(configPath);
@@ -519,7 +519,7 @@ describe('Configuration Schema Validation', () => {
       preset: 'invalid-preset'
     };
 
-    const configPath = join(tempDir, 'ai-excellence.config.json');
+    const configPath = join(tempDir, 'guvnr.config.json');
     writeFileSync(configPath, JSON.stringify(invalidConfig, null, 2));
 
     const validation = validateConfig(configPath);
@@ -532,7 +532,7 @@ describe('Configuration Schema Validation', () => {
       commands: ['plan']
     };
 
-    const configPath = join(tempDir, 'ai-excellence.config.json');
+    const configPath = join(tempDir, 'guvnr.config.json');
     writeFileSync(configPath, JSON.stringify(incompleteConfig, null, 2));
 
     const validation = validateConfig(configPath);
@@ -615,10 +615,10 @@ describe('Cross-Component Integration', () => {
       const presetDir = join(presetsDir, preset);
       assert.ok(existsSync(presetDir), `Preset directory ${preset} should exist`);
 
-      const configPath = join(presetDir, 'ai-excellence.config.json');
+      const guvnrYamlPath = join(presetDir, 'guvnr.yaml');
       const claudeMdPath = join(presetDir, 'CLAUDE.md');
 
-      assert.ok(existsSync(configPath), `Preset ${preset} should have config.json`);
+      assert.ok(existsSync(guvnrYamlPath), `Preset ${preset} should have guvnr.yaml`);
       assert.ok(existsSync(claudeMdPath), `Preset ${preset} should have CLAUDE.md`);
     }
   });

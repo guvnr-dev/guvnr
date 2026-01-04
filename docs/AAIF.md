@@ -118,16 +118,16 @@ Changes to specifications follow a formal SEP process:
 4. **Acceptance**: Formal adoption by steering committee
 5. **Implementation**: Reference implementations created
 
-## Impact on AI Excellence Framework
+## Impact on Guvnr
 
-This framework is fully aligned with AAIF standards:
+Guvnr is fully aligned with AAIF standards:
 
 ### AGENTS.md Compliance
 
 Our `generate agents` command creates AAIF-compliant AGENTS.md files:
 
 ```bash
-npx ai-excellence-framework generate --tools agents
+npx guvnr generate --tools agents
 ```
 
 ### MCP Integration
@@ -144,7 +144,7 @@ All our MCP documentation and configurations follow the AAIF-stewarded specifica
 Generate Goose configurations with:
 
 ```bash
-npx ai-excellence-framework generate --tools goose
+npx guvnr generate --tools goose
 ```
 
 ## The Vision: "W3C for Agentic AI"
@@ -174,8 +174,8 @@ Block has stated they hope AAIF becomes "what the W3C is for the Web" — a set 
 ### 1. Add AGENTS.md to Your Project
 
 ```bash
-# Using AI Excellence Framework
-npx ai-excellence-framework generate --tools agents
+# Using Guvnr
+npx guvnr generate --tools agents
 
 # Or manually create AGENTS.md with:
 # - Project overview
@@ -253,4 +253,4 @@ Yes. AAIF maintains backward compatibility. Existing MCP servers will continue t
 
 ---
 
-_Part of the [AI Excellence Framework](https://github.com/ai-excellence-framework/ai-excellence-framework)_
+_Part of [Guvnr](https://github.com/guvnr-dev/guvnr)_

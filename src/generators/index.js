@@ -1,5 +1,5 @@
 /**
- * AI Excellence Framework - Generator Modules Index
+ * Guvnr - Generator Modules Index
  *
  * Central export point for all generator modules.
  * Generators are progressively being extracted to separate files.

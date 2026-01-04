@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://github.com/ai-excellence-framework/claude-md.schema.json",
+  "$id": "https://github.com/guvnr-dev/guvnr/claude-md.schema.json",
   "title": "CLAUDE.md Validation Schema",
   "description": "Schema for validating CLAUDE.md structure (conceptual - actual validation done via regex)",
   "type": "object",

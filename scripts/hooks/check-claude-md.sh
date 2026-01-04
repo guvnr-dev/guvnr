@@ -61,7 +61,7 @@ info() {
 # Check if CLAUDE.md exists
 if [ ! -f "$CLAUDE_MD" ]; then
     warn "CLAUDE.md not found in project root"
-    info "Create with: npx ai-excellence init"
+    info "Create with: npx guvnr init"
     exit 0
 fi
 

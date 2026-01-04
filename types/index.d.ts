@@ -1,5 +1,5 @@
 /**
- * AI Excellence Framework - TypeScript Declarations
+ * Guvnr - TypeScript Declarations
  *
  * Provides type definitions for the main module exports.
  */

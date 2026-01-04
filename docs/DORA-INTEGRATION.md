@@ -1,6 +1,6 @@
 # DORA Metrics Integration Guide
 
-This guide explains how to integrate DORA metrics with the AI Excellence Framework to measure and improve AI-assisted software delivery performance.
+This guide explains how to integrate DORA metrics with Guvnr to measure and improve AI-assisted software delivery performance.
 
 ## Overview
 
@@ -148,7 +148,7 @@ jobs:
       - uses: actions/checkout@v4
       - run: npm test
       - run: npm run lint
-      - run: npx ai-excellence-framework validate
+      - run: npx guvnr validate
       - run: npm run deploy
 ```
 
@@ -160,7 +160,7 @@ Add metrics collection to your workflow:
 
 ```bash
 # Enable framework metrics
-npx ai-excellence-framework init --preset full
+npx guvnr init --preset full
 
 # Collect session metrics
 ./scripts/metrics/collect-session-metrics.sh --auto
@@ -210,7 +210,7 @@ The 2025 DORA Report introduces seven team archetypes replacing the traditional 
 
 ### Phase 1: Foundation (Week 1)
 
-- [ ] Install framework: `npx ai-excellence-framework init`
+- [ ] Install framework: `npx guvnr init`
 - [ ] Create CLAUDE.md with AI policy section
 - [ ] Enable pre-commit hooks
 - [ ] Document current DORA baseline

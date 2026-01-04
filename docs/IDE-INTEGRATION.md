@@ -1,6 +1,6 @@
 # IDE Integration Guide
 
-This guide covers integrating the AI Excellence Framework with popular IDEs and code editors.
+This guide covers integrating Guvnr with popular IDEs and code editors.
 
 ## Table of Contents
 
@@ -18,7 +18,7 @@ This guide covers integrating the AI Excellence Framework with popular IDEs and 
 
 ### Claude Code Extension Setup
 
-The official Claude Code VS Code extension provides seamless integration with the AI Excellence Framework.
+The official Claude Code VS Code extension provides seamless integration with Guvnr.
 
 #### Installation
 
@@ -87,7 +87,7 @@ Create `.vscode/tasks.json` for framework commands:
     {
       "label": "AIX: Validate Installation",
       "type": "shell",
-      "command": "npx ai-excellence-framework validate",
+      "command": "npx guvnr validate",
       "group": "test",
       "presentation": {
         "reveal": "always",
@@ -97,13 +97,13 @@ Create `.vscode/tasks.json` for framework commands:
     {
       "label": "AIX: Health Check",
       "type": "shell",
-      "command": "npx ai-excellence-framework doctor",
+      "command": "npx guvnr doctor",
       "group": "test"
     },
     {
       "label": "AIX: Update Framework",
       "type": "shell",
-      "command": "npx ai-excellence-framework update",
+      "command": "npx guvnr update",
       "group": "build"
     },
     {
@@ -178,7 +178,7 @@ Create `.vscode/extensions.json`:
 
 ## Cursor
 
-Cursor is an AI-native code editor that integrates naturally with the AI Excellence Framework.
+Cursor is an AI-native code editor that integrates naturally with Guvnr.
 
 ### Configuration
 
@@ -324,10 +324,10 @@ Google Antigravity is fully compatible with Windsurf configurations. No addition
 
 ### Generate Configurations
 
-Use the AI Excellence Framework to generate Windsurf/Antigravity configs:
+Use Guvnr to generate Windsurf/Antigravity configs:
 
 ```bash
-npx ai-excellence-framework generate --tools windsurf
+npx guvnr generate --tools windsurf
 ```
 
 This creates:
@@ -398,12 +398,12 @@ Create file templates for framework files at `.idea/fileTemplates/`:
 
 Create `.idea/runConfigurations/`:
 
-**AIX_Validate.xml:**
+**Guvnr_Validate.xml:**
 
 ```xml
 <component name="ProjectRunConfigurationManager">
-  <configuration name="AIX: Validate" type="ShConfigurationType">
-    <option name="SCRIPT_TEXT" value="npx ai-excellence-framework validate" />
+  <configuration name="Guvnr: Validate" type="ShConfigurationType">
+    <option name="SCRIPT_TEXT" value="npx guvnr validate" />
     <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
     <option name="SCRIPT_PATH" value="" />
     <option name="SCRIPT_OPTIONS" value="" />
@@ -420,11 +420,11 @@ Create `.idea/runConfigurations/`:
 
 Create live templates for common patterns:
 
-**Settings → Editor → Live Templates → Create new group "AI Excellence"**
+**Settings → Editor → Live Templates → Create new group "Guvnr"**
 
 | Abbreviation   | Template Text                                                              | Description             |
 | -------------- | -------------------------------------------------------------------------- | ----------------------- |
-| `aix-todo`     | `// TODO(AIX): $COMMENT$`                                                  | AI Excellence TODO      |
+| `aix-todo`     | `// TODO(AIX): $COMMENT$`                                                  | Guvnr TODO              |
 | `aix-verify`   | `// VERIFY: $ASSERTION$`                                                   | Verification checkpoint |
 | `aix-decision` | `/* DECISION: $DECISION$\n * RATIONALE: $RATIONALE$\n * DATE: $DATE$\n */` | Document decision       |
 
@@ -445,7 +445,7 @@ file:CLAUDE.md||file:CLAUDE.local.md||file:.claude//*||file:scripts/hooks//*||fi
 Add to `~/.config/nvim/lua/plugins/ai-excellence.lua`:
 
 ```lua
--- AI Excellence Framework integration for Neovim
+-- Guvnr integration for Neovim
 return {
   -- Claude.nvim or similar AI plugin
   {
@@ -486,20 +486,20 @@ return {
 Add to `~/.config/nvim/lua/config/autocmds.lua`:
 
 ```lua
--- AI Excellence Framework commands
+-- Guvnr commands
 vim.api.nvim_create_user_command('AIXValidate', function()
-  vim.cmd('!npx ai-excellence-framework validate')
-end, { desc = 'Validate AI Excellence Framework installation' })
+  vim.cmd('!npx guvnr validate')
+end, { desc = 'Validate Guvnr installation' })
 
 vim.api.nvim_create_user_command('AIXDoctor', function()
-  vim.cmd('!npx ai-excellence-framework doctor')
-end, { desc = 'Run AI Excellence health check' })
+  vim.cmd('!npx guvnr doctor')
+end, { desc = 'Run Guvnr health check' })
 
 -- Auto-load CLAUDE.md on project open
 vim.api.nvim_create_autocmd("VimEnter", {
   callback = function()
     if vim.fn.filereadable("CLAUDE.md") == 1 then
-      vim.notify("AI Excellence Framework detected. CLAUDE.md available.", vim.log.levels.INFO)
+      vim.notify("Guvnr detected. CLAUDE.md available.", vim.log.levels.INFO)
     end
   end,
 })
@@ -522,7 +522,7 @@ vim.api.nvim_create_autocmd("FileType", {
 Add to `~/.emacs.d/init.el` or `~/.config/emacs/init.el`:
 
 ```elisp
-;; AI Excellence Framework integration
+;; Guvnr integration
 
 (use-package markdown-mode
   :ensure t
@@ -531,14 +531,14 @@ Add to `~/.emacs.d/init.el` or `~/.config/emacs/init.el`:
 
 ;; Custom functions for framework
 (defun aix-validate ()
-  "Validate AI Excellence Framework installation."
+  "Validate Guvnr installation."
   (interactive)
-  (compile "npx ai-excellence-framework validate"))
+  (compile "npx guvnr validate"))
 
 (defun aix-doctor ()
-  "Run AI Excellence health check."
+  "Run Guvnr health check."
   (interactive)
-  (compile "npx ai-excellence-framework doctor"))
+  (compile "npx guvnr doctor"))
 
 (defun aix-open-claude-md ()
   "Open CLAUDE.md in current project."
@@ -558,7 +558,7 @@ Add to `~/.emacs.d/init.el` or `~/.config/emacs/init.el`:
   (lambda ()
     (when (and (project-current)
                (file-exists-p (expand-file-name "CLAUDE.md" (project-root (project-current)))))
-      (message "AI Excellence Framework project detected"))))
+      (message "Guvnr project detected"))))
 ```
 
 ---
@@ -641,7 +641,7 @@ Enable verbose logging for debugging:
 
 ```bash
 # For CLI
-DEBUG=aix:* npx ai-excellence-framework validate
+DEBUG=aix:* npx guvnr validate
 
 # For MCP server
 PROJECT_MEMORY_LOG_LEVEL=DEBUG python3 scripts/mcp/project-memory-server.py

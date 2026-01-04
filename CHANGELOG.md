@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to the AI Excellence Framework will be documented in this file.
+All notable changes to Guvnr will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -9,16 +9,55 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Planned
 
-- VitePress documentation site deployment
+- VitePress documentation site deployment at guvnr.dev
 - Real-world team usage metrics dashboard
 - Interactive setup wizard
 - VS Code extension
+
+## [2.0.0] - 2026-01-03
+
+### Breaking Changes
+
+- **Renamed to Guvnr** — The package has been renamed from `ai-excellence-framework` to `guvnr`
+- **New configuration format** — `guvnr.yaml` is now the single source of truth; CLAUDE.md and other tool configs are generated from it
+- **CLI command changes** — Use `guvnr` instead of `npx ai-excellence-framework`
+
+### Added
+
+- **guvnr.yaml** — New abstract configuration format that generates configs for all AI tools
+- **True multi-tool architecture** — All AI tools are treated equally; none is "primary"
+- **`guvnr generate`** — New command to generate tool-specific configs from guvnr.yaml
+- **Legacy migration** — `guvnr init` detects existing CLAUDE.md and offers migration path
+
+### Changed
+
+- Package name: `ai-excellence-framework` → `guvnr`
+- CLI binary: `npx ai-excellence-framework` → `guvnr` (or `npx guvnr`)
+- Primary config: `CLAUDE.md` → `guvnr.yaml` (CLAUDE.md is now generated output)
+- Repository: `github.com/ai-excellence-framework` → `github.com/guvnr-dev/guvnr`
+- Homepage: → `https://guvnr.dev`
+- Error codes: `AIX-*` → `GUVNR-*`
+
+### Migration Guide
+
+```bash
+# Old way
+npx ai-excellence-framework init
+npx ai-excellence-framework validate
+
+# New way
+npx guvnr init
+npx guvnr generate
+npx guvnr validate
+```
+
+If you have an existing CLAUDE.md, `guvnr init` will detect it and offer to migrate your configuration to guvnr.yaml.
 
 ## [1.0.0] - 2026-01-01
 
 ### Initial Release
 
-The AI Excellence Framework is a comprehensive, universal framework for reducing friction in AI-assisted software development. This initial release includes support for 25 AI coding tools, a full CLI, MCP server, and extensive documentation.
+The AI Excellence Framework (now Guvnr) is a comprehensive, universal framework for reducing friction in AI-assisted software development. This initial release includes support for 25 AI coding tools, a full CLI, MCP server, and extensive documentation.
 
 ### Added
 
@@ -116,9 +155,9 @@ Universal configuration generation for:
 
 #### Shell Completions
 
-- Bash completion (`completions/ai-excellence.bash`)
-- Zsh completion (`completions/ai-excellence.zsh`)
-- Fish completion (`completions/ai-excellence.fish`)
+- Bash completion (`completions/guvnr.bash`)
+- Zsh completion (`completions/guvnr.zsh`)
+- Fish completion (`completions/guvnr.fish`)
 
 #### Documentation
 
@@ -194,7 +233,7 @@ import {
   SUPPORTED_TOOLS,
   PRESETS
   // ... and more
-} from 'ai-excellence-framework';
+} from 'guvnr';
 ```
 
 ### Research Validation
@@ -216,7 +255,7 @@ All statistics and claims verified against authoritative sources:
 This project follows [Semantic Versioning](https://semver.org/):
 
 - **MAJOR** version for incompatible changes to:
-  - CLAUDE.md required sections
+  - guvnr.yaml schema
   - Slash command interfaces
   - MCP server API
   - CLI command signatures
@@ -234,5 +273,6 @@ This project follows [Semantic Versioning](https://semver.org/):
   - Security patches
   - Performance improvements
 
-[Unreleased]: https://github.com/ai-excellence-framework/ai-excellence-framework/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/ai-excellence-framework/ai-excellence-framework/releases/tag/v1.0.0
+[Unreleased]: https://github.com/guvnr-dev/guvnr/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/guvnr-dev/guvnr/compare/v1.0.0...v2.0.0
+[1.0.0]: https://github.com/guvnr-dev/guvnr/releases/tag/v1.0.0

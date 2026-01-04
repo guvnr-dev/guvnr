@@ -1,6 +1,6 @@
 # VS Code Extension Integration Guide
 
-This guide explains how to integrate the AI Excellence Framework with Visual Studio Code and its AI extensions.
+This guide explains how to integrate Guvnr with Visual Studio Code and its AI extensions.
 
 ---
 
@@ -27,7 +27,7 @@ Create `.github/copilot-instructions.md`:
 
 ## Project Context
 
-This project uses the AI Excellence Framework.
+This project uses Guvnr.
 
 ## Code Style
 
@@ -56,7 +56,7 @@ Reference CLAUDE.md for full project context.
 ### Generate from CLAUDE.md
 
 ```bash
-npx ai-excellence-framework generate --tool copilot
+npx guvnr generate --tool copilot
 ```
 
 ### VS Code Settings
@@ -176,7 +176,7 @@ Configure in VS Code settings:
 
 ```json
 {
-  "cline.customInstructions": "Follow the AI Excellence Framework patterns. Read CLAUDE.md for project context. Use /plan before implementing and /verify before completing."
+  "cline.customInstructions": "Follow the Guvnr patterns. Read CLAUDE.md for project context. Use /plan before implementing and /verify before completing."
 }
 ```
 
@@ -195,7 +195,7 @@ Create `.vscode/tasks.json`:
     {
       "label": "AI: Validate Framework",
       "type": "shell",
-      "command": "npx ai-excellence-framework validate",
+      "command": "npx guvnr validate",
       "group": "build",
       "presentation": {
         "reveal": "always",
@@ -206,7 +206,7 @@ Create `.vscode/tasks.json`:
     {
       "label": "AI: Doctor Check",
       "type": "shell",
-      "command": "npx ai-excellence-framework doctor",
+      "command": "npx guvnr doctor",
       "group": "test",
       "presentation": {
         "reveal": "always"
@@ -333,7 +333,7 @@ Create `.vscode/extensions.json`:
     }
   },
 
-  // AI Excellence Framework
+  // Guvnr
   "files.associations": {
     "CLAUDE.md": "markdown",
     "AGENTS.md": "markdown",
@@ -523,7 +523,7 @@ Run framework commands directly:
 
 ```bash
 # In VS Code terminal
-npx ai-excellence-framework doctor
+npx guvnr doctor
 ```
 
 ### 5. Use Multi-Root Workspaces
@@ -547,4 +547,4 @@ For monorepos, configure each folder with its own CLAUDE.md:
 
 ---
 
-_Part of the AI Excellence Framework_
+_Part of Guvnr_

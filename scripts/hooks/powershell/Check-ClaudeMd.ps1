@@ -14,8 +14,8 @@
       0 - Success or warning only
       1 - Error (blocks commit)
 
-    Part of the AI Excellence Framework
-    https://github.com/ai-excellence-framework/ai-excellence-framework
+    Part of Guvnr
+    https://github.com/guvnr-dev/guvnr
 #>
 
 [CmdletBinding()]
@@ -68,7 +68,7 @@ function Write-Info-Msg {
 # Check if CLAUDE.md exists
 if (-not (Test-Path $ClaudeMdPath)) {
     Write-Warning-Msg "CLAUDE.md not found in project root"
-    Write-Info-Msg "Create with: npx ai-excellence init"
+    Write-Info-Msg "Create with: npx guvnr init"
     exit 0
 }
 

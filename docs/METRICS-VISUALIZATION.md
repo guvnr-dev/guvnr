@@ -531,7 +531,7 @@ Add metrics check to CI:
 
 ```bash
 # Disable metrics collection
-export AI_EXCELLENCE_METRICS_DISABLED=true
+export GUVNR_METRICS_DISABLED=true
 
 # Or in config
 {

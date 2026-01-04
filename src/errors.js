@@ -1,8 +1,8 @@
 /**
- * AI Excellence Framework - Structured Error System
+ * Guvnr - Structured Error System
  *
  * Provides consistent, trackable error codes for CLI operations.
- * Error codes follow the format: AIX-{CATEGORY}-{NUMBER}
+ * Error codes follow the format: GUVNR-{CATEGORY}-{NUMBER}
  *
  * Categories:
  * - INIT: Initialization errors (100-199)
@@ -14,7 +14,7 @@
  * - HOOK: Hook errors (700-799)
  * - GEN: General errors (900-999)
  *
- * @module ai-excellence-framework/errors
+ * @module guvnr/errors
  * @see https://github.com/lirantal/nodejs-cli-apps-best-practices
  */
 
@@ -24,10 +24,10 @@ import { randomUUID } from 'crypto';
 
 /**
  * Base URL for error documentation.
- * Can be overridden via AIX_DOCS_URL environment variable.
+ * Can be overridden via GUVNR_DOCS_URL environment variable.
  * @type {string}
  */
-const DOCS_BASE_URL = process.env.AIX_DOCS_URL || 'https://ai-excellence-framework.github.io';
+const DOCS_BASE_URL = process.env.GUVNR_DOCS_URL || 'https://guvnr.dev';
 
 /**
  * Sanitize context object to prevent sensitive path leakage.
@@ -194,7 +194,7 @@ function _redactSensitiveValue(value, key) {
  */
 export class FrameworkError extends Error {
   /**
-   * @param {string} code - Error code (e.g., 'AIX-INIT-101')
+   * @param {string} code - Error code (e.g., 'GUVNR-INIT-101')
    * @param {string} message - Human-readable error message
    * @param {Object} [options] - Additional error options
    * @param {Error} [options.cause] - Original error that caused this error
@@ -274,237 +274,237 @@ export class FrameworkError extends Error {
  */
 export const ERROR_CODES = {
   // Initialization Errors (100-199)
-  'AIX-INIT-100': {
+  'GUVNR-INIT-100': {
     category: 'Initialization',
     description: 'General initialization failure',
     suggestion: 'Check file permissions and try again with --verbose flag'
   },
-  'AIX-INIT-101': {
+  'GUVNR-INIT-101': {
     category: 'Initialization',
     description: 'Directory already contains framework files',
     suggestion: 'Use --force to overwrite existing files, or use --dry-run to preview changes'
   },
-  'AIX-INIT-102': {
+  'GUVNR-INIT-102': {
     category: 'Initialization',
     description: 'Invalid preset specified',
     suggestion: 'Valid presets are: minimal, standard, full, team'
   },
-  'AIX-INIT-103': {
+  'GUVNR-INIT-103': {
     category: 'Initialization',
     description: 'Failed to create directory structure',
     suggestion: 'Check write permissions for the target directory'
   },
-  'AIX-INIT-104': {
+  'GUVNR-INIT-104': {
     category: 'Initialization',
     description: 'Template file not found',
-    suggestion: 'Reinstall the framework: npm install -g ai-excellence-framework'
+    suggestion: 'Reinstall the framework: npm install -g guvnr'
   },
-  'AIX-INIT-105': {
+  'GUVNR-INIT-105': {
     category: 'Initialization',
     description: 'Interactive prompts not available',
     suggestion: 'Use --yes flag for non-interactive mode, or run in an interactive terminal'
   },
-  'AIX-INIT-110': {
+  'GUVNR-INIT-110': {
     category: 'Initialization',
     description: 'Invalid option key detected (prototype pollution prevention)',
     suggestion: 'Option keys must not include __proto__, constructor, or prototype'
   },
-  'AIX-INIT-111': {
+  'GUVNR-INIT-111': {
     category: 'Initialization',
     description: 'Invalid preset name format',
     suggestion: 'Preset names must be alphanumeric (a-z, 0-9) and under 50 characters'
   },
 
   // Validation Errors (200-299)
-  'AIX-VALID-200': {
+  'GUVNR-VALID-200': {
     category: 'Validation',
     description: 'General validation failure',
-    suggestion: 'Run "aix validate --verbose" for detailed validation output'
+    suggestion: 'Run "guvnr validate --verbose" for detailed validation output'
   },
-  'AIX-VALID-201': {
+  'GUVNR-VALID-201': {
     category: 'Validation',
     description: 'CLAUDE.md file is missing',
-    suggestion: 'Run "aix init" to create CLAUDE.md or create it manually'
+    suggestion: 'Run "guvnr init" to create CLAUDE.md or create it manually'
   },
-  'AIX-VALID-202': {
+  'GUVNR-VALID-202': {
     category: 'Validation',
     description: 'CLAUDE.md missing required sections',
     suggestion: 'Required sections: ## Overview, ## Tech Stack, ## Current State'
   },
-  'AIX-VALID-203': {
+  'GUVNR-VALID-203': {
     category: 'Validation',
     description: 'Configuration schema validation failed',
-    suggestion: 'Check ai-excellence.config.json against the schema'
+    suggestion: 'Check guvnr.config.json against the schema'
   },
-  'AIX-VALID-204': {
+  'GUVNR-VALID-204': {
     category: 'Validation',
     description: 'Slash command file is malformed',
     suggestion: 'Slash commands must have YAML frontmatter with "description" field'
   },
-  'AIX-VALID-205': {
+  'GUVNR-VALID-205': {
     category: 'Validation',
     description: 'Agent definition is malformed',
     suggestion: 'Agent files must have YAML frontmatter with "name" and "description" fields'
   },
-  'AIX-VALID-206': {
+  'GUVNR-VALID-206': {
     category: 'Validation',
     description: 'Hook script is not executable',
     suggestion: 'Run: chmod +x scripts/hooks/*.sh'
   },
 
   // Configuration Errors (300-399)
-  'AIX-CONFIG-300': {
+  'GUVNR-CONFIG-300': {
     category: 'Configuration',
     description: 'General configuration error',
-    suggestion: 'Check ai-excellence.config.json for syntax errors'
+    suggestion: 'Check guvnr.config.json for syntax errors'
   },
-  'AIX-CONFIG-301': {
+  'GUVNR-CONFIG-301': {
     category: 'Configuration',
     description: 'Configuration file not found',
     suggestion:
-      'Run "aix init" to create configuration or create ai-excellence.config.json manually'
+      'Run "guvnr init" to create configuration or create guvnr.config.json manually'
   },
-  'AIX-CONFIG-302': {
+  'GUVNR-CONFIG-302': {
     category: 'Configuration',
     description: 'Invalid JSON in configuration file',
     suggestion: 'Validate JSON syntax at https://jsonlint.com/'
   },
-  'AIX-CONFIG-303': {
+  'GUVNR-CONFIG-303': {
     category: 'Configuration',
     description: 'Unknown configuration option',
     suggestion: 'Check documentation for valid configuration options'
   },
-  'AIX-CONFIG-304': {
+  'GUVNR-CONFIG-304': {
     category: 'Configuration',
     description: 'Incompatible configuration version',
-    suggestion: 'Run "aix update" to migrate configuration to current version'
+    suggestion: 'Run "guvnr update" to migrate configuration to current version'
   },
 
   // Filesystem Errors (400-499)
-  'AIX-FS-400': {
+  'GUVNR-FS-400': {
     category: 'Filesystem',
     description: 'General filesystem error',
     suggestion: 'Check file permissions and disk space'
   },
-  'AIX-FS-401': {
+  'GUVNR-FS-401': {
     category: 'Filesystem',
     description: 'Permission denied',
     suggestion: 'Check file/directory permissions or run with appropriate privileges'
   },
-  'AIX-FS-402': {
+  'GUVNR-FS-402': {
     category: 'Filesystem',
     description: 'File not found',
     suggestion: 'Verify the file path exists and is spelled correctly'
   },
-  'AIX-FS-403': {
+  'GUVNR-FS-403': {
     category: 'Filesystem',
     description: 'Directory not found',
     suggestion: 'Create the directory first or check the path'
   },
-  'AIX-FS-404': {
+  'GUVNR-FS-404': {
     category: 'Filesystem',
     description: 'Disk space insufficient',
     suggestion: 'Free up disk space and try again'
   },
-  'AIX-FS-405': {
+  'GUVNR-FS-405': {
     category: 'Filesystem',
     description: 'File already exists and overwrite not allowed',
     suggestion: 'Use --force flag to overwrite or rename the existing file'
   },
 
   // Network Errors (500-599)
-  'AIX-NET-500': {
+  'GUVNR-NET-500': {
     category: 'Network',
     description: 'General network error',
     suggestion: 'Check internet connection and try again'
   },
-  'AIX-NET-501': {
+  'GUVNR-NET-501': {
     category: 'Network',
     description: 'Failed to download template',
     suggestion: 'Check internet connection or use offline installation'
   },
-  'AIX-NET-502': {
+  'GUVNR-NET-502': {
     category: 'Network',
     description: 'Registry unreachable',
     suggestion: 'Check npm registry configuration and network connectivity'
   },
 
   // MCP Server Errors (600-699)
-  'AIX-MCP-600': {
+  'GUVNR-MCP-600': {
     category: 'MCP Server',
     description: 'General MCP server error',
     suggestion: 'Check MCP server logs and configuration'
   },
-  'AIX-MCP-601': {
+  'GUVNR-MCP-601': {
     category: 'MCP Server',
     description: 'MCP server failed to start',
     suggestion: 'Check Python installation and MCP SDK: pip install mcp'
   },
-  'AIX-MCP-602': {
+  'GUVNR-MCP-602': {
     category: 'MCP Server',
     description: 'MCP database initialization failed',
     suggestion: 'Check write permissions for ~/.claude/project-memories/'
   },
-  'AIX-MCP-603': {
+  'GUVNR-MCP-603': {
     category: 'MCP Server',
     description: 'MCP connection pool exhausted',
     suggestion: 'Increase PROJECT_MEMORY_POOL_SIZE environment variable'
   },
-  'AIX-MCP-604': {
+  'GUVNR-MCP-604': {
     category: 'MCP Server',
     description: 'MCP rate limit exceeded',
     suggestion: 'Wait before retrying or increase PROJECT_MEMORY_RATE_LIMIT'
   },
-  'AIX-MCP-605': {
+  'GUVNR-MCP-605': {
     category: 'MCP Server',
     description: 'MCP data import failed',
     suggestion: 'Verify the import file is valid JSON from a previous export'
   },
 
   // Hook Errors (700-799)
-  'AIX-HOOK-700': {
+  'GUVNR-HOOK-700': {
     category: 'Hooks',
     description: 'General hook error',
     suggestion: 'Check hook script syntax and permissions'
   },
-  'AIX-HOOK-701': {
+  'GUVNR-HOOK-701': {
     category: 'Hooks',
     description: 'Pre-commit hook installation failed',
     suggestion: 'Install pre-commit: pip install pre-commit && pre-commit install'
   },
-  'AIX-HOOK-702': {
+  'GUVNR-HOOK-702': {
     category: 'Hooks',
     description: 'Hook script execution failed',
     suggestion: 'Check script syntax: bash -n scripts/hooks/script.sh'
   },
-  'AIX-HOOK-703': {
+  'GUVNR-HOOK-703': {
     category: 'Hooks',
     description: 'Hook blocked by security policy',
     suggestion: 'Review hook commands against allowed commands in settings.json'
   },
 
   // General Errors (900-999)
-  'AIX-GEN-900': {
+  'GUVNR-GEN-900': {
     category: 'General',
     description: 'Unknown error occurred',
     suggestion: 'Run with --verbose flag and report issue on GitHub'
   },
-  'AIX-GEN-901': {
+  'GUVNR-GEN-901': {
     category: 'General',
     description: 'Operation cancelled by user',
     suggestion: 'No action needed'
   },
-  'AIX-GEN-902': {
+  'GUVNR-GEN-902': {
     category: 'General',
     description: 'Operation timed out',
     suggestion: 'Try again or increase timeout if available'
   },
-  'AIX-GEN-903': {
+  'GUVNR-GEN-903': {
     category: 'General',
     description: 'Unsupported Node.js version',
     suggestion: 'Upgrade to Node.js 18.x or higher'
   },
-  'AIX-GEN-904': {
+  'GUVNR-GEN-904': {
     category: 'General',
     description: 'Unsupported operating system',
     suggestion: 'This operation is not supported on your operating system'
@@ -520,10 +520,10 @@ export const ERROR_CODES = {
  * @returns {FrameworkError} Configured error instance
  *
  * @example
- * throw createError('AIX-INIT-101', 'Found existing CLAUDE.md in /path/to/project');
+ * throw createError('GUVNR-INIT-101', 'Found existing CLAUDE.md in /path/to/project');
  */
 export function createError(code, customMessage, options = {}) {
-  const errorDef = ERROR_CODES[code] || ERROR_CODES['AIX-GEN-900'];
+  const errorDef = ERROR_CODES[code] || ERROR_CODES['GUVNR-GEN-900'];
   const message = customMessage || errorDef.description;
 
   return new FrameworkError(code, message, {
@@ -610,7 +610,7 @@ export function asyncHandler(fn) {
         process.exit(getExitCode(error.code));
       } else {
         // Wrap unknown errors, preserving original error type and code for debugging
-        const wrapped = createError('AIX-GEN-900', error.message, {
+        const wrapped = createError('GUVNR-GEN-900', error.message, {
           cause: error,
           context: {
             originalErrorType: error.name || 'Error',
@@ -636,7 +636,7 @@ export function asyncHandler(fn) {
  * @throws {FrameworkError} If condition is false
  *
  * @example
- * assertCondition(fs.existsSync(path), 'AIX-FS-402', `File not found: ${path}`);
+ * assertCondition(fs.existsSync(path), 'GUVNR-FS-402', `File not found: ${path}`);
  */
 export function assertCondition(condition, code, message, options) {
   if (!condition) {

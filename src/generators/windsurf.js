@@ -83,7 +83,7 @@ export function generateWindsurfrulesContent(context) {
 
 ## Project Overview
 
-${(context?.overview || 'Project configured with AI Excellence Framework.').slice(0, 500)}
+${(context?.overview || 'Project configured with Guvnr.').slice(0, 500)}
 
 ## Tech Stack
 
@@ -148,7 +148,7 @@ export function generateWindsurfMainRule(context) {
   return `# Project Rules: ${projectName}
 
 ## Overview
-${(context?.overview || 'Project configured with AI Excellence Framework.').slice(0, 500)}
+${(context?.overview || 'Project configured with Guvnr.').slice(0, 500)}
 
 ## Tech Stack
 ${

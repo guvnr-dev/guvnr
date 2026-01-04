@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    AI Excellence Framework - Dependency Verification for PowerShell
+    Guvnr - Dependency Verification for PowerShell
 
 .DESCRIPTION
     Verifies that dependencies exist before installation.
@@ -21,8 +21,8 @@
       Attackers register these names (slopsquatting) to inject malware.
       This script verifies packages exist before they're installed.
 
-    Part of the AI Excellence Framework
-    https://github.com/ai-excellence-framework/ai-excellence-framework
+    Part of Guvnr
+    https://github.com/guvnr-dev/guvnr
 #>
 
 [CmdletBinding()]
@@ -178,7 +178,7 @@ function Test-PythonPackages {
 
 # Main execution
 Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
-Write-Host "  AI Excellence Framework - Dependency Verification" -ForegroundColor Cyan
+Write-Host "  Guvnr - Dependency Verification" -ForegroundColor Cyan
 Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
 Write-Host ""
 

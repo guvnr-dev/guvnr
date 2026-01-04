@@ -5,7 +5,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Share how you're using the AI Excellence Framework!
+        Share how you're using Guvnr!
         We'd love to see your setups, customizations, and success stories.
 
   - type: textarea

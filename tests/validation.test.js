@@ -1,5 +1,5 @@
 /**
- * Validation Utilities Tests for AI Excellence Framework
+ * Validation Utilities Tests for Guvnr
  *
  * Tests the input validation system from src/utils/validation.js including:
  * - Path validation and security
@@ -34,7 +34,7 @@ import {
 function createTempDir() {
   const tempDir = join(
     tmpdir(),
-    `ai-excellence-validation-test-${Date.now()}-${Math.random().toString(36).slice(2)}`
+    `guvnr-validation-test-${Date.now()}-${Math.random().toString(36).slice(2)}`
   );
   mkdirSync(tempDir, { recursive: true });
   return tempDir;

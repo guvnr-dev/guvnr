@@ -1,7 +1,7 @@
 /**
- * AI Excellence Framework - Init Command
+ * Guvnr - Init Command
  *
- * Initializes the framework in a project directory.
+ * Initializes Guvnr in a project directory by creating guvnr.yaml.
  */
 
 import { existsSync } from 'fs';
@@ -12,6 +12,7 @@ import chalk from 'chalk';
 import ora from 'ora';
 import enquirer from 'enquirer';
 import fse from 'fs-extra';
+import yaml from 'js-yaml';
 import { createError, FrameworkError } from '../errors.js';
 import { PRESET_CONFIGS } from '../index.js';
 
@@ -95,7 +96,7 @@ function sanitizeOptions(options) {
   const dangerousKeys = ['__proto__', 'constructor', 'prototype'];
   for (const key of dangerousKeys) {
     if (Object.hasOwn(options, key)) {
-      throw createError('AIX-INIT-110', `Invalid option key: ${key}`);
+      throw createError('GUVNR-INIT-110', `Invalid option key: ${key}`);
     }
   }
 
@@ -110,7 +111,7 @@ function sanitizeOptions(options) {
     if (presetStr.length > 50 || !/^[a-z][a-z0-9_-]*$/.test(presetStr)) {
       // Use sanitizeForError to prevent log injection via control characters
       throw createError(
-        'AIX-INIT-111',
+        'GUVNR-INIT-111',
         `Invalid preset name format: ${sanitizeForError(presetStr)}`
       );
     }
@@ -208,7 +209,7 @@ export async function initCommand(rawOptions) {
     }
   };
 
-  log(chalk.cyan('\n  AI Excellence Framework Installer\n'));
+  log(chalk.cyan('\n  Guvnr - Universal AI Config Installer\n'));
 
   // Dry run mode
   if (options.dryRun) {
@@ -227,7 +228,7 @@ export async function initCommand(rawOptions) {
   // Check for existing installation
   const existingFiles = checkExistingFiles(cwd);
   if (existingFiles.length > 0 && !options.force) {
-    log(chalk.yellow('\n  Existing AI Excellence Framework files detected:'));
+    log(chalk.yellow('\n  Existing Guvnr configuration files detected:'));
     existingFiles.forEach(f => log(chalk.gray(`    - ${f}`)));
 
     if (!options.yes && !jsonOutput) {
@@ -264,7 +265,7 @@ export async function initCommand(rawOptions) {
   // Disable spinner in JSON mode for clean output
   const spinner = jsonOutput
     ? { text: '', start: () => spinner, succeed: () => {}, fail: () => {} }
-    : ora('Installing AI Excellence Framework...').start();
+    : ora('Installing Guvnr...').start();
 
   try {
     const results = {
@@ -277,59 +278,48 @@ export async function initCommand(rawOptions) {
     spinner.text = 'Creating directory structure...';
     await createDirectories(cwd, config, options.dryRun, results);
 
-    // 2. Install CLAUDE.md
-    if (config.components.claudeMd) {
-      spinner.text = 'Creating CLAUDE.md...';
-      await installClaudeMd(cwd, options.dryRun, results);
-    }
+    // 2. Install guvnr.yaml (primary config)
+    spinner.text = 'Creating guvnr.yaml...';
+    await installGuvnrConfig(cwd, config, options.dryRun, results);
 
-    // 3. Install slash commands
-    if (config.components.commands.length > 0) {
-      spinner.text = 'Installing slash commands...';
-      await installCommands(cwd, config.components.commands, options.dryRun, results);
-    }
+    // Note: Tool-specific files (like .claude/commands, .cursor/) are created by
+    // `guvnr generate`. The init command only creates the universal guvnr.yaml config.
 
-    // 4. Install subagents
-    if (config.components.agents.length > 0) {
-      spinner.text = 'Installing subagents...';
-      await installAgents(cwd, config.components.agents, options.dryRun, results);
-    }
-
-    // 5. Install hooks
+    // 3. Install hooks
     if (config.components.hooks && options.hooks !== false) {
       spinner.text = 'Installing hook scripts...';
       await installHooks(cwd, options.dryRun, results);
     }
 
-    // 6. Install pre-commit config
+    // 4. Install pre-commit config
     if (config.components.preCommit) {
       spinner.text = 'Installing pre-commit configuration...';
       await installPreCommit(cwd, options.dryRun, results);
     }
 
-    // 7. Install MCP server
+    // 5. Install MCP server
     if (config.components.mcp && options.mcp !== false) {
       spinner.text = 'Installing MCP server...';
       await installMcp(cwd, options.dryRun, results);
     }
 
-    // 8. Install templates
+    // 6. Install templates
     if (config.components.templates) {
       spinner.text = 'Installing templates...';
       await installTemplates(cwd, options.dryRun, results);
     }
 
-    // 9. Install metrics
+    // 7. Install metrics
     if (config.components.metrics) {
       spinner.text = 'Installing metrics collection...';
       await installMetrics(cwd, options.dryRun, results);
     }
 
-    // 10. Update .gitignore
+    // 8. Update .gitignore
     spinner.text = 'Updating .gitignore...';
     await updateGitignore(cwd, options.dryRun, results);
 
-    spinner.succeed('AI Excellence Framework installed successfully!');
+    spinner.succeed('Guvnr installed successfully!');
 
     // Output results
     if (jsonOutput) {
@@ -364,7 +354,7 @@ export async function initCommand(rawOptions) {
     }
 
     // Wrap in FrameworkError and throw (CLI will handle exit code)
-    throw createError('AIX-INIT-100', error.message, {
+    throw createError('GUVNR-INIT-100', error.message, {
       cause: error,
       context: { preset: config?.name, cwd }
     });
@@ -396,7 +386,7 @@ async function promptConfiguration(defaultPreset) {
 }
 
 /**
- * Check for existing framework files in the target directory.
+ * Check for existing Guvnr config files in the target directory.
  *
  * Note on TOCTOU (Time-of-Check to Time-of-Use):
  * This function uses existsSync which creates a potential TOCTOU window - files
@@ -422,9 +412,10 @@ async function promptConfiguration(defaultPreset) {
  */
 function checkExistingFiles(cwd) {
   const filesToCheck = [
-    'CLAUDE.md',
-    '.claude/commands/plan.md',
-    '.claude/commands/verify.md',
+    'guvnr.yaml',
+    'guvnr.yml',
+    '.guvnr/config.yaml',
+    'CLAUDE.md', // Legacy support
     '.pre-commit-config.yaml'
   ];
 
@@ -432,7 +423,7 @@ function checkExistingFiles(cwd) {
 }
 
 /**
- * Create directory structure for the framework
+ * Create directory structure for Guvnr installation
  *
  * @param {string} cwd - Target directory
  * @param {Object} config - Preset configuration
@@ -442,9 +433,8 @@ function checkExistingFiles(cwd) {
  * @private
  */
 async function createDirectories(cwd, config, dryRun, results) {
+  // Core directories (tool-agnostic)
   const dirs = [
-    '.claude/commands',
-    '.claude/agents',
     'docs/session-notes',
     'docs/decisions',
     '.tmp/scratch',
@@ -452,6 +442,7 @@ async function createDirectories(cwd, config, dryRun, results) {
     '.tmp/staging'
   ];
 
+  // Optional directories based on config
   if (config.components.hooks) {
     dirs.push('scripts/hooks');
   }
@@ -476,136 +467,137 @@ async function createDirectories(cwd, config, dryRun, results) {
 }
 
 /**
- * Install CLAUDE.md template file
+ * Install guvnr.yaml configuration file
  *
  * @param {string} cwd - Target directory
+ * @param {Object} config - Preset configuration
  * @param {boolean} dryRun - If true, don't write files
  * @param {Object} results - Results tracker with created/skipped arrays
  * @returns {Promise<void>}
  * @private
  */
-async function installClaudeMd(cwd, dryRun, results) {
-  const targetPath = join(cwd, 'CLAUDE.md');
-  const templatePath = join(PACKAGE_ROOT, 'templates', 'CLAUDE.md.template');
+async function installGuvnrConfig(cwd, config, dryRun, results) {
+  const targetPath = join(cwd, 'guvnr.yaml');
+  const templatePath = join(PACKAGE_ROOT, 'templates', 'guvnr.yaml.template');
 
-  // Check if template exists, otherwise use embedded template
+  // Check if template exists, otherwise generate inline
   let content;
   if (existsSync(templatePath)) {
     content = await readFile(templatePath, 'utf-8');
   } else {
-    content = generateClaudeMdTemplate();
+    content = generateGuvnrTemplate(config);
   }
 
   // Replace placeholders
-  const projectName = basename(cwd) || 'Project';
-  content = content.replace(/\[PROJECT_NAME\]/g, projectName);
-  content = content.replace(/\[DATE\]/g, new Date().toISOString().split('T')[0]);
+  const projectName = basename(cwd) || 'my-project';
+  content = content.replace(/\$\{PROJECT_NAME\}/g, projectName);
+  content = content.replace(/\$\{PROJECT_DESCRIPTION\}/g, 'A project using Guvnr for AI assistant configuration');
+  content = content.replace(/\$\{PRIMARY_LANGUAGE\}/g, 'JavaScript');
+  content = content.replace(/\$\{LANGUAGE_VERSION\}/g, 'ES2022');
+  content = content.replace(/\$\{FRAMEWORK\}/g, 'Node.js');
+  content = content.replace(/\$\{FRAMEWORK_VERSION\}/g, '20.x');
+  content = content.replace(/\$\{RUNTIME\}/g, 'Node.js');
+  content = content.replace(/\$\{RUNTIME_VERSION\}/g, '20.x');
+  content = content.replace(/\$\{PACKAGE_MANAGER\}/g, 'npm');
+  content = content.replace(/\$\{TEST_FRAMEWORK\}/g, 'jest');
+  content = content.replace(/\$\{PROJECT_OVERVIEW\}/g, 'Describe your project here.');
+  content = content.replace(/\$\{ARCHITECTURE_DESCRIPTION\}/g, 'Describe your architecture here.');
+  content = content.replace(/\$\{CURRENT_PHASE\}/g, 'Development');
+  content = content.replace(/\$\{ACTIVE_WORK_ITEM\}/g, 'Initial setup');
+  content = content.replace(/\$\{KNOWN_ISSUE\}/g, 'None yet');
 
   if (!dryRun) {
     await writeFile(targetPath, content);
   }
-  results.created.push('CLAUDE.md');
+  results.created.push('guvnr.yaml');
 }
 
 /**
- * Generate CLAUDE.md template inline when external template is unavailable
+ * Generate guvnr.yaml template inline when external template is unavailable
  *
- * @returns {string} CLAUDE.md template content with placeholders
+ * @param {Object} config - Preset configuration
+ * @returns {string} guvnr.yaml template content
  * @private
  */
-function generateClaudeMdTemplate() {
-  return `# Project: [PROJECT_NAME]
+function generateGuvnrTemplate(config) {
+  const toolsToGenerate = config?.components?.tools || ['claude', 'cursor', 'copilot'];
 
-## Overview
-[One paragraph describing what this project does and its purpose]
+  return `# yaml-language-server: $schema=https://guvnr.dev/schema/guvnr.schema.json
+# Guvnr Configuration - Universal AI Coding Assistant Config
+# Docs: https://guvnr.dev
 
-## Tech Stack
-- Language: [e.g., TypeScript 5.3]
-- Runtime: [e.g., Node.js 20.x]
-- Framework: [e.g., Next.js 14]
-- Database: [e.g., PostgreSQL 15]
-- Key Dependencies: [list critical deps with versions]
+version: "1.0"
 
-## Architecture
+project:
+  name: "\${PROJECT_NAME}"
+  description: "\${PROJECT_DESCRIPTION}"
 
-### Directory Structure
-\`\`\`
-src/
-├── api/          # API routes and handlers
-├── components/   # UI components
-├── lib/          # Shared utilities
-├── services/     # Business logic
-└── types/        # Type definitions
-\`\`\`
+tech_stack:
+  languages:
+    - name: "\${PRIMARY_LANGUAGE}"
+      version: "\${LANGUAGE_VERSION}"
+  frameworks:
+    - name: "\${FRAMEWORK}"
+      version: "\${FRAMEWORK_VERSION}"
+  runtime:
+    name: "\${RUNTIME}"
+    version: "\${RUNTIME_VERSION}"
+  package_manager: "\${PACKAGE_MANAGER}"
+  test_framework: "\${TEST_FRAMEWORK}"
 
-### Key Entry Points
-- API: \`src/api/index.ts\`
-- Main: \`src/index.ts\`
+context:
+  overview: |
+    \${PROJECT_OVERVIEW}
+  current_phase: "\${CURRENT_PHASE}"
+  active_work:
+    - "\${ACTIVE_WORK_ITEM}"
+  known_issues:
+    - "\${KNOWN_ISSUE}"
 
-## Conventions
+conventions:
+  style:
+    - "Use consistent indentation"
+    - "Prefer const over let"
+  naming:
+    - "camelCase for variables and functions"
+    - "PascalCase for classes"
+  commit_format: conventional
 
-### Code Style
-- [Naming conventions]
-- [File organization rules]
-- [Import ordering]
+security:
+  rules:
+    - "Never commit secrets or API keys"
+    - "Validate all user input"
 
-### Commit Messages
-- Use conventional commits: feat|fix|docs|refactor|test|chore
-- Include ticket number when applicable
+skills:
+  - name: plan
+    description: Create an implementation plan before coding
+    trigger: Before implementing any non-trivial feature
+    steps:
+      - Analyze the requirements
+      - Identify files that need to change
+      - Propose a step-by-step approach
 
-### Testing
-- Unit tests: \`npm test\`
-- Integration: \`npm run test:integration\`
+  - name: verify
+    description: Verify work is complete and correct
+    trigger: After completing any task
+    steps:
+      - Review all changes made
+      - Check requirements are met
+      - Ensure tests pass
 
-## Common Commands
-\`\`\`bash
-npm run dev      # Start development server
-npm run build    # Production build
-npm test         # Run tests
-npm run lint     # Run linter
-\`\`\`
+tools:
+  generate:
+${toolsToGenerate.map(t => `    - ${t}`).join('\n')}
 
-## Current State
-
-### Active Work
-- [Current feature/task being developed]
-
-### Known Issues
-- [List known bugs or technical debt]
-
-### Recent Decisions
-- [DATE]: [Decision and rationale]
-
-## Session Instructions
-
-### Before Starting
-1. Read this file completely
-2. Check \`docs/session-notes/\` for recent context
-3. Run tests to verify baseline
-
-### During Work
-- Use \`/plan\` before implementing anything significant
-- Use \`/assumptions\` to surface hidden assumptions
-- Use \`/verify\` before marking tasks complete
-- Track assumptions explicitly using TodoWrite
-
-### Before Ending
-- Run \`/handoff\` to capture session state
-- Update "Current State" section above
-- Commit work in progress
-
-### Security Checklist (for AI-generated code)
-Before committing, verify:
-- [ ] No hardcoded secrets or credentials
-- [ ] Input validation present where needed
-- [ ] No SQL/command/XSS injection vulnerabilities
-- [ ] Dependencies exist (not hallucinated names)
-- [ ] Error handling doesn't expose internal details
+memory:
+  enabled: false
+  session_notes_dir: docs/session-notes
+  decisions_dir: docs/decisions
 `;
 }
 
 /**
- * Install slash commands from framework package
+ * Install slash commands from Guvnr package (Claude-specific)
  *
  * @param {string} cwd - Target directory
  * @param {string[]} commands - Array of command names to install
@@ -633,7 +625,7 @@ async function installCommands(cwd, commands, dryRun, results) {
 }
 
 /**
- * Install subagent definitions from framework package
+ * Install subagent definitions from Guvnr package (Claude-specific)
  *
  * @param {string} cwd - Target directory
  * @param {string[]} agents - Array of agent names to install
@@ -661,7 +653,7 @@ async function installAgents(cwd, agents, dryRun, results) {
 }
 
 /**
- * Install hook scripts from framework package
+ * Install hook scripts from Guvnr package
  *
  * @param {string} cwd - Target directory
  * @param {boolean} dryRun - If true, don't copy files
@@ -771,10 +763,10 @@ async function installPreCommit(cwd, dryRun, results) {
     if (validation.hasCriticalErrors) {
       const errorMsg = `Pre-commit template has critical errors and cannot be installed:\n${validation.errors.map(e => `  - ${e}`).join('\n')}`;
       console.error(chalk.red(`\n❌ ${errorMsg}\n`));
-      throw createError('AIX-HOOK-700', errorMsg, {
+      throw createError('GUVNR-HOOK-700', errorMsg, {
         context: { templatePath: sourcePath, errors: validation.errors },
         suggestion:
-          'The pre-commit template in the framework package is malformed. Please report this issue.'
+          'The pre-commit template in the Guvnr package is malformed. Please report this issue.'
       });
     }
 
@@ -795,7 +787,7 @@ async function installPreCommit(cwd, dryRun, results) {
 }
 
 /**
- * Install MCP server files from framework package
+ * Install MCP server files from Guvnr package
  *
  * @param {string} cwd - Target directory
  * @param {boolean} dryRun - If true, don't copy files
@@ -824,7 +816,7 @@ async function installMcp(cwd, dryRun, results) {
 }
 
 /**
- * Install template files from framework package
+ * Install template files from Guvnr package
  *
  * @param {string} cwd - Target directory
  * @param {boolean} dryRun - If true, don't copy files
@@ -841,7 +833,7 @@ async function installTemplates(cwd, dryRun, results) {
   }
 
   // Copy specific templates
-  const templates = ['.pre-commit-config.yaml', 'CLAUDE.md.template'];
+  const templates = ['.pre-commit-config.yaml', 'guvnr.yaml.template'];
 
   for (const template of templates) {
     const sourcePath = join(sourceDir, template);
@@ -857,7 +849,7 @@ async function installTemplates(cwd, dryRun, results) {
 }
 
 /**
- * Install metrics collection scripts from framework package
+ * Install metrics collection scripts from Guvnr package
  *
  * @param {string} cwd - Target directory
  * @param {boolean} dryRun - If true, don't copy files
@@ -880,7 +872,7 @@ async function installMetrics(cwd, dryRun, results) {
 }
 
 /**
- * Update .gitignore with framework-specific entries
+ * Update .gitignore with Guvnr-specific entries
  *
  * @param {string} cwd - Target directory
  * @param {boolean} dryRun - If true, don't modify files
@@ -891,17 +883,22 @@ async function installMetrics(cwd, dryRun, results) {
 async function updateGitignore(cwd, dryRun, results) {
   const gitignorePath = join(cwd, '.gitignore');
   const additions = `
-# AI Excellence Framework
-CLAUDE.local.md
-.claude/settings.local.json
+# Guvnr - AI Tool Configs
+guvnr.local.yaml
+.guvnr/
 docs/session-notes/*.local.md
 .tmp/
 .secrets.baseline
+
+# Generated tool configs (optional - some prefer to commit these)
+# CLAUDE.md
+# .cursor/
+# .copilot/
 `;
 
   if (existsSync(gitignorePath)) {
     const existing = await readFile(gitignorePath, 'utf-8');
-    if (!existing.includes('AI Excellence Framework')) {
+    if (!existing.includes('Guvnr')) {
       if (!dryRun) {
         await writeFile(gitignorePath, existing + additions);
       }
@@ -957,22 +954,19 @@ function printResults(results, dryRun) {
  */
 function printNextSteps(config) {
   console.log(chalk.cyan('\n  Next Steps:\n'));
-  console.log(chalk.white('  1. Edit CLAUDE.md to describe your project'));
-  console.log(chalk.white('  2. Run "claude" and try "/plan [your task]"'));
+  console.log(chalk.white('  1. Edit guvnr.yaml to describe your project'));
+  console.log(chalk.white('  2. Run "guvnr generate" to create tool-specific configs'));
+  console.log(chalk.white('  3. Start coding with your preferred AI tool'));
 
   if (config.components.preCommit) {
-    console.log(chalk.white('  3. Run "pip install pre-commit && pre-commit install"'));
+    console.log(chalk.white('  4. Run "pip install pre-commit && pre-commit install"'));
   }
 
   if (config.components.mcp) {
-    console.log(chalk.white('  4. Set up MCP server: pip install -r scripts/mcp/requirements.txt'));
+    console.log(chalk.white('  5. Set up MCP server: pip install -r scripts/mcp/requirements.txt'));
   }
 
-  console.log(
-    chalk.gray(
-      '\n  Documentation: https://github.com/ai-excellence-framework/ai-excellence-framework'
-    )
-  );
-  console.log(chalk.gray('  Quick Reference: npx ai-excellence-framework --help'));
+  console.log(chalk.gray('\n  Documentation: https://guvnr.dev'));
+  console.log(chalk.gray('  Quick Reference: guvnr --help'));
   console.log('');
 }

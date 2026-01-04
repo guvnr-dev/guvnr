@@ -1,6 +1,6 @@
 # Multi-Model Support Guide
 
-This guide explains how to use the AI Excellence Framework with different AI coding assistants beyond Claude.
+This guide explains how to use Guvnr with different AI coding assistants beyond Claude.
 
 **Last Updated**: January 2026
 
@@ -30,10 +30,10 @@ AGENTS.md is a [universal standard](https://agents.md/) for guiding AI coding ag
 
 ```bash
 # Generate AGENTS.md from your CLAUDE.md
-npx ai-excellence-framework generate --tool agents
+npx guvnr generate --tool agents
 
 # Or during initialization
-npx ai-excellence-framework init --generate agents
+npx guvnr init --generate agents
 ```
 
 ### AGENTS.md Structure
@@ -146,7 +146,7 @@ Cursor uses `.cursorrules` or `.cursor/rules` for project-specific instructions.
 ### Generating Cursor Rules
 
 ```bash
-npx ai-excellence-framework generate --tool cursor
+npx guvnr generate --tool cursor
 ```
 
 ### Cursor Rules Format
@@ -190,7 +190,7 @@ Copilot uses `.github/copilot-instructions.md` for repository-wide instructions.
 ### Generating Copilot Instructions
 
 ```bash
-npx ai-excellence-framework generate --tool copilot
+npx guvnr generate --tool copilot
 ```
 
 ### Copilot Instructions Format
@@ -260,7 +260,7 @@ Windsurf uses `.windsurfrules` for project instructions.
 ### Generating Windsurf Rules
 
 ```bash
-npx ai-excellence-framework generate --tool windsurf
+npx guvnr generate --tool windsurf
 ```
 
 ### Windsurf Rules Format
@@ -291,7 +291,7 @@ Similar to Cursor, Windsurf supports markdown-based rules:
 
 ```bash
 # Generate configurations for all supported tools
-npx ai-excellence-framework generate --tool all
+npx guvnr generate --tool all
 
 # This creates:
 # - CLAUDE.md
@@ -307,7 +307,7 @@ Use a single source of truth (CLAUDE.md) and regenerate:
 
 ```bash
 # After updating CLAUDE.md
-npx ai-excellence-framework generate --tool all --force
+npx guvnr generate --tool all --force
 ```
 
 Or add to your CI pipeline:
@@ -325,7 +325,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-      - run: npx ai-excellence-framework generate --tool all
+      - run: npx guvnr generate --tool all
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: 'chore: sync AI configuration files'
@@ -420,21 +420,21 @@ Whenever you make an architectural decision:
 
 ```bash
 # Read existing AGENTS.md and adapt
-npx ai-excellence-framework init --from-agents
+npx guvnr init --from-agents
 ```
 
 ### From Cursor Rules to CLAUDE.md
 
 ```bash
 # Import from .cursorrules
-npx ai-excellence-framework init --from-cursor
+npx guvnr init --from-cursor
 ```
 
 ### From CLAUDE.md to AGENTS.md
 
 ```bash
 # Export to AGENTS.md format
-npx ai-excellence-framework generate --tool agents
+npx guvnr generate --tool agents
 ```
 
 ---
@@ -481,4 +481,4 @@ npx ai-excellence-framework generate --tool agents
 
 ---
 
-_Part of the AI Excellence Framework_
+_Part of Guvnr_

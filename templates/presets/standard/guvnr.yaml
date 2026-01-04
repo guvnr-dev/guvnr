@@ -1,0 +1,97 @@
+# Guvnr Configuration - Standard Preset
+# Universal AI coding assistant configuration
+# Learn more: https://guvnr.dev/docs/configuration
+
+version: "1.0"
+
+project:
+  name: "My Project"
+  description: "Project description"
+
+tech_stack:
+  primary_language: "TypeScript"
+  runtime: "Node.js 20.x"
+  framework: "Express"
+  database: "PostgreSQL"
+  key_dependencies:
+    - "typescript: ^5.3"
+
+context:
+  overview: |
+    One paragraph describing what this project does and its purpose.
+
+  architecture: |
+    src/
+    ├── api/          # API routes and handlers
+    ├── components/   # UI components
+    ├── lib/          # Shared utilities
+    ├── services/     # Business logic
+    └── types/        # Type definitions
+
+conventions:
+  code_style:
+    - "Use TypeScript strict mode"
+    - "Prefer functional components"
+  commit_messages: "conventional"
+  file_naming: "kebab-case"
+
+current_state:
+  phase: "Development"
+  active_work:
+    - "Current task or feature"
+  recent_decisions: []
+  known_issues: []
+
+# Standard preset: Core skills for individual developers
+skills:
+  plan:
+    description: "Create implementation plan before coding"
+  verify:
+    description: "Verify task completion with skeptical review"
+  handoff:
+    description: "Generate session handoff summary"
+  assumptions:
+    description: "Surface and document assumptions before implementation"
+  review:
+    description: "Multi-perspective code review"
+  security-review:
+    description: "Security-focused code review using OWASP guidelines"
+
+# Standard preset: Core agents
+agents:
+  reviewer:
+    description: "Independent code review agent with fresh perspective"
+  explorer:
+    description: "Codebase exploration and context gathering"
+
+# Generate configs for common tools
+tools:
+  claude:
+    generate: true
+  cursor:
+    generate: true
+  copilot:
+    generate: true
+  windsurf:
+    generate: false
+  aider:
+    generate: false
+
+# Hooks enabled in standard preset
+hooks:
+  enabled: true
+  post_edit:
+    enabled: true
+    timeout: 30
+  verify_deps:
+    enabled: true
+
+# Security enabled in standard preset
+security:
+  pre_commit: true
+  secrets_detection: true
+  dependency_scanning: true
+
+# Memory disabled in standard preset (use full/team for this)
+memory:
+  enabled: false

@@ -131,20 +131,20 @@ jobs:
         with:
           name: v${{ steps.version.outputs.VERSION }}
           body: |
-            ## AI Excellence Framework v${{ steps.version.outputs.VERSION }}
+            ## Guvnr v${{ steps.version.outputs.VERSION }}
 
             ### Changes
             ${{ steps.changelog.outputs.CHANGES }}
 
             ### Installation
             ```bash
-            npm install -g ai-excellence-framework
+            npm install -g guvnr
             # or
-            npx ai-excellence-framework init
+            npx guvnr init
             ```
 
             ### Documentation
-            - [Quick Start](https://ai-excellence-framework.github.io/)
+            - [Quick Start](https://guvnr-dev.github.io/guvnr/)
             - [When AI Helps](./docs/WHEN-AI-HELPS.md)
             - [Research Citations](./docs/RESEARCH-CITATIONS.md)
           generate_release_notes: true
@@ -155,6 +155,6 @@ jobs:
       - name: Post-release notification
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: |
-          echo "Successfully published ai-excellence-framework@${{ steps.version.outputs.VERSION }}"
-          echo "npm: https://www.npmjs.com/package/ai-excellence-framework"
+          echo "Successfully published guvnr@${{ steps.version.outputs.VERSION }}"
+          echo "npm: https://www.npmjs.com/package/guvnr"
           echo "GitHub: https://github.com/${{ github.repository }}/releases/tag/v${{ steps.version.outputs.VERSION }}"

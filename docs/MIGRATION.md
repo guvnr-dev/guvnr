@@ -1,22 +1,22 @@
 # Migration Guide
 
-Upgrade paths and breaking change documentation for AI Excellence Framework.
+Upgrade paths and breaking change documentation for Guvnr.
 
 ## Current Version: 1.0.0
 
-This is the initial release of the AI Excellence Framework. Future versions will include migration guides here.
+This is the initial release of Guvnr. Future versions will include migration guides here.
 
 ## Installing 1.0.0
 
 ```bash
 # Install the framework
-npm install ai-excellence-framework
+npm install guvnr
 
 # Initialize in your project
-npx ai-excellence init --preset standard
+npx guvnr init --preset standard
 
 # Verify installation
-npx ai-excellence doctor
+npx guvnr doctor
 ```
 
 ## Presets
@@ -32,10 +32,10 @@ Choose your configuration level:
 
 ```bash
 # Examples
-npx ai-excellence init --preset minimal
-npx ai-excellence init --preset standard
-npx ai-excellence init --preset full
-npx ai-excellence init --preset team
+npx guvnr init --preset minimal
+npx guvnr init --preset standard
+npx guvnr init --preset full
+npx guvnr init --preset team
 ```
 
 ## Generating Tool Configurations
@@ -44,26 +44,26 @@ Generate configurations for your AI coding tools:
 
 ```bash
 # Generate for all 25 supported tools
-npx ai-excellence generate --tools all
+npx guvnr generate --tools all
 
 # Generate for specific tools
-npx ai-excellence generate --tools cursor,copilot,windsurf
+npx guvnr generate --tools cursor,copilot,windsurf
 
 # Preview without writing files
-npx ai-excellence generate --tools all --dry-run
+npx guvnr generate --tools all --dry-run
 ```
 
 ## Validating Your Setup
 
 ```bash
 # Check configuration
-npx ai-excellence validate
+npx guvnr validate
 
 # Auto-fix issues
-npx ai-excellence validate --fix
+npx guvnr validate --fix
 
 # Detailed health check
-npx ai-excellence doctor --verbose
+npx guvnr doctor --verbose
 ```
 
 ---
@@ -80,5 +80,5 @@ When new versions are released, migration guides will be added here with:
 ## Getting Help
 
 - [Troubleshooting Guide](./TROUBLESHOOTING.md)
-- [GitHub Issues](https://github.com/ai-excellence-framework/ai-excellence-framework/issues)
-- [Documentation](https://ai-excellence-framework.github.io/)
+- [GitHub Issues](https://github.com/guvnr-dev/guvnr/issues)
+- [Documentation](https://guvnr.dev/)

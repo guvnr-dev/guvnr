@@ -11,8 +11,8 @@
     .\Check-Todos.ps1
 
 .NOTES
-    Part of the AI Excellence Framework
-    https://github.com/ai-excellence-framework/ai-excellence-framework
+    Part of Guvnr
+    https://github.com/guvnr-dev/guvnr
 #>
 
 [CmdletBinding()]

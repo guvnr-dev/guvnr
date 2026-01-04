@@ -24,8 +24,8 @@
     .\Check-AISecurity.ps1 -Json | ConvertFrom-Json
 
 .NOTES
-    Part of the AI Excellence Framework
-    https://github.com/ai-excellence-framework/ai-excellence-framework
+    Part of Guvnr
+    https://github.com/guvnr-dev/guvnr
 #>
 
 [CmdletBinding()]
@@ -40,9 +40,9 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 # Read environment variables as fallback
-if (-not $Enforce -and $env:AIX_SECURITY_ENFORCE -eq 'true') { $Enforce = $true }
-if (-not $Strict -and $env:AIX_SECURITY_STRICT -eq 'true') { $Strict = $true }
-if (-not $Json -and $env:AIX_STRUCTURED_LOGGING -eq 'true') { $Json = $true }
+if (-not $Enforce -and $env:GUVNR_SECURITY_ENFORCE -eq 'true') { $Enforce = $true }
+if (-not $Strict -and $env:GUVNR_SECURITY_STRICT -eq 'true') { $Strict = $true }
+if (-not $Json -and $env:GUVNR_STRUCTURED_LOGGING -eq 'true') { $Json = $true }
 
 # Initialize counters
 $script:Issues = 0
@@ -248,15 +248,15 @@ else {
         Write-Host "See: https://owasp.org/www-project-top-ten/"
         Write-Host ""
         Write-Host "To configure enforcement:"
-        Write-Host '  $env:AIX_SECURITY_ENFORCE = "true"  # Block commits on issues'
-        Write-Host '  $env:AIX_SECURITY_STRICT = "true"   # Enable strict mode'
-        Write-Host '  $env:AIX_STRUCTURED_LOGGING = "true" # Enable JSON output'
+        Write-Host '  $env:GUVNR_SECURITY_ENFORCE = "true"  # Block commits on issues'
+        Write-Host '  $env:GUVNR_SECURITY_STRICT = "true"   # Enable strict mode'
+        Write-Host '  $env:GUVNR_STRUCTURED_LOGGING = "true" # Enable JSON output'
         Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Gray
 
         if ($Enforce -and $script:Issues -gt 0) {
             Write-Host ""
             Write-Host "❌ Commit blocked due to security issues." -ForegroundColor Red
-            Write-Host '   Fix the issues above or set $env:AIX_SECURITY_ENFORCE = "false" to skip.'
+            Write-Host '   Fix the issues above or set $env:GUVNR_SECURITY_ENFORCE = "false" to skip.'
             exit 1
         }
     }

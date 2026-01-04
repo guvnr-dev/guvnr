@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# AI Excellence Framework - Dependency Verification
+# Guvnr - Dependency Verification
 #
 # Verifies that dependencies exist before installation.
 # Prevents slopsquatting attacks from hallucinated package names.
@@ -175,7 +175,7 @@ main() {
     local exit_code=0
 
     echo "═══════════════════════════════════════════════════════════"
-    echo "  AI Excellence Framework - Dependency Verification"
+    echo "  Guvnr - Dependency Verification"
     echo "═══════════════════════════════════════════════════════════"
     echo ""
 

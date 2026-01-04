@@ -129,7 +129,7 @@ Commands live in `.claude/commands/`:
 Install with the CLI:
 
 ```bash
-npx ai-excellence-framework init --preset standard
+npx guvnr init --preset standard
 ```
 
 Or copy individual commands:
@@ -137,7 +137,7 @@ Or copy individual commands:
 ```bash
 mkdir -p .claude/commands
 curl -o .claude/commands/plan.md \
-  https://raw.githubusercontent.com/ai-excellence-framework/ai-excellence-framework/main/.claude/commands/plan.md
+  https://raw.githubusercontent.com/guvnr-dev/guvnr/main/.claude/commands/plan.md
 ```
 
 ## Command Structure

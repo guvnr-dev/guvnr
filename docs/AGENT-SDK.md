@@ -398,9 +398,9 @@ for await (const message of query({
 
 :::
 
-## Integration with AI Excellence Framework
+## Integration with Guvnr
 
-The Claude Agent SDK works seamlessly with the AI Excellence Framework. Use the framework's configurations with the SDK:
+The Claude Agent SDK works seamlessly with Guvnr. Use the framework's configurations with the SDK:
 
 ```python
 import asyncio
@@ -494,4 +494,4 @@ Many teams use both: CLI for daily development, SDK for production workflows.
 
 ---
 
-_Part of the [AI Excellence Framework](https://github.com/ai-excellence-framework/ai-excellence-framework)_
+_Part of [Guvnr](https://github.com/guvnr-dev/guvnr)_

@@ -55,7 +55,7 @@ export function generateCopilotContent(context) {
 
 ## Project Context
 
-${context?.overview || 'This project uses the AI Excellence Framework for AI-assisted development.'}
+${context?.overview || 'This project uses Guvnr for AI-assisted development.'}
 
 ## Tech Stack
 

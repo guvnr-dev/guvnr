@@ -1,5 +1,5 @@
 /**
- * AI Excellence Framework - Input Validation Utilities
+ * Guvnr - Input Validation Utilities
  *
  * Provides secure validation for paths, configurations, and user inputs.
  */

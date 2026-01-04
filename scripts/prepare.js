@@ -26,7 +26,7 @@ const requiredFiles = [
   '.claude/commands/verify.md'
 ];
 
-console.log('Preparing ai-excellence-framework for publication...\n');
+console.log('Preparing guvnr for publication...\n');
 
 let errors = 0;
 

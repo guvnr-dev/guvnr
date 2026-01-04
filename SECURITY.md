@@ -18,7 +18,7 @@ Instead, please report them through one of these channels:
 
 ### Option 1: GitHub Security Advisories (Preferred)
 
-1. Go to the [Security tab](https://github.com/ai-excellence-framework/ai-excellence-framework/security) of this repository
+1. Go to the [Security tab](https://github.com/guvnr-dev/guvnr/security) of this repository
 2. Click "Report a vulnerability"
 3. Fill out the form with details
 
@@ -74,12 +74,12 @@ We follow a coordinated disclosure policy:
 
 ## Security Best Practices for Users
 
-When using the AI Excellence Framework:
+When using Guvnr:
 
 ### 1. Keep Updated
 
 ```bash
-npm update ai-excellence-framework
+npm update guvnr
 ```
 
 ### 2. Use Pre-commit Hooks
@@ -117,7 +117,7 @@ The framework includes slopsquatting prevention:
 ### 5. Use the Doctor Command
 
 ```bash
-npx ai-excellence-framework doctor
+npx guvnr doctor
 ```
 
 This checks for:
@@ -145,7 +145,7 @@ The framework includes security features to help protect your codebase:
 **Assets Protected:**
 
 - Secrets and credentials in project files
-- Project configuration (CLAUDE.md, ai-excellence.config.json)
+- Project configuration (CLAUDE.md, guvnr.yaml)
 - MCP memory database (decisions, patterns, context)
 - User input (command arguments, file paths, configuration)
 
@@ -170,8 +170,8 @@ The framework includes security features to help protect your codebase:
 User Input → Length Check → Type Normalization → Sanitization → Command Handler
 ```
 
-- Maximum argument length: 1000 chars (configurable via `AIX_MAX_ARG_LENGTH`)
-- Command timeout: 5 minutes (configurable via `AIX_TIMEOUT`)
+- Maximum argument length: 1000 chars (configurable via `GUVNR_MAX_ARG_LENGTH`)
+- Command timeout: 5 minutes (configurable via `GUVNR_TIMEOUT`)
 - Signal handling for graceful abort (SIGINT, SIGTERM)
 - All violations collected before reporting
 

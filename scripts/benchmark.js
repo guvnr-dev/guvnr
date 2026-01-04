@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Performance Benchmark Script for AI Excellence Framework
+ * Performance Benchmark Script for Guvnr
  *
  * Measures performance of key operations to track regressions.
  *
@@ -53,7 +53,7 @@ async function measure(name, fn) {
  * Create a temporary test directory with CLAUDE.md
  */
 function createTestDir() {
-  const dir = mkdtempSync(join(tmpdir(), 'aix-benchmark-'));
+  const dir = mkdtempSync(join(tmpdir(), 'guvnr-benchmark-'));
   writeFileSync(
     join(dir, 'CLAUDE.md'),
     `# Benchmark Project
@@ -80,7 +80,7 @@ async function runBenchmarks() {
   let testDir;
 
   if (!jsonOutput) {
-    console.log('\n🏃 AI Excellence Framework Performance Benchmark\n');
+    console.log('\n🏃 Guvnr Performance Benchmark\n');
     console.log(`Running ${iterations} iterations per test...\n`);
   }
 

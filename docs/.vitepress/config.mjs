@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: 'AI Excellence Framework',
+  title: 'Guvnr',
   description: 'A comprehensive framework for reducing friction in AI-assisted software development',
 
   // Clean URLs (no .html extension)
@@ -12,7 +12,7 @@ export default defineConfig({
   themeConfig: {
     // Logo and title
     logo: '/logo.svg',
-    siteTitle: 'AI Excellence Framework',
+    siteTitle: 'Guvnr',
 
     // Navigation bar
     nav: [
@@ -48,7 +48,7 @@ export default defineConfig({
           { text: 'PostgreSQL Deployment', link: '/POSTGRESQL-DEPLOYMENT' },
           { text: 'Enterprise Guide', link: '/guides/enterprise' },
           { text: 'VS Code Integration', link: '/guides/vscode-integration' },
-          { text: 'GitHub', link: 'https://github.com/ai-excellence-framework/ai-excellence-framework' }
+          { text: 'GitHub', link: 'https://github.com/guvnr-dev/guvnr' }
         ]
       }
     ],
@@ -59,7 +59,7 @@ export default defineConfig({
         {
           text: 'Introduction',
           items: [
-            { text: 'What is AI Excellence?', link: '/docs/' },
+            { text: 'What is Guvnr?', link: '/docs/' },
             { text: 'Why This Framework?', link: '/docs/why' },
             { text: 'Core Concepts', link: '/docs/concepts' }
           ]
@@ -167,18 +167,18 @@ export default defineConfig({
 
     // Social links
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/ai-excellence-framework/ai-excellence-framework' }
+      { icon: 'github', link: 'https://github.com/guvnr-dev/guvnr' }
     ],
 
     // Footer
     footer: {
       message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2024-2026 AI Excellence Framework Contributors'
+      copyright: 'Copyright © 2024-2026 Guvnr Contributors'
     },
 
     // Edit link
     editLink: {
-      pattern: 'https://github.com/ai-excellence-framework/ai-excellence-framework/edit/main/docs/:path',
+      pattern: 'https://github.com/guvnr-dev/guvnr/edit/main/docs/:path',
       text: 'Edit this page on GitHub'
     },
 
@@ -218,16 +218,16 @@ export default defineConfig({
     ['meta', { name: 'theme-color', content: '#2563eb' }],
     ['meta', { name: 'og:type', content: 'website' }],
     ['meta', { name: 'og:locale', content: 'en' }],
-    ['meta', { name: 'og:site_name', content: 'AI Excellence Framework' }],
-    ['meta', { name: 'og:title', content: 'AI Excellence Framework' }],
+    ['meta', { name: 'og:site_name', content: 'Guvnr' }],
+    ['meta', { name: 'og:title', content: 'Guvnr' }],
     ['meta', { name: 'og:description', content: 'A comprehensive framework for reducing friction in AI-assisted software development' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
-    ['meta', { name: 'twitter:title', content: 'AI Excellence Framework' }],
+    ['meta', { name: 'twitter:title', content: 'Guvnr' }],
     ['meta', { name: 'twitter:description', content: 'Reduce friction in AI-assisted development' }]
   ],
 
   // Sitemap
   sitemap: {
-    hostname: 'https://ai-excellence-framework.github.io/'
+    hostname: 'https://guvnr.dev/'
   }
 })

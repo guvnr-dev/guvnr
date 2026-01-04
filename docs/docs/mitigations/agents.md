@@ -96,7 +96,7 @@ Agents live in `.claude/agents/`:
 Install with the CLI:
 
 ```bash
-npx ai-excellence-framework init --preset standard
+npx guvnr init --preset standard
 ```
 
 ## Agent Structure

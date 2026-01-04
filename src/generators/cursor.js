@@ -165,13 +165,13 @@ export function generateCursorIndex(context) {
   const projectName = getProjectName(context);
 
   return `---
-description: AI Excellence Framework configuration for ${projectName}
+description: Guvnr configuration for ${projectName}
 alwaysApply: true
 ---
 
 # ${projectName}
 
-${context?.overview || 'A software project configured with the AI Excellence Framework.'}
+${context?.overview || 'A software project configured with Guvnr.'}
 
 ## Quick Reference
 

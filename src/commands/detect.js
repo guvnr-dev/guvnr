@@ -1,5 +1,5 @@
 /**
- * AI Excellence Framework - Detect Tools Command
+ * Guvnr - Detect Tools Command
  *
  * Scans the project directory to detect which AI coding tools are already configured.
  */
@@ -230,14 +230,14 @@ export async function detectCommand(options) {
     return;
   }
 
-  console.log(chalk.cyan('\n  AI Excellence Framework - Tool Detection\n'));
+  console.log(chalk.cyan('\n  Guvnr - Tool Detection\n'));
   console.log(chalk.gray(`  Scanning: ${cwd}\n`));
 
   if (detected.length === 0) {
     console.log(chalk.yellow('  No AI tools detected in this project.\n'));
-    console.log(chalk.gray('  Run "npx ai-excellence init" to set up the framework.'));
+    console.log(chalk.gray('  Run "npx guvnr init" to set up the framework.'));
     console.log(
-      chalk.gray('  Run "npx ai-excellence generate --tools all" to generate configurations.\n')
+      chalk.gray('  Run "npx guvnr generate --tools all" to generate configurations.\n')
     );
     return;
   }
@@ -265,7 +265,7 @@ export async function detectCommand(options) {
   if (detected.length < 5) {
     console.log(
       chalk.cyan(
-        '  💡 Tip: Run "npx ai-excellence generate --tools all" to add more tool support.\n'
+        '  💡 Tip: Run "npx guvnr generate --tools all" to add more tool support.\n'
       )
     );
   }
@@ -274,7 +274,7 @@ export async function detectCommand(options) {
   const hasClaude = detected.some(t => t.id === 'claude');
   if (!hasClaude) {
     console.log(
-      chalk.yellow('  ⚠️  No CLAUDE.md found. Run "npx ai-excellence init" to create one.\n')
+      chalk.yellow('  ⚠️  No CLAUDE.md found. Run "npx guvnr init" to create one.\n')
     );
   }
 
@@ -284,7 +284,7 @@ export async function detectCommand(options) {
     console.log(
       chalk.gray('  Note: Consider adding AGENTS.md for Linux Foundation AAIF compatibility.')
     );
-    console.log(chalk.gray('        Run: npx ai-excellence generate --tools agents\n'));
+    console.log(chalk.gray('        Run: npx guvnr generate --tools agents\n'));
   }
 
   console.log(chalk.gray(`  Total: ${detected.length}/${TOOL_PATTERNS.length} tools configured\n`));

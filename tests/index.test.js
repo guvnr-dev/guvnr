@@ -1,5 +1,5 @@
 /**
- * Core Index Module Tests for AI Excellence Framework
+ * Core Index Module Tests for Guvnr
  *
  * Tests the main src/index.js exports including:
  * - Configuration utilities (getPresetConfig, mergeConfig)
@@ -46,7 +46,7 @@ import {
 function createTempDir() {
   const tempDir = join(
     tmpdir(),
-    `ai-excellence-test-${Date.now()}-${Math.random().toString(36).slice(2)}`
+    `guvnr-test-${Date.now()}-${Math.random().toString(36).slice(2)}`
   );
   mkdirSync(tempDir, { recursive: true });
   return tempDir;
@@ -116,7 +116,7 @@ describe('getPresetConfig', () => {
   it('should return config for valid preset', () => {
     const config = getPresetConfig('minimal');
     assert.ok(config, 'Should return a config');
-    assert.strictEqual(config.description, 'CLAUDE.md + essential commands only');
+    assert.strictEqual(config.description, 'guvnr.yaml + essential skills only');
   });
 
   it('should return standard config for unknown preset', () => {

@@ -1,6 +1,6 @@
 # VS Code Integration Guide
 
-This guide explains how to integrate the AI Excellence Framework with VS Code and VS Code-based editors like Cursor.
+This guide explains how to integrate Guvnr with VS Code and VS Code-based editors like Cursor.
 
 ## Table of Contents
 
@@ -122,7 +122,7 @@ Add these to your `keybindings.json`:
   {
     "key": "ctrl+shift+p",
     "command": "workbench.action.tasks.runTask",
-    "args": "AI Excellence: Validate"
+    "args": "Guvnr: Validate"
   }
 ]
 ```
@@ -133,8 +133,8 @@ Create `.vscode/markdown.code-snippets`:
 
 ```json
 {
-  "AI Excellence Decision": {
-    "prefix": "aix-decision",
+  "Guvnr Decision": {
+    "prefix": "guvnr-decision",
     "body": [
       "### Decision: ${1:Title}",
       "",
@@ -154,8 +154,8 @@ Create `.vscode/markdown.code-snippets`:
     ],
     "description": "Document an architectural decision"
   },
-  "AI Excellence Session Note": {
-    "prefix": "aix-session",
+  "Guvnr Session Note": {
+    "prefix": "guvnr-session",
     "body": [
       "# Session Notes - ${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}",
       "",
@@ -182,7 +182,7 @@ Create `.vscode/markdown.code-snippets`:
     "description": "Create a session handoff note"
   },
   "CLAUDE.md Section": {
-    "prefix": "aix-section",
+    "prefix": "guvnr-section",
     "body": ["## ${1:Section Name}", "", "${2:Section content}", ""],
     "description": "Add a new CLAUDE.md section"
   }
@@ -198,9 +198,9 @@ Create `.vscode/tasks.json`:
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "AI Excellence: Validate",
+      "label": "Guvnr: Validate",
       "type": "shell",
-      "command": "npx ai-excellence-framework validate",
+      "command": "npx guvnr validate",
       "group": "build",
       "presentation": {
         "reveal": "always",
@@ -209,9 +209,9 @@ Create `.vscode/tasks.json`:
       "problemMatcher": []
     },
     {
-      "label": "AI Excellence: Doctor",
+      "label": "Guvnr: Doctor",
       "type": "shell",
-      "command": "npx ai-excellence-framework doctor --verbose",
+      "command": "npx guvnr doctor --verbose",
       "group": "build",
       "presentation": {
         "reveal": "always",
@@ -220,9 +220,9 @@ Create `.vscode/tasks.json`:
       "problemMatcher": []
     },
     {
-      "label": "AI Excellence: Fix Issues",
+      "label": "Guvnr: Fix Issues",
       "type": "shell",
-      "command": "npx ai-excellence-framework validate --fix",
+      "command": "npx guvnr validate --fix",
       "group": "build",
       "presentation": {
         "reveal": "always",
@@ -352,7 +352,7 @@ Add to Cursor settings for optimal experience:
 
 1. Ensure Node.js is in PATH
 2. Check that `npx` is available
-3. Run `npm install -g ai-excellence-framework` if npx fails
+3. Run `npm install -g guvnr` if npx fails
 
 ### Snippets Not Appearing
 
@@ -361,7 +361,7 @@ Add to Cursor settings for optimal experience:
 **Solution:**
 
 1. Ensure the file type is "Markdown"
-2. Start typing the snippet prefix (e.g., "aix-")
+2. Start typing the snippet prefix (e.g., "guvnr-")
 3. Press Ctrl+Space to force suggestions
 
 ## Complete Setup Script

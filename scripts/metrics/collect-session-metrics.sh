@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# AI Excellence Framework - Session Metrics Collection
+# Guvnr - Session Metrics Collection
 #
 # Collects baseline and ongoing metrics for AI-assisted development effectiveness.
 # Run at session end or via cron for aggregate tracking.
@@ -123,7 +123,7 @@ collect_session_metrics() {
 
     echo ""
     echo "═══════════════════════════════════════════════════════════"
-    echo "  AI Excellence Framework - Session Metrics Collection"
+    echo "  Guvnr - Session Metrics Collection"
     echo "═══════════════════════════════════════════════════════════"
     echo ""
 
@@ -215,7 +215,7 @@ EOF
 generate_report() {
     echo ""
     echo "═══════════════════════════════════════════════════════════"
-    echo "  AI Excellence Framework - Metrics Report"
+    echo "  Guvnr - Metrics Report"
     echo "═══════════════════════════════════════════════════════════"
     echo ""
 
@@ -289,7 +289,7 @@ generate_report() {
 establish_baseline() {
     echo ""
     echo "═══════════════════════════════════════════════════════════"
-    echo "  AI Excellence Framework - Baseline Establishment"
+    echo "  Guvnr - Baseline Establishment"
     echo "═══════════════════════════════════════════════════════════"
     echo ""
     log_info "Establishing baseline before framework adoption..."
@@ -310,7 +310,7 @@ establish_baseline() {
     "error_rework_rate_percent": ${baseline_error_rate:-30},
     "satisfaction": ${baseline_satisfaction:-3}
   },
-  "notes": "Baseline established before AI Excellence Framework adoption"
+  "notes": "Baseline established before Guvnr adoption"
 }
 EOF
 

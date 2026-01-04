@@ -1,0 +1,141 @@
+# Guvnr Configuration - Full Preset
+# Universal AI coding assistant configuration
+# Learn more: https://guvnr.dev/docs/configuration
+
+version: "1.0"
+
+project:
+  name: "My Project"
+  description: "Project description"
+
+tech_stack:
+  primary_language: "TypeScript"
+  runtime: "Node.js 20.x"
+  framework: "Next.js 14"
+  database: "PostgreSQL 15"
+  key_dependencies:
+    - "typescript: ^5.3"
+    - "react: ^18"
+
+context:
+  overview: |
+    One paragraph describing what this project does and its purpose.
+
+    Meta-nature: If this project dogfoods itself or has a self-referential
+    quality, describe it here.
+
+  architecture: |
+    docs/
+    ├── architecture/     # Architecture decision records
+    ├── session-notes/    # Session handoff notes
+    └── api/              # API documentation
+
+    src/
+    ├── api/              # API routes and handlers
+    ├── components/       # UI components
+    ├── lib/              # Shared utilities
+    ├── services/         # Business logic
+    └── types/            # Type definitions
+
+  key_relationships:
+    - "Document important patterns and how components interact"
+
+conventions:
+  code_style:
+    - "Use TypeScript strict mode"
+    - "Prefer functional components"
+    - "Use named exports"
+  commit_messages: "conventional"
+  file_naming: "kebab-case"
+  documentation_style: "JSDoc for public APIs"
+
+current_state:
+  phase: "Development"
+  active_work:
+    - "Current task or feature"
+  recent_decisions: []
+  known_issues: []
+  known_gaps: []
+
+critical_constraints:
+  - name: "Simplicity First"
+    description: "Remove complexity that isn't earning its keep"
+  - name: "Evidence-Based"
+    description: "Changes should be motivated by observed friction or measured improvement"
+
+# Full preset: All available skills
+skills:
+  plan:
+    description: "Create implementation plan before coding"
+  verify:
+    description: "Verify task completion with skeptical review"
+  handoff:
+    description: "Generate session handoff summary"
+  assumptions:
+    description: "Surface and document assumptions before implementation"
+  review:
+    description: "Multi-perspective code review"
+  security-review:
+    description: "Security-focused code review using OWASP guidelines"
+  refactor:
+    description: "Plan and execute code refactoring safely"
+  test-coverage:
+    description: "Analyze and improve test coverage"
+
+# Full preset: All agents
+agents:
+  reviewer:
+    description: "Independent code review agent with fresh perspective"
+  explorer:
+    description: "Codebase exploration and context gathering"
+  tester:
+    description: "Test generation and verification agent"
+
+# Generate configs for all major tools
+tools:
+  claude:
+    generate: true
+  cursor:
+    generate: true
+  copilot:
+    generate: true
+  windsurf:
+    generate: true
+  aider:
+    generate: true
+  cline:
+    generate: true
+  continue:
+    generate: true
+
+# All hooks enabled
+hooks:
+  enabled: true
+  post_edit:
+    enabled: true
+    timeout: 30
+  verify_deps:
+    enabled: true
+    fail_on_unknown: true
+
+# Full security configuration
+security:
+  pre_commit: true
+  secrets_detection: true
+  dependency_scanning: true
+  ai_pattern_checks: true
+
+# MCP memory enabled
+memory:
+  enabled: true
+  storage: "sqlite"
+  limits:
+    max_decisions: 1000
+    max_patterns: 100
+    max_context_keys: 50
+
+# Metrics collection enabled
+metrics:
+  enabled: true
+  auto_collect: true
+  directory: ".tmp/metrics"

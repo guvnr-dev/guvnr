@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://github.com/ai-excellence-framework/config.schema.json",
-  "title": "AI Excellence Framework Configuration",
-  "description": "Configuration schema for ai-excellence.config.json",
+  "$id": "https://github.com/guvnr-dev/guvnr/config.schema.json",
+  "title": "Guvnr Configuration",
+  "description": "Configuration schema for guvnr.config.json",
   "type": "object",
   "properties": {
     "$schema": {

@@ -1,4 +1,4 @@
-# Contributing to AI Excellence Framework
+# Contributing to Guvnr
 
 Thank you for your interest in contributing! This document provides guidelines for contributing to the project.
 
@@ -34,8 +34,8 @@ Be respectful, constructive, and inclusive. We're all here to make AI-assisted d
 
 ```bash
 # Clone
-git clone https://github.com/ai-excellence-framework/ai-excellence-framework.git
-cd ai-excellence-framework
+git clone https://github.com/guvnr-dev/guvnr.git
+cd guvnr
 
 # Install dependencies
 npm install

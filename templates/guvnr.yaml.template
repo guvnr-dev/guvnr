@@ -1,0 +1,183 @@
+# yaml-language-server: $schema=https://guvnr.dev/schema/guvnr.schema.json
+# Guvnr Configuration - Universal AI Coding Assistant Config
+# Docs: https://guvnr.dev
+
+version: "1.0"
+
+# =============================================================================
+# PROJECT METADATA
+# =============================================================================
+project:
+  name: "${PROJECT_NAME}"
+  description: "${PROJECT_DESCRIPTION}"
+  # repository: https://github.com/org/repo
+
+# =============================================================================
+# TECH STACK
+# =============================================================================
+tech_stack:
+  languages:
+    - name: "${PRIMARY_LANGUAGE}"
+      version: "${LANGUAGE_VERSION}"
+  frameworks:
+    - name: "${FRAMEWORK}"
+      version: "${FRAMEWORK_VERSION}"
+  runtime:
+    name: "${RUNTIME}"
+    version: "${RUNTIME_VERSION}"
+  package_manager: "${PACKAGE_MANAGER}"
+  test_framework: "${TEST_FRAMEWORK}"
+
+# =============================================================================
+# PROJECT CONTEXT (What AI assistants need to know)
+# =============================================================================
+context:
+  overview: |
+    ${PROJECT_OVERVIEW}
+
+  architecture: |
+    ${ARCHITECTURE_DESCRIPTION}
+
+  current_phase: "${CURRENT_PHASE}"
+
+  active_work:
+    - "${ACTIVE_WORK_ITEM}"
+
+  known_issues:
+    - "${KNOWN_ISSUE}"
+
+# =============================================================================
+# CONVENTIONS (How code should be written)
+# =============================================================================
+conventions:
+  style:
+    - "Use consistent indentation (2 spaces)"
+    - "Prefer const over let, avoid var"
+    - "Use meaningful variable names"
+
+  naming:
+    - "camelCase for variables and functions"
+    - "PascalCase for classes and components"
+    - "SCREAMING_SNAKE_CASE for constants"
+
+  patterns:
+    - "Prefer composition over inheritance"
+    - "Use dependency injection where appropriate"
+    - "Keep functions small and focused"
+
+  avoid:
+    - "No console.log in production code"
+    - "Avoid deeply nested callbacks"
+    - "Don't use any type without justification"
+
+  commit_format: conventional
+
+# =============================================================================
+# SECURITY RULES
+# =============================================================================
+security:
+  rules:
+    - "Never commit secrets or API keys"
+    - "Validate all user input"
+    - "Use parameterized queries for database access"
+    - "Escape output to prevent XSS"
+
+  sensitive_paths:
+    - ".env*"
+    - "**/secrets/**"
+    - "**/credentials/**"
+
+  require_review:
+    - "src/auth/**"
+    - "src/security/**"
+
+# =============================================================================
+# SKILLS (Reusable AI commands - works across all tools)
+# =============================================================================
+skills:
+  - name: plan
+    description: Create an implementation plan before coding
+    trigger: Before implementing any non-trivial feature
+    steps:
+      - Analyze the requirements thoroughly
+      - Identify all files that need to change
+      - Consider edge cases and error handling
+      - Propose a step-by-step approach
+      - Wait for approval before implementing
+
+  - name: verify
+    description: Verify work is complete and correct
+    trigger: After completing any task
+    steps:
+      - Review all changes made
+      - Check that requirements are fully met
+      - Verify no regressions introduced
+      - Ensure tests pass
+      - Confirm documentation is updated
+
+  - name: security-review
+    description: Security-focused code review
+    trigger: For auth, payment, or data handling code
+    steps:
+      - Check for OWASP Top 10 vulnerabilities
+      - Verify input validation
+      - Check for secret exposure
+      - Review access controls
+      - Document security considerations
+
+# =============================================================================
+# AGENTS (Specialized AI personas)
+# =============================================================================
+agents:
+  - name: reviewer
+    role: Senior code reviewer
+    expertise:
+      - Code quality
+      - Best practices
+      - Performance optimization
+    instructions: |
+      Review code with a critical eye. Look for bugs, security issues,
+      and opportunities for improvement. Be constructive but thorough.
+
+  - name: architect
+    role: Software architect
+    expertise:
+      - System design
+      - Scalability
+      - Technical decisions
+    instructions: |
+      Focus on high-level design and architectural patterns.
+      Consider long-term maintainability and extensibility.
+
+# =============================================================================
+# TOOL CONFIGURATION
+# =============================================================================
+tools:
+  # Which tool configs to generate (run: guvnr generate)
+  generate:
+    - claude
+    - cursor
+    - copilot
+
+  # Tool-specific overrides (optional)
+  # claude:
+  #   model: claude-sonnet-4-20250514
+  # cursor:
+  #   rules_style: directory
+
+# =============================================================================
+# MEMORY & PERSISTENCE (Optional MCP server)
+# =============================================================================
+memory:
+  enabled: false
+  storage: sqlite
+  session_notes_dir: docs/session-notes
+  decisions_dir: docs/decisions
+
+# =============================================================================
+# HOOKS (Git automation)
+# =============================================================================
+hooks:
+  pre_commit:
+    - secrets
+    - todos

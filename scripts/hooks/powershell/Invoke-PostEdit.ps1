@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    AI Excellence Framework - Post-Edit Hook for PowerShell
+    Guvnr - Post-Edit Hook for PowerShell
 
 .DESCRIPTION
     Auto-lint and format files after Claude Code edits them.
@@ -20,8 +20,8 @@
     .\Invoke-PostEdit.ps1 -FilePath .\script.py -DryRun
 
 .NOTES
-    Part of the AI Excellence Framework
-    https://github.com/ai-excellence-framework/ai-excellence-framework
+    Part of Guvnr
+    https://github.com/guvnr-dev/guvnr
 #>
 
 [CmdletBinding()]
@@ -37,8 +37,8 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 # Configuration from environment
-if (-not $Quiet -and $env:AI_EXCELLENCE_QUIET -eq '1') { $Quiet = $true }
-if (-not $DryRun -and $env:AI_EXCELLENCE_DRY_RUN -eq '1') { $DryRun = $true }
+if (-not $Quiet -and $env:GUVNR_QUIET -eq '1') { $Quiet = $true }
+if (-not $DryRun -and $env:GUVNR_DRY_RUN -eq '1') { $DryRun = $true }
 $TimeoutSeconds = 30
 
 # Logging functions
@@ -54,7 +54,7 @@ function Write-LogError {
 
 function Write-LogDebug {
     param([string]$Message)
-    if ($env:AI_EXCELLENCE_DEBUG -eq '1') {
+    if ($env:GUVNR_DEBUG -eq '1') {
         Write-Host "[DEBUG] $Message" -ForegroundColor DarkGray
     }
 }

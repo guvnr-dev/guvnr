@@ -5,7 +5,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Share your ideas for improving the AI Excellence Framework!
+        Share your ideas for improving Guvnr!
         This is a space for open discussion before creating formal feature requests.
 
   - type: textarea

@@ -86,8 +86,8 @@ repos:
 .\Check-AISecurity.ps1 -Json | ConvertFrom-Json
 
 # Environment variable configuration
-$env:AIX_SECURITY_ENFORCE = "true"
-$env:AIX_SECURITY_STRICT = "true"
+$env:GUVNR_SECURITY_ENFORCE = "true"
+$env:GUVNR_SECURITY_STRICT = "true"
 .\Check-AISecurity.ps1
 ```
 
@@ -126,14 +126,14 @@ $env:AIX_SECURITY_STRICT = "true"
 
 ### Environment Variables
 
-| Variable                 | Description             | Default |
-| ------------------------ | ----------------------- | ------- |
-| `AIX_SECURITY_ENFORCE`   | Block commits on issues | `false` |
-| `AIX_SECURITY_STRICT`    | Enable strict mode      | `false` |
-| `AIX_STRUCTURED_LOGGING` | JSON output             | `false` |
-| `AI_EXCELLENCE_QUIET`    | Suppress output         | `0`     |
-| `AI_EXCELLENCE_DRY_RUN`  | Dry run mode            | `0`     |
-| `AI_EXCELLENCE_DEBUG`    | Debug logging           | `0`     |
+| Variable                  | Description             | Default |
+| ------------------------- | ----------------------- | ------- |
+| `GUVNR_SECURITY_ENFORCE`  | Block commits on issues | `false` |
+| `GUVNR_SECURITY_STRICT`   | Enable strict mode      | `false` |
+| `GUVNR_STRUCTURED_LOGGING`| JSON output             | `false` |
+| `GUVNR_QUIET`             | Suppress output         | `0`     |
+| `GUVNR_DRY_RUN`           | Dry run mode            | `0`     |
+| `GUVNR_DEBUG`             | Debug logging           | `0`     |
 
 ## Detected Patterns
 
@@ -213,4 +213,4 @@ When modifying hooks, please update both bash and PowerShell versions to maintai
 
 ## License
 
-Part of the AI Excellence Framework. See LICENSE for details.
+Part of Guvnr. See LICENSE for details.

@@ -1,5 +1,5 @@
 /**
- * AI Excellence Framework - Generator Base Utilities
+ * Guvnr - Generator Base Utilities
  *
  * Shared utilities for all generator modules.
  */

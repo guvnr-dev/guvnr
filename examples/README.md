@@ -26,7 +26,7 @@ cp examples/standard/CLAUDE.md ./CLAUDE.md
 
 ```bash
 # Initialize with examples as reference
-npx ai-excellence-framework init --preset standard
+npx guvnr init --preset standard
 ```
 
 ## Customization

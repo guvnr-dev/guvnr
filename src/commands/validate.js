@@ -1,19 +1,20 @@
 /**
- * AI Excellence Framework - Validate Command
+ * Guvnr - Validate Command
  *
- * Validates the framework configuration and setup with auto-fix capabilities.
+ * Validates the Guvnr configuration and setup with auto-fix capabilities.
  *
  * Performance: Uses async file I/O to avoid blocking the event loop during
- * validation, which is especially important for large CLAUDE.md files.
+ * validation, which is especially important for large configuration files.
  */
 
 import { readFile, writeFile, mkdir, appendFile, access, constants } from 'fs/promises';
 import { existsSync } from 'fs';
-import { join, dirname } from 'path';
+import { join, dirname, basename } from 'path';
 import { fileURLToPath } from 'url';
 import chalk from 'chalk';
 import ora from 'ora';
 import fse from 'fs-extra';
+import yaml from 'js-yaml';
 import { detectSecrets, checkAbortSignal } from '../index.js';
 import { createError } from '../errors.js';
 
@@ -54,151 +55,113 @@ async function safeReadFile(filePath) {
  */
 const VALIDATION_RULES = [
   {
-    id: 'claude-md-exists',
-    name: 'CLAUDE.md exists',
+    id: 'guvnr-yaml-exists',
+    name: 'guvnr.yaml exists',
     category: 'core',
-    check: async cwd => fileExists(join(cwd, 'CLAUDE.md')),
+    check: async cwd => {
+      return (await fileExists(join(cwd, 'guvnr.yaml'))) || (await fileExists(join(cwd, 'guvnr.yml')));
+    },
     fix: async cwd => {
-      const template = `# Project Name
+      const template = `# Guvnr Configuration
+version: "1.0"
 
-## Overview
+project:
+  name: "${basename(cwd)}"
+  description: "Project description"
 
-[Brief description of what this project does]
+tech_stack:
+  languages:
+    - name: "JavaScript"
+      version: "ES2022"
+  package_manager: "npm"
+  test_framework: "jest"
 
-## Tech Stack
+context:
+  overview: |
+    Brief description of what this project does.
+  current_phase: "development"
 
-- Language: [e.g., JavaScript, Python]
-- Framework: [e.g., React, Django]
+conventions:
+  style:
+    - "Use consistent indentation (2 spaces)"
+  naming:
+    - "camelCase for variables and functions"
+  commit_format: conventional
 
-## Architecture
+security:
+  rules:
+    - "Never commit secrets or API keys"
+    - "Validate all user input"
 
-[Key architectural decisions and patterns]
-
-## Conventions
-
-- [Naming conventions]
-- [File structure patterns]
-
-## Common Commands
-
-\`\`\`bash
-# Build
-npm run build
-
-# Test
-npm test
-
-# Run
-npm start
-\`\`\`
-
-## Current State
-
-### Phase
-Initial setup
-
-### Recent Decisions
-- [Date]: [Decision made]
-
-### Known Issues
-- None yet
-
-## Session Instructions
-
-### Before Starting
-1. Read this file completely
-2. Check recent commits for context
-
-### During Work
-- Use /plan before implementation
-- Use /verify before completing tasks
-
-### Before Ending
-- Update "Current State" section
-- Commit work in progress
+tools:
+  generate:
+    - claude
+    - cursor
+    - copilot
 `;
-      await writeFile(join(cwd, 'CLAUDE.md'), template);
+      await writeFile(join(cwd, 'guvnr.yaml'), template);
       return true;
     },
     severity: 'error'
   },
   {
-    id: 'claude-md-has-overview',
-    name: 'CLAUDE.md has Overview section',
+    id: 'guvnr-yaml-valid',
+    name: 'guvnr.yaml is valid YAML',
     category: 'core',
     check: async cwd => {
-      const content = await safeReadFile(join(cwd, 'CLAUDE.md'));
-      return content !== null && /## Overview/i.test(content);
-    },
-    fix: async cwd => {
-      const path = join(cwd, 'CLAUDE.md');
-      let content = await safeReadFile(path);
-      if (content === null) {
+      const yamlPath = (await fileExists(join(cwd, 'guvnr.yaml')))
+        ? join(cwd, 'guvnr.yaml')
+        : join(cwd, 'guvnr.yml');
+      const content = await safeReadFile(yamlPath);
+      if (content === null) return true; // Skip if no file
+      try {
+        yaml.load(content);
+        return true;
+      } catch {
         return false;
       }
-      if (!/## Overview/i.test(content)) {
-        // Find the first heading and insert after it
-        content = content.replace(
-          /^(# .+\n)/m,
-          '$1\n## Overview\n\n[Brief description of what this project does]\n\n'
-        );
-        await writeFile(path, content);
-      }
-      return true;
     },
+    fix: null, // Cannot auto-fix YAML syntax errors
+    severity: 'error'
+  },
+  {
+    id: 'guvnr-yaml-has-project',
+    name: 'guvnr.yaml has project section',
+    category: 'core',
+    check: async cwd => {
+      const yamlPath = (await fileExists(join(cwd, 'guvnr.yaml')))
+        ? join(cwd, 'guvnr.yaml')
+        : join(cwd, 'guvnr.yml');
+      const content = await safeReadFile(yamlPath);
+      if (content === null) return true; // Skip if no file
+      try {
+        const config = yaml.load(content);
+        return config && config.project && config.project.name;
+      } catch {
+        return false;
+      }
+    },
+    fix: null,
     severity: 'warning'
   },
   {
-    id: 'claude-md-has-tech-stack',
-    name: 'CLAUDE.md has Tech Stack section',
+    id: 'guvnr-yaml-has-version',
+    name: 'guvnr.yaml has version field',
     category: 'core',
     check: async cwd => {
-      const content = await safeReadFile(join(cwd, 'CLAUDE.md'));
-      return content !== null && /## Tech Stack/i.test(content);
-    },
-    fix: async cwd => {
-      const path = join(cwd, 'CLAUDE.md');
-      let content = await safeReadFile(path);
-      if (content === null) {
+      const yamlPath = (await fileExists(join(cwd, 'guvnr.yaml')))
+        ? join(cwd, 'guvnr.yaml')
+        : join(cwd, 'guvnr.yml');
+      const content = await safeReadFile(yamlPath);
+      if (content === null) return true; // Skip if no file
+      try {
+        const config = yaml.load(content);
+        return config && config.version;
+      } catch {
         return false;
       }
-      if (!/## Tech Stack/i.test(content)) {
-        // Find Overview section and insert after it
-        if (/## Overview/i.test(content)) {
-          content = content.replace(
-            /(## Overview[\s\S]*?)(\n## |\n$)/m,
-            '$1\n\n## Tech Stack\n\n- Language: [specify]\n- Framework: [specify]\n\n$2'
-          );
-        } else {
-          content += '\n\n## Tech Stack\n\n- Language: [specify]\n- Framework: [specify]\n';
-        }
-        await writeFile(path, content);
-      }
-      return true;
     },
-    severity: 'warning'
-  },
-  {
-    id: 'claude-md-has-current-state',
-    name: 'CLAUDE.md has Current State section',
-    category: 'core',
-    check: async cwd => {
-      const content = await safeReadFile(join(cwd, 'CLAUDE.md'));
-      return content !== null && /## Current State/i.test(content);
-    },
-    fix: async cwd => {
-      const path = join(cwd, 'CLAUDE.md');
-      let content = await safeReadFile(path);
-      if (content === null) {
-        return false;
-      }
-      if (!/## Current State/i.test(content)) {
-        content +=
-          '\n\n## Current State\n\n### Phase\nIn development\n\n### Recent Decisions\n- [Add decisions here]\n';
-        await writeFile(path, content);
-      }
-      return true;
-    },
+    fix: null,
     severity: 'warning'
   },
   {
@@ -283,9 +246,9 @@ Initial setup
     category: 'security',
     check: async cwd => fileExists(join(cwd, '.gitignore')),
     fix: async cwd => {
-      const content = `# AI Excellence Framework
-CLAUDE.local.md
-.claude/settings.local.json
+      const content = `# Guvnr - AI Tool Configs
+guvnr.local.yaml
+.guvnr/
 .tmp/
 .secrets.baseline
 
@@ -329,7 +292,7 @@ Thumbs.db
       if (!(await fileExists(path))) {
         return false;
       }
-      await appendFile(path, '\n# AI Excellence Framework temp files\n.tmp/\n');
+      await appendFile(path, '\n# Guvnr temp files\n.tmp/\n');
       return true;
     },
     severity: 'warning'
@@ -423,7 +386,7 @@ export async function validateCommand(options) {
   const signal = options._abortSignal;
 
   if (!json) {
-    console.log(chalk.cyan('\n  AI Excellence Framework Validator\n'));
+    console.log(chalk.cyan('\n  Guvnr - Configuration Validator\n'));
 
     if (autoFix) {
       console.log(chalk.yellow('  Auto-fix mode enabled\n'));
@@ -527,7 +490,7 @@ export async function validateCommand(options) {
     console.log(JSON.stringify(jsonOutput, null, 2));
     if (results.errors.length > 0) {
       throw createError(
-        'AIX-VALID-200',
+        'GUVNR-VALID-200',
         `Validation failed with ${results.errors.length} error(s)`
       );
     }
@@ -539,7 +502,7 @@ export async function validateCommand(options) {
 
   // Throw error if validation failed (CLI will handle exit code)
   if (results.errors.length > 0) {
-    throw createError('AIX-VALID-200', `Validation failed with ${results.errors.length} error(s)`);
+    throw createError('GUVNR-VALID-200', `Validation failed with ${results.errors.length} error(s)`);
   }
 }
 
@@ -614,15 +577,15 @@ function printValidationResults(results, autoFix) {
   if (results.errors.length === 0 && results.warnings.length === 0) {
     console.log(chalk.green('  ✓ All critical checks passed!\n'));
   } else if (results.errors.length === 0) {
-    console.log(chalk.yellow('  ⚠ Framework is functional but has warnings to address.\n'));
+    console.log(chalk.yellow('  ⚠ Configuration is functional but has warnings to address.\n'));
     if (!autoFix) {
-      console.log(chalk.gray('  Run "npx ai-excellence validate --fix" to auto-fix issues.\n'));
+      console.log(chalk.gray('  Run "guvnr validate --fix" to auto-fix issues.\n'));
     }
   } else {
-    console.log(chalk.red('  ✗ Framework has errors that need to be fixed.\n'));
+    console.log(chalk.red('  ✗ Configuration has errors that need to be fixed.\n'));
     if (!autoFix) {
-      console.log(chalk.gray('  Run "npx ai-excellence validate --fix" to auto-fix issues.\n'));
-      console.log(chalk.gray('  Or run "npx ai-excellence init" to reinitialize.\n'));
+      console.log(chalk.gray('  Run "guvnr validate --fix" to auto-fix issues.\n'));
+      console.log(chalk.gray('  Or run "guvnr init" to reinitialize.\n'));
     }
   }
 }

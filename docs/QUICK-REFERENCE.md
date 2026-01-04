@@ -1,4 +1,4 @@
-# AI Excellence Framework — Quick Reference
+# Guvnr — Quick Reference
 
 > One-page guide to using the framework effectively
 
@@ -8,7 +8,7 @@
 
 ```bash
 # Install
-npx ai-excellence-framework init
+npx guvnr init
 
 # Or manually copy files
 cp -r .claude/ your-project/.claude/
@@ -236,4 +236,4 @@ python scripts/mcp/project-memory-server.py
 
 ---
 
-_AI Excellence Framework v1.0.0_
+_Guvnr v1.0.0_

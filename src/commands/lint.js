@@ -1,5 +1,5 @@
 /**
- * AI Excellence Framework - Lint Command
+ * Guvnr - Lint Command
  *
  * Checks configuration files for issues and best practices:
  * - CLAUDE.md structure and content
@@ -114,7 +114,7 @@ const CHECKS = {
 export async function lintCommand(options) {
   const cwd = process.cwd();
 
-  console.log(chalk.cyan('\n  AI Excellence Framework - Configuration Linter\n'));
+  console.log(chalk.cyan('\n  Guvnr - Configuration Linter\n'));
 
   const spinner = ora('Checking configuration files...').start();
 
@@ -168,7 +168,7 @@ export async function lintCommand(options) {
 
     // Throw error if lint failed (CLI will handle exit code)
     if (results.errors.length > 0 && !options.ignoreErrors) {
-      throw createError('AIX-VALID-200', `Lint found ${results.errors.length} error(s)`);
+      throw createError('GUVNR-VALID-200', `Lint found ${results.errors.length} error(s)`);
     }
   } catch (error) {
     spinner.fail('Lint failed');
@@ -179,7 +179,7 @@ export async function lintCommand(options) {
     }
 
     // Wrap and throw (CLI will handle exit code)
-    throw createError('AIX-GEN-900', error.message, { cause: error });
+    throw createError('GUVNR-GEN-900', error.message, { cause: error });
   }
 }
 
@@ -194,7 +194,7 @@ function checkExists(cwd, name) {
   return {
     passed: exists,
     message: exists ? `${name} exists` : `${name} not found`,
-    suggestion: exists ? null : `Run 'aix init' to create ${name}`
+    suggestion: exists ? null : `Run 'guvnr init' to create ${name}`
   };
 }
 
@@ -409,7 +409,7 @@ function checkCursorExists(cwd) {
   return {
     passed: existsSync(path),
     message: existsSync(path) ? '.cursor/ directory exists' : 'No .cursor/ directory',
-    suggestion: existsSync(path) ? null : "Run 'aix generate --tools cursor' to create"
+    suggestion: existsSync(path) ? null : "Run 'guvnr generate --tools cursor' to create"
   };
 }
 
@@ -497,7 +497,7 @@ function checkWindsurfExists(cwd) {
   return {
     passed: existsSync(path),
     message: existsSync(path) ? '.windsurf/ directory exists' : 'No .windsurf/ directory',
-    suggestion: existsSync(path) ? null : "Run 'aix generate --tools windsurf' to create"
+    suggestion: existsSync(path) ? null : "Run 'guvnr generate --tools windsurf' to create"
   };
 }
 
@@ -532,7 +532,7 @@ function checkHooksExist(cwd) {
   return {
     passed: existsSync(path),
     message: existsSync(path) ? 'Hooks directory exists' : 'No hooks directory',
-    suggestion: existsSync(path) ? null : "Run 'aix init' with hooks enabled"
+    suggestion: existsSync(path) ? null : "Run 'guvnr init' with hooks enabled"
   };
 }
 

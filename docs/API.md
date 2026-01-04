@@ -1,17 +1,17 @@
 # API Reference
 
-Programmatic API for AI Excellence Framework.
+Programmatic API for Guvnr.
 
 ## Installation
 
 ```bash
-npm install ai-excellence-framework
+npm install guvnr
 ```
 
 ## ESM Import
 
 ```javascript
-import { init, validate, doctor, generate, lint, update } from 'ai-excellence-framework';
+import { init, validate, doctor, generate, lint, update } from 'guvnr';
 ```
 
 ## Commands
@@ -21,7 +21,7 @@ import { init, validate, doctor, generate, lint, update } from 'ai-excellence-fr
 Initialize the framework in a project directory.
 
 ```javascript
-import { init } from 'ai-excellence-framework/commands/init';
+import { init } from 'guvnr/commands/init';
 
 await init({
   preset: 'standard', // 'minimal' | 'standard' | 'full' | 'team'
@@ -52,7 +52,7 @@ interface InitResult {
 Validate framework configuration.
 
 ```javascript
-import { validate } from 'ai-excellence-framework/commands/validate';
+import { validate } from 'guvnr/commands/validate';
 
 const result = await validate({
   fix: false, // Auto-fix issues
@@ -86,7 +86,7 @@ interface ValidationError {
 Check environment and installation health.
 
 ```javascript
-import { doctor } from 'ai-excellence-framework/commands/doctor';
+import { doctor } from 'guvnr/commands/doctor';
 
 const result = await doctor({
   verbose: false, // Detailed output
@@ -117,7 +117,7 @@ interface HealthCheck {
 Generate configurations for AI tools.
 
 ```javascript
-import { generate } from 'ai-excellence-framework/commands/generate';
+import { generate } from 'guvnr/commands/generate';
 
 const result = await generate({
   tools: ['cursor', 'copilot', 'agents'], // or 'all'
@@ -174,7 +174,7 @@ interface GeneratedFile {
 Lint configuration files.
 
 ```javascript
-import { lint } from 'ai-excellence-framework/commands/lint';
+import { lint } from 'guvnr/commands/lint';
 
 const result = await lint({
   fix: false, // Auto-fix issues
@@ -209,7 +209,7 @@ interface LintFinding {
 Check for and apply framework updates.
 
 ```javascript
-import { update } from 'ai-excellence-framework/commands/update';
+import { update } from 'guvnr/commands/update';
 
 const result = await update({
   check: true, // Check only, don't update
@@ -233,15 +233,15 @@ interface UpdateResult {
 
 ## Error Handling
 
-All commands throw `AIExcellenceError` on failure:
+All commands throw `GuvnrError` on failure:
 
 ```javascript
-import { init, AIExcellenceError } from 'ai-excellence-framework';
+import { init, GuvnrError } from 'guvnr';
 
 try {
   await init({ preset: 'standard' });
 } catch (error) {
-  if (error instanceof AIExcellenceError) {
+  if (error instanceof GuvnrError) {
     console.error(`Error ${error.code}: ${error.message}`);
     console.error(`Suggestion: ${error.suggestion}`);
   }
@@ -252,14 +252,14 @@ try {
 
 | Code            | Description           |
 | --------------- | --------------------- |
-| `AIX-INIT-001`  | Initialization failed |
-| `AIX-INIT-002`  | Directory not empty   |
-| `AIX-VALID-001` | Validation failed     |
-| `AIX-VALID-002` | Schema mismatch       |
-| `AIX-GEN-001`   | Generation failed     |
-| `AIX-GEN-002`   | Unknown tool          |
-| `AIX-FS-001`    | File system error     |
-| `AIX-NET-001`   | Network error         |
+| `GUVNR-INIT-001`  | Initialization failed |
+| `GUVNR-INIT-002`  | Directory not empty   |
+| `GUVNR-VALID-001` | Validation failed     |
+| `GUVNR-VALID-002` | Schema mismatch       |
+| `GUVNR-GEN-001`   | Generation failed     |
+| `GUVNR-GEN-002`   | Unknown tool          |
+| `GUVNR-FS-001`    | File system error     |
+| `GUVNR-NET-001`   | Network error         |
 
 ---
 
@@ -281,8 +281,8 @@ import type {
   LintResult,
   UpdateOptions,
   UpdateResult,
-  AIExcellenceError
-} from 'ai-excellence-framework';
+  GuvnrError
+} from 'guvnr';
 ```
 
 ---
@@ -293,8 +293,8 @@ For command-line usage, see [CLI Reference](./QUICK-REFERENCE.md).
 
 ```bash
 # All commands available via CLI
-npx ai-excellence-framework <command> [options]
+npx guvnr <command> [options]
 
 # Or with alias
-npx aix <command> [options]
+npx gvnr <command> [options]
 ```

@@ -1,5 +1,5 @@
 /**
- * AI Excellence Framework - Error Types
+ * Guvnr - Error Types
  *
  * Provides type definitions for the error system.
  */

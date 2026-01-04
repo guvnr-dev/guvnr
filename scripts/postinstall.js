@@ -8,15 +8,15 @@
 const message = `
 ╔════════════════════════════════════════════════════════════╗
 ║                                                            ║
-║   AI Excellence Framework installed successfully!          ║
+║   Guvnr installed successfully!                            ║
 ║                                                            ║
 ║   Quick start:                                             ║
-║     npx ai-excellence init         Initialize framework    ║
-║     npx ai-excellence validate     Check configuration     ║
-║     npx ai-excellence doctor       Diagnose issues         ║
+║     npx guvnr init         Initialize framework            ║
+║     npx guvnr validate     Check configuration             ║
+║     npx guvnr doctor       Diagnose issues                 ║
 ║                                                            ║
 ║   Documentation:                                           ║
-║     https://ai-excellence-framework.github.io/             ║
+║     https://guvnr.dev/                                     ║
 ║                                                            ║
 ╚════════════════════════════════════════════════════════════╝
 `;

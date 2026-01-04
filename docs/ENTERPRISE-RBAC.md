@@ -1,6 +1,6 @@
 # Enterprise RBAC Documentation
 
-Role-Based Access Control (RBAC) patterns for enterprise deployments of the AI Excellence Framework.
+Role-Based Access Control (RBAC) patterns for enterprise deployments of Guvnr.
 
 ---
 
@@ -84,10 +84,10 @@ protection_rules:
 
 ```bash
 # Set role via environment variable
-export AIX_USER_ROLE="developer"
+export GUVNR_USER_ROLE="developer"
 
 # Role-aware hook execution
-if [ "$AIX_USER_ROLE" != "architect" ] && [ "$AIX_USER_ROLE" != "admin" ]; then
+if [ "$GUVNR_USER_ROLE" != "architect" ] && [ "$GUVNR_USER_ROLE" != "admin" ]; then
     echo "⚠️  CLAUDE.md modification requires architect role"
     exit 1
 fi
@@ -184,7 +184,7 @@ async def remember_decision(arguments: dict) -> list:
 #!/bin/bash
 # scripts/hooks/audit-log.sh
 
-LOG_FILE="${AIX_AUDIT_LOG:-/var/log/aix-audit.log}"
+LOG_FILE="${GUVNR_AUDIT_LOG:-/var/log/guvnr-audit.log}"
 
 log_event() {
     local event_type="$1"
@@ -195,7 +195,7 @@ log_event() {
         --arg ts "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
         --arg type "$event_type" \
         --arg user "${USER:-unknown}" \
-        --arg role "${AIX_USER_ROLE:-developer}" \
+        --arg role "${GUVNR_USER_ROLE:-developer}" \
         --arg action "$action" \
         --arg result "$result" \
         '{
@@ -224,13 +224,13 @@ function Write-AuditLog {
         [string]$Result = "success"
     )
 
-    $logPath = $env:AIX_AUDIT_LOG ?? "/var/log/aix-audit.log"
+    $logPath = $env:GUVNR_AUDIT_LOG ?? "/var/log/guvnr-audit.log"
 
     $entry = @{
         timestamp = (Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ")
         event_type = $EventType
         user = $env:USER ?? "unknown"
-        role = $env:AIX_USER_ROLE ?? "developer"
+        role = $env:GUVNR_USER_ROLE ?? "developer"
         action = $Action
         result = $Result
     } | ConvertTo-Json -Compress
@@ -281,8 +281,8 @@ jobs:
 
       - name: Validate changes
         run: |
-          npx ai-excellence-framework validate
-          npx ai-excellence-framework lint
+          npx guvnr validate
+          npx guvnr lint
 ```
 
 ### Deployment Gate
@@ -505,7 +505,7 @@ jobs:
 
 ### Permission Denied
 
-1. Check user role: `echo $AIX_USER_ROLE`
+1. Check user role: `echo $GUVNR_USER_ROLE`
 2. Verify group membership
 3. Check CODEOWNERS file
 4. Review audit logs
@@ -534,4 +534,4 @@ jobs:
 
 ---
 
-_Part of the AI Excellence Framework_
+_Part of Guvnr_

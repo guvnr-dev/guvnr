@@ -1,0 +1,337 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://guvnr.dev/schema/guvnr.schema.json",
+  "title": "Guvnr Configuration",
+  "description": "Universal AI coding assistant configuration - governs all your AI tools from one file",
+  "type": "object",
+  "required": ["version", "project"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference for IDE validation"
+    },
+    "version": {
+      "type": "string",
+      "description": "Guvnr config format version",
+      "enum": ["1.0"],
+      "default": "1.0"
+    },
+    "project": {
+      "type": "object",
+      "description": "Project metadata and context",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Project name",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "description": {
+          "type": "string",
+          "description": "Brief project description (1-2 sentences)",
+          "maxLength": 500
+        },
+        "repository": {
+          "type": "string",
+          "description": "Repository URL",
+          "format": "uri"
+        }
+      }
+    },
+    "tech_stack": {
+      "type": "object",
+      "description": "Technology stack details",
+      "properties": {
+        "languages": {
+          "type": "array",
+          "description": "Programming languages used",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "version": { "type": "string" }
+            },
+            "required": ["name"]
+          }
+        },
+        "frameworks": {
+          "type": "array",
+          "description": "Frameworks and libraries",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "version": { "type": "string" }
+            },
+            "required": ["name"]
+          }
+        },
+        "runtime": {
+          "type": "object",
+          "description": "Runtime environment",
+          "properties": {
+            "name": { "type": "string" },
+            "version": { "type": "string" }
+          }
+        },
+        "package_manager": {
+          "type": "string",
+          "description": "Package manager (npm, yarn, pnpm, pip, cargo, etc.)"
+        },
+        "test_framework": {
+          "type": "string",
+          "description": "Primary test framework"
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "description": "Project context for AI assistants",
+      "properties": {
+        "overview": {
+          "type": "string",
+          "description": "Detailed project overview (multi-line supported)"
+        },
+        "architecture": {
+          "type": "string",
+          "description": "High-level architecture description"
+        },
+        "current_phase": {
+          "type": "string",
+          "description": "Current development phase (e.g., 'MVP', 'Beta', 'Production')"
+        },
+        "active_work": {
+          "type": "array",
+          "description": "Currently active work items",
+          "items": { "type": "string" }
+        },
+        "known_issues": {
+          "type": "array",
+          "description": "Known bugs or technical debt",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "conventions": {
+      "type": "object",
+      "description": "Coding conventions and standards",
+      "properties": {
+        "style": {
+          "type": "array",
+          "description": "Code style rules",
+          "items": { "type": "string" }
+        },
+        "naming": {
+          "type": "array",
+          "description": "Naming conventions",
+          "items": { "type": "string" }
+        },
+        "patterns": {
+          "type": "array",
+          "description": "Preferred design patterns",
+          "items": { "type": "string" }
+        },
+        "avoid": {
+          "type": "array",
+          "description": "Anti-patterns and things to avoid",
+          "items": { "type": "string" }
+        },
+        "commit_format": {
+          "type": "string",
+          "description": "Commit message format (e.g., 'conventional')",
+          "enum": ["conventional", "angular", "semantic", "custom"],
+          "default": "conventional"
+        }
+      }
+    },
+    "security": {
+      "type": "object",
+      "description": "Security requirements and rules",
+      "properties": {
+        "rules": {
+          "type": "array",
+          "description": "Security rules AI must follow",
+          "items": { "type": "string" }
+        },
+        "sensitive_paths": {
+          "type": "array",
+          "description": "Paths containing sensitive data",
+          "items": { "type": "string" }
+        },
+        "secret_patterns": {
+          "type": "array",
+          "description": "Patterns to detect secrets",
+          "items": { "type": "string" }
+        },
+        "require_review": {
+          "type": "array",
+          "description": "Paths/patterns requiring human review",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "skills": {
+      "type": "array",
+      "description": "Reusable AI skills/commands",
+      "items": {
+        "type": "object",
+        "required": ["name", "description"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Skill name (used as command trigger)",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "description": {
+            "type": "string",
+            "description": "What this skill does"
+          },
+          "trigger": {
+            "type": "string",
+            "description": "When to use this skill"
+          },
+          "steps": {
+            "type": "array",
+            "description": "Steps the AI should follow",
+            "items": { "type": "string" }
+          },
+          "output": {
+            "type": "string",
+            "description": "Expected output format"
+          },
+          "examples": {
+            "type": "array",
+            "description": "Example usages",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "agents": {
+      "type": "array",
+      "description": "Specialized AI agent personas",
+      "items": {
+        "type": "object",
+        "required": ["name", "role"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Agent name",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "role": {
+            "type": "string",
+            "description": "Agent's role/persona"
+          },
+          "expertise": {
+            "type": "array",
+            "description": "Areas of expertise",
+            "items": { "type": "string" }
+          },
+          "instructions": {
+            "type": "string",
+            "description": "Specific instructions for this agent"
+          }
+        }
+      }
+    },
+    "tools": {
+      "type": "object",
+      "description": "AI tool-specific configuration",
+      "properties": {
+        "generate": {
+          "type": "array",
+          "description": "Which tool configs to generate",
+          "items": {
+            "type": "string",
+            "enum": [
+              "claude",
+              "cursor",
+              "copilot",
+              "windsurf",
+              "aider",
+              "continue",
+              "cline",
+              "zed",
+              "junie",
+              "goose",
+              "kiro",
+              "augment",
+              "qodo",
+              "opencode",
+              "zencoder",
+              "tabnine",
+              "amazonq",
+              "agents-md"
+            ]
+          },
+          "default": ["claude", "cursor", "copilot"]
+        },
+        "claude": {
+          "type": "object",
+          "description": "Claude Code specific settings",
+          "properties": {
+            "model": { "type": "string" },
+            "max_tokens": { "type": "integer" }
+          }
+        },
+        "cursor": {
+          "type": "object",
+          "description": "Cursor specific settings",
+          "properties": {
+            "rules_style": {
+              "type": "string",
+              "enum": ["single-file", "directory"]
+            }
+          }
+        }
+      }
+    },
+    "memory": {
+      "type": "object",
+      "description": "Session memory and persistence settings",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable MCP memory server",
+          "default": false
+        },
+        "storage": {
+          "type": "string",
+          "enum": ["sqlite", "postgres"],
+          "default": "sqlite"
+        },
+        "session_notes_dir": {
+          "type": "string",
+          "description": "Directory for session handoff notes",
+          "default": "docs/session-notes"
+        },
+        "decisions_dir": {
+          "type": "string",
+          "description": "Directory for architectural decisions",
+          "default": "docs/decisions"
+        }
+      }
+    },
+    "hooks": {
+      "type": "object",
+      "description": "Git hooks and automation",
+      "properties": {
+        "pre_commit": {
+          "type": "array",
+          "description": "Pre-commit checks to run",
+          "items": {
+            "type": "string",
+            "enum": ["secrets", "todos", "security", "lint", "test"]
+          }
+        },
+        "post_commit": {
+          "type": "array",
+          "description": "Post-commit actions",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

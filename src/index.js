@@ -1,16 +1,16 @@
 /**
- * AI Excellence Framework
+ * Guvnr - Universal AI Coding Assistant Configuration
  *
- * A comprehensive framework for reducing friction in AI-assisted software development.
+ * One config to govern Claude, Cursor, Copilot, Windsurf, Aider, and 15+ other AI tools.
  *
- * @module ai-excellence-framework
- * @see https://ai-excellence-framework.github.io/
+ * @module guvnr
+ * @see https://guvnr.dev
  *
  * @example
  * // Programmatic usage
- * import { initCommand, validateCommand, VERSION } from 'ai-excellence-framework';
+ * import { initCommand, validateCommand, VERSION } from 'guvnr';
  *
- * // Initialize framework in a directory
+ * // Initialize guvnr in a directory
  * const result = await initCommand({ preset: 'standard', yes: true });
  *
  * // Validate installation
@@ -18,7 +18,7 @@
  *
  * @example
  * // Error handling
- * import { createError, FrameworkError, EXIT_CODES } from 'ai-excellence-framework/errors';
+ * import { createError, FrameworkError, EXIT_CODES } from 'guvnr/errors';
  *
  * try {
  *   await riskyOperation();
@@ -73,7 +73,8 @@
  * @property {boolean} installed - Whether the framework is installed
  * @property {PresetName|null} preset - Detected preset level, or null if not installed
  * @property {Object} checks - Individual component check results
- * @property {boolean} checks.claudeMd - Whether CLAUDE.md exists
+ * @property {boolean} checks.guvnrYaml - Whether guvnr.yaml exists (primary config)
+ * @property {boolean} checks.claudeMd - Whether CLAUDE.md exists (generated output)
  * @property {boolean} checks.commandsDir - Whether .claude/commands exists
  * @property {boolean} checks.agentsDir - Whether .claude/agents exists
  * @property {boolean} checks.preCommit - Whether .pre-commit-config.yaml exists
@@ -188,7 +189,7 @@ export const DEFAULT_CONFIG = {
  */
 export const PRESET_CONFIGS = {
   minimal: {
-    description: 'CLAUDE.md + essential commands only',
+    description: 'guvnr.yaml + essential skills only',
     commands: ['plan', 'verify'],
     agents: [],
     hooks: false,
@@ -345,6 +346,8 @@ const PACKAGE_ROOT = join(__dirname, '..');
  */
 export function checkInstallation(cwd = process.cwd()) {
   const checks = {
+    guvnrYaml:
+      existsSync(join(cwd, 'guvnr.yaml')) || existsSync(join(cwd, 'guvnr.yml')),
     claudeMd: existsSync(join(cwd, 'CLAUDE.md')),
     commandsDir: existsSync(join(cwd, '.claude', 'commands')),
     agentsDir: existsSync(join(cwd, '.claude', 'agents')),
@@ -352,7 +355,8 @@ export function checkInstallation(cwd = process.cwd()) {
     mcpServer: existsSync(join(cwd, 'scripts', 'mcp', 'project-memory-server.py'))
   };
 
-  const installed = checks.claudeMd && checks.commandsDir;
+  // guvnr.yaml is the primary indicator; CLAUDE.md is legacy/generated
+  const installed = checks.guvnrYaml || (checks.claudeMd && checks.commandsDir);
 
   let preset = null;
   if (installed) {
@@ -468,7 +472,7 @@ export const readClaudeMd = deprecate(
   _readClaudeMdSync,
   'readClaudeMd() is deprecated. Use readClaudeMdAsync() instead for better performance. ' +
     'Synchronous file reads block the event loop.',
-  'AIX_DEP_001'
+  'GUVNR_DEP_001'
 );
 
 /**

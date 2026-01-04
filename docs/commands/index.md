@@ -1,6 +1,6 @@
 # Slash Commands
 
-The AI Excellence Framework includes 8 slash commands for structured AI workflows.
+Guvnr includes 8 slash commands for structured AI workflows.
 
 ## Command Overview
 
@@ -19,7 +19,7 @@ The AI Excellence Framework includes 8 slash commands for structured AI workflow
 
 ```bash
 # Install commands
-npx ai-excellence-framework init --preset standard
+npx guvnr init --preset standard
 
 # Use in Claude
 /plan add user authentication

@@ -1,6 +1,6 @@
 # Troubleshooting Guide
 
-Quick solutions to common issues when using the AI Excellence Framework.
+Quick solutions to common issues when using Guvnr.
 
 ## Installation Issues
 
@@ -14,16 +14,16 @@ Quick solutions to common issues when using the AI Excellence Framework.
 "test": "node --test tests/*.test.js"
 ```
 
-### `npx ai-excellence init` fails
+### `npx guvnr init` fails
 
 **Problem:** CLI fails during initialization.
 
 **Solutions:**
 
 1. Ensure Node.js 18+ is installed: `node --version`
-2. Try with verbose output: `npx ai-excellence doctor --verbose`
+2. Try with verbose output: `npx guvnr doctor --verbose`
 3. Clear npm cache: `npm cache clean --force`
-4. Install globally: `npm install -g ai-excellence-framework`
+4. Install globally: `npm install -g guvnr`
 
 ### Pre-commit hooks not running
 
@@ -170,7 +170,7 @@ Quick solutions to common issues when using the AI Excellence Framework.
 
 ### Before asking for help
 
-1. Run `npx ai-excellence doctor --verbose`
+1. Run `npx guvnr doctor --verbose`
 2. Check `npm test` output
 3. Review this troubleshooting guide
 4. Search existing issues
@@ -185,7 +185,7 @@ Include:
 - Error message (full output)
 - Steps to reproduce
 
-**GitHub Issues:** https://github.com/ai-excellence-framework/ai-excellence-framework/issues
+**GitHub Issues:** https://github.com/guvnr-dev/guvnr/issues
 
 ## Common Error Messages
 
@@ -206,8 +206,8 @@ chmod +x scripts/hooks/*.sh
 
 **Fix:**
 
-1. Run `npx ai-excellence validate` to check structure
-2. Run `npx ai-excellence init` to restore missing files
+1. Run `npx guvnr validate` to check structure
+2. Run `npx guvnr init` to restore missing files
 
 ### "SyntaxError: Unexpected token"
 
@@ -467,7 +467,7 @@ rules:
 
 ```bash
 # CLI verbose output
-npx ai-excellence-framework doctor --verbose
+npx guvnr doctor --verbose
 
 # MCP server debug mode
 export PROJECT_MEMORY_DEBUG=true
@@ -478,7 +478,7 @@ python scripts/mcp/project-memory-server.py
 
 ```bash
 # Full validation with verbose output
-npx ai-excellence-framework validate --verbose
+npx guvnr validate --verbose
 
 # List installed components
 ls -la .claude/commands/
@@ -517,7 +517,7 @@ SELECT * FROM decisions ORDER BY timestamp DESC LIMIT 5;
 2. Regenerate from template:
 
    ```bash
-   npx ai-excellence-framework init --force
+   npx guvnr init --force
    ```
 
 3. Use health monitor:
@@ -564,19 +564,19 @@ SELECT * FROM decisions ORDER BY timestamp DESC LIMIT 5;
 
 ```bash
 # Validate and auto-fix
-npx ai-excellence-framework validate --fix
+npx guvnr validate --fix
 
 # Full reinitialization (preserves CLAUDE.md content)
-npx ai-excellence-framework init --preset standard --force
+npx guvnr init --preset standard --force
 ```
 
 ## Diagnostic Commands Reference
 
 | Command                                           | Purpose                  |
 | ------------------------------------------------- | ------------------------ |
-| `npx ai-excellence doctor`                        | Full environment check   |
-| `npx ai-excellence validate`                      | Configuration validation |
-| `npx ai-excellence validate --fix`                | Auto-fix issues          |
+| `npx guvnr doctor`                        | Full environment check   |
+| `npx guvnr validate`                      | Configuration validation |
+| `npx guvnr validate --fix`                | Auto-fix issues          |
 | `./scripts/health/claude-md-monitor.sh`           | CLAUDE.md health check   |
 | `node scripts/metrics/friction-metrics.js status` | Metrics system status    |
 | `python -c "import mcp; print('OK')"`             | MCP SDK check            |
@@ -589,7 +589,7 @@ If you've tried the above solutions and still have issues:
 1. **Gather diagnostics:**
 
    ```bash
-   npx ai-excellence doctor --verbose > diagnostics.txt 2>&1
+   npx guvnr doctor --verbose > diagnostics.txt 2>&1
    node --version >> diagnostics.txt
    python3 --version >> diagnostics.txt
    ```
@@ -600,9 +600,9 @@ If you've tried the above solutions and still have issues:
    - Relevant configuration files
 
 3. **Open an issue:**
-   - [GitHub Issues](https://github.com/ai-excellence-framework/ai-excellence-framework/issues)
+   - [GitHub Issues](https://github.com/guvnr-dev/guvnr/issues)
    - Include diagnostics.txt
    - Tag with appropriate labels
 
 4. **Community help:**
-   - [GitHub Discussions](https://github.com/ai-excellence-framework/ai-excellence-framework/discussions)
+   - [GitHub Discussions](https://github.com/guvnr-dev/guvnr/discussions)

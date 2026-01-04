@@ -293,4 +293,4 @@ def validate_token(token: str, resource: str) -> bool:
 
 ---
 
-_Part of the [AI Excellence Framework](https://github.com/ai-excellence-framework/ai-excellence-framework)_
+_Part of [Guvnr](https://github.com/guvnr-dev/guvnr)_

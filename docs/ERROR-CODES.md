@@ -1,12 +1,12 @@
 # Error Codes Reference
 
-This document provides a complete reference for all AI Excellence Framework error codes.
+This document provides a complete reference for all Guvnr error codes.
 
 ## Error Code Format
 
-Error codes follow the format: `AIX-{CATEGORY}-{NUMBER}`
+Error codes follow the format: `GUVNR-{CATEGORY}-{NUMBER}`
 
-- **AIX**: AI Excellence Framework prefix
+- **GUVNR**: Guvnr prefix
 - **CATEGORY**: Error category (INIT, VALID, CONFIG, FS, NET, MCP, HOOK, GEN)
 - **NUMBER**: Specific error number within the category
 
@@ -25,9 +25,9 @@ Error codes follow the format: `AIX-{CATEGORY}-{NUMBER}`
 
 ---
 
-## Initialization Errors (AIX-INIT-xxx)
+## Initialization Errors (GUVNR-INIT-xxx)
 
-### AIX-INIT-100
+### GUVNR-INIT-100
 
 **General initialization failure**
 
@@ -35,15 +35,15 @@ The framework failed to initialize for an unspecified reason.
 
 **Solution:** Check file permissions and try again with `--verbose` flag for more details.
 
-### AIX-INIT-101
+### GUVNR-INIT-101
 
 **Directory already contains framework files**
 
-The target directory already has AI Excellence Framework files installed.
+The target directory already has Guvnr files installed.
 
 **Solution:** Use `--force` to overwrite existing files, or use `--dry-run` to preview changes first.
 
-### AIX-INIT-102
+### GUVNR-INIT-102
 
 **Invalid preset specified**
 
@@ -51,7 +51,7 @@ The preset name provided is not recognized.
 
 **Solution:** Valid presets are: `minimal`, `standard`, `full`, `team`
 
-### AIX-INIT-103
+### GUVNR-INIT-103
 
 **Failed to create directory structure**
 
@@ -59,15 +59,15 @@ Could not create the required directory structure.
 
 **Solution:** Check write permissions for the target directory.
 
-### AIX-INIT-104
+### GUVNR-INIT-104
 
 **Template file not found**
 
 A required template file is missing from the installation.
 
-**Solution:** Reinstall the framework: `npm install -g ai-excellence-framework`
+**Solution:** Reinstall the framework: `npm install -g guvnr`
 
-### AIX-INIT-105
+### GUVNR-INIT-105
 
 **Interactive prompts not available**
 
@@ -77,9 +77,9 @@ The command requires interactive input but the terminal doesn't support it.
 
 ---
 
-## Validation Errors (AIX-VALID-xxx)
+## Validation Errors (GUVNR-VALID-xxx)
 
-### AIX-VALID-200
+### GUVNR-VALID-200
 
 **General validation failure**
 
@@ -87,7 +87,7 @@ Validation failed for an unspecified reason.
 
 **Solution:** Run `aix validate --verbose` for detailed validation output.
 
-### AIX-VALID-201
+### GUVNR-VALID-201
 
 **CLAUDE.md file is missing**
 
@@ -95,7 +95,7 @@ The project doesn't have a CLAUDE.md file.
 
 **Solution:** Run `aix init` to create CLAUDE.md or create it manually.
 
-### AIX-VALID-202
+### GUVNR-VALID-202
 
 **CLAUDE.md missing required sections**
 
@@ -103,15 +103,15 @@ The CLAUDE.md file is missing one or more required sections.
 
 **Solution:** Required sections are: `## Overview`, `## Tech Stack`, `## Current State`
 
-### AIX-VALID-203
+### GUVNR-VALID-203
 
 **Configuration schema validation failed**
 
 The configuration file doesn't match the expected schema.
 
-**Solution:** Check `ai-excellence.config.json` against the schema.
+**Solution:** Check `guvnr.yaml` against the schema.
 
-### AIX-VALID-204
+### GUVNR-VALID-204
 
 **Slash command file is malformed**
 
@@ -119,7 +119,7 @@ A slash command file has invalid structure.
 
 **Solution:** Slash commands must have YAML frontmatter with a "description" field.
 
-### AIX-VALID-205
+### GUVNR-VALID-205
 
 **Agent definition is malformed**
 
@@ -127,7 +127,7 @@ An agent definition file has invalid structure.
 
 **Solution:** Agent files must have YAML frontmatter with "name" and "description" fields.
 
-### AIX-VALID-206
+### GUVNR-VALID-206
 
 **Hook script is not executable**
 
@@ -137,25 +137,25 @@ A hook script doesn't have execute permissions.
 
 ---
 
-## Configuration Errors (AIX-CONFIG-xxx)
+## Configuration Errors (GUVNR-CONFIG-xxx)
 
-### AIX-CONFIG-300
+### GUVNR-CONFIG-300
 
 **General configuration error**
 
 A configuration error occurred.
 
-**Solution:** Check `ai-excellence.config.json` for syntax errors.
+**Solution:** Check `guvnr.yaml` for syntax errors.
 
-### AIX-CONFIG-301
+### GUVNR-CONFIG-301
 
 **Configuration file not found**
 
 The configuration file doesn't exist.
 
-**Solution:** Run `aix init` to create configuration or create `ai-excellence.config.json` manually.
+**Solution:** Run `aix init` to create configuration or create `guvnr.yaml` manually.
 
-### AIX-CONFIG-302
+### GUVNR-CONFIG-302
 
 **Invalid JSON in configuration file**
 
@@ -163,7 +163,7 @@ The configuration file contains invalid JSON.
 
 **Solution:** Validate JSON syntax at https://jsonlint.com/
 
-### AIX-CONFIG-303
+### GUVNR-CONFIG-303
 
 **Unknown configuration option**
 
@@ -171,7 +171,7 @@ The configuration file contains an unrecognized option.
 
 **Solution:** Check documentation for valid configuration options.
 
-### AIX-CONFIG-304
+### GUVNR-CONFIG-304
 
 **Incompatible configuration version**
 
@@ -181,9 +181,9 @@ The configuration file version is not compatible with the current framework vers
 
 ---
 
-## Filesystem Errors (AIX-FS-xxx)
+## Filesystem Errors (GUVNR-FS-xxx)
 
-### AIX-FS-400
+### GUVNR-FS-400
 
 **General filesystem error**
 
@@ -191,7 +191,7 @@ A filesystem operation failed.
 
 **Solution:** Check file permissions and disk space.
 
-### AIX-FS-401
+### GUVNR-FS-401
 
 **Permission denied**
 
@@ -199,7 +199,7 @@ The operation was denied due to insufficient permissions.
 
 **Solution:** Check file/directory permissions or run with appropriate privileges.
 
-### AIX-FS-402
+### GUVNR-FS-402
 
 **File not found**
 
@@ -207,7 +207,7 @@ The specified file doesn't exist.
 
 **Solution:** Verify the file path exists and is spelled correctly.
 
-### AIX-FS-403
+### GUVNR-FS-403
 
 **Directory not found**
 
@@ -215,7 +215,7 @@ The specified directory doesn't exist.
 
 **Solution:** Create the directory first or check the path.
 
-### AIX-FS-404
+### GUVNR-FS-404
 
 **Disk space insufficient**
 
@@ -223,7 +223,7 @@ There isn't enough disk space for the operation.
 
 **Solution:** Free up disk space and try again.
 
-### AIX-FS-405
+### GUVNR-FS-405
 
 **File already exists and overwrite not allowed**
 
@@ -233,9 +233,9 @@ The target file exists and the operation doesn't allow overwriting.
 
 ---
 
-## Network Errors (AIX-NET-xxx)
+## Network Errors (GUVNR-NET-xxx)
 
-### AIX-NET-500
+### GUVNR-NET-500
 
 **General network error**
 
@@ -243,7 +243,7 @@ A network operation failed.
 
 **Solution:** Check internet connection and try again.
 
-### AIX-NET-501
+### GUVNR-NET-501
 
 **Failed to download template**
 
@@ -251,7 +251,7 @@ Could not download a template from the network.
 
 **Solution:** Check internet connection or use offline installation.
 
-### AIX-NET-502
+### GUVNR-NET-502
 
 **Registry unreachable**
 
@@ -261,9 +261,9 @@ The npm registry cannot be reached.
 
 ---
 
-## MCP Server Errors (AIX-MCP-xxx)
+## MCP Server Errors (GUVNR-MCP-xxx)
 
-### AIX-MCP-600
+### GUVNR-MCP-600
 
 **General MCP server error**
 
@@ -271,7 +271,7 @@ An error occurred with the MCP server.
 
 **Solution:** Check MCP server logs and configuration.
 
-### AIX-MCP-601
+### GUVNR-MCP-601
 
 **MCP server failed to start**
 
@@ -279,7 +279,7 @@ The MCP server could not start.
 
 **Solution:** Check Python installation and MCP SDK: `pip install mcp`
 
-### AIX-MCP-602
+### GUVNR-MCP-602
 
 **MCP database initialization failed**
 
@@ -287,7 +287,7 @@ The MCP database could not be initialized.
 
 **Solution:** Check write permissions for `~/.claude/project-memories/`
 
-### AIX-MCP-603
+### GUVNR-MCP-603
 
 **MCP connection pool exhausted**
 
@@ -295,7 +295,7 @@ All database connections are in use.
 
 **Solution:** Increase `PROJECT_MEMORY_POOL_SIZE` environment variable.
 
-### AIX-MCP-604
+### GUVNR-MCP-604
 
 **MCP rate limit exceeded**
 
@@ -303,7 +303,7 @@ Too many operations in a short time period.
 
 **Solution:** Wait before retrying or increase `PROJECT_MEMORY_RATE_LIMIT`.
 
-### AIX-MCP-605
+### GUVNR-MCP-605
 
 **MCP data import failed**
 
@@ -313,9 +313,9 @@ Failed to import data from a backup file.
 
 ---
 
-## Hook Errors (AIX-HOOK-xxx)
+## Hook Errors (GUVNR-HOOK-xxx)
 
-### AIX-HOOK-700
+### GUVNR-HOOK-700
 
 **General hook error**
 
@@ -323,7 +323,7 @@ A hook operation failed.
 
 **Solution:** Check hook script syntax and permissions.
 
-### AIX-HOOK-701
+### GUVNR-HOOK-701
 
 **Pre-commit hook installation failed**
 
@@ -331,7 +331,7 @@ Could not install pre-commit hooks.
 
 **Solution:** Install pre-commit: `pip install pre-commit && pre-commit install`
 
-### AIX-HOOK-702
+### GUVNR-HOOK-702
 
 **Hook script execution failed**
 
@@ -339,7 +339,7 @@ A hook script failed to execute.
 
 **Solution:** Check script syntax: `bash -n scripts/hooks/script.sh`
 
-### AIX-HOOK-703
+### GUVNR-HOOK-703
 
 **Hook blocked by security policy**
 
@@ -349,9 +349,9 @@ A hook was blocked due to security settings.
 
 ---
 
-## General Errors (AIX-GEN-xxx)
+## General Errors (GUVNR-GEN-xxx)
 
-### AIX-GEN-900
+### GUVNR-GEN-900
 
 **Unknown error occurred**
 
@@ -359,7 +359,7 @@ An unexpected error occurred.
 
 **Solution:** Run with `--verbose` flag and report issue on GitHub.
 
-### AIX-GEN-901
+### GUVNR-GEN-901
 
 **Operation cancelled by user**
 
@@ -367,7 +367,7 @@ The user cancelled the operation.
 
 **Solution:** No action needed.
 
-### AIX-GEN-902
+### GUVNR-GEN-902
 
 **Operation timed out**
 
@@ -375,7 +375,7 @@ The operation took too long and was cancelled.
 
 **Solution:** Try again or increase timeout if available.
 
-### AIX-GEN-903
+### GUVNR-GEN-903
 
 **Unsupported Node.js version**
 
@@ -383,7 +383,7 @@ The Node.js version is too old.
 
 **Solution:** Upgrade to Node.js 18.x or higher.
 
-### AIX-GEN-904
+### GUVNR-GEN-904
 
 **Unsupported operating system**
 
@@ -399,5 +399,5 @@ If you encounter an error not listed here or need additional help:
 
 1. Run the command with `--verbose` for detailed output
 2. Check the [Troubleshooting Guide](./TROUBLESHOOTING.md)
-3. Search [existing issues](https://github.com/ai-excellence-framework/ai-excellence-framework/issues)
+3. Search [existing issues](https://github.com/guvnr-dev/guvnr/issues)
 4. Open a new issue with the error code and verbose output

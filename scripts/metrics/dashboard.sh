@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# AI Excellence Framework - Metrics Dashboard
+# Guvnr - Metrics Dashboard
 #
 # Terminal-based dashboard for visualizing session metrics.
 #
@@ -151,7 +151,7 @@ draw_dashboard() {
     echo -e "${CYAN}"
     draw_line $width $TL $TR
     printf "${V}%*s${V}\n" $((width-2)) ""
-    printf "${V}  ${WHITE}${BOLD}AI Excellence Framework Dashboard${NC}${CYAN}%*s${V}\n" $((width-38)) ""
+    printf "${V}  ${WHITE}${BOLD}Guvnr Dashboard${NC}${CYAN}%*s${V}\n" $((width-19)) ""
     printf "${V}%*s${V}\n" $((width-2)) ""
     draw_line $width $LT $RT
     echo -e "${NC}"

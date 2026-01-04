@@ -246,4 +246,4 @@ All metrics are stored locally and never transmitted. No telemetry is sent to ex
 
 ---
 
-_Part of the AI Excellence Framework_
+_Part of Guvnr_

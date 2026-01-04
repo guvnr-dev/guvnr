@@ -1,7 +1,10 @@
 /**
- * AI Excellence Framework - Generate Command
+ * Guvnr - Generate Command
  *
- * Generates configuration files for multiple AI coding tools:
+ * Generates tool-specific configuration files from guvnr.yaml:
+ * - CLAUDE.md (Claude Code)
+ * - .claude/commands/ (Claude slash commands)
+ * - .claude/agents/ (Claude subagents)
  * - AGENTS.md (Linux Foundation AAIF standard)
  * - Skills (SKILL.md - universal agent skills specification)
  * - Claude Code Plugins (.claude-plugin/plugin.json)
@@ -12,7 +15,7 @@
  * - JetBrains Junie (.junie/guidelines.md)
  * - Cline (.clinerules)
  * - Block Goose (AGENTS.md + MCP extensions)
- * - Kiro CLI (~/.kiro/ - AWS Q Developer successor)
+ * - Kiro CLI (~/.kiro/)
  * - Continue.dev (config.yaml, .continue/rules/)
  * - Augment Code (augment rules)
  * - Qodo AI (TOML config)
@@ -21,22 +24,11 @@
  * - Tabnine (.tabnine/guidelines/)
  * - Amazon Q Developer (.amazonq/rules/)
  *
- * This enables the framework to work across all major AI coding assistants.
+ * guvnr.yaml is the single source of truth - all tool configs are generated from it.
  *
+ * @see https://guvnr.dev - Guvnr documentation
  * @see https://agents.md - AAIF standard
  * @see https://agentskills.io/specification - Agent Skills specification
- * @see https://code.claude.com/docs/en/plugins-reference - Claude Code Plugins
- * @see https://kiro.dev/docs/cli/ - Kiro CLI
- * @see https://docs.continue.dev/reference - Continue.dev
- * @see https://www.augmentcode.com - Augment Code
- * @see https://www.qodo.ai - Qodo AI
- * @see https://github.com/JetBrains/junie-guidelines - Junie guidelines
- * @see https://docs.cline.bot/features/cline-rules - Cline rules
- * @see https://block.github.io/goose/ - Block Goose
- * @see https://opencode.ai - OpenCode AI
- * @see https://zencoder.ai - Zencoder
- * @see https://www.tabnine.com - Tabnine
- * @see https://docs.aws.amazon.com/amazonq - Amazon Q Developer
  */
 
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
@@ -44,6 +36,7 @@ import { readFile } from 'fs/promises';
 import { join, dirname, basename } from 'path';
 import { fileURLToPath } from 'url';
 import chalk from 'chalk';
+import yaml from 'js-yaml';
 import { createError, FrameworkError } from '../errors.js';
 
 /**
@@ -128,6 +121,113 @@ export function isToolSupported(tool) {
 }
 
 /**
+ * Transform guvnr.yaml config to projectContext format
+ * This bridges the new guvnr.yaml format to the existing generator infrastructure
+ *
+ * @param {object} config - Parsed guvnr.yaml content
+ * @returns {object} Project context in the format expected by generators
+ */
+function transformGuvnrToContext(config) {
+  const project = config.project || {};
+  const techStack = config.tech_stack || {};
+  const context = config.context || {};
+  const conventions = config.conventions || {};
+  const security = config.security || {};
+  const skills = config.skills || [];
+  const agents = config.agents || [];
+
+  // Build tech stack array
+  const techStackArray = [];
+  if (techStack.languages) {
+    techStack.languages.forEach(lang => {
+      techStackArray.push(`${lang.name}${lang.version ? ` ${lang.version}` : ''}`);
+    });
+  }
+  if (techStack.frameworks) {
+    techStack.frameworks.forEach(fw => {
+      techStackArray.push(`${fw.name}${fw.version ? ` ${fw.version}` : ''}`);
+    });
+  }
+  if (techStack.runtime) {
+    techStackArray.push(`${techStack.runtime.name}${techStack.runtime.version ? ` ${techStack.runtime.version}` : ''}`);
+  }
+  if (techStack.package_manager) {
+    techStackArray.push(techStack.package_manager);
+  }
+  if (techStack.test_framework) {
+    techStackArray.push(techStack.test_framework);
+  }
+
+  // Build conventions string
+  const conventionsLines = [];
+  if (conventions.style) {
+    conventionsLines.push('### Style', ...conventions.style.map(s => `- ${s}`), '');
+  }
+  if (conventions.naming) {
+    conventionsLines.push('### Naming', ...conventions.naming.map(n => `- ${n}`), '');
+  }
+  if (conventions.patterns) {
+    conventionsLines.push('### Patterns', ...conventions.patterns.map(p => `- ${p}`), '');
+  }
+  if (conventions.avoid) {
+    conventionsLines.push('### Avoid', ...conventions.avoid.map(a => `- ${a}`), '');
+  }
+
+  // Build security checklist
+  const securityLines = [];
+  if (security.rules) {
+    securityLines.push(...security.rules.map(r => `- [ ] ${r}`));
+  }
+
+  // Build current state
+  const currentStateLines = [];
+  if (context.current_phase) {
+    currentStateLines.push(`### Phase\n${context.current_phase}\n`);
+  }
+  if (context.active_work) {
+    currentStateLines.push('### Active Work', ...context.active_work.map(w => `- ${w}`), '');
+  }
+  if (context.known_issues) {
+    currentStateLines.push('### Known Issues', ...context.known_issues.map(i => `- ${i}`), '');
+  }
+
+  // Store skills and agents for tool-specific generation
+  const skillsFormatted = skills.map(s => ({
+    name: s.name,
+    description: s.description,
+    trigger: s.trigger,
+    steps: s.steps || []
+  }));
+
+  const agentsFormatted = agents.map(a => ({
+    name: a.name,
+    role: a.role,
+    expertise: a.expertise || [],
+    instructions: a.instructions || ''
+  }));
+
+  return {
+    projectName: project.name || 'Untitled Project',
+    overview: context.overview || project.description || '',
+    techStack: techStackArray,
+    architecture: context.architecture || '',
+    conventions: conventionsLines.join('\n'),
+    commands: '', // Populated by specific tools
+    currentState: currentStateLines.join('\n'),
+    sessionInstructions: '', // Tool-specific
+    securityChecklist: securityLines.join('\n'),
+    // Extended fields from guvnr.yaml
+    skills: skillsFormatted,
+    agents: agentsFormatted,
+    security,
+    tools: config.tools || {},
+    memory: config.memory || {},
+    hooks: config.hooks || {},
+    raw: config
+  };
+}
+
+/**
  * Main generate command handler
  *
  * @param {object} options - Command options
@@ -140,7 +240,7 @@ export function isToolSupported(tool) {
 export async function generateCommand(options) {
   const cwd = process.cwd();
 
-  console.log(chalk.cyan('\n  AI Excellence Framework - Multi-Tool Generator\n'));
+  console.log(chalk.cyan('\n  Guvnr - Multi-Tool Config Generator\n'));
 
   // Determine which tools to generate for
   let tools = options.tools || ['all'];
@@ -156,23 +256,39 @@ export async function generateCommand(options) {
   const invalidTools = tools.filter(t => !isToolSupported(t));
   if (invalidTools.length > 0) {
     throw createError(
-      'AIX-CONFIG-303',
+      'GUVNR-CONFIG-303',
       `Invalid tools: ${invalidTools.join(', ')}. Supported: ${SUPPORTED_TOOLS.join(', ')}`
     );
   }
 
-  // Check for CLAUDE.md as source of truth
+  // Check for guvnr.yaml as source of truth (primary)
+  const guvnrYamlPath = join(cwd, 'guvnr.yaml');
+  const guvnrYmlPath = join(cwd, 'guvnr.yml');
   const claudeMdPath = join(cwd, 'CLAUDE.md');
   let projectContext = null;
+  let configSource = null;
 
-  if (existsSync(claudeMdPath)) {
-    console.log(chalk.gray('  Using CLAUDE.md as source of truth\n'));
+  if (existsSync(guvnrYamlPath)) {
+    console.log(chalk.gray('  Using guvnr.yaml as source of truth\n'));
+    const guvnrContent = await readFile(guvnrYamlPath, 'utf-8');
+    const guvnrConfig = yaml.load(guvnrContent);
+    projectContext = transformGuvnrToContext(guvnrConfig);
+    configSource = 'guvnr.yaml';
+  } else if (existsSync(guvnrYmlPath)) {
+    console.log(chalk.gray('  Using guvnr.yml as source of truth\n'));
+    const guvnrContent = await readFile(guvnrYmlPath, 'utf-8');
+    const guvnrConfig = yaml.load(guvnrContent);
+    projectContext = transformGuvnrToContext(guvnrConfig);
+    configSource = 'guvnr.yml';
+  } else if (existsSync(claudeMdPath)) {
+    // Legacy support for CLAUDE.md
+    console.log(chalk.yellow('  Using CLAUDE.md (legacy) - consider migrating to guvnr.yaml\n'));
     const claudeMdContent = await readFile(claudeMdPath, 'utf-8');
-    // Lazy load parseProjectContext to improve CLI startup time
     const parseProjectContext = await getParseProjectContext();
     projectContext = parseProjectContext(claudeMdContent);
+    configSource = 'CLAUDE.md';
   } else if (!options.force) {
-    console.log(chalk.yellow('  No CLAUDE.md found. Run "aix init" first or use --force.\n'));
+    console.log(chalk.yellow('  No guvnr.yaml found. Run "guvnr init" first or use --force.\n'));
     return;
   }
 
@@ -215,8 +331,7 @@ export async function generateCommand(options) {
             await generateAiderConfig(cwd, projectContext, options, results);
             break;
           case 'claude':
-            // CLAUDE.md is handled by init command
-            results.skipped.push('CLAUDE.md (use "aix init" command)');
+            await generateClaudeConfig(cwd, projectContext, options, results);
             break;
           case 'gemini':
             await generateGeminiConfig(cwd, projectContext, options, results);
@@ -287,7 +402,7 @@ export async function generateCommand(options) {
     }
 
     // Wrap and throw (CLI will handle exit code)
-    throw createError('AIX-GEN-900', error.message, { cause: error });
+    throw createError('GUVNR-GEN-900', error.message, { cause: error });
   }
 }
 
@@ -427,8 +542,195 @@ npm run build
 \`\`\`
 
 ---
-*Generated by [AI Excellence Framework](https://github.com/ai-excellence-framework/ai-excellence-framework)*
+*Generated by [Guvnr](https://guvnr.dev)*
 `;
+}
+
+/**
+ * Generate Claude Code configuration (CLAUDE.md, .claude/commands/, .claude/agents/)
+ * This is the primary output for Claude Code users
+ */
+async function generateClaudeConfig(cwd, context, options, results) {
+  // 1. Generate CLAUDE.md
+  const claudeMdPath = join(cwd, 'CLAUDE.md');
+  if (!existsSync(claudeMdPath) || options.force) {
+    const content = generateClaudeMdContent(context);
+    if (!options.dryRun) {
+      writeFileSync(claudeMdPath, content);
+    }
+    results.created.push('CLAUDE.md');
+  } else {
+    results.skipped.push('CLAUDE.md (exists, use --force)');
+  }
+
+  // 2. Generate .claude/commands/ for skills
+  if (context.skills && context.skills.length > 0) {
+    const commandsDir = join(cwd, '.claude', 'commands');
+    if (!options.dryRun) {
+      mkdirSync(commandsDir, { recursive: true });
+    }
+
+    for (const skill of context.skills) {
+      const commandPath = join(commandsDir, `${skill.name}.md`);
+      if (!existsSync(commandPath) || options.force) {
+        const commandContent = generateClaudeCommand(skill);
+        if (!options.dryRun) {
+          writeFileSync(commandPath, commandContent);
+        }
+        results.created.push(`.claude/commands/${skill.name}.md`);
+      } else {
+        results.skipped.push(`.claude/commands/${skill.name}.md (exists)`);
+      }
+    }
+  }
+
+  // 3. Generate .claude/agents/ for agents
+  if (context.agents && context.agents.length > 0) {
+    const agentsDir = join(cwd, '.claude', 'agents');
+    if (!options.dryRun) {
+      mkdirSync(agentsDir, { recursive: true });
+    }
+
+    for (const agent of context.agents) {
+      const agentPath = join(agentsDir, `${agent.name}.md`);
+      if (!existsSync(agentPath) || options.force) {
+        const agentContent = generateClaudeAgent(agent);
+        if (!options.dryRun) {
+          writeFileSync(agentPath, agentContent);
+        }
+        results.created.push(`.claude/agents/${agent.name}.md`);
+      } else {
+        results.skipped.push(`.claude/agents/${agent.name}.md (exists)`);
+      }
+    }
+  }
+}
+
+/**
+ * Generate CLAUDE.md content from project context
+ */
+function generateClaudeMdContent(context) {
+  const projectName = context?.projectName || basename(process.cwd());
+  const techStackStr = context?.techStack?.join(', ') || 'Not specified';
+
+  let content = `# ${projectName}
+
+## Overview
+
+${context?.overview || 'A software project configured for AI-assisted development.'}
+
+## Tech Stack
+
+${techStackStr}
+
+`;
+
+  if (context?.architecture) {
+    content += `## Architecture
+
+${context.architecture}
+
+`;
+  }
+
+  if (context?.conventions) {
+    content += `## Conventions
+
+${context.conventions}
+
+`;
+  }
+
+  if (context?.currentState) {
+    content += `## Current State
+
+${context.currentState}
+
+`;
+  }
+
+  if (context?.securityChecklist) {
+    content += `## Security Checklist
+
+${context.securityChecklist}
+
+`;
+  }
+
+  content += `## Session Instructions
+
+### Before Starting
+1. Read this file completely
+2. Check for recent context in docs/session-notes/
+
+### During Work
+- Use available slash commands (\`/plan\`, \`/verify\`, etc.)
+- Follow project conventions
+- Test your changes
+
+### Before Ending
+- Commit work in progress
+- Document any incomplete work
+
+---
+*Generated by [Guvnr](https://guvnr.dev) from guvnr.yaml*
+`;
+
+  return content;
+}
+
+/**
+ * Generate Claude slash command from skill definition
+ */
+function generateClaudeCommand(skill) {
+  let content = `# ${skill.name}
+
+${skill.description}
+
+`;
+
+  if (skill.trigger) {
+    content += `**Trigger**: ${skill.trigger}
+
+`;
+  }
+
+  if (skill.steps && skill.steps.length > 0) {
+    content += `## Steps
+
+${skill.steps.map((step, i) => `${i + 1}. ${step}`).join('\n')}
+`;
+  }
+
+  return content;
+}
+
+/**
+ * Generate Claude agent from agent definition
+ */
+function generateClaudeAgent(agent) {
+  let content = `# ${agent.name}
+
+**Role**: ${agent.role}
+
+`;
+
+  if (agent.expertise && agent.expertise.length > 0) {
+    content += `## Expertise
+
+${agent.expertise.map(e => `- ${e}`).join('\n')}
+
+`;
+  }
+
+  if (agent.instructions) {
+    content += `## Instructions
+
+${agent.instructions}
+`;
+  }
+
+  return content;
 }
 
 /**
@@ -563,13 +865,13 @@ function generateCursorIndex(context) {
   const projectName = context?.projectName || basename(process.cwd());
 
   return `---
-description: AI Excellence Framework configuration for ${projectName}
+description: Guvnr configuration for ${projectName}
 alwaysApply: true
 ---
 
 # ${projectName}
 
-${context?.overview || 'A software project configured with the AI Excellence Framework.'}
+${context?.overview || 'A software project configured with the Guvnr.'}
 
 ## Quick Reference
 
@@ -626,7 +928,7 @@ function generateCopilotContent(context) {
 
 ## Project Context
 
-${context?.overview || 'This project uses the AI Excellence Framework for AI-assisted development.'}
+${context?.overview || 'This project uses the Guvnr for AI-assisted development.'}
 
 ## Tech Stack
 
@@ -744,7 +1046,7 @@ function generateWindsurfrulesContent(context) {
 
 ## Project Overview
 
-${(context?.overview || 'Project configured with AI Excellence Framework.').slice(0, 500)}
+${(context?.overview || 'Project configured with Guvnr.').slice(0, 500)}
 
 ## Tech Stack
 
@@ -804,7 +1106,7 @@ function generateWindsurfMainRule(context) {
   return `# Project Rules: ${projectName}
 
 ## Overview
-${(context?.overview || 'Project configured with AI Excellence Framework.').slice(0, 500)}
+${(context?.overview || 'Project configured with Guvnr.').slice(0, 500)}
 
 ## Tech Stack
 ${
@@ -882,7 +1184,7 @@ async function generateAiderConfig(cwd, context, options, results) {
 
 function generateAiderContent(_context) {
   return `# Aider Configuration
-# Generated by AI Excellence Framework
+# Generated by Guvnr
 # See: https://aider.chat/docs/config.html
 
 # Auto-commit changes with good messages
@@ -1005,7 +1307,7 @@ Files to never modify without explicit permission:
 - Migration files
 
 ---
-*Generated by [AI Excellence Framework](https://github.com/ai-excellence-framework/ai-excellence-framework)*
+*Generated by [Guvnr](https://guvnr.dev)*
 `;
 }
 
@@ -1047,7 +1349,7 @@ async function generateCodexConfig(cwd, context, options, results) {
 
 function generateCodexToml(_context) {
   return `# Codex CLI Configuration
-# Generated by AI Excellence Framework
+# Generated by Guvnr
 # See: https://developers.openai.com/codex/local-config/
 
 # Approval settings
@@ -1206,7 +1508,7 @@ async function generateAmpConfig(cwd, context, options, results) {
 
 function generateAmpToml(_context) {
   return `# Amp Configuration
-# Generated by AI Excellence Framework
+# Generated by Guvnr
 # See: https://ampcode.com/manual
 
 [amp]
@@ -1656,7 +1958,7 @@ ${
 - Don't use deprecated APIs
 
 ---
-*Generated by [AI Excellence Framework](https://github.com/ai-excellence-framework/ai-excellence-framework)*
+*Generated by [Guvnr](https://guvnr.dev)*
 `;
 }
 
@@ -1899,7 +2201,7 @@ See \`extensions.yaml\` for recommended MCP extensions including:
 - [AAIF (Agentic AI Foundation)](https://aaif.io)
 
 ---
-*Generated by [AI Excellence Framework](https://github.com/ai-excellence-framework/ai-excellence-framework)*
+*Generated by [Guvnr](https://guvnr.dev)*
 `;
 }
 
@@ -1948,7 +2250,7 @@ function generatePluginManifest(context) {
       name: safeName,
       version: '1.0.0',
       description: `Claude Code plugin for ${projectName}`,
-      author: 'AI Excellence Framework',
+      author: 'Guvnr',
       repository: '',
       commands: './commands',
       agents: './agents',
@@ -2001,7 +2303,7 @@ This plugin is installed locally in the project. To share it:
 - [Plugin Marketplaces](https://code.claude.com/docs/en/discover-plugins)
 
 ---
-*Generated by [AI Excellence Framework](https://github.com/ai-excellence-framework/ai-excellence-framework)*
+*Generated by [Guvnr](https://guvnr.dev)*
 `;
 }
 
@@ -2121,7 +2423,7 @@ ${
 - Migration files
 
 ---
-*Generated by [AI Excellence Framework](https://github.com/ai-excellence-framework/ai-excellence-framework)*
+*Generated by [Guvnr](https://guvnr.dev)*
 `;
 }
 
@@ -2270,7 +2572,7 @@ npm run lint   # Check code style
 - Keep commits focused and atomic
 
 ---
-*Generated by [AI Excellence Framework](https://github.com/ai-excellence-framework/ai-excellence-framework)*
+*Generated by [Guvnr](https://guvnr.dev)*
 `;
 }
 
@@ -2387,7 +2689,7 @@ Use these slash commands in Augment:
 - \`/refactor\` - Suggest refactoring improvements
 
 ---
-*Generated by [AI Excellence Framework](https://github.com/ai-excellence-framework/ai-excellence-framework)*
+*Generated by [Guvnr](https://guvnr.dev)*
 `;
 }
 
@@ -2573,7 +2875,7 @@ Never modify without explicit permission:
 - Database migration files (create new ones)
 
 ---
-*Generated by [AI Excellence Framework](https://github.com/ai-excellence-framework/ai-excellence-framework)*
+*Generated by [Guvnr](https://guvnr.dev)*
 `;
 }
 
@@ -2769,7 +3071,7 @@ npm run build  # Verify build
 \`\`\`
 
 ---
-*Generated by [AI Excellence Framework](https://github.com/ai-excellence-framework/ai-excellence-framework)*
+*Generated by [Guvnr](https://guvnr.dev)*
 `;
 }
 
@@ -3104,7 +3406,7 @@ function generateTabnineProjectGuidelines(context) {
 
 ## Project Overview
 
-${context?.overview || 'Project configured with AI Excellence Framework.'}
+${context?.overview || 'Project configured with Guvnr.'}
 
 ## Tech Stack
 
@@ -3288,7 +3590,7 @@ function generateAmazonQProjectRules(context) {
 
 ## Project Overview
 
-${context?.overview || 'Project configured with AI Excellence Framework.'}
+${context?.overview || 'Project configured with Guvnr.'}
 
 ## Tech Stack
 

@@ -1,34 +1,38 @@
 # Getting Started
 
-Get up and running with the AI Excellence Framework in under 5 minutes.
+Get up and running with Guvnr in under 5 minutes.
 
 ## TL;DR — 30-Second Setup
 
 ```bash
-# One command to install everything
-npx ai-excellence-framework init --preset standard
+# Initialize guvnr
+npx guvnr init --preset standard
+
+# Generate configs for your AI tools
+npx guvnr generate
 
 # Start using immediately
 /plan add a login button to the header
 ```
 
-That's it. You now have structured AI assistance for your project.
+That's it. You now have unified AI configuration for your project.
 
 ---
 
-## Why Use This Framework?
+## Why Use Guvnr?
 
-AI coding assistants are powerful but have known friction points:
+**The Problem**: Every AI tool has its own config format. Keeping them in sync is tedious.
 
-| Problem                    | Without Framework               | With Framework                 |
-| -------------------------- | ------------------------------- | ------------------------------ |
-| AI forgets project context | Repeats questions every session | Reads CLAUDE.md automatically  |
-| Incomplete implementations | "Done" but half-finished        | `/verify` catches gaps         |
-| Security vulnerabilities   | 86% of AI code has XSS issues   | `/security-review` audits code |
-| Lost session context       | Start from scratch next time    | `/handoff` preserves state     |
-| Hallucinated packages      | 20% fake dependencies           | Pre-commit hooks catch them    |
+**The Solution**: Write once in `guvnr.yaml`, generate everywhere.
 
-**The framework provides structure that makes AI assistance reliable.**
+| AI Tool         | Config Format                     | Guvnr Generates |
+| --------------- | --------------------------------- | --------------- |
+| Claude Code     | `CLAUDE.md`, `.claude/`           | ✅              |
+| Cursor          | `.cursor/rules/`                  | ✅              |
+| GitHub Copilot  | `.github/copilot-instructions.md` | ✅              |
+| Windsurf        | `.windsurf/rules/`                | ✅              |
+| Aider           | `.aider.conf.yml`                 | ✅              |
+| 20+ more...     | Various                           | ✅              |
 
 ---
 
@@ -47,31 +51,31 @@ git --version   # Any recent version
 
 ---
 
-## Installation Options
+## Installation
 
 ### Option 1: Interactive Setup (Recommended)
 
 ```bash
 cd your-project
-npx ai-excellence-framework init
+npx guvnr init
 ```
 
 You'll be guided through choosing a preset and customizing options.
 
 ### Option 2: Preset Selection
 
-| Preset       | Best For           | Install Command                                      |
-| ------------ | ------------------ | ---------------------------------------------------- |
-| **Minimal**  | Trying it out      | `npx ai-excellence-framework init --preset minimal`  |
-| **Standard** | Individual devs    | `npx ai-excellence-framework init --preset standard` |
-| **Full**     | Serious projects   | `npx ai-excellence-framework init --preset full`     |
-| **Team**     | Team collaboration | `npx ai-excellence-framework init --preset team`     |
+| Preset       | Best For           | Install Command                  |
+| ------------ | ------------------ | -------------------------------- |
+| **Minimal**  | Trying it out      | `npx guvnr init --preset minimal`  |
+| **Standard** | Individual devs    | `npx guvnr init --preset standard` |
+| **Full**     | Serious projects   | `npx guvnr init --preset full`     |
+| **Team**     | Team collaboration | `npx guvnr init --preset team`     |
 
 ### Option 3: Global Installation
 
 ```bash
-npm install -g ai-excellence-framework
-ai-excellence init  # or: aix init
+npm install -g guvnr
+guvnr init
 ```
 
 ---
@@ -81,7 +85,7 @@ ai-excellence init  # or: aix init
 ### Minute 1-2: Verify Installation
 
 ```bash
-npx ai-excellence-framework doctor
+npx guvnr doctor
 ```
 
 You should see green checkmarks:
@@ -92,50 +96,58 @@ You should see green checkmarks:
     ✓ Git available: 2.43.0
 
   Framework:
-    ✓ Framework installed: Yes
-    ✓ CLAUDE.md present: Yes
+    ✓ guvnr.yaml present: Yes
+    ✓ Configuration valid: Yes
 
   Summary: 10/10 checks passed
 
   ✓ All systems operational!
 ```
 
-### Minute 3-5: Customize CLAUDE.md
+### Minute 3-5: Customize guvnr.yaml
 
-Open `CLAUDE.md` and fill in your project details:
+Open `guvnr.yaml` and fill in your project details:
 
-```markdown
-# My Project Name
+```yaml
+version: "1.0"
 
-## Overview
+project:
+  name: "My App"
+  description: "A brief description of what this project does"
 
-A brief description of what this project does.
+tech_stack:
+  primary_language: "TypeScript"
+  framework: "React 18"
+  database: "PostgreSQL"
 
-## Tech Stack
+context:
+  overview: |
+    Describe your project here.
 
-- Frontend: React 18 with TypeScript
-- Backend: Node.js with Express
-- Database: PostgreSQL
+conventions:
+  code_style:
+    - "Use TypeScript strict mode"
+    - "Prefer functional components"
+  commit_messages: "conventional"
 
-## Architecture
-
-src/
-├── components/ # React components
-├── api/ # API routes
-└── utils/ # Helper functions
-
-## Current State
-
-### Phase
-
-Early development - building core features
-
-### Recent Decisions
-
-- 2025-01-15: Chose React Query for data fetching
+tools:
+  claude:
+    generate: true
+  cursor:
+    generate: true
+  copilot:
+    generate: true
 ```
 
-### Minute 6-7: Try Your First Command
+### Minute 6-7: Generate Tool Configs
+
+```bash
+npx guvnr generate
+```
+
+This creates all your tool-specific config files from guvnr.yaml.
+
+### Minute 8-9: Try Your First Command
 
 Open your AI assistant and try:
 
@@ -145,7 +157,7 @@ Open your AI assistant and try:
 
 The AI will create a structured plan before coding.
 
-### Minute 8-9: Verify Work
+### Minute 10: Verify Work
 
 After the AI implements something:
 
@@ -154,14 +166,6 @@ After the AI implements something:
 ```
 
 This catches incomplete work before you accept it.
-
-### Minute 10: End Your Session
-
-```
-/handoff
-```
-
-This creates a summary for your next session.
 
 ---
 
@@ -193,11 +197,11 @@ This creates a summary for your next session.
 
 ---
 
-## Available Commands
+## Available Skills (Slash Commands)
 
 ### Essential (Use Daily)
 
-| Command          | Purpose                    | When to Use                 |
+| Skill            | Purpose                    | When to Use                 |
 | ---------------- | -------------------------- | --------------------------- |
 | `/plan [task]`   | Create implementation plan | Before any significant work |
 | `/verify [task]` | Check work is complete     | Before accepting AI output  |
@@ -205,7 +209,7 @@ This creates a summary for your next session.
 
 ### Situational (As Needed)
 
-| Command                   | Purpose                       | When to Use                   |
+| Skill                     | Purpose                       | When to Use                   |
 | ------------------------- | ----------------------------- | ----------------------------- |
 | `/assumptions [task]`     | Surface hidden assumptions    | When requirements are unclear |
 | `/review [path]`          | Multi-perspective code review | After significant changes     |
@@ -215,159 +219,55 @@ This creates a summary for your next session.
 
 ---
 
-## Common Scenarios
-
-### Scenario: Bug Fix
+## CLI Commands
 
 ```bash
-# 1. Plan the fix
-/plan fix the login button not responding on mobile
-
-# 2. AI investigates and fixes
-
-# 3. Verify the fix
-/verify check the mobile login fix
-
-# 4. Commit
-git add . && git commit -m "fix: mobile login button responsiveness"
-```
-
-### Scenario: New Feature
-
-```bash
-# 1. Plan the feature
-/plan add user profile page with avatar upload
-
-# 2. Surface assumptions first
-/assumptions user profile requirements
-
-# 3. AI implements
-
-# 4. Security review (user-facing features)
-/security-review src/components/Profile.tsx
-
-# 5. Verify
-/verify check profile page implementation
-
-# 6. Commit
-git add . && git commit -m "feat: add user profile page"
-```
-
-### Scenario: Code Review
-
-```bash
-# Get a thorough review
-/review src/api/auth.ts
-
-# Or focus on security
-/security-review src/api/auth.ts
-```
-
-### Scenario: Refactoring
-
-```bash
-# Plan the refactor first
-/refactor extract payment logic into separate module
-
-# AI creates safe refactoring plan
-# Then implements step by step
+guvnr init [--preset <name>]    # Initialize guvnr.yaml
+guvnr generate [--tools <list>] # Generate tool configs
+guvnr validate                  # Validate configuration
+guvnr doctor                    # Check environment health
+guvnr lint                      # Lint configuration files
+guvnr detect                    # Detect installed AI tools
+guvnr update                    # Check for updates
 ```
 
 ---
 
-## What Gets Installed
+## What Gets Generated
 
-After running `init`, your project contains:
+After running `guvnr generate`, your project contains:
 
 ```
 your-project/
-├── CLAUDE.md                    # Project context (edit this!)
+├── guvnr.yaml                  # Your config (source of truth)
+├── CLAUDE.md                   # Generated for Claude Code
 ├── .claude/
 │   ├── commands/
-│   │   ├── plan.md             # /plan command
-│   │   ├── verify.md           # /verify command
-│   │   ├── handoff.md          # /handoff command
-│   │   ├── assumptions.md      # /assumptions command
-│   │   ├── review.md           # /review command
-│   │   ├── security-review.md  # /security-review command
-│   │   ├── refactor.md         # /refactor command
-│   │   └── test-coverage.md    # /test-coverage command
+│   │   ├── plan.md             # /plan skill
+│   │   ├── verify.md           # /verify skill
+│   │   └── ...                 # Other skills
 │   └── agents/
 │       ├── explorer.md         # Codebase exploration
 │       ├── reviewer.md         # Code review
 │       └── tester.md           # Test generation
-├── scripts/
-│   ├── hooks/                   # Git hooks (standard/full/team)
-│   └── mcp/                     # MCP server (full/team only)
-├── docs/
-│   └── session-notes/          # Session handoff notes
-└── .tmp/                        # Temporary files (gitignored)
+├── .cursor/rules/              # Generated for Cursor
+├── .github/
+│   └── copilot-instructions.md # Generated for Copilot
+├── AGENTS.md                   # Generated AGENTS.md standard
+└── ...                         # Other tool configs
 ```
 
 ---
 
-## Multi-Tool Support
+## Regenerating After Changes
 
-The framework works with 10+ AI coding assistants:
-
-| Tool            | Configuration File                |
-| --------------- | --------------------------------- |
-| Claude Code     | `CLAUDE.md`                       |
-| Cursor          | `.cursor/rules/`                  |
-| GitHub Copilot  | `.github/copilot-instructions.md` |
-| Windsurf        | `.windsurf/rules/`                |
-| Aider           | `.aider.conf.yml`                 |
-| Gemini CLI      | `GEMINI.md`                       |
-| OpenAI Codex    | `.codex/`                         |
-| Zed             | `.rules`                          |
-| Sourcegraph Amp | `amp.toml`                        |
-| Roo Code        | `.roo/rules/`                     |
-
-Generate configs for your tools:
+When you update `guvnr.yaml`:
 
 ```bash
-# Generate for specific tool
-npx ai-excellence-framework generate cursor
-
-# Generate for multiple tools
-npx ai-excellence-framework generate cursor copilot aider
-
-# Generate for all supported tools
-npx ai-excellence-framework generate all
+guvnr generate
 ```
 
----
-
-## Optional Enhancements
-
-### Enable Pre-commit Hooks
-
-Security scanning on every commit:
-
-```bash
-pip install pre-commit
-pre-commit install
-```
-
-### Enable MCP Server (Full/Team Presets)
-
-Persist decisions across sessions:
-
-```bash
-pip install mcp
-python scripts/mcp/project-memory-server.py
-```
-
-### Validate Configuration
-
-Check your setup anytime:
-
-```bash
-npx ai-excellence-framework validate
-
-# Fix issues automatically
-npx ai-excellence-framework validate --fix
-```
+All tool configs are regenerated to stay in sync.
 
 ---
 
@@ -377,32 +277,26 @@ npx ai-excellence-framework validate --fix
 
 ```bash
 # Use npx
-npx ai-excellence-framework --help
+npx guvnr --help
 
 # Or install globally
-npm install -g ai-excellence-framework
+npm install -g guvnr
 ```
 
 ### Slash commands not working
 
 1. Check files exist: `ls .claude/commands/`
-2. Verify YAML frontmatter is valid
+2. Run `guvnr generate` to regenerate
 3. Restart your AI assistant
 
-### CLAUDE.md not being read
-
-1. File must be named exactly `CLAUDE.md` (case-sensitive)
-2. Must be in project root
-3. Must be valid markdown
-
-### Doctor command shows errors
+### Validation errors
 
 ```bash
 # See detailed diagnostics
-npx ai-excellence-framework doctor --verbose
+npx guvnr doctor --verbose
 
-# Auto-fix common issues
-npx ai-excellence-framework doctor --fix
+# Validate configuration
+npx guvnr validate
 ```
 
 See [Troubleshooting Guide](/TROUBLESHOOTING) for more solutions.
@@ -411,12 +305,11 @@ See [Troubleshooting Guide](/TROUBLESHOOTING) for more solutions.
 
 ## Next Steps
 
-1. **Customize CLAUDE.md** — Add your project's specific context
-2. **Try /plan** — Plan your first feature
-3. **Use /verify** — Verify AI-completed work
-4. **Read [Quick Reference](/QUICK-REFERENCE)** — One-page command summary
-5. **Explore [Model Selection](/MODEL-SELECTION)** — Choose the right AI model
-6. **Read [When AI Helps](/WHEN-AI-HELPS)** — Maximize AI effectiveness
+1. **Customize guvnr.yaml** — Add your project's specific context
+2. **Run `guvnr generate`** — Create tool configs
+3. **Try /plan** — Plan your first feature
+4. **Use /verify** — Verify AI-completed work
+5. **Read [Quick Reference](/QUICK-REFERENCE)** — One-page command summary
 
 ---
 
@@ -424,9 +317,9 @@ See [Troubleshooting Guide](/TROUBLESHOOTING) for more solutions.
 
 - **Quick Reference**: [One-page guide](/QUICK-REFERENCE)
 - **Troubleshooting**: [Common issues](/TROUBLESHOOTING)
-- **GitHub Issues**: [Report bugs](https://github.com/ai-excellence-framework/ai-excellence-framework/issues)
-- **Discussions**: [Ask questions](https://github.com/ai-excellence-framework/ai-excellence-framework/discussions)
+- **GitHub Issues**: [Report bugs](https://github.com/guvnr-dev/guvnr/issues)
+- **Discussions**: [Ask questions](https://github.com/guvnr-dev/guvnr/discussions)
 
 ---
 
-Ready to dive deeper? Check out [Core Concepts](/docs/concepts) to understand the framework's philosophy.
+Ready to dive deeper? Check out [Core Concepts](/docs/concepts) to understand Guvnr's philosophy.

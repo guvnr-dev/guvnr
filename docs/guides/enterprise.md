@@ -1,6 +1,6 @@
 # Enterprise Deployment Guide
 
-This guide covers deploying and managing the AI Excellence Framework at enterprise scale, including multi-team setups, compliance considerations, and governance.
+This guide covers deploying and managing Guvnr at enterprise scale, including multi-team setups, compliance considerations, and governance.
 
 ## Table of Contents
 
@@ -20,7 +20,7 @@ This guide covers deploying and managing the AI Excellence Framework at enterpri
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                     Enterprise AI Excellence                     │
+│                       Enterprise Guvnr                           │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐             │
@@ -87,7 +87,7 @@ Each team manages their own framework installation independently.
 
 ```bash
 # Each team runs:
-npx ai-excellence-framework init --preset standard
+npx guvnr init --preset standard
 ```
 
 ### Model 2: Centralized Configuration
@@ -110,10 +110,10 @@ Central team manages configuration templates; teams apply them.
 
 ```bash
 # Central team creates organization template
-npx ai-excellence-framework init --preset team --org-template
+npx guvnr init --preset team --org-template
 
 # Teams apply organization template
-npx ai-excellence-framework init --from-org
+npx guvnr init --from-org
 ```
 
 ### Model 3: Federated (Recommended for > 50 developers)
@@ -242,7 +242,7 @@ Enable comprehensive audit logging:
 ```python
 # In MCP server configuration
 AUDIT_LOG_ENABLED = True
-AUDIT_LOG_PATH = "/var/log/ai-excellence/audit.log"
+AUDIT_LOG_PATH = "/var/log/guvnr/audit.log"
 AUDIT_LOG_FORMAT = "json"
 AUDIT_LOG_RETENTION_DAYS = 365
 
@@ -256,7 +256,7 @@ AUDIT_LOG_RETENTION_DAYS = 365
 
 ### Policy Enforcement
 
-Create a policy file (`.ai-excellence-policy.yaml`):
+Create a policy file (`.guvnr-policy.yaml`):
 
 ```yaml
 version: '1.0'
@@ -358,8 +358,8 @@ secret_management:
   address: https://vault.company.com
   auth_method: kubernetes
   secrets:
-    mcp_encryption_key: secret/data/ai-excellence/encryption
-    federation_api_key: secret/data/ai-excellence/federation
+    mcp_encryption_key: secret/data/guvnr/encryption
+    federation_api_key: secret/data/guvnr/federation
 ```
 
 ## Monitoring & Observability
@@ -375,19 +375,19 @@ metrics:
 
   # Collected metrics
   counters:
-    - aix_commands_total
-    - aix_verifications_total
-    - aix_security_issues_total
-    - aix_decisions_recorded_total
+    - guvnr_commands_total
+    - guvnr_verifications_total
+    - guvnr_security_issues_total
+    - guvnr_decisions_recorded_total
 
   gauges:
-    - aix_active_sessions
-    - aix_mcp_connections
-    - aix_database_size_bytes
+    - guvnr_active_sessions
+    - guvnr_mcp_connections
+    - guvnr_database_size_bytes
 
   histograms:
-    - aix_command_duration_seconds
-    - aix_verification_duration_seconds
+    - guvnr_command_duration_seconds
+    - guvnr_verification_duration_seconds
 ```
 
 ### Alerting Rules
@@ -395,10 +395,10 @@ metrics:
 ```yaml
 # Example Prometheus alerting rules
 groups:
-  - name: ai-excellence
+  - name: guvnr
     rules:
       - alert: HighSecurityIssueRate
-        expr: rate(aix_security_issues_total[1h]) > 10
+        expr: rate(guvnr_security_issues_total[1h]) > 10
         for: 15m
         labels:
           severity: warning
@@ -414,7 +414,7 @@ groups:
           summary: MCP server is down
 
       - alert: VerificationFailureSpike
-        expr: rate(aix_verifications_failed_total[1h]) / rate(aix_verifications_total[1h]) > 0.3
+        expr: rate(guvnr_verifications_failed_total[1h]) / rate(guvnr_verifications_total[1h]) > 0.3
         for: 30m
         labels:
           severity: warning
@@ -426,7 +426,7 @@ groups:
 
 Import these Grafana dashboards:
 
-- [AI Excellence Overview](https://grafana.com/grafana/dashboards/xxxxx)
+- [Guvnr Overview](https://grafana.com/grafana/dashboards/xxxxx)
 - [MCP Server Health](https://grafana.com/grafana/dashboards/xxxxy)
 - [Security Metrics](https://grafana.com/grafana/dashboards/xxxxz)
 
@@ -439,7 +439,7 @@ Import these Grafana dashboards:
 # Automated backup script
 
 # Backup MCP databases
-for db in /var/lib/ai-excellence/*/project-memories.db; do
+for db in /var/lib/guvnr/*/project-memories.db; do
     project=$(dirname "$db" | xargs basename)
     sqlite3 "$db" ".backup '/backup/mcp/$project-$(date +%Y%m%d).db'"
 done
@@ -448,10 +448,10 @@ done
 pg_dump ai_excellence_federation > "/backup/federation-$(date +%Y%m%d).sql"
 
 # Backup configuration
-tar -czf "/backup/config-$(date +%Y%m%d).tar.gz" /etc/ai-excellence/
+tar -czf "/backup/config-$(date +%Y%m%d).tar.gz" /etc/guvnr/
 
 # Upload to S3 (or your backup storage)
-aws s3 sync /backup/ s3://company-backup/ai-excellence/
+aws s3 sync /backup/ s3://company-backup/guvnr/
 ```
 
 ### Recovery Procedures
@@ -460,13 +460,13 @@ aws s3 sync /backup/ s3://company-backup/ai-excellence/
 
    ```bash
    # Stop MCP server
-   systemctl stop ai-excellence-mcp
+   systemctl stop guvnr-mcp
 
    # Restore from backup
-   cp /backup/mcp/project-20240115.db /var/lib/ai-excellence/project/project-memories.db
+   cp /backup/mcp/project-20240115.db /var/lib/guvnr/project/project-memories.db
 
    # Start MCP server
-   systemctl start ai-excellence-mcp
+   systemctl start guvnr-mcp
    ```
 
 2. **Federation Server Recovery**
@@ -515,7 +515,7 @@ spec:
     - type: Pods
       pods:
         metric:
-          name: aix_active_sessions
+          name: guvnr_active_sessions
         target:
           type: AverageValue
           averageValue: 100
@@ -578,7 +578,7 @@ For organizations with > 1000 developers:
 
 ### Getting Enterprise Support
 
-Contact: enterprise@ai-excellence-framework.org
+Contact: enterprise@guvnr.dev
 
 Include:
 
@@ -596,4 +596,4 @@ Include:
 
 ---
 
-_For questions about enterprise deployment, open a [GitHub Discussion](https://github.com/ai-excellence-framework/ai-excellence-framework/discussions) or contact the maintainers._
+_For questions about enterprise deployment, open a [GitHub Discussion](https://github.com/guvnr-framework/guvnr-framework/discussions) or contact the maintainers._

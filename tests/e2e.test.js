@@ -1,5 +1,5 @@
 /**
- * End-to-End Tests for AI Excellence Framework
+ * End-to-End Tests for Guvnr
  *
  * These tests invoke the actual CLI binary to verify real-world behavior.
  *
@@ -25,7 +25,7 @@ const CLI_PATH = join(PROJECT_ROOT, 'bin', 'cli.js');
 function createTempDir() {
   const tempDir = join(
     tmpdir(),
-    `ai-excellence-e2e-${Date.now()}-${Math.random().toString(36).slice(2)}`
+    `guvnr-e2e-${Date.now()}-${Math.random().toString(36).slice(2)}`
   );
   mkdirSync(tempDir, { recursive: true });
   return tempDir;
@@ -273,14 +273,14 @@ describe('E2E: Configuration File Handling', () => {
     cleanupTempDir(tempDir);
   });
 
-  it('should create valid JSON configuration', () => {
+  it('should create valid guvnr.yaml configuration', () => {
     runCLI('init --preset full --yes', tempDir);
 
-    const configPath = join(tempDir, 'ai-excellence.config.json');
+    const configPath = join(tempDir, 'guvnr.yaml');
     if (existsSync(configPath)) {
-      const config = JSON.parse(readFileSync(configPath, 'utf-8'));
-      assert.ok(config.version, 'Config should have version');
-      assert.ok(config.preset, 'Config should have preset');
+      const content = readFileSync(configPath, 'utf-8');
+      assert.ok(content.includes('version:'), 'Config should have version');
+      assert.ok(content.includes('project:'), 'Config should have project section');
     }
   });
 });

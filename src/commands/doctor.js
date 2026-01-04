@@ -1,5 +1,5 @@
 /**
- * AI Excellence Framework - Doctor Command
+ * Guvnr - Doctor Command
  *
  * Diagnoses common issues and verifies system setup.
  */
@@ -148,7 +148,7 @@ const DIAGNOSTICS = [
       return {
         passed: hasClaudeMd && hasCommands,
         value: hasClaudeMd && hasCommands ? 'Yes' : 'Partial',
-        hint: !hasClaudeMd ? 'Run: npx ai-excellence init' : undefined
+        hint: !hasClaudeMd ? 'Run: npx guvnr init' : undefined
       };
     }
   },
@@ -233,7 +233,7 @@ const DIAGNOSTICS = [
         return {
           passed: false,
           value: 'Not installed',
-          hint: 'Run: npx ai-excellence init --preset full'
+          hint: 'Run: npx guvnr init --preset full'
         };
       }
 
@@ -445,7 +445,7 @@ const DIAGNOSTICS = [
         return {
           passed: false,
           value: '0 commands',
-          hint: 'Run: npx ai-excellence init to install commands'
+          hint: 'Run: npx guvnr init to install commands'
         };
       }
 
@@ -477,7 +477,7 @@ const DIAGNOSTICS = [
         return {
           passed: true,
           value: '0 agents (optional)',
-          hint: 'Run: npx ai-excellence init --preset full to install agents'
+          hint: 'Run: npx guvnr init --preset full to install agents'
         };
       }
 
@@ -555,7 +555,7 @@ export async function doctorCommand(options) {
   const json = options.json || false;
 
   if (!json) {
-    console.log(chalk.cyan('\n  AI Excellence Framework Doctor\n'));
+    console.log(chalk.cyan('\n  Guvnr Doctor\n'));
   }
 
   const spinner = json ? null : ora('Running diagnostics...').start();

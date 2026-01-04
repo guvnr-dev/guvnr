@@ -12,12 +12,12 @@ _Concrete implementations for the strategies in "Mitigating AI-Assisted Developm
 
 ```bash
 # Option 1: Use the CLI
-npx ai-excellence-framework init
+npx guvnr init
 
 # Option 2: Manual copy
-git clone https://github.com/your-username/ai-excellence-framework.git /tmp/aix
-cp -r /tmp/aix/.claude /tmp/aix/CLAUDE.md /tmp/aix/scripts ./
-rm -rf /tmp/aix
+git clone https://github.com/guvnr-dev/guvnr.git /tmp/guvnr
+cp -r /tmp/guvnr/.claude /tmp/guvnr/CLAUDE.md /tmp/guvnr/scripts ./
+rm -rf /tmp/guvnr
 ```
 
 ### What Gets Installed

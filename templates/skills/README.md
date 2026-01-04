@@ -48,7 +48,7 @@ cp -r templates/skills/* .claude/skills/
 ### Via Framework CLI
 
 ```bash
-npx ai-excellence-framework generate --tools skills
+npx guvnr generate --tools skills
 ```
 
 ## SKILL.md Format
@@ -130,7 +130,7 @@ This means you can place skills in any of these directories and Copilot will fin
 
 ```bash
 # Generate skills to .github/skills/ for Copilot compatibility
-npx ai-excellence-framework generate --tools skills
+npx guvnr generate --tools skills
 ```
 
 ### Compatibility Matrix
@@ -162,4 +162,4 @@ Skills are now part of the [AAIF (Agentic AI Foundation)](https://aaif.io) ecosy
 
 ---
 
-_Part of the [AI Excellence Framework](https://github.com/ai-excellence-framework/ai-excellence-framework)_
+_Part of [Guvnr](https://github.com/guvnr-dev/guvnr)_

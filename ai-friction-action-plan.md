@@ -252,7 +252,7 @@ npx degit username/ai-excellence-template .claude
 #### 3.2 Package Structure
 
 ```
-ai-excellence-framework/
+guvnr/
 ├── bin/
 │   └── cli.js              # Bootstrap CLI
 ├── templates/
@@ -378,7 +378,7 @@ Enable team adoption:
 #### 5.1 Repository Setup
 
 ```
-github.com/[username]/ai-excellence-framework
+github.com/guvnr-dev/guvnr
 
 ├── README.md (compelling introduction)
 ├── CONTRIBUTING.md

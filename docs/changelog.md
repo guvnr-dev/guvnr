@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Initial Release
 
-The AI Excellence Framework is a comprehensive, universal framework for reducing friction in AI-assisted software development.
+Guvnr is a comprehensive, universal framework for reducing friction in AI-assisted software development.
 
 ### Highlights
 
@@ -38,13 +38,13 @@ The AI Excellence Framework is a comprehensive, universal framework for reducing
 
 ```bash
 # Install
-npm install ai-excellence-framework
+npm install guvnr
 
 # Initialize
-npx ai-excellence init --preset standard
+npx guvnr init --preset standard
 
 # Generate tool configs
-npx ai-excellence generate --tools all
+npx guvnr generate --tools all
 ```
 
 ### Documentation
@@ -55,4 +55,4 @@ npx ai-excellence generate --tools all
 
 ---
 
-For the complete changelog with technical details, see [CHANGELOG.md](https://github.com/ai-excellence-framework/ai-excellence-framework/blob/main/CHANGELOG.md).
+For the complete changelog with technical details, see [CHANGELOG.md](https://github.com/guvnr-dev/guvnr/blob/main/CHANGELOG.md).

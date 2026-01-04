@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * AI Excellence Framework - Context Window Analysis
+ * Guvnr - Context Window Analysis
  *
  * Measures and validates context window optimization, token efficiency,
  * and framework overhead to ensure optimal AI assistant performance.
@@ -364,7 +364,7 @@ function printResults(results, verbose = false) {
 
   console.log('');
   console.log(
-    `${colors.bold}${colors.blue}AI Excellence Framework - Context Window Analysis${colors.reset}`
+    `${colors.bold}${colors.blue}Guvnr - Context Window Analysis${colors.reset}`
   );
   console.log(`${colors.dim}${'─'.repeat(60)}${colors.reset}`);
   console.log(`${colors.dim}Analyzed: ${timestamp}${colors.reset}`);
