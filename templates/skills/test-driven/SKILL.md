@@ -10,6 +10,7 @@ This skill guides test-driven development practices, ensuring code quality throu
 ## When to Use
 
 Activate this skill when:
+
 - Implementing new features
 - Fixing bugs (write regression test first)
 - Refactoring existing code
@@ -44,12 +45,12 @@ Activate this skill when:
 
 ## Test Categories
 
-| Type | Scope | Speed | When to Write |
-|------|-------|-------|---------------|
-| **Unit** | Single function/class | Fast | Every function |
+| Type            | Scope                  | Speed  | When to Write           |
+| --------------- | ---------------------- | ------ | ----------------------- |
+| **Unit**        | Single function/class  | Fast   | Every function          |
 | **Integration** | Component interactions | Medium | Every integration point |
-| **E2E** | Full user workflows | Slow | Key user journeys |
-| **Regression** | Known bug scenarios | Fast | Every bug fix |
+| **E2E**         | Full user workflows    | Slow   | Key user journeys       |
+| **Regression**  | Known bug scenarios    | Fast   | Every bug fix           |
 
 ## Writing Good Tests
 
@@ -125,16 +126,17 @@ test('should call API with correct params', () => {
 
 ## Code Coverage Guidelines
 
-| Metric | Target | Priority |
-|--------|--------|----------|
-| Line coverage | 80%+ | High |
-| Branch coverage | 75%+ | High |
-| Function coverage | 90%+ | Medium |
-| Critical paths | 100% | Critical |
+| Metric            | Target | Priority |
+| ----------------- | ------ | -------- |
+| Line coverage     | 80%+   | High     |
+| Branch coverage   | 75%+   | High     |
+| Function coverage | 90%+   | Medium   |
+| Critical paths    | 100%   | Critical |
 
 ## Refactoring with Tests
 
 When refactoring:
+
 1. Ensure existing tests pass
 2. Don't change tests and code simultaneously
 3. Make small, incremental changes
@@ -153,18 +155,21 @@ npm test -- path/to/test.js # Single file
 ## Troubleshooting
 
 ### Tests Are Slow
+
 - Mock external dependencies
 - Use in-memory databases
 - Parallelize test execution
 - Focus unit tests, fewer E2E
 
 ### Tests Are Flaky
+
 - Avoid time-dependent assertions
 - Use deterministic test data
 - Properly await async operations
 - Isolate test state
 
 ### Hard to Test Code
+
 - Refactor for testability
 - Extract dependencies
 - Use dependency injection

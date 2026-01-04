@@ -267,11 +267,11 @@ The CI pipeline includes performance regression tests:
 
 ### Performance Baseline
 
-| Metric | Value | Target |
-| ------ | ----- | ------ |
-| CLI Init (standard) | ~2.4s | <5s |
-| MCP P95 latency | ~28ms | <100ms |
-| Memory usage | ~85MB | <200MB |
+| Metric              | Value | Target |
+| ------------------- | ----- | ------ |
+| CLI Init (standard) | ~2.4s | <5s    |
+| MCP P95 latency     | ~28ms | <100ms |
+| Memory usage        | ~85MB | <200MB |
 
 Future versions will track performance improvements against this baseline.
 

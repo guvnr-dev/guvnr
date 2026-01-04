@@ -177,7 +177,10 @@ function withTimeout(handler, commandName) {
     // Generate unique operation ID for log correlation
     currentOperationId = randomUUID();
 
-    logger.debug(`Starting ${commandName} with timeout: ${timeoutMs}ms`, { command: commandName, timeout: timeoutMs });
+    logger.debug(`Starting ${commandName} with timeout: ${timeoutMs}ms`, {
+      command: commandName,
+      timeout: timeoutMs
+    });
 
     // Create an AbortController for manual cancellation and signal handling
     const controller = new AbortController();
@@ -386,17 +389,22 @@ function validateInputLengths(opts) {
   if (violations.length > 0) {
     // Log all violations for structured logging consumers
     for (const v of violations) {
-      logger.error(`Option '${v.key}' value is too long (${v.length} chars, max: ${MAX_ARG_LENGTH})`, {
-        option: v.key,
-        length: v.length,
-        maxLength: MAX_ARG_LENGTH
-      });
+      logger.error(
+        `Option '${v.key}' value is too long (${v.length} chars, max: ${MAX_ARG_LENGTH})`,
+        {
+          option: v.key,
+          length: v.length,
+          maxLength: MAX_ARG_LENGTH
+        }
+      );
     }
 
     // User-friendly output
     console.error(chalk.red(`\nError: ${violations.length} option value(s) too long`));
     for (const v of violations) {
-      console.error(chalk.gray(`  - '${v.key}' is ${v.length} characters (max: ${MAX_ARG_LENGTH})`));
+      console.error(
+        chalk.gray(`  - '${v.key}' is ${v.length} characters (max: ${MAX_ARG_LENGTH})`)
+      );
       console.error(chalk.gray(`    Value starts with: "${v.truncated}"`));
     }
     process.exit(1);
@@ -409,9 +417,9 @@ program
   .name('ai-excellence')
   .description(
     'AI Excellence Framework - Reduce friction in AI-assisted development\n\n' +
-    'Input Limits:\n' +
-    `  - String arguments: max ${MAX_ARG_LENGTH} characters (set AIX_MAX_ARG_LENGTH to customize)\n` +
-    '  - Timeout: default 5min (set AIX_TIMEOUT env var to customize, max 600s)'
+      'Input Limits:\n' +
+      `  - String arguments: max ${MAX_ARG_LENGTH} characters (set AIX_MAX_ARG_LENGTH to customize)\n` +
+      '  - Timeout: default 5min (set AIX_TIMEOUT env var to customize, max 600s)'
   )
   .version(packageJson.version)
   .option('--no-color', 'Disable colored output (also respects NO_COLOR env var)')
@@ -430,7 +438,9 @@ program
     // Validate input lengths to prevent DoS via extremely long arguments
     validateInputLengths(opts);
   })
-  .addHelpText('after', `
+  .addHelpText(
+    'after',
+    `
 Examples:
   $ ai-excellence init                    # Initialize with standard preset
   $ ai-excellence init --preset full      # Full setup with MCP and metrics
@@ -448,7 +458,8 @@ Environment variables:
   AIX_STRUCTURED_LOGGING=true             # Enable JSON log output for CI/CD
 
 More info: https://ai-excellence-framework.github.io/
-`);
+`
+  );
 
 // Valid presets
 const VALID_PRESETS = ['minimal', 'standard', 'full', 'team'];

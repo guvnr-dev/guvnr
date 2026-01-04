@@ -80,13 +80,13 @@ rate_limiter = RateLimiter(max_ops=RATE_LIMIT, window_seconds=60)
 
 #### Recommended Settings by Team Size
 
-| Deployment Type     | Team Size | RATE_LIMIT | POOL_SIZE | Rationale                                                  |
-| ------------------- | --------- | ---------- | --------- | ---------------------------------------------------------- |
-| **Solo Developer**  | 1         | 100        | 3         | Default settings are sufficient for individual use         |
-| **Small Team**      | 2-5       | 300        | 5         | Moderate concurrency, shared memory access                 |
-| **Medium Team**     | 6-15      | 600        | 10        | Higher concurrency, consider read replicas                 |
-| **Large Team**      | 16-50     | 1000       | 20        | Consider PostgreSQL backend for scalability                |
-| **Enterprise**      | 50+       | 2000+      | 50+       | Requires PostgreSQL, sharding, dedicated infrastructure    |
+| Deployment Type    | Team Size | RATE_LIMIT | POOL_SIZE | Rationale                                               |
+| ------------------ | --------- | ---------- | --------- | ------------------------------------------------------- |
+| **Solo Developer** | 1         | 100        | 3         | Default settings are sufficient for individual use      |
+| **Small Team**     | 2-5       | 300        | 5         | Moderate concurrency, shared memory access              |
+| **Medium Team**    | 6-15      | 600        | 10        | Higher concurrency, consider read replicas              |
+| **Large Team**     | 16-50     | 1000       | 20        | Consider PostgreSQL backend for scalability             |
+| **Enterprise**     | 50+       | 2000+      | 50+       | Requires PostgreSQL, sharding, dedicated infrastructure |
 
 **Configuration Examples:**
 
@@ -421,6 +421,6 @@ As 2025 emerges as the "year of LLM agents," the framework includes specific mit
 
 ## Document History
 
-| Date       | Changes                                                    |
-| ---------- | ---------------------------------------------------------- |
-| 2026-01-01 | Initial release with framework v1.0.0                      |
+| Date       | Changes                               |
+| ---------- | ------------------------------------- |
+| 2026-01-01 | Initial release with framework v1.0.0 |

@@ -10,12 +10,12 @@ The **Agentic AI Foundation (AAIF)** was announced on December 9, 2025, as a dir
 
 AAIF addresses critical challenges in the AI agent ecosystem:
 
-| Challenge | AAIF Solution |
-|-----------|---------------|
-| Fragmented protocols | Unified MCP standard |
-| Vendor lock-in | Open, vendor-neutral governance |
-| Security concerns | Shared safety principles |
-| Integration complexity | Cross-platform compatibility |
+| Challenge              | AAIF Solution                   |
+| ---------------------- | ------------------------------- |
+| Fragmented protocols   | Unified MCP standard            |
+| Vendor lock-in         | Open, vendor-neutral governance |
+| Security concerns      | Shared safety principles        |
+| Integration complexity | Cross-platform compatibility    |
 
 ## Founding Members
 
@@ -69,12 +69,15 @@ AAIF stewards three inaugural open-source projects:
 # AGENTS.md
 
 ## Project Overview
+
 Project-specific instructions for AI agents...
 
 ## Build & Test
+
 Commands for building and testing...
 
 ## Security Guidelines
+
 Security requirements for generated code...
 ```
 
@@ -157,13 +160,13 @@ Block has stated they hope AAIF becomes "what the W3C is for the Web" — a set 
 
 ## Timeline
 
-| Date | Milestone |
-|------|-----------|
-| Nov 2024 | MCP released by Anthropic |
-| Mar 2025 | OpenAI adopts MCP |
-| Aug 2025 | AGENTS.md released by OpenAI |
-| Sep 2025 | MCP Registry preview launches |
-| Nov 2025 | MCP November 2025 spec (Tasks) |
+| Date     | Milestone                             |
+| -------- | ------------------------------------- |
+| Nov 2024 | MCP released by Anthropic             |
+| Mar 2025 | OpenAI adopts MCP                     |
+| Aug 2025 | AGENTS.md released by OpenAI          |
+| Sep 2025 | MCP Registry preview launches         |
+| Nov 2025 | MCP November 2025 spec (Tasks)        |
 | Dec 2025 | AAIF announced under Linux Foundation |
 
 ## Getting Started with AAIF Standards
@@ -202,6 +205,7 @@ npx ai-excellence-framework generate --tools agents
 ### 3. Use AAIF-Aligned Tools
 
 Tools supporting AAIF standards:
+
 - Claude Code
 - GitHub Copilot
 - Cursor
@@ -249,4 +253,4 @@ Yes. AAIF maintains backward compatibility. Existing MCP servers will continue t
 
 ---
 
-*Part of the [AI Excellence Framework](https://github.com/ai-excellence-framework/ai-excellence-framework)*
+_Part of the [AI Excellence Framework](https://github.com/ai-excellence-framework/ai-excellence-framework)_

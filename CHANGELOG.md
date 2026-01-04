@@ -41,32 +41,32 @@ The AI Excellence Framework is a comprehensive, universal framework for reducing
 
 Universal configuration generation for:
 
-| Tool | Configuration |
-|------|---------------|
-| Claude Code | `CLAUDE.md`, `.claude/` |
-| Cursor IDE | `.cursor/`, `.cursorrules` |
-| GitHub Copilot | `.github/copilot-instructions.md` |
-| Windsurf IDE | `.windsurf/`, `.windsurfrules` |
-| Aider CLI | `.aider.conf.yml` |
-| AGENTS.md (AAIF) | `AGENTS.md` |
-| Google Gemini CLI | `GEMINI.md` |
-| OpenAI Codex | `.codex/` |
-| Zed Editor | `.zed/`, `.rules` |
-| Sourcegraph Amp | `.amp/`, `amp.toml` |
-| Roo Code | `.roo/rules/` |
-| JetBrains Junie | `.junie/guidelines.md` |
-| Cline AI | `.cline/`, `.clinerules` |
-| Block Goose | `.goose/` |
-| Kiro CLI | `.kiro/` |
-| Continue.dev | `.continue/` |
-| Augment Code | `.augment/` |
-| Qodo AI | `qodo.toml` |
-| OpenCode AI | `opencode.json`, `.opencode/` |
-| Zencoder | `.zencoder/` |
-| Tabnine | `.tabnine/guidelines/` |
-| Amazon Q Developer | `.amazonq/rules/` |
-| Agent Skills | `.github/skills/` |
-| Claude Plugins | `.claude-plugin/` |
+| Tool               | Configuration                     |
+| ------------------ | --------------------------------- |
+| Claude Code        | `CLAUDE.md`, `.claude/`           |
+| Cursor IDE         | `.cursor/`, `.cursorrules`        |
+| GitHub Copilot     | `.github/copilot-instructions.md` |
+| Windsurf IDE       | `.windsurf/`, `.windsurfrules`    |
+| Aider CLI          | `.aider.conf.yml`                 |
+| AGENTS.md (AAIF)   | `AGENTS.md`                       |
+| Google Gemini CLI  | `GEMINI.md`                       |
+| OpenAI Codex       | `.codex/`                         |
+| Zed Editor         | `.zed/`, `.rules`                 |
+| Sourcegraph Amp    | `.amp/`, `amp.toml`               |
+| Roo Code           | `.roo/rules/`                     |
+| JetBrains Junie    | `.junie/guidelines.md`            |
+| Cline AI           | `.cline/`, `.clinerules`          |
+| Block Goose        | `.goose/`                         |
+| Kiro CLI           | `.kiro/`                          |
+| Continue.dev       | `.continue/`                      |
+| Augment Code       | `.augment/`                       |
+| Qodo AI            | `qodo.toml`                       |
+| OpenCode AI        | `opencode.json`, `.opencode/`     |
+| Zencoder           | `.zencoder/`                      |
+| Tabnine            | `.tabnine/guidelines/`            |
+| Amazon Q Developer | `.amazonq/rules/`                 |
+| Agent Skills       | `.github/skills/`                 |
+| Claude Plugins     | `.claude-plugin/`                 |
 
 #### Slash Commands (8 total)
 
@@ -192,7 +192,7 @@ import {
   detectTools,
   VERSION,
   SUPPORTED_TOOLS,
-  PRESETS,
+  PRESETS
   // ... and more
 } from 'ai-excellence-framework';
 ```

@@ -4,11 +4,11 @@ Ready-to-use CLAUDE.md examples for different project sizes.
 
 ## Available Examples
 
-| Example | Description | Use Case |
-|---------|-------------|----------|
-| [minimal/](./minimal/) | Basic setup | Side projects, small apps |
-| [standard/](./standard/) | Recommended setup | Production applications |
-| [full/](./full/) | Complete with MCP | Enterprise, compliance needs |
+| Example                  | Description       | Use Case                     |
+| ------------------------ | ----------------- | ---------------------------- |
+| [minimal/](./minimal/)   | Basic setup       | Side projects, small apps    |
+| [standard/](./standard/) | Recommended setup | Production applications      |
+| [full/](./full/)         | Complete with MCP | Enterprise, compliance needs |
 
 ## Usage
 

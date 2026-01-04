@@ -12,13 +12,13 @@ Tasks provide a new abstraction in MCP for tracking work being performed by an M
 
 Tasks are particularly helpful for:
 
-| Use Case | Description |
-|----------|-------------|
-| Long-running data analysis | Processing hundreds of thousands of data points |
-| Enterprise automation | Complex multi-step workflows |
-| Code migration tools | Refactors and migrations running for minutes/hours |
-| Test execution platforms | Streaming logs from long-running test suites |
-| Deep research tools | Spawning multiple internal agents |
+| Use Case                   | Description                                        |
+| -------------------------- | -------------------------------------------------- |
+| Long-running data analysis | Processing hundreds of thousands of data points    |
+| Enterprise automation      | Complex multi-step workflows                       |
+| Code migration tools       | Refactors and migrations running for minutes/hours |
+| Test execution platforms   | Streaming logs from long-running test suites       |
+| Deep research tools        | Spawning multiple internal agents                  |
 
 ## Task Lifecycle
 
@@ -42,13 +42,13 @@ Tasks are particularly helpful for:
 
 ### Task States
 
-| State | Description |
-|-------|-------------|
-| `working` | Task is actively being processed |
+| State            | Description                             |
+| ---------------- | --------------------------------------- |
+| `working`        | Task is actively being processed        |
 | `input_required` | Task needs additional input from client |
-| `completed` | Task finished successfully |
-| `failed` | Task encountered an error |
-| `cancelled` | Task was cancelled by client |
+| `completed`      | Task finished successfully              |
+| `failed`         | Task encountered an error               |
+| `cancelled`      | Task was cancelled by client            |
 
 ## Key Capabilities
 
@@ -81,6 +81,7 @@ Results of completed tasks are accessible after the request completes:
 ### 3. Flexible Lifecycle Management
 
 Tasks support proper lifecycle with:
+
 - State transitions with validation
 - Cancellation support
 - Error handling with detailed messages
@@ -89,6 +90,7 @@ Tasks support proper lifecycle with:
 ### 4. Task Isolation
 
 Proper security boundaries with session-based access control:
+
 - Tasks are scoped to the creating session
 - Cross-session task access is prevented
 - Proper cleanup on session termination
@@ -142,16 +144,16 @@ async def process_dataset(task_id: str, url: str):
 // Periodically poll for task status
 async function waitForTask(client, taskId) {
   while (true) {
-    const status = await client.request("tasks/get", { taskId });
+    const status = await client.request('tasks/get', { taskId });
 
     switch (status.state) {
-      case "completed":
-        return await client.request("tasks/result", { taskId });
-      case "failed":
+      case 'completed':
+        return await client.request('tasks/result', { taskId });
+      case 'failed':
         throw new Error(status.error);
-      case "cancelled":
-        throw new Error("Task was cancelled");
-      case "input_required":
+      case 'cancelled':
+        throw new Error('Task was cancelled');
+      case 'input_required':
         // Handle input request
         await handleInputRequired(client, taskId, status.inputSchema);
         break;

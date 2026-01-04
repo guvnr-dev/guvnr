@@ -44,7 +44,7 @@ const REQUIRED_FILES = [
   '.claude/commands/verify.md',
   '.claude/commands/security-review.md',
   '.claude/agents/reviewer.md',
-  'templates/presets/standard/CLAUDE.md',
+  'templates/presets/standard/CLAUDE.md'
 ];
 
 // Files that must NOT be in the package
@@ -62,7 +62,7 @@ const FORBIDDEN_PATTERNS = [
   '.nyc_output',
   '.test.js',
   '.test.py',
-  '.test.sh',
+  '.test.sh'
 ];
 
 // ANSI colors
@@ -99,7 +99,7 @@ function getPackInfo() {
   try {
     const output = execSync('npm pack --dry-run 2>&1', {
       cwd: ROOT,
-      encoding: 'utf-8',
+      encoding: 'utf-8'
     });
 
     // Parse package size
@@ -118,14 +118,10 @@ function getPackInfo() {
     }
 
     return {
-      packageSize: sizeMatch
-        ? parseSize(sizeMatch[1], sizeMatch[2])
-        : 0,
-      unpackedSize: unpackedMatch
-        ? parseSize(unpackedMatch[1], unpackedMatch[2])
-        : 0,
+      packageSize: sizeMatch ? parseSize(sizeMatch[1], sizeMatch[2]) : 0,
+      unpackedSize: unpackedMatch ? parseSize(unpackedMatch[1], unpackedMatch[2]) : 0,
       fileCount: filesMatch ? parseInt(filesMatch[1], 10) : 0,
-      files,
+      files
     };
   } catch (error) {
     log(`Error running npm pack: ${error.message}`, RED);
@@ -167,7 +163,7 @@ function checkPackageSize(packInfo) {
       `File count ≤ ${MAX_FILE_COUNT}`,
       packInfo.fileCount <= MAX_FILE_COUNT,
       `${packInfo.fileCount} files`
-    ),
+    )
   ];
 
   return results.every(Boolean);
@@ -176,8 +172,8 @@ function checkPackageSize(packInfo) {
 function checkRequiredFiles(packInfo) {
   logSection('Required Files');
 
-  const results = REQUIRED_FILES.map((file) => {
-    const found = packInfo.files.some((f) => f === file || f.startsWith(file));
+  const results = REQUIRED_FILES.map(file => {
+    const found = packInfo.files.some(f => f === file || f.startsWith(file));
     return logCheck(file, found);
   });
 
@@ -187,16 +183,12 @@ function checkRequiredFiles(packInfo) {
 function checkForbiddenFiles(packInfo) {
   logSection('Forbidden Files (must not be included)');
 
-  const results = FORBIDDEN_PATTERNS.map((pattern) => {
-    const found = packInfo.files.some((f) =>
-      f.toLowerCase().includes(pattern.toLowerCase())
-    );
+  const results = FORBIDDEN_PATTERNS.map(pattern => {
+    const found = packInfo.files.some(f => f.toLowerCase().includes(pattern.toLowerCase()));
     const passed = logCheck(`No ${pattern}`, !found);
     if (found) {
-      const matching = packInfo.files.filter((f) =>
-        f.toLowerCase().includes(pattern.toLowerCase())
-      );
-      matching.forEach((f) => log(`    → Found: ${f}`, YELLOW));
+      const matching = packInfo.files.filter(f => f.toLowerCase().includes(pattern.toLowerCase()));
+      matching.forEach(f => log(`    → Found: ${f}`, YELLOW));
     }
     return passed;
   });
@@ -216,7 +208,7 @@ function checkVersionConsistency() {
     logCheck('Version in CHANGELOG', changelog.includes(`[${pkg.version}]`)),
     logCheck('Package exports defined', pkg.exports && Object.keys(pkg.exports).length > 0),
     logCheck('Bin commands defined', pkg.bin && Object.keys(pkg.bin).length >= 2),
-    logCheck('Node engines specified', pkg.engines && pkg.engines.node),
+    logCheck('Node engines specified', pkg.engines && pkg.engines.node)
   ];
 
   return results.every(Boolean);
@@ -234,10 +226,10 @@ function checkCriticalFiles() {
     'CONTRIBUTING.md',
     'bin/cli.js',
     'src/index.js',
-    'types/index.d.ts',
+    'types/index.d.ts'
   ];
 
-  const results = criticalFiles.map((file) => {
+  const results = criticalFiles.map(file => {
     const exists = existsSync(join(ROOT, file));
     return logCheck(file, exists);
   });
@@ -253,7 +245,7 @@ function checkLicense() {
 
   const results = [
     logCheck('License field set', !!pkg.license, pkg.license),
-    logCheck('LICENSE file exists', licenseFile),
+    logCheck('LICENSE file exists', licenseFile)
   ];
 
   return results.every(Boolean);
@@ -280,10 +272,7 @@ async function main() {
   const skipTests = args.includes('--skip-tests');
 
   console.log('');
-  log(
-    `${BOLD}AI Excellence Framework - Pre-Publish Verification${RESET}`,
-    BLUE
-  );
+  log(`${BOLD}AI Excellence Framework - Pre-Publish Verification${RESET}`, BLUE);
   log('━'.repeat(50), BLUE);
 
   const pkg = getPackageJson();
@@ -333,7 +322,7 @@ async function main() {
   }
 }
 
-main().catch((error) => {
+main().catch(error => {
   log(`Error: ${error.message}`, RED);
   process.exit(1);
 });

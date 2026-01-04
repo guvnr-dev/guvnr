@@ -10,12 +10,12 @@ The MCP Registry is the official catalog and API for publicly available MCP serv
 
 ## Available Registries
 
-| Registry | Description | Servers |
-|----------|-------------|---------|
-| [MCP Registry](https://registry.modelcontextprotocol.io) | Official community registry | 1,000+ |
-| [Docker MCP Catalog](https://docs.docker.com/ai/mcp-catalog-and-toolkit/catalog/) | Containerized MCP servers | Hundreds |
-| [GitHub MCP Registry](https://github.com/modelcontextprotocol/registry) | Enterprise-focused servers | 40+ |
-| [Postman MCP Catalog](https://www.postman.com) | API-focused MCP servers | Growing |
+| Registry                                                                          | Description                 | Servers  |
+| --------------------------------------------------------------------------------- | --------------------------- | -------- |
+| [MCP Registry](https://registry.modelcontextprotocol.io)                          | Official community registry | 1,000+   |
+| [Docker MCP Catalog](https://docs.docker.com/ai/mcp-catalog-and-toolkit/catalog/) | Containerized MCP servers   | Hundreds |
+| [GitHub MCP Registry](https://github.com/modelcontextprotocol/registry)           | Enterprise-focused servers  | 40+      |
+| [Postman MCP Catalog](https://www.postman.com)                                    | API-focused MCP servers     | Growing  |
 
 ## Finding Servers
 
@@ -129,28 +129,28 @@ Most MCP servers can be installed via npx:
 
 ### Official Anthropic Servers
 
-| Server | Description | Install |
-|--------|-------------|---------|
-| Memory | Persistent key-value memory | `npx -y @anthropic-ai/mcp-server-memory` |
-| Filesystem | File operations | `npx -y @anthropic-ai/mcp-server-filesystem` |
-| Git | Git operations | `npx -y @anthropic-ai/mcp-server-git` |
-| GitHub | GitHub API integration | `npx -y @anthropic-ai/mcp-server-github` |
-| PostgreSQL | Database operations | `npx -y @anthropic-ai/mcp-server-postgres` |
-| SQLite | SQLite database access | `npx -y @anthropic-ai/mcp-server-sqlite` |
-| Fetch | HTTP requests | `npx -y @anthropic-ai/mcp-server-fetch` |
-| Puppeteer | Browser automation | `npx -y @anthropic-ai/mcp-server-puppeteer` |
-| Slack | Slack integration | `npx -y @anthropic-ai/mcp-server-slack` |
+| Server     | Description                 | Install                                      |
+| ---------- | --------------------------- | -------------------------------------------- |
+| Memory     | Persistent key-value memory | `npx -y @anthropic-ai/mcp-server-memory`     |
+| Filesystem | File operations             | `npx -y @anthropic-ai/mcp-server-filesystem` |
+| Git        | Git operations              | `npx -y @anthropic-ai/mcp-server-git`        |
+| GitHub     | GitHub API integration      | `npx -y @anthropic-ai/mcp-server-github`     |
+| PostgreSQL | Database operations         | `npx -y @anthropic-ai/mcp-server-postgres`   |
+| SQLite     | SQLite database access      | `npx -y @anthropic-ai/mcp-server-sqlite`     |
+| Fetch      | HTTP requests               | `npx -y @anthropic-ai/mcp-server-fetch`      |
+| Puppeteer  | Browser automation          | `npx -y @anthropic-ai/mcp-server-puppeteer`  |
+| Slack      | Slack integration           | `npx -y @anthropic-ai/mcp-server-slack`      |
 
 ### Community Servers
 
-| Server | Description | Category |
-|--------|-------------|----------|
-| Brave Search | Web search via Brave | Search |
-| Obsidian | Note-taking integration | Knowledge |
-| Linear | Project management | Productivity |
-| Notion | Workspace integration | Productivity |
-| Sentry | Error tracking | DevOps |
-| AWS | AWS service access | Cloud |
+| Server       | Description             | Category     |
+| ------------ | ----------------------- | ------------ |
+| Brave Search | Web search via Brave    | Search       |
+| Obsidian     | Note-taking integration | Knowledge    |
+| Linear       | Project management      | Productivity |
+| Notion       | Workspace integration   | Productivity |
+| Sentry       | Error tracking          | DevOps       |
+| AWS          | AWS service access      | Cloud        |
 
 ## Configuration Best Practices
 
@@ -188,9 +188,12 @@ Limit filesystem access:
     "filesystem": {
       "command": "npx",
       "args": [
-        "-y", "@anthropic-ai/mcp-server-filesystem",
-        "--allowed-directories", "./src,./docs",
-        "--read-only-directories", "./config"
+        "-y",
+        "@anthropic-ai/mcp-server-filesystem",
+        "--allowed-directories",
+        "./src,./docs",
+        "--read-only-directories",
+        "./config"
       ]
     }
   }
@@ -246,6 +249,7 @@ filters:
    - What environment variables does it read?
 
 3. **Check for Vulnerabilities**
+
    ```bash
    # For npm packages
    npm audit @example/mcp-server

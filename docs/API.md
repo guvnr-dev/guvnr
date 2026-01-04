@@ -11,14 +11,7 @@ npm install ai-excellence-framework
 ## ESM Import
 
 ```javascript
-import {
-  init,
-  validate,
-  doctor,
-  generate,
-  lint,
-  update,
-} from 'ai-excellence-framework';
+import { init, validate, doctor, generate, lint, update } from 'ai-excellence-framework';
 ```
 
 ## Commands
@@ -31,12 +24,12 @@ Initialize the framework in a project directory.
 import { init } from 'ai-excellence-framework/commands/init';
 
 await init({
-  preset: 'standard',      // 'minimal' | 'standard' | 'full' | 'team'
-  force: false,            // Overwrite existing files
-  dryRun: false,           // Preview without changes
-  skipHooks: false,        // Skip hook installation
-  skipMcp: false,          // Skip MCP server setup
-  skipPrecommit: false,    // Skip pre-commit config
+  preset: 'standard', // 'minimal' | 'standard' | 'full' | 'team'
+  force: false, // Overwrite existing files
+  dryRun: false, // Preview without changes
+  skipHooks: false, // Skip hook installation
+  skipMcp: false, // Skip MCP server setup
+  skipPrecommit: false, // Skip pre-commit config
   targetDir: process.cwd() // Target directory
 });
 ```
@@ -62,8 +55,8 @@ Validate framework configuration.
 import { validate } from 'ai-excellence-framework/commands/validate';
 
 const result = await validate({
-  fix: false,              // Auto-fix issues
-  strict: false,           // Strict validation mode
+  fix: false, // Auto-fix issues
+  strict: false, // Strict validation mode
   targetDir: process.cwd()
 });
 ```
@@ -96,7 +89,7 @@ Check environment and installation health.
 import { doctor } from 'ai-excellence-framework/commands/doctor';
 
 const result = await doctor({
-  verbose: false,          // Detailed output
+  verbose: false, // Detailed output
   targetDir: process.cwd()
 });
 ```
@@ -127,7 +120,7 @@ Generate configurations for AI tools.
 import { generate } from 'ai-excellence-framework/commands/generate';
 
 const result = await generate({
-  tools: ['cursor', 'copilot', 'agents'],  // or 'all'
+  tools: ['cursor', 'copilot', 'agents'], // or 'all'
   dryRun: false,
   outputDir: process.cwd()
 });
@@ -151,28 +144,28 @@ interface GeneratedFile {
 
 **Supported Tools:**
 
-| Tool | Config Generated |
-|------|------------------|
-| `cursor` | `.cursor/rules/` |
-| `copilot` | `.github/copilot-instructions.md` |
-| `windsurf` | `.windsurf/rules/` |
-| `aider` | `.aider.conf.yml` |
-| `agents` | `AGENTS.md` |
-| `gemini` | `.gemini/` |
-| `codex` | `.codex/` |
-| `zed` | `.zed/` |
-| `amp` | `.amp/` |
-| `roo` | `.roo/` |
-| `junie` | `.junie/` |
-| `cline` | `.cline/` |
-| `goose` | `.goose/` |
-| `kiro` | `.kiro/` |
-| `continue` | `.continue/` |
-| `augment` | `.augment/` |
-| `qodo` | `qodo.toml` |
-| `opencode` | `.opencode/` |
-| `zencoder` | `.zencoder/` |
-| `plugins` | `.claude-plugin/` |
+| Tool       | Config Generated                  |
+| ---------- | --------------------------------- |
+| `cursor`   | `.cursor/rules/`                  |
+| `copilot`  | `.github/copilot-instructions.md` |
+| `windsurf` | `.windsurf/rules/`                |
+| `aider`    | `.aider.conf.yml`                 |
+| `agents`   | `AGENTS.md`                       |
+| `gemini`   | `.gemini/`                        |
+| `codex`    | `.codex/`                         |
+| `zed`      | `.zed/`                           |
+| `amp`      | `.amp/`                           |
+| `roo`      | `.roo/`                           |
+| `junie`    | `.junie/`                         |
+| `cline`    | `.cline/`                         |
+| `goose`    | `.goose/`                         |
+| `kiro`     | `.kiro/`                          |
+| `continue` | `.continue/`                      |
+| `augment`  | `.augment/`                       |
+| `qodo`     | `qodo.toml`                       |
+| `opencode` | `.opencode/`                      |
+| `zencoder` | `.zencoder/`                      |
+| `plugins`  | `.claude-plugin/`                 |
 
 ---
 
@@ -184,8 +177,8 @@ Lint configuration files.
 import { lint } from 'ai-excellence-framework/commands/lint';
 
 const result = await lint({
-  fix: false,              // Auto-fix issues
-  format: 'text',          // 'text' | 'json'
+  fix: false, // Auto-fix issues
+  format: 'text', // 'text' | 'json'
   targetDir: process.cwd()
 });
 ```
@@ -219,8 +212,8 @@ Check for and apply framework updates.
 import { update } from 'ai-excellence-framework/commands/update';
 
 const result = await update({
-  check: true,             // Check only, don't update
-  force: false             // Force update
+  check: true, // Check only, don't update
+  force: false // Force update
 });
 ```
 
@@ -257,16 +250,16 @@ try {
 
 ### Error Codes
 
-| Code | Description |
-|------|-------------|
-| `AIX-INIT-001` | Initialization failed |
-| `AIX-INIT-002` | Directory not empty |
-| `AIX-VALID-001` | Validation failed |
-| `AIX-VALID-002` | Schema mismatch |
-| `AIX-GEN-001` | Generation failed |
-| `AIX-GEN-002` | Unknown tool |
-| `AIX-FS-001` | File system error |
-| `AIX-NET-001` | Network error |
+| Code            | Description           |
+| --------------- | --------------------- |
+| `AIX-INIT-001`  | Initialization failed |
+| `AIX-INIT-002`  | Directory not empty   |
+| `AIX-VALID-001` | Validation failed     |
+| `AIX-VALID-002` | Schema mismatch       |
+| `AIX-GEN-001`   | Generation failed     |
+| `AIX-GEN-002`   | Unknown tool          |
+| `AIX-FS-001`    | File system error     |
+| `AIX-NET-001`   | Network error         |
 
 ---
 
@@ -288,7 +281,7 @@ import type {
   LintResult,
   UpdateOptions,
   UpdateResult,
-  AIExcellenceError,
+  AIExcellenceError
 } from 'ai-excellence-framework';
 ```
 

@@ -13,11 +13,11 @@ Skills are structured, auto-discovered capabilities that AI agents (Copilot, Cod
 
 ## Available Skills
 
-| Skill | Description | Use Case |
-|-------|-------------|----------|
+| Skill                                             | Description                      | Use Case               |
+| ------------------------------------------------- | -------------------------------- | ---------------------- |
 | [project-standards](./project-standards/SKILL.md) | Coding standards and conventions | Writing/reviewing code |
-| [security-review](./security-review/SKILL.md) | OWASP and AI-specific security | Security audits |
-| [test-driven](./test-driven/SKILL.md) | TDD practices and patterns | Implementing features |
+| [security-review](./security-review/SKILL.md)     | OWASP and AI-specific security   | Security audits        |
+| [test-driven](./test-driven/SKILL.md)             | TDD practices and patterns       | Implementing features  |
 
 ## Installation
 
@@ -135,11 +135,11 @@ npx ai-excellence-framework generate --tools skills
 
 ### Compatibility Matrix
 
-| Skill Location | Copilot | Codex | Claude Code |
-|----------------|---------|-------|-------------|
-| `.github/skills/` | ✅ Native | ✅ Reads | ✅ Reads |
-| `.claude/skills/` | ✅ Auto-discovers | ✅ Reads | ✅ Native |
-| `.codex/skills/` | ✅ Auto-discovers | ✅ Native | ✅ Reads |
+| Skill Location    | Copilot           | Codex     | Claude Code |
+| ----------------- | ----------------- | --------- | ----------- |
+| `.github/skills/` | ✅ Native         | ✅ Reads  | ✅ Reads    |
+| `.claude/skills/` | ✅ Auto-discovers | ✅ Reads  | ✅ Native   |
+| `.codex/skills/`  | ✅ Auto-discovers | ✅ Native | ✅ Reads    |
 
 ### AAIF Standardization
 

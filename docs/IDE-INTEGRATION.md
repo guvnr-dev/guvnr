@@ -266,11 +266,11 @@ For Cursor's Composer feature, create `.cursor/composer.json`:
 
 Both Windsurf and Antigravity share the same configuration format:
 
-| Location | Purpose |
-|----------|---------|
-| `.windsurf/rules/*.md` | Directory-based rules (recommended) |
-| `.windsurfrules` | Single-file rules (legacy/alternative) |
-| `AGENTS.md` | Falls back to standard agent config |
+| Location               | Purpose                                |
+| ---------------------- | -------------------------------------- |
+| `.windsurf/rules/*.md` | Directory-based rules (recommended)    |
+| `.windsurfrules`       | Single-file rules (legacy/alternative) |
+| `AGENTS.md`            | Falls back to standard agent config    |
 
 ### Windsurf Rules Directory
 
@@ -316,6 +316,7 @@ Create `.windsurf/memories.md` for persistent context:
 Google Antigravity is fully compatible with Windsurf configurations. No additional setup required.
 
 **Key points:**
+
 - Antigravity reads `.windsurf/` configurations
 - Falls back to `.windsurfrules` single file
 - Reads `AGENTS.md` if Windsurf configs aren't present
@@ -330,6 +331,7 @@ npx ai-excellence-framework generate --tools windsurf
 ```
 
 This creates:
+
 - `.windsurf/rules/project.md` - Project rules
 - `.windsurf/rules/security.md` - Security guidelines
 - `.windsurfrules` - Single-file fallback

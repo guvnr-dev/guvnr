@@ -4,13 +4,13 @@ This document provides a comprehensive reference for all environment variables u
 
 ## CLI Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `AIX_TIMEOUT` | `300000` | Command timeout in milliseconds (5 minutes default) |
-| `AIX_DEBUG` | `false` | Enable debug output (`true` to enable) |
-| `AIX_STRUCTURED_LOGGING` | `false` | Enable JSON log output for CI/CD integration |
-| `NO_COLOR` | (unset) | Disable colored output (any value enables) |
-| `VERBOSE` | `false` | Show verbose error output with stack traces |
+| Variable                 | Default  | Description                                         |
+| ------------------------ | -------- | --------------------------------------------------- |
+| `AIX_TIMEOUT`            | `300000` | Command timeout in milliseconds (5 minutes default) |
+| `AIX_DEBUG`              | `false`  | Enable debug output (`true` to enable)              |
+| `AIX_STRUCTURED_LOGGING` | `false`  | Enable JSON log output for CI/CD integration        |
+| `NO_COLOR`               | (unset)  | Disable colored output (any value enables)          |
+| `VERBOSE`                | `false`  | Show verbose error output with stack traces         |
 
 ### Example Usage
 
@@ -30,16 +30,16 @@ NO_COLOR=1 ai-excellence lint
 
 ## MCP Server Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `PROJECT_MEMORY_DB` | Auto | SQLite database path (auto-detected from project name) |
-| `PROJECT_MEMORY_MAX_DECISIONS` | `1000` | Maximum stored decisions |
-| `PROJECT_MEMORY_MAX_PATTERNS` | `100` | Maximum stored patterns |
-| `PROJECT_MEMORY_MAX_CONTEXT_KEYS` | `50` | Maximum context key-value pairs |
-| `PROJECT_MEMORY_POOL_SIZE` | `5` | Connection pool size for team deployments |
-| `PROJECT_MEMORY_RATE_LIMIT` | `100` | Maximum operations per minute |
-| `PROJECT_MEMORY_PERSIST_RATE_LIMIT` | `false` | Persist rate limit state to database |
-| `STRUCTURED_LOGGING` | `false` | Enable JSON log output for MCP server |
+| Variable                            | Default | Description                                            |
+| ----------------------------------- | ------- | ------------------------------------------------------ |
+| `PROJECT_MEMORY_DB`                 | Auto    | SQLite database path (auto-detected from project name) |
+| `PROJECT_MEMORY_MAX_DECISIONS`      | `1000`  | Maximum stored decisions                               |
+| `PROJECT_MEMORY_MAX_PATTERNS`       | `100`   | Maximum stored patterns                                |
+| `PROJECT_MEMORY_MAX_CONTEXT_KEYS`   | `50`    | Maximum context key-value pairs                        |
+| `PROJECT_MEMORY_POOL_SIZE`          | `5`     | Connection pool size for team deployments              |
+| `PROJECT_MEMORY_RATE_LIMIT`         | `100`   | Maximum operations per minute                          |
+| `PROJECT_MEMORY_PERSIST_RATE_LIMIT` | `false` | Persist rate limit state to database                   |
+| `STRUCTURED_LOGGING`                | `false` | Enable JSON log output for MCP server                  |
 
 ### Database Path Resolution
 
@@ -72,22 +72,22 @@ STRUCTURED_LOGGING=true
 
 For team deployments using PostgreSQL instead of SQLite:
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `PROJECT_MEMORY_DB_HOST` | `localhost` | PostgreSQL host |
-| `PROJECT_MEMORY_DB_PORT` | `5432` | PostgreSQL port |
-| `PROJECT_MEMORY_DB_NAME` | `project_memory` | Database name |
-| `PROJECT_MEMORY_DB_USER` | `mcp_server` | Database user |
-| `PROJECT_MEMORY_DB_PASSWORD` | (none) | Database password (required) |
+| Variable                     | Default          | Description                  |
+| ---------------------------- | ---------------- | ---------------------------- |
+| `PROJECT_MEMORY_DB_HOST`     | `localhost`      | PostgreSQL host              |
+| `PROJECT_MEMORY_DB_PORT`     | `5432`           | PostgreSQL port              |
+| `PROJECT_MEMORY_DB_NAME`     | `project_memory` | Database name                |
+| `PROJECT_MEMORY_DB_USER`     | `mcp_server`     | Database user                |
+| `PROJECT_MEMORY_DB_PASSWORD` | (none)           | Database password (required) |
 
 See [PostgreSQL Deployment Guide](./POSTGRESQL-DEPLOYMENT.md) for full setup instructions.
 
 ## Security Hook Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `AIX_SECURITY_ENFORCE` | `false` | Block commits on security issues |
-| `AIX_SECURITY_STRICT` | `false` | Enable additional strict security checks |
+| Variable               | Default | Description                              |
+| ---------------------- | ------- | ---------------------------------------- |
+| `AIX_SECURITY_ENFORCE` | `false` | Block commits on security issues         |
+| `AIX_SECURITY_STRICT`  | `false` | Enable additional strict security checks |
 
 ### Example Usage
 
@@ -104,8 +104,8 @@ export AIX_SECURITY_STRICT=true
 
 ## Metrics Collection Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
+| Variable          | Default                    | Description                            |
+| ----------------- | -------------------------- | -------------------------------------- |
 | `AIX_METRICS_DIR` | `~/.ai-excellence/metrics` | Directory for storing friction metrics |
 
 ## CI/CD Integration
@@ -115,27 +115,27 @@ For CI/CD pipelines, we recommend setting:
 ```yaml
 # GitHub Actions example
 env:
-  AIX_STRUCTURED_LOGGING: "true"  # JSON output for log parsing
-  AIX_TIMEOUT: "600000"           # Longer timeout for CI
-  NO_COLOR: "1"                   # Disable colors in logs
-  AIX_SECURITY_ENFORCE: "true"    # Block on security issues
+  AIX_STRUCTURED_LOGGING: 'true' # JSON output for log parsing
+  AIX_TIMEOUT: '600000' # Longer timeout for CI
+  NO_COLOR: '1' # Disable colors in logs
+  AIX_SECURITY_ENFORCE: 'true' # Block on security issues
 ```
 
 ## Quick Reference Table
 
-| Category | Variable | Purpose |
-|----------|----------|---------|
-| **CLI** | `AIX_TIMEOUT` | Command timeout |
-| **CLI** | `AIX_DEBUG` | Debug logging |
-| **CLI** | `AIX_STRUCTURED_LOGGING` | JSON output |
-| **CLI** | `NO_COLOR` | Disable colors |
-| **MCP** | `PROJECT_MEMORY_DB` | Database path |
-| **MCP** | `PROJECT_MEMORY_POOL_SIZE` | Connection pool |
-| **MCP** | `PROJECT_MEMORY_RATE_LIMIT` | Rate limiting |
-| **MCP** | `STRUCTURED_LOGGING` | JSON output |
-| **Security** | `AIX_SECURITY_ENFORCE` | Block on issues |
-| **Security** | `AIX_SECURITY_STRICT` | Strict checks |
-| **Metrics** | `AIX_METRICS_DIR` | Metrics storage |
+| Category     | Variable                    | Purpose         |
+| ------------ | --------------------------- | --------------- |
+| **CLI**      | `AIX_TIMEOUT`               | Command timeout |
+| **CLI**      | `AIX_DEBUG`                 | Debug logging   |
+| **CLI**      | `AIX_STRUCTURED_LOGGING`    | JSON output     |
+| **CLI**      | `NO_COLOR`                  | Disable colors  |
+| **MCP**      | `PROJECT_MEMORY_DB`         | Database path   |
+| **MCP**      | `PROJECT_MEMORY_POOL_SIZE`  | Connection pool |
+| **MCP**      | `PROJECT_MEMORY_RATE_LIMIT` | Rate limiting   |
+| **MCP**      | `STRUCTURED_LOGGING`        | JSON output     |
+| **Security** | `AIX_SECURITY_ENFORCE`      | Block on issues |
+| **Security** | `AIX_SECURITY_STRICT`       | Strict checks   |
+| **Metrics**  | `AIX_METRICS_DIR`           | Metrics storage |
 
 ## See Also
 

@@ -50,7 +50,7 @@ const CONFIG = {
   // Total framework overhead target
   // Framework files should consume <5% of context window
   // This leaves >95% for actual conversation and code
-  MAX_FRAMEWORK_PERCENT: 5,
+  MAX_FRAMEWORK_PERCENT: 5
 };
 
 // ANSI colors for terminal output
@@ -63,7 +63,7 @@ const colors = {
   yellow: '\x1b[33m',
   blue: '\x1b[34m',
   cyan: '\x1b[36m',
-  white: '\x1b[37m',
+  white: '\x1b[37m'
 };
 
 /**
@@ -96,7 +96,7 @@ function analyzeFile(filePath) {
     characters: content.length,
     lines: content.split('\n').length,
     tokens: estimateTokens(content),
-    content, // Keep for further analysis
+    content // Keep for further analysis
   };
 }
 
@@ -142,7 +142,7 @@ function analyzeClaudeMd(filePath) {
         name: name === '_preamble' ? '(Title/Preamble)' : name,
         tokens,
         percent: parseFloat(((tokens / totalTokens) * 100).toFixed(1)),
-        lines: sectionContent.split('\n').length,
+        lines: sectionContent.split('\n').length
       };
     })
     .sort((a, b) => b.tokens - a.tokens);
@@ -160,7 +160,7 @@ function analyzeClaudeMd(filePath) {
     hasTldr,
     withinRecommended: totalTokens <= CONFIG.RECOMMENDED_CLAUDE_MD_TOKENS,
     withinMax: totalTokens <= CONFIG.MAX_CLAUDE_MD_TOKENS,
-    recommendation: `<${CONFIG.RECOMMENDED_CLAUDE_MD_TOKENS.toLocaleString()} tokens`,
+    recommendation: `<${CONFIG.RECOMMENDED_CLAUDE_MD_TOKENS.toLocaleString()} tokens`
   };
 }
 
@@ -172,7 +172,7 @@ function analyzeCommands(commandsDir) {
     return null;
   }
 
-  const files = readdirSync(commandsDir).filter((f) => f.endsWith('.md'));
+  const files = readdirSync(commandsDir).filter(f => f.endsWith('.md'));
   const results = [];
   let totalTokens = 0;
 
@@ -192,7 +192,7 @@ function analyzeCommands(commandsDir) {
     totalTokens,
     avgTokensPerCommand: results.length > 0 ? Math.round(totalTokens / results.length) : 0,
     files: results.sort((a, b) => b.tokens - a.tokens),
-    recommendation: `<${CONFIG.RECOMMENDED_COMMAND_TOKENS.toLocaleString()} tokens each`,
+    recommendation: `<${CONFIG.RECOMMENDED_COMMAND_TOKENS.toLocaleString()} tokens each`
   };
 }
 
@@ -204,7 +204,7 @@ function analyzeAgents(agentsDir) {
     return null;
   }
 
-  const files = readdirSync(agentsDir).filter((f) => f.endsWith('.md'));
+  const files = readdirSync(agentsDir).filter(f => f.endsWith('.md'));
   const results = [];
   let totalTokens = 0;
 
@@ -224,7 +224,7 @@ function analyzeAgents(agentsDir) {
     totalTokens,
     avgTokensPerAgent: results.length > 0 ? Math.round(totalTokens / results.length) : 0,
     files: results.sort((a, b) => b.tokens - a.tokens),
-    recommendation: `<${CONFIG.RECOMMENDED_AGENT_TOKENS.toLocaleString()} tokens each`,
+    recommendation: `<${CONFIG.RECOMMENDED_AGENT_TOKENS.toLocaleString()} tokens each`
   };
 }
 
@@ -259,7 +259,7 @@ function calculateOverhead(claudeMd, commands, agents) {
     remainingTokens,
     remainingPercent: parseFloat((100 - percentOfContext).toFixed(2)),
     withinTarget: percentOfContext <= CONFIG.MAX_FRAMEWORK_PERCENT,
-    target: `<${CONFIG.MAX_FRAMEWORK_PERCENT}%`,
+    target: `<${CONFIG.MAX_FRAMEWORK_PERCENT}%`
   };
 }
 
@@ -277,7 +277,7 @@ function generateSuggestions(claudeMd, commands, agents, overhead) {
         category: 'CLAUDE.md',
         message: `CLAUDE.md is ${claudeMd.tokens.toLocaleString()} tokens (recommended: <${CONFIG.RECOMMENDED_CLAUDE_MD_TOKENS.toLocaleString()})`,
         suggestion:
-          'Consider moving verbose sections to separate docs and linking them. Add a TL;DR section summarizing key points.',
+          'Consider moving verbose sections to separate docs and linking them. Add a TL;DR section summarizing key points.'
       });
     }
 
@@ -287,44 +287,48 @@ function generateSuggestions(claudeMd, commands, agents, overhead) {
         category: 'CLAUDE.md',
         message: 'No TL;DR section found in CLAUDE.md',
         suggestion:
-          'Adding a TL;DR section helps AI assistants quickly understand project context without processing the full document.',
+          'Adding a TL;DR section helps AI assistants quickly understand project context without processing the full document.'
       });
     }
 
     // Identify large sections
-    const largeSections = claudeMd.sections.filter((s) => s.tokens > 800);
+    const largeSections = claudeMd.sections.filter(s => s.tokens > 800);
     if (largeSections.length > 0) {
       suggestions.push({
         severity: 'info',
         category: 'CLAUDE.md',
-        message: `Largest sections: ${largeSections.slice(0, 3).map((s) => `${s.name} (${s.tokens} tokens)`).join(', ')}`,
-        suggestion: 'Review these sections for potential condensation or extraction to separate files.',
+        message: `Largest sections: ${largeSections
+          .slice(0, 3)
+          .map(s => `${s.name} (${s.tokens} tokens)`)
+          .join(', ')}`,
+        suggestion:
+          'Review these sections for potential condensation or extraction to separate files.'
       });
     }
   }
 
   // Command suggestions
   if (commands) {
-    const largeCommands = commands.files.filter((f) => !f.withinRecommended);
+    const largeCommands = commands.files.filter(f => !f.withinRecommended);
     if (largeCommands.length > 0) {
       suggestions.push({
         severity: 'warning',
         category: 'Commands',
         message: `${largeCommands.length} command(s) exceed recommended token limit (${CONFIG.RECOMMENDED_COMMAND_TOKENS})`,
-        suggestion: `Large commands: ${largeCommands.map((c) => `${c.name} (${c.tokens})`).join(', ')}. Consider splitting into sub-commands or removing verbose examples.`,
+        suggestion: `Large commands: ${largeCommands.map(c => `${c.name} (${c.tokens})`).join(', ')}. Consider splitting into sub-commands or removing verbose examples.`
       });
     }
   }
 
   // Agent suggestions
   if (agents) {
-    const largeAgents = agents.files.filter((f) => !f.withinRecommended);
+    const largeAgents = agents.files.filter(f => !f.withinRecommended);
     if (largeAgents.length > 0) {
       suggestions.push({
         severity: 'warning',
         category: 'Agents',
         message: `${largeAgents.length} agent(s) exceed recommended token limit (${CONFIG.RECOMMENDED_AGENT_TOKENS})`,
-        suggestion: `Large agents: ${largeAgents.map((a) => `${a.name} (${a.tokens})`).join(', ')}`,
+        suggestion: `Large agents: ${largeAgents.map(a => `${a.name} (${a.tokens})`).join(', ')}`
       });
     }
   }
@@ -335,7 +339,7 @@ function generateSuggestions(claudeMd, commands, agents, overhead) {
       severity: 'error',
       category: 'Overhead',
       message: `Framework overhead is ${overhead.percentOfContext}% of context window (target: <${CONFIG.MAX_FRAMEWORK_PERCENT}%)`,
-      suggestion: `This leaves only ${overhead.remainingPercent}% for conversation. Reduce verbosity to improve context efficiency.`,
+      suggestion: `This leaves only ${overhead.remainingPercent}% for conversation. Reduce verbosity to improve context efficiency.`
     });
   }
 
@@ -345,7 +349,7 @@ function generateSuggestions(claudeMd, commands, agents, overhead) {
       severity: 'success',
       category: 'Overall',
       message: 'Context optimization is within best practice guidelines',
-      suggestion: `Framework uses ${overhead?.percentOfContext || 0}% of context, leaving ${overhead?.remainingPercent || 100}% for conversation.`,
+      suggestion: `Framework uses ${overhead?.percentOfContext || 0}% of context, leaving ${overhead?.remainingPercent || 100}% for conversation.`
     });
   }
 
@@ -373,8 +377,12 @@ function printResults(results, verbose = false) {
     const statusIcon = overhead.withinTarget
       ? `${colors.green}✓${colors.reset}`
       : `${colors.red}✗${colors.reset}`;
-    console.log(`  Framework Overhead:   ${overhead.totalTokens.toLocaleString()} tokens (${overhead.percentOfContext}%) ${statusIcon}`);
-    console.log(`  Available for Chat:   ${overhead.remainingTokens.toLocaleString()} tokens (${overhead.remainingPercent}%)`);
+    console.log(
+      `  Framework Overhead:   ${overhead.totalTokens.toLocaleString()} tokens (${overhead.percentOfContext}%) ${statusIcon}`
+    );
+    console.log(
+      `  Available for Chat:   ${overhead.remainingTokens.toLocaleString()} tokens (${overhead.remainingPercent}%)`
+    );
     console.log(`  Target: ${overhead.target}`);
   }
   console.log('');
@@ -391,7 +399,9 @@ function printResults(results, verbose = false) {
     console.log(`  Tokens: ${claudeMd.tokens.toLocaleString()} ${statusIcon}`);
     console.log(`  Size: ${claudeMd.sizeKB} KB (${claudeMd.lines} lines)`);
     console.log(`  Sections: ${claudeMd.sectionCount}`);
-    console.log(`  Has TL;DR: ${claudeMd.hasTldr ? `${colors.green}Yes${colors.reset}` : `${colors.dim}No${colors.reset}`}`);
+    console.log(
+      `  Has TL;DR: ${claudeMd.hasTldr ? `${colors.green}Yes${colors.reset}` : `${colors.dim}No${colors.reset}`}`
+    );
     console.log(`  Recommendation: ${claudeMd.recommendation}`);
 
     if (verbose && claudeMd.sections.length > 0) {
@@ -469,16 +479,20 @@ function printResults(results, verbose = false) {
   console.log('');
 
   // Summary
-  const hasErrors = suggestions.some((s) => s.severity === 'error');
-  const hasWarnings = suggestions.some((s) => s.severity === 'warning');
+  const hasErrors = suggestions.some(s => s.severity === 'error');
+  const hasWarnings = suggestions.some(s => s.severity === 'warning');
   console.log(`${colors.dim}${'─'.repeat(60)}${colors.reset}`);
 
   if (!hasErrors && !hasWarnings) {
     console.log(`${colors.green}${colors.bold}✓ Context Optimization: EXCELLENT${colors.reset}`);
   } else if (!hasErrors) {
-    console.log(`${colors.yellow}${colors.bold}⚠ Context Optimization: GOOD (minor improvements possible)${colors.reset}`);
+    console.log(
+      `${colors.yellow}${colors.bold}⚠ Context Optimization: GOOD (minor improvements possible)${colors.reset}`
+    );
   } else {
-    console.log(`${colors.red}${colors.bold}✗ Context Optimization: NEEDS ATTENTION${colors.reset}`);
+    console.log(
+      `${colors.red}${colors.bold}✗ Context Optimization: NEEDS ATTENTION${colors.reset}`
+    );
   }
   console.log('');
 }
@@ -501,8 +515,12 @@ async function main() {
     console.log('');
     console.log('Configuration (based on 2025 best practices):');
     console.log(`  Max context window: ${CONFIG.MAX_CONTEXT_TOKENS.toLocaleString()} tokens`);
-    console.log(`  CLAUDE.md limit: ${CONFIG.RECOMMENDED_CLAUDE_MD_TOKENS.toLocaleString()} tokens (recommended)`);
-    console.log(`  Command limit: ${CONFIG.RECOMMENDED_COMMAND_TOKENS.toLocaleString()} tokens each`);
+    console.log(
+      `  CLAUDE.md limit: ${CONFIG.RECOMMENDED_CLAUDE_MD_TOKENS.toLocaleString()} tokens (recommended)`
+    );
+    console.log(
+      `  Command limit: ${CONFIG.RECOMMENDED_COMMAND_TOKENS.toLocaleString()} tokens each`
+    );
     console.log(`  Framework overhead target: <${CONFIG.MAX_FRAMEWORK_PERCENT}%`);
     process.exit(0);
   }
@@ -525,7 +543,7 @@ async function main() {
     commands,
     agents,
     overhead,
-    suggestions,
+    suggestions
   };
 
   if (jsonOutput) {
@@ -535,11 +553,11 @@ async function main() {
   }
 
   // Exit with error if critical issues found
-  const hasErrors = suggestions.some((s) => s.severity === 'error');
+  const hasErrors = suggestions.some(s => s.severity === 'error');
   process.exit(hasErrors ? 1 : 0);
 }
 
-main().catch((error) => {
+main().catch(error => {
   console.error(`Error: ${error.message}`);
   process.exit(1);
 });

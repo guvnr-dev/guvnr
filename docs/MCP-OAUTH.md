@@ -69,13 +69,13 @@ MCP servers are now officially classified as **OAuth Resource Servers** per RFC 
 
 ### Token Requirements
 
-| Requirement | Description |
-|-------------|-------------|
-| **Token Type** | Bearer tokens (RFC 6750) |
-| **Token Format** | JWT recommended for self-validation |
-| **Expiration** | Short-lived (15 minutes recommended) |
-| **Refresh** | Refresh tokens for long-running sessions |
-| **Revocation** | RFC 7009 revocation endpoint support |
+| Requirement      | Description                              |
+| ---------------- | ---------------------------------------- |
+| **Token Type**   | Bearer tokens (RFC 6750)                 |
+| **Token Format** | JWT recommended for self-validation      |
+| **Expiration**   | Short-lived (15 minutes recommended)     |
+| **Refresh**      | Refresh tokens for long-running sessions |
+| **Revocation**   | RFC 7009 revocation endpoint support     |
 
 ## Resource Indicators (RFC 8707)
 
@@ -146,13 +146,13 @@ Elicitation allows MCP servers to request additional information from users duri
 
 ### Elicitation Types
 
-| Type | Use Case |
-|------|----------|
-| **text** | Free-form text input |
-| **select** | Choose from options |
-| **confirm** | Yes/No confirmation |
-| **secret** | Password or sensitive input |
-| **file** | File selection/upload |
+| Type        | Use Case                    |
+| ----------- | --------------------------- |
+| **text**    | Free-form text input        |
+| **select**  | Choose from options         |
+| **confirm** | Yes/No confirmation         |
+| **secret**  | Password or sensitive input |
+| **file**    | File selection/upload       |
 
 ### Example: Confirmation Elicitation
 
@@ -190,13 +190,13 @@ The June 2025 specification also introduced structured tool outputs, allowing to
   "schema": {
     "type": "object",
     "properties": {
-      "status": {"type": "string", "enum": ["success", "partial", "failed"]},
-      "data": {"type": "array", "items": {"type": "object"}},
+      "status": { "type": "string", "enum": ["success", "partial", "failed"] },
+      "data": { "type": "array", "items": { "type": "object" } },
       "metadata": {
         "type": "object",
         "properties": {
-          "execution_time_ms": {"type": "number"},
-          "records_processed": {"type": "integer"}
+          "execution_time_ms": { "type": "number" },
+          "records_processed": { "type": "integer" }
         }
       }
     }
@@ -256,8 +256,8 @@ Request only the scopes you need:
 
 ```json
 {
-  "scopes": ["tools:read", "tools:execute"],  // Good: minimal scopes
-  "scopes": ["admin"]  // Bad: over-privileged
+  "scopes": ["tools:read", "tools:execute"], // Good: minimal scopes
+  "scopes": ["admin"] // Bad: over-privileged
 }
 ```
 
@@ -293,4 +293,4 @@ def validate_token(token: str, resource: str) -> bool:
 
 ---
 
-*Part of the [AI Excellence Framework](https://github.com/ai-excellence-framework/ai-excellence-framework)*
+_Part of the [AI Excellence Framework](https://github.com/ai-excellence-framework/ai-excellence-framework)_

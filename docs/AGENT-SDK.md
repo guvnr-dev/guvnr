@@ -58,6 +58,7 @@ export ANTHROPIC_API_KEY=your-api-key
 Get your key from the [Anthropic Console](https://console.anthropic.com/).
 
 **Alternative providers:**
+
 - **Amazon Bedrock**: `CLAUDE_CODE_USE_BEDROCK=1`
 - **Google Vertex AI**: `CLAUDE_CODE_USE_VERTEX=1`
 - **Microsoft Foundry**: `CLAUDE_CODE_USE_FOUNDRY=1`
@@ -83,11 +84,11 @@ asyncio.run(main())
 ```
 
 ```typescript [TypeScript]
-import { query } from "@anthropic-ai/claude-agent-sdk";
+import { query } from '@anthropic-ai/claude-agent-sdk';
 
 for await (const message of query({
-  prompt: "Find and fix the bug in auth.py",
-  options: { allowedTools: ["Read", "Edit", "Bash"] }
+  prompt: 'Find and fix the bug in auth.py',
+  options: { allowedTools: ['Read', 'Edit', 'Bash'] }
 })) {
   console.log(message);
 }
@@ -99,17 +100,17 @@ for await (const message of query({
 
 The SDK includes powerful tools out of the box:
 
-| Tool | Description |
-|------|-------------|
-| **Read** | Read any file in the working directory |
-| **Write** | Create new files |
-| **Edit** | Make precise edits to existing files |
-| **Bash** | Run terminal commands, scripts, git operations |
-| **Glob** | Find files by pattern (`**/*.ts`, `src/**/*.py`) |
-| **Grep** | Search file contents with regex |
-| **WebSearch** | Search the web for current information |
-| **WebFetch** | Fetch and parse web page content |
-| **Task** | Spawn subagents for specialized tasks |
+| Tool          | Description                                      |
+| ------------- | ------------------------------------------------ |
+| **Read**      | Read any file in the working directory           |
+| **Write**     | Create new files                                 |
+| **Edit**      | Make precise edits to existing files             |
+| **Bash**      | Run terminal commands, scripts, git operations   |
+| **Glob**      | Find files by pattern (`**/*.ts`, `src/**/*.py`) |
+| **Grep**      | Search file contents with regex                  |
+| **WebSearch** | Search the web for current information           |
+| **WebFetch**  | Fetch and parse web page content                 |
+| **Task**      | Spawn subagents for specialized tasks            |
 
 ### Example: Codebase Search
 
@@ -131,13 +132,13 @@ asyncio.run(main())
 ```
 
 ```typescript [TypeScript]
-import { query } from "@anthropic-ai/claude-agent-sdk";
+import { query } from '@anthropic-ai/claude-agent-sdk';
 
 for await (const message of query({
-  prompt: "Find all TODO comments and create a summary",
-  options: { allowedTools: ["Read", "Glob", "Grep"] }
+  prompt: 'Find all TODO comments and create a summary',
+  options: { allowedTools: ['Read', 'Glob', 'Grep'] }
 })) {
-  if ("result" in message) console.log(message.result);
+  if ('result' in message) console.log(message.result);
 }
 ```
 
@@ -174,22 +175,22 @@ asyncio.run(main())
 ```
 
 ```typescript [TypeScript]
-import { query } from "@anthropic-ai/claude-agent-sdk";
+import { query } from '@anthropic-ai/claude-agent-sdk';
 
 for await (const message of query({
-  prompt: "Use the code-reviewer agent to review this codebase",
+  prompt: 'Use the code-reviewer agent to review this codebase',
   options: {
-    allowedTools: ["Read", "Glob", "Grep", "Task"],
+    allowedTools: ['Read', 'Glob', 'Grep', 'Task'],
     agents: {
-      "code-reviewer": {
-        description: "Expert code reviewer for quality and security reviews.",
-        prompt: "Analyze code quality and suggest improvements.",
-        tools: ["Read", "Glob", "Grep"]
+      'code-reviewer': {
+        description: 'Expert code reviewer for quality and security reviews.',
+        prompt: 'Analyze code quality and suggest improvements.',
+        tools: ['Read', 'Glob', 'Grep']
       }
     }
   }
 })) {
-  if ("result" in message) console.log(message.result);
+  if ('result' in message) console.log(message.result);
 }
 ```
 
@@ -221,17 +222,17 @@ asyncio.run(main())
 ```
 
 ```typescript [TypeScript]
-import { query } from "@anthropic-ai/claude-agent-sdk";
+import { query } from '@anthropic-ai/claude-agent-sdk';
 
 for await (const message of query({
-  prompt: "Open example.com and describe what you see",
+  prompt: 'Open example.com and describe what you see',
   options: {
     mcpServers: {
-      playwright: { command: "npx", args: ["@playwright/mcp@latest"] }
+      playwright: { command: 'npx', args: ['@playwright/mcp@latest'] }
     }
   }
 })) {
-  if ("result" in message) console.log(message.result);
+  if ('result' in message) console.log(message.result);
 }
 ```
 
@@ -273,25 +274,25 @@ asyncio.run(main())
 ```
 
 ```typescript [TypeScript]
-import { query, HookCallback } from "@anthropic-ai/claude-agent-sdk";
-import { appendFileSync } from "fs";
+import { query, HookCallback } from '@anthropic-ai/claude-agent-sdk';
+import { appendFileSync } from 'fs';
 
-const logFileChange: HookCallback = async (input) => {
-  const filePath = (input as any).tool_input?.file_path ?? "unknown";
-  appendFileSync("./audit.log", `${new Date().toISOString()}: modified ${filePath}\n`);
+const logFileChange: HookCallback = async input => {
+  const filePath = (input as any).tool_input?.file_path ?? 'unknown';
+  appendFileSync('./audit.log', `${new Date().toISOString()}: modified ${filePath}\n`);
   return {};
 };
 
 for await (const message of query({
-  prompt: "Refactor utils.py to improve readability",
+  prompt: 'Refactor utils.py to improve readability',
   options: {
-    permissionMode: "acceptEdits",
+    permissionMode: 'acceptEdits',
     hooks: {
-      PostToolUse: [{ matcher: "Edit|Write", hooks: [logFileChange] }]
+      PostToolUse: [{ matcher: 'Edit|Write', hooks: [logFileChange] }]
     }
   }
 })) {
-  if ("result" in message) console.log(message.result);
+  if ('result' in message) console.log(message.result);
 }
 ```
 
@@ -330,26 +331,26 @@ asyncio.run(main())
 ```
 
 ```typescript [TypeScript]
-import { query } from "@anthropic-ai/claude-agent-sdk";
+import { query } from '@anthropic-ai/claude-agent-sdk';
 
 let sessionId: string | undefined;
 
 // First query: capture the session ID
 for await (const message of query({
-  prompt: "Read the authentication module",
-  options: { allowedTools: ["Read", "Glob"] }
+  prompt: 'Read the authentication module',
+  options: { allowedTools: ['Read', 'Glob'] }
 })) {
-  if (message.type === "system" && message.subtype === "init") {
+  if (message.type === 'system' && message.subtype === 'init') {
     sessionId = message.session_id;
   }
 }
 
 // Resume with full context from the first query
 for await (const message of query({
-  prompt: "Now find all places that call it",
+  prompt: 'Now find all places that call it',
   options: { resume: sessionId }
 })) {
-  if ("result" in message) console.log(message.result);
+  if ('result' in message) console.log(message.result);
 }
 ```
 
@@ -381,17 +382,17 @@ asyncio.run(main())
 ```
 
 ```typescript [TypeScript]
-import { query } from "@anthropic-ai/claude-agent-sdk";
+import { query } from '@anthropic-ai/claude-agent-sdk';
 
 // Read-only agent that can analyze but not modify
 for await (const message of query({
-  prompt: "Review this code for best practices",
+  prompt: 'Review this code for best practices',
   options: {
-    allowedTools: ["Read", "Glob", "Grep"],
-    permissionMode: "bypassPermissions"
+    allowedTools: ['Read', 'Glob', 'Grep'],
+    permissionMode: 'bypassPermissions'
   }
 })) {
-  if ("result" in message) console.log(message.result);
+  if ('result' in message) console.log(message.result);
 }
 ```
 
@@ -422,12 +423,12 @@ asyncio.run(main())
 
 ### Framework Features in SDK
 
-| Feature | Description | Location |
-|---------|-------------|----------|
-| **Skills** | Specialized capabilities in Markdown | `.claude/skills/SKILL.md` |
-| **Slash Commands** | Custom commands for tasks | `.claude/commands/*.md` |
-| **Memory** | Project context and instructions | `CLAUDE.md` |
-| **Plugins** | Extend with commands, agents, MCP | `.claude-plugin/` |
+| Feature            | Description                          | Location                  |
+| ------------------ | ------------------------------------ | ------------------------- |
+| **Skills**         | Specialized capabilities in Markdown | `.claude/skills/SKILL.md` |
+| **Slash Commands** | Custom commands for tasks            | `.claude/commands/*.md`   |
+| **Memory**         | Project context and instructions     | `CLAUDE.md`               |
+| **Plugins**        | Extend with commands, agents, MCP    | `.claude-plugin/`         |
 
 ## Use Cases
 
@@ -481,16 +482,16 @@ result = asyncio.run(ci_review())
 
 ## SDK vs CLI Comparison
 
-| Use Case | Best Choice |
-|----------|-------------|
+| Use Case                | Best Choice     |
+| ----------------------- | --------------- |
 | Interactive development | Claude Code CLI |
-| CI/CD pipelines | Agent SDK |
-| Custom applications | Agent SDK |
-| One-off tasks | Claude Code CLI |
-| Production automation | Agent SDK |
+| CI/CD pipelines         | Agent SDK       |
+| Custom applications     | Agent SDK       |
+| One-off tasks           | Claude Code CLI |
+| Production automation   | Agent SDK       |
 
 Many teams use both: CLI for daily development, SDK for production workflows.
 
 ---
 
-*Part of the [AI Excellence Framework](https://github.com/ai-excellence-framework/ai-excellence-framework)*
+_Part of the [AI Excellence Framework](https://github.com/ai-excellence-framework/ai-excellence-framework)_

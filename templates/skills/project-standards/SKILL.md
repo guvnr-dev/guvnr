@@ -10,6 +10,7 @@ This skill ensures code follows the project's established patterns and conventio
 ## When to Use
 
 Activate this skill when:
+
 - Writing new code in this repository
 - Reviewing or modifying existing code
 - Setting up new components or modules
@@ -18,6 +19,7 @@ Activate this skill when:
 ## Coding Conventions
 
 ### General Rules
+
 - Follow existing code patterns in the repository
 - Use consistent naming conventions
 - Write self-documenting code with clear variable names
@@ -25,12 +27,14 @@ Activate this skill when:
 - Prefer explicit over implicit
 
 ### Naming Conventions
+
 - **Variables/Functions**: camelCase
 - **Classes/Components**: PascalCase
 - **Constants**: SCREAMING_SNAKE_CASE
 - **Files**: kebab-case
 
 ### Code Style
+
 - Use consistent indentation (2 spaces recommended)
 - Keep functions focused and small (<50 lines)
 - Prefer composition over inheritance
@@ -46,6 +50,7 @@ Activate this skill when:
 ## Commit Standards
 
 Use conventional commits:
+
 - `feat:` new features
 - `fix:` bug fixes
 - `docs:` documentation changes
@@ -64,6 +69,7 @@ npm run build   # Verify build
 ## Files to Avoid
 
 Never modify without explicit permission:
+
 - `.env` files (contain secrets)
 - Lock files (package-lock.json, yarn.lock)
 - Generated files in dist/ or build/

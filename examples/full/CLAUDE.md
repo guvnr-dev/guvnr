@@ -73,11 +73,13 @@ packages/
 ```
 
 ### Stored Decisions
+
 - Architecture choices (use MCP to record)
 - Technology selections
 - Security trade-offs
 
 ### Stored Patterns
+
 - Coding standards
 - Error handling approaches
 - Testing strategies
@@ -85,30 +87,36 @@ packages/
 ## Current State
 
 ### Completed
+
 - API Gateway
 - Data ingestion pipeline
 - Core analytics models
 
 ### In Progress
+
 - Compliance audit service
 - Real-time alerting
 
 ### Blocked
+
 - Payment integration (awaiting vendor API access)
 
 ### Known Tech Debt
+
 - Legacy Python 3.10 service needs upgrade
 - Kafka schema registry migration pending
 
 ## Session Instructions
 
 ### Before Starting
+
 1. Read this file completely
 2. Check MCP memory for recent decisions: `store_decision`
 3. Review recent commits for context
 4. Run test suite to verify baseline
 
 ### During Work
+
 - Use `/plan` before any feature work
 - Use `/assumptions` to surface hidden requirements
 - Use `/security-review` for all data handling code
@@ -116,11 +124,13 @@ packages/
 - Use `/verify` with skeptical falsification
 
 ### For Compliance Work
+
 - Document all changes in audit log
 - Use SOX checklist for financial features
 - Request security review before merge
 
 ### Before Ending
+
 - Run `/handoff` to document session
 - Export MCP memory if significant decisions made
 - Update "Current State" section
@@ -129,6 +139,7 @@ packages/
 ## Dogfooding Notes
 
 This example demonstrates:
+
 - Complex multi-service architecture
 - Compliance requirements documentation
 - MCP memory integration

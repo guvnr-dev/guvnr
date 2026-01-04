@@ -143,6 +143,7 @@ The framework includes security features to help protect your codebase:
 ### Threat Model
 
 **Assets Protected:**
+
 - Secrets and credentials in project files
 - Project configuration (CLAUDE.md, ai-excellence.config.json)
 - MCP memory database (decisions, patterns, context)
@@ -150,20 +151,21 @@ The framework includes security features to help protect your codebase:
 
 **Mitigations by Threat:**
 
-| Threat | Mitigations | Components |
-|--------|-------------|------------|
-| Secret Exposure | Content scanning with 100+ patterns, gitignore management | CLI, Pre-commit hooks |
-| Injection Attacks | Input validation, sanitization, parameterized queries | CLI, MCP Server |
-| Denial of Service | Rate limiting, timeout controls, bounded input | CLI, MCP Server |
-| Path Traversal | Path normalization, base path validation, null byte detection | CLI, Init Command |
-| Prototype Pollution | Object.create(null), Object.hasOwn() checks | CLI, Commands |
-| Log Injection | Control character stripping, ANSI escape removal | CLI, Error handling |
-| ReDoS | Bounded quantifiers in all regex patterns | Secret detection |
-| Memory Exhaustion | Size limits on imports, connection pooling | MCP Server |
+| Threat              | Mitigations                                                   | Components            |
+| ------------------- | ------------------------------------------------------------- | --------------------- |
+| Secret Exposure     | Content scanning with 100+ patterns, gitignore management     | CLI, Pre-commit hooks |
+| Injection Attacks   | Input validation, sanitization, parameterized queries         | CLI, MCP Server       |
+| Denial of Service   | Rate limiting, timeout controls, bounded input                | CLI, MCP Server       |
+| Path Traversal      | Path normalization, base path validation, null byte detection | CLI, Init Command     |
+| Prototype Pollution | Object.create(null), Object.hasOwn() checks                   | CLI, Commands         |
+| Log Injection       | Control character stripping, ANSI escape removal              | CLI, Error handling   |
+| ReDoS               | Bounded quantifiers in all regex patterns                     | Secret detection      |
+| Memory Exhaustion   | Size limits on imports, connection pooling                    | MCP Server            |
 
 ### CLI Security
 
 **Input Validation Chain:**
+
 ```
 User Input → Length Check → Type Normalization → Sanitization → Command Handler
 ```
@@ -176,6 +178,7 @@ User Input → Length Check → Type Normalization → Sanitization → Command 
 ### Secret Detection
 
 100+ patterns across 10 categories with ReDoS-protected regex:
+
 - AI/ML Keys (OpenAI, Anthropic, Google AI, etc.)
 - Cloud Providers (AWS, Azure, GCP)
 - VCS Tokens (GitHub, GitLab, Bitbucket)
@@ -191,22 +194,26 @@ User Input → Length Check → Type Normalization → Sanitization → Command 
 ### MCP Server Security
 
 **Rate Limiting:**
+
 - Default: 100 ops/minute (`PROJECT_MEMORY_RATE_LIMIT`)
 - Token bucket algorithm with sliding window
 - Metrics exposed via health endpoint
 
 **Connection Pooling:**
+
 - Pool size: 5 (`PROJECT_MEMORY_POOL_SIZE`)
 - Temp connection limit: 10
 - Wait queue: 50 requests max
 - WAL mode for SQLite concurrency
 
 **Import Security:**
+
 ```
 JSON Size Check (before parsing) → JSON Parse → Schema Validation → Checksum Verification → Import
 ```
 
 Limits:
+
 - JSON size: 10MB
 - Decisions: 10,000
 - Patterns: 1,000
@@ -217,6 +224,7 @@ Limits:
 ### Error Handling
 
 Error contexts are sanitized to prevent information leakage:
+
 - Path redaction for home directories
 - Circular reference handling
 - Sensitive env var filtering (`*KEY*`, `*SECRET*`, `*TOKEN*`, `*PASSWORD*`, etc.)

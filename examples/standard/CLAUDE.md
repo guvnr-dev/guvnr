@@ -47,28 +47,34 @@ src/
 ## Current State
 
 ### Completed
+
 - User authentication
 - Product catalog
 
 ### In Progress
+
 - Order management
 
 ### Planned
+
 - Payment integration
 
 ## Session Instructions
 
 ### Before Starting
+
 1. Read this file completely
 2. Run `npm install` if dependencies changed
 3. Run `npm test` to verify baseline
 
 ### During Work
+
 - Use `/plan` before implementing features
 - Use `/security-review` for auth/payment code
 - Use `/verify` before completing tasks
 
 ### Before Ending
+
 - Run `/handoff` to document session state
 - Commit work in progress
 - Update "Current State" section

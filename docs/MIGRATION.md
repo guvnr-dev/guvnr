@@ -23,12 +23,12 @@ npx ai-excellence doctor
 
 Choose your configuration level:
 
-| Preset | Use Case | Features |
-|--------|----------|----------|
-| `minimal` | Quick start | CLAUDE.md + /plan + /verify |
-| `standard` | Individual devs | All commands + agents + hooks |
-| `full` | Complete setup | + MCP server + metrics |
-| `team` | Team collaboration | + memory federation |
+| Preset     | Use Case           | Features                      |
+| ---------- | ------------------ | ----------------------------- |
+| `minimal`  | Quick start        | CLAUDE.md + /plan + /verify   |
+| `standard` | Individual devs    | All commands + agents + hooks |
+| `full`     | Complete setup     | + MCP server + metrics        |
+| `team`     | Team collaboration | + memory federation           |
 
 ```bash
 # Examples

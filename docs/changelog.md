@@ -24,15 +24,15 @@ The AI Excellence Framework is a comprehensive, universal framework for reducing
 
 ### Multi-Tool Support
 
-| Tool | Configuration |
-|------|---------------|
-| Claude Code | `CLAUDE.md`, `.claude/` |
-| Cursor IDE | `.cursor/`, `.cursorrules` |
-| GitHub Copilot | `.github/copilot-instructions.md` |
-| Windsurf IDE | `.windsurf/`, `.windsurfrules` |
-| Aider CLI | `.aider.conf.yml` |
-| AGENTS.md (AAIF) | `AGENTS.md` |
-| And 19 more... | See documentation |
+| Tool             | Configuration                     |
+| ---------------- | --------------------------------- |
+| Claude Code      | `CLAUDE.md`, `.claude/`           |
+| Cursor IDE       | `.cursor/`, `.cursorrules`        |
+| GitHub Copilot   | `.github/copilot-instructions.md` |
+| Windsurf IDE     | `.windsurf/`, `.windsurfrules`    |
+| Aider CLI        | `.aider.conf.yml`                 |
+| AGENTS.md (AAIF) | `AGENTS.md`                       |
+| And 19 more...   | See documentation                 |
 
 ### Getting Started
 
