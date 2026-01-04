@@ -1027,12 +1027,18 @@ describe('additional tool generators', () => {
       assert.ok(existsSync(projectPath), '.tabnine/guidelines/project.md should be created');
 
       const projectContent = readFileSync(projectPath, 'utf-8');
-      assert.ok(projectContent.includes('Project Guidelines'), 'Should have project guidelines header');
+      assert.ok(
+        projectContent.includes('Project Guidelines'),
+        'Should have project guidelines header'
+      );
       assert.ok(projectContent.includes('Tabnine'), 'Should reference Tabnine');
 
       // Check coding-standards.md
       const codingPath = join(guidelinesDir, 'coding-standards.md');
-      assert.ok(existsSync(codingPath), '.tabnine/guidelines/coding-standards.md should be created');
+      assert.ok(
+        existsSync(codingPath),
+        '.tabnine/guidelines/coding-standards.md should be created'
+      );
 
       // Check security.md
       const securityPath = join(guidelinesDir, 'security.md');
@@ -1075,7 +1081,10 @@ describe('additional tool generators', () => {
       assert.ok(existsSync(projectPath), '.amazonq/rules/project-rules.md should be created');
 
       const projectContent = readFileSync(projectPath, 'utf-8');
-      assert.ok(projectContent.includes('Amazon Q Developer'), 'Should reference Amazon Q Developer');
+      assert.ok(
+        projectContent.includes('Amazon Q Developer'),
+        'Should reference Amazon Q Developer'
+      );
       assert.ok(projectContent.includes('Project Rules'), 'Should have project rules header');
 
       // Check coding-rules.md
@@ -1087,7 +1096,10 @@ describe('additional tool generators', () => {
       assert.ok(existsSync(securityPath), '.amazonq/rules/security-rules.md should be created');
 
       const securityContent = readFileSync(securityPath, 'utf-8');
-      assert.ok(securityContent.includes('AWS-Specific Security'), 'Should have AWS security section');
+      assert.ok(
+        securityContent.includes('AWS-Specific Security'),
+        'Should have AWS security section'
+      );
       assert.ok(securityContent.includes('IAM'), 'Should mention IAM');
     } finally {
       process.chdir(originalCwd);

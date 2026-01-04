@@ -177,7 +177,10 @@ describe('Secret Pattern Accuracy', () => {
     const testCases = [
       // AI/ML Keys
       { input: 'sk-1234567890abcdefghijklmnopqrstuvwxyz12345678', expected: 'OpenAI Key' },
-      { input: 'sk-ant-api03-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', expected: 'Anthropic Key' },
+      {
+        input: 'sk-ant-api03-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        expected: 'Anthropic Key'
+      },
       { input: 'AIzaSyAxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', expected: 'Google AI Key' },
 
       // GitHub Tokens
@@ -219,7 +222,11 @@ describe('Secret Pattern Accuracy', () => {
     for (const input of benignInputs) {
       it(`should not flag: "${input.substring(0, 40)}..."`, () => {
         const results = detectSecrets(input);
-        assert.strictEqual(results.findings.length, 0, `Unexpected match in benign input: ${JSON.stringify(results.findings)}`);
+        assert.strictEqual(
+          results.findings.length,
+          0,
+          `Unexpected match in benign input: ${JSON.stringify(results.findings)}`
+        );
       });
     }
   });
